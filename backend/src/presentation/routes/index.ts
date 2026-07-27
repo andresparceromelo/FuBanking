@@ -6,6 +6,9 @@ import paymentRoutes from './payment.routes';
 import pocketRoutes from './pocket.routes';
 import loanRoutes from './loan.routes';
 import transferRoutes from './transfer.routes';
+import cardRoutes from './card.routes';
+import moneyRequestRoutes from './moneyRequest.routes';
+import notificationRoutes from './notification.routes';
 
 /**
  * Router raíz de la API.
@@ -22,5 +25,9 @@ router.use('/payments', paymentRoutes);
 router.use('/pockets', pocketRoutes);
 router.use('/loans', loanRoutes);
 router.use('/transfers', transferRoutes);
+router.use('/cards', cardRoutes);
+router.use('/money-requests', moneyRequestRoutes);
+router.use('/notifications', notificationRoutes);
 
 export default router;
+

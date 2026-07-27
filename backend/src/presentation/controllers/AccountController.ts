@@ -2,6 +2,8 @@ import { Request, Response, NextFunction } from 'express';
 import { CreateAccount } from '../../application/use-cases/account/CreateAccount';
 import { GetUserAccounts } from '../../application/use-cases/account/GetUserAccounts';
 import { GetAccountDetails } from '../../application/use-cases/account/GetAccountDetails';
+import { DepositMoney } from '../../application/use-cases/account/DepositMoney';
+import { WithdrawMoney } from '../../application/use-cases/account/WithdrawMoney';
 import { createAccountSchema } from '../validators/account.validators';
 import { sendSuccess } from '../../shared/utils/response';
 
@@ -21,6 +23,8 @@ export class AccountController {
     private readonly createAccountUseCase: CreateAccount,
     private readonly getUserAccountsUseCase: GetUserAccounts,
     private readonly getAccountDetailsUseCase: GetAccountDetails,
+    private readonly depositMoneyUseCase: DepositMoney,
+    private readonly withdrawMoneyUseCase: WithdrawMoney,
   ) {}
 
   /**
@@ -72,4 +76,45 @@ export class AccountController {
       next(error);
     }
   };
+
+  /**
+   * POST /accounts/:id/deposit
+   * Deposita dinero en la cuenta del usuario.
+   */
+  deposit = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const accountId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const { amount, description } = req.body;
+      const updatedAccount = await this.depositMoneyUseCase.execute({
+        userId: req.user!.id,
+        accountId,
+        amount: Number(amount),
+        description,
+      });
+      sendSuccess(res, updatedAccount.toPublic(), 'Depósito realizado exitosamente');
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * POST /accounts/:id/withdraw
+   * Retira dinero de la cuenta del usuario.
+   */
+  withdraw = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const accountId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const { amount, description } = req.body;
+      const updatedAccount = await this.withdrawMoneyUseCase.execute({
+        userId: req.user!.id,
+        accountId,
+        amount: Number(amount),
+        description,
+      });
+      sendSuccess(res, updatedAccount.toPublic(), 'Retiro realizado exitosamente');
+    } catch (error) {
+      next(error);
+    }
+  };
 }
+

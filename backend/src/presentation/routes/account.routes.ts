@@ -4,6 +4,8 @@ import { TransferController } from '../controllers/TransferController';
 import { CreateAccount } from '../../application/use-cases/account/CreateAccount';
 import { GetUserAccounts } from '../../application/use-cases/account/GetUserAccounts';
 import { GetAccountDetails } from '../../application/use-cases/account/GetAccountDetails';
+import { DepositMoney } from '../../application/use-cases/account/DepositMoney';
+import { WithdrawMoney } from '../../application/use-cases/account/WithdrawMoney';
 import { SearchAccountByNumber } from '../../application/use-cases/account/SearchAccountByNumber';
 import { SearchUserByEmail } from '../../application/use-cases/user/SearchUserByEmail';
 import { CreateTransfer } from '../../application/use-cases/transfer/CreateTransfer';
@@ -34,6 +36,8 @@ const transactionRepository = new SupabaseTransactionRepository(supabaseClient);
 const createAccount        = new CreateAccount(accountRepository);
 const getUserAccounts      = new GetUserAccounts(accountRepository);
 const getAccountDetails    = new GetAccountDetails(accountRepository);
+const depositMoney         = new DepositMoney(accountRepository, transactionRepository);
+const withdrawMoney        = new WithdrawMoney(accountRepository);
 const searchAccountByNumber = new SearchAccountByNumber(accountRepository, userRepository);
 const searchUserByEmail    = new SearchUserByEmail(userRepository, accountRepository);
 const createTransfer       = new CreateTransfer(accountRepository, transactionRepository, userRepository);
@@ -45,6 +49,8 @@ const controller = new AccountController(
   createAccount,
   getUserAccounts,
   getAccountDetails,
+  depositMoney,
+  withdrawMoney,
 );
 const transferController = new TransferController(
   createTransfer,
@@ -59,5 +65,8 @@ router.get('/search', authMiddleware, transferController.searchByAccountNumber);
 router.post('/', authMiddleware, controller.create);
 router.get('/me', authMiddleware, controller.getMyAccounts);
 router.get('/:id', authMiddleware, controller.getDetails);
+router.post('/:id/deposit', authMiddleware, controller.deposit);
+router.post('/:id/withdraw', authMiddleware, controller.withdraw);
 
 export default router;
+
