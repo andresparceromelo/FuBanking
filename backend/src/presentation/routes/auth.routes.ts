@@ -43,8 +43,8 @@ const loginUser = new LoginUser(
   emailService,
 );
 const logoutUser = new LogoutUser();
-const requestPasswordReset = new RequestPasswordReset(userRepository, supabaseClient);
-const resetPassword = new ResetPassword(userRepository, passwordService, supabaseClient);
+const requestPasswordReset = new RequestPasswordReset(userRepository, tokenService, emailService);
+const resetPassword = new ResetPassword(userRepository, passwordService, tokenService);
 
 // ── Casos de uso: 2FA ─────────────────────────────────────────────────────
 const verifyTwoFactor = new VerifyTwoFactorCode(

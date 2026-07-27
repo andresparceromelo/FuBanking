@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { loanService } from '../services/loan.service';
 import { CreateLoanPayload, LoanApplicationResponse, LoanSimulationPayload, LoanSimulationResponse } from '../types/loan.types';
 
@@ -8,7 +8,7 @@ export function useLoans() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const simulateLoan = async (payload: LoanSimulationPayload): Promise<LoanSimulationResponse | null> => {
+  const simulateLoan = useCallback(async (payload: LoanSimulationPayload): Promise<LoanSimulationResponse | null> => {
     try {
       setIsLoading(true);
       setError(null);
@@ -20,9 +20,9 @@ export function useLoans() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const createLoan = async (payload: CreateLoanPayload): Promise<LoanApplicationResponse | null> => {
+  const createLoan = useCallback(async (payload: CreateLoanPayload): Promise<LoanApplicationResponse | null> => {
     try {
       setIsLoading(true);
       setError(null);
@@ -34,7 +34,7 @@ export function useLoans() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   return { simulateLoan, createLoan, isLoading, error };
 }

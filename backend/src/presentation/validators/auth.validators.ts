@@ -40,7 +40,17 @@ export const registerSchema = z
     birthDate: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, 'La fecha de nacimiento debe estar en formato YYYY-MM-DD')
-      .refine((date) => new Date(date) <= new Date(), 'La fecha de nacimiento no puede ser en el futuro'),
+      .refine((date) => new Date(date) <= new Date(), 'La fecha de nacimiento no puede ser en el futuro')
+      .refine((date) => {
+        const birth = new Date(date);
+        const today = new Date();
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+          age--;
+        }
+        return age >= 18;
+      }, 'Debes ser mayor de 18 años para registrarte'),
     email: z.string().email('Correo electrónico inválido').toLowerCase().trim(),
     document: z
       .string()

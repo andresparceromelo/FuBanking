@@ -176,6 +176,25 @@ export class SupabaseUserRepository implements IUserRepository {
     }
   }
 
+  async updatePassword(id: string, newPasswordHash: string): Promise<User> {
+    const { data, error } = await this.client
+      .from(this.TABLE)
+      .update({ password: newPasswordHash, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error || !data) {
+      throw new AppError(
+        `Error al actualizar la contraseña: ${error?.message ?? 'Desconocido'}`,
+        500,
+        'DB_ERROR',
+      );
+    }
+
+    return this.mapRowToUser(data as UserRow);
+  }
+
   async updateTwoFactor(id: string, enabled: boolean): Promise<User> {
     const { data, error } = await this.client
       .from(this.TABLE)

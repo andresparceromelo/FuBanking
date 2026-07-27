@@ -13,4 +13,11 @@ export interface IEmailService {
    * @param code Código OTP en texto plano (6 dígitos).
    */
   sendTwoFactorCode(email: string, code: string): Promise<void>;
+
+  /**
+   * Envía el enlace para recuperar la contraseña.
+   * @param email Correo destino del usuario.
+   * @param resetLink Enlace único de recuperación.
+   */
+  sendPasswordResetEmail(email: string, resetLink: string): Promise<void>;
 }

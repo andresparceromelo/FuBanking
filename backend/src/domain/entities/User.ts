@@ -78,7 +78,7 @@ export class User {
   private _birthDate: Date;
   private _phone: string | null;
   private _avatarUrl: string | null;
-  private readonly _passwordHash: string;
+  private _passwordHash: string;
   private _isActive: boolean;
   private _twoFactorEnabled: boolean;
   private readonly _createdAt: Date;
@@ -135,6 +135,14 @@ export class User {
   }
 
   // ── Métodos de dominio ───────────────────────────────────────────────────
+
+  /**
+   * Actualiza el hash de la contraseña.
+   */
+  updatePasswordHash(newPasswordHash: string): void {
+    this._passwordHash = newPasswordHash;
+    this._updatedAt = new Date();
+  }
 
   /**
    * Actualiza los campos permitidos del perfil.

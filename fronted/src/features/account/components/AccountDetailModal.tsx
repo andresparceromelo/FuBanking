@@ -5,6 +5,7 @@ import { X, CreditCard, Building2, Percent, AlertCircle, CheckCircle2, XCircle }
 import { Account, AccountStatus, ACCOUNT_TYPE_LABELS, ACCOUNT_STATUS_LABELS } from '../types/account.types';
 import { PocketSection } from './PocketSection';
 import { usePockets } from '../hooks/usePockets';
+import { TransactionHistory } from '../../transfers/components/TransactionHistory';
 
 interface AccountDetailModalProps {
   account: Account | null;
@@ -19,9 +20,10 @@ interface AccountDetailModalProps {
  * del tipo de cuenta (tasa de interés, sobregiro, empresa, etc.).
  */
 export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailModalProps) {
-  if (!isOpen || !account) return null;
+  // Los hooks deben llamarse siempre, antes de cualquier return condicional
+  const { pockets, isLoading, error, refetch, createPocket, updatePocket, transferPocket } = usePockets(account?.id ?? '');
 
-  const { pockets, isLoading, error, refetch, createPocket, updatePocket, transferPocket } = usePockets(account.id);
+  if (!isOpen || !account) return null;
 
   const statusIcon: Record<AccountStatus, React.ReactNode> = {
     [AccountStatus.ACTIVA]: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
@@ -157,6 +159,12 @@ export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailMo
             onTransferPocket={transferPocket}
             onRefresh={refetch}
           />
+        </div>
+
+        {/* Historial de transacciones */}
+        <div className="border-t border-white/10 pt-4 mt-4">
+          <p className="text-xs text-white/40 uppercase tracking-widest mb-4">Movimientos recientes</p>
+          <TransactionHistory accountId={account.id} />
         </div>
       </div>
     </div>

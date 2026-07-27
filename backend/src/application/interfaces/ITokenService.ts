@@ -4,6 +4,7 @@
 export interface TokenPayload {
   userId: string;
   email: string;
+  type?: 'reset' | 'auth' | '2fa';
 }
 
 /**

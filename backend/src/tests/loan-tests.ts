@@ -62,6 +62,13 @@ class InMemoryUserRepo implements IUserRepository {
     return user;
   }
 
+  async updatePassword(id: string, newPasswordHash: string) {
+    const user = this.store.get(id);
+    if (!user) throw new Error('User not found');
+    user.updatePasswordHash(newPasswordHash);
+    return user;
+  }
+
   async delete(id: string) {
     this.store.delete(id);
   }

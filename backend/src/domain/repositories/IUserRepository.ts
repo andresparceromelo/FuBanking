@@ -54,6 +54,12 @@ export interface IUserRepository {
   update(id: string, data: UpdateUserData): Promise<User>;
 
   /**
+   * Actualiza el hash de la contraseña de un usuario.
+   * Retorna el usuario actualizado.
+   */
+  updatePassword(id: string, newPasswordHash: string): Promise<User>;
+
+  /**
    * Activa o desactiva el 2FA para un usuario.
    * Retorna el usuario actualizado.
    */

@@ -1,35 +1,50 @@
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { ITokenService } from '../../interfaces/ITokenService';
+import { IEmailService } from '../../interfaces/IEmailService';
 import { RequestPasswordResetDto } from '../../dtos/auth/auth.dtos';
-import { SupabaseClient } from '@supabase/supabase-js';
 
 /**
  * Caso de Uso: Solicitar recuperación de contraseña.
  *
- * Usa el flujo nativo de Supabase Auth para enviar el email de recuperación.
- * Por seguridad, siempre retorna éxito aunque el email no exista
- * (previene la enumeración de usuarios).
- *
- * Nota: este caso de uso es el único que depende directamente del cliente
- * de Supabase porque usa la funcionalidad de Auth (no la BD directamente).
+ * Envía el email de recuperación utilizando el NodemailerEmailService,
+ * generando un token local temporal.
+ * Por seguridad, siempre retorna éxito aunque el email no exista.
  */
 export class RequestPasswordReset {
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly supabaseClient: SupabaseClient,
+    private readonly tokenService: ITokenService,
+    private readonly emailService: IEmailService,
   ) {}
 
   async execute(dto: RequestPasswordResetDto): Promise<void> {
     const email = dto.email.toLowerCase().trim();
 
-    // Verificar si el usuario existe (opcional: para evitar enviar emails innecesarios)
+    console.log('[RequestPasswordReset] Buscando usuario con email:', email);
+
+    // Verificar si el usuario existe
     const user = await this.userRepository.findByEmail(email);
 
-    // Si el usuario no existe, retornamos éxito igualmente (seguridad)
-    if (!user) return;
+    if (!user) {
+      console.log('[RequestPasswordReset] Usuario NO encontrado en la BD. Abortando.');
+      return;
+    }
 
-    // Usar Supabase Auth para enviar el email de recuperación
-    await this.supabaseClient.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env['CLIENT_URL']}/reset-password`,
-    });
+    console.log('[RequestPasswordReset] Usuario encontrado, ID:', user.id);
+
+    // Generar token JWT válido por 15 minutos
+    const token = this.tokenService.generate(
+      { userId: user.id, email: user.email.toString(), type: 'reset' },
+      { expiresIn: '15m' }
+    );
+
+    // Construir enlace de recuperación
+    const resetLink = `${process.env['CLIENT_URL']}/reset-password?token=${token}`;
+    console.log('[RequestPasswordReset] Enlace generado:', resetLink);
+
+    // Enviar el email usando Nodemailer
+    console.log('[RequestPasswordReset] Enviando correo a:', user.email.toString());
+    await this.emailService.sendPasswordResetEmail(user.email.toString(), resetLink);
+    console.log('[RequestPasswordReset] Correo enviado exitosamente.');
   }
 }
