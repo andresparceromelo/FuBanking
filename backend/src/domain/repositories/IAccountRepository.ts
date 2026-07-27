@@ -35,4 +35,8 @@ export interface IAccountRepository {
    * Retorna la cuenta creada con todos sus campos.
    */
   save(account: Account, details?: AccountDetails | null): Promise<Account>;
+  /**
+   * Actualiza el saldo de la cuenta y retorna la cuenta actualizada.
+   */
+  updateBalance(accountId: string, newBalance: number): Promise<Account>;
 }

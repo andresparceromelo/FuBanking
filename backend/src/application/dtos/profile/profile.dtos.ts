@@ -27,7 +27,7 @@ export interface UpdateProfileDto {
   middleName?: string | null;
   lastName?: string;
   secondLastName?: string | null;
-  birthDate?: Date;
+  birthDate?: Date | null;
   phone?: string | null;
   avatarUrl?: string | null;
 }

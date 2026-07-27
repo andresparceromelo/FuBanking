@@ -62,8 +62,9 @@ export class AccountController {
    */
   getDetails = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const accountId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
       const account = await this.getAccountDetailsUseCase.execute({
-        accountId: req.params.id,
+        accountId,
         userId: req.user!.id,
       });
       sendSuccess(res, account, 'Detalle de cuenta obtenido exitosamente');

@@ -2,6 +2,9 @@ import { Router } from 'express';
 import authRoutes from './auth.routes';
 import profileRoutes from './profile.routes';
 import accountRoutes from './account.routes';
+import paymentRoutes from './payment.routes';
+import pocketRoutes from './pocket.routes';
+import loanRoutes from './loan.routes';
 
 /**
  * Router raíz de la API.
@@ -14,5 +17,8 @@ const router = Router();
 router.use('/auth', authRoutes);
 router.use('/profile', profileRoutes);
 router.use('/accounts', accountRoutes);
+router.use('/payments', paymentRoutes);
+router.use('/pockets', pocketRoutes);
+router.use('/loans', loanRoutes);
 
 export default router;

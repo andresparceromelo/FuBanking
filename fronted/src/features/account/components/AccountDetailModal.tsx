@@ -3,6 +3,8 @@
 import React from 'react';
 import { X, CreditCard, Building2, Percent, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
 import { Account, AccountStatus, ACCOUNT_TYPE_LABELS, ACCOUNT_STATUS_LABELS } from '../types/account.types';
+import { PocketSection } from './PocketSection';
+import { usePockets } from '../hooks/usePockets';
 
 interface AccountDetailModalProps {
   account: Account | null;
@@ -18,6 +20,8 @@ interface AccountDetailModalProps {
  */
 export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailModalProps) {
   if (!isOpen || !account) return null;
+
+  const { pockets, isLoading, error, refetch, createPocket, updatePocket, transferPocket } = usePockets(account.id);
 
   const statusIcon: Record<AccountStatus, React.ReactNode> = {
     [AccountStatus.ACTIVA]: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
@@ -47,7 +51,7 @@ export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailMo
 
       {/* Modal */}
       <div
-        className="relative z-10 w-full max-w-md bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+        className="relative z-10 w-full max-w-3xl bg-[#1a1a2e] border border-white/10 rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -140,6 +144,20 @@ export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailMo
             )}
           </div>
         )}
+
+        <div className="border-t border-white/10 pt-4 mt-4">
+          <PocketSection
+            accountId={account.id}
+            accountBalance={account.balance}
+            pockets={pockets}
+            isLoading={isLoading}
+            error={error}
+            onCreatePocket={createPocket}
+            onUpdatePocket={updatePocket}
+            onTransferPocket={transferPocket}
+            onRefresh={refetch}
+          />
+        </div>
       </div>
     </div>
   );

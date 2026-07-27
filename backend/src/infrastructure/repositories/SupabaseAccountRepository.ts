@@ -169,6 +169,21 @@ export class SupabaseAccountRepository implements IAccountRepository {
     return fullAccount;
   }
 
+  async updateBalance(accountId: string, newBalance: number): Promise<Account> {
+    const { data, error } = await this.client
+      .from(this.TABLE)
+      .update({ balance: newBalance })
+      .eq('id', accountId)
+      .select(`*, account_details(*)`)
+      .single();
+
+    if (error || !data) {
+      throw new AppError(`Error al actualizar saldo: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
+    }
+
+    return this.mapRowToAccount(data as AccountRow);
+  }
+
   /**
    * Verifica si algún campo de los detalles tiene un valor real.
    */

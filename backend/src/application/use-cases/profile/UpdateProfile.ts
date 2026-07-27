@@ -40,7 +40,7 @@ export class UpdateProfile {
       middleName: dto.middleName,
       lastName: dto.lastName,
       secondLastName: dto.secondLastName,
-      birthDate: dto.birthDate,
+      birthDate: dto.birthDate ?? undefined,
       phone: dto.phone,
       avatarUrl: dto.avatarUrl,
     });

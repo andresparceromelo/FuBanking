@@ -8,10 +8,9 @@ import { AccountType } from '../../domain/entities/Account';
  */
 
 export const createAccountSchema = z.object({
-  type: z.enum(
-    [AccountType.AHORROS, AccountType.CORRIENTE, AccountType.NOMINA],
-    { errorMap: () => ({ message: `El tipo de cuenta debe ser: ${Object.values(AccountType).join(', ')}` }) }
-  ),
+  type: z.nativeEnum(AccountType).refine((value) => Object.values(AccountType).includes(value), {
+    message: `El tipo de cuenta debe ser: ${Object.values(AccountType).join(', ')}`,
+  }),
   // Campos opcionales — solo aplican según el tipo
   requestCheckbook: z.boolean().optional(),
   companyName: z

@@ -14,7 +14,13 @@ export function useRegister() {
     setError(null);
     try {
       const response = await authService.register(data);
-      login(response.user, response.token);
+      if (response.requiresTwoFactor) {
+        sessionStorage.setItem('2fa_temp_token', response.temporaryToken);
+        sessionStorage.setItem('2fa_masked_email', response.maskedEmail);
+        window.location.href = '/verify-two-factor';
+      } else {
+        login(response.user, response.token);
+      }
     } catch (err: any) {
       setError(err as AuthError);
     } finally {

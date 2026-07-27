@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/shared/hooks/useAuth';
-import { LogOut, Wallet, User as UserIcon } from 'lucide-react';
+import { LogOut, Wallet, User as UserIcon, HandCoins } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 
 export function Navbar() {
@@ -13,6 +13,7 @@ export function Navbar() {
 
   const navLinks = [
     { href: '/accounts', label: 'Cuentas', icon: Wallet },
+    { href: '/loans', label: 'Préstamos', icon: HandCoins },
     { href: '/profile', label: 'Perfil', icon: UserIcon },
   ];
 
