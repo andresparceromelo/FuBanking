@@ -4,7 +4,7 @@ import { Loader2 } from 'lucide-react';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
-  variant?: 'default' | 'outline' | 'ghost' | 'link';
+  variant?: 'default' | 'outline' | 'ghost' | 'link' | 'destructive';
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -15,6 +15,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       outline: 'border border-border bg-transparent hover:bg-muted text-foreground',
       ghost: 'bg-transparent hover:bg-muted text-foreground',
       link: 'bg-transparent text-primary hover:underline underline-offset-4',
+      destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-sm',
     };
 
     return (

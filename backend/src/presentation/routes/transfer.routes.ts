@@ -41,8 +41,9 @@ const controller = new TransferController(
 );
 
 // -- Rutas (todas protegidas) --
-router.post('/',    authMiddleware, controller.create);
-router.get('/:id', authMiddleware, controller.getById);
+router.post('/', authMiddleware, controller.create);
 router.get('/account/:accountId', authMiddleware, controller.getHistory);
+router.get('/search/email', authMiddleware, controller.searchByEmail);
+router.get('/:id', authMiddleware, controller.getById);
 
 export default router;

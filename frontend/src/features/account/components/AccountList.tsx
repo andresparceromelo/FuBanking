@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Plus, Wallet } from 'lucide-react';
+import { Plus, Wallet, Eye, EyeOff } from 'lucide-react';
 import { Account } from '../types/account.types';
 import { AccountCard } from './AccountCard';
 import { AccountDetailModal } from './AccountDetailModal';
 import { CreateAccountModal } from './CreateAccountModal';
+import { DepositWithdrawModal } from './DepositWithdrawModal';
 import { useAccounts } from '../hooks/useAccounts';
 
 /**
@@ -22,10 +23,30 @@ export function AccountList() {
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [showBalance, setShowBalance] = useState(true);
+
+  // Deposit / Withdraw modal state
+  const [actionModal, setActionModal] = useState<{
+    isOpen: boolean;
+    type: 'deposit' | 'withdraw';
+    account: Account | null;
+  }>({
+    isOpen: false,
+    type: 'deposit',
+    account: null,
+  });
 
   const handleCardClick = (account: Account) => {
     setSelectedAccount(account);
     setIsDetailOpen(true);
+  };
+
+  const handleOpenActionModal = (account: Account, type: 'deposit' | 'withdraw') => {
+    setActionModal({
+      isOpen: true,
+      type,
+      account,
+    });
   };
 
   const handleCreateSuccess = (newAccount: Account) => {
@@ -63,14 +84,26 @@ export function AccountList() {
           </div>
         </div>
 
-        {/* Botón Nueva Cuenta */}
-        <button
-          onClick={() => setIsCreateOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
-        >
-          <Plus className="w-4 h-4" />
-          Nueva cuenta
-        </button>
+        <div className="flex items-center gap-2">
+          {/* Toggle Mostrar/Ocultar Saldo */}
+          <button
+            onClick={() => setShowBalance(!showBalance)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/10 bg-white/5 text-white/60 hover:text-white text-xs font-semibold transition-all"
+            title={showBalance ? 'Ocultar saldos' : 'Mostrar saldos'}
+          >
+            {showBalance ? <EyeOff size={14} /> : <Eye size={14} />}
+            <span className="hidden sm:inline">{showBalance ? 'Ocultar' : 'Mostrar'}</span>
+          </button>
+
+          {/* Botón Nueva Cuenta */}
+          <button
+            onClick={() => setIsCreateOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-medium hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20"
+          >
+            <Plus className="w-4 h-4" />
+            Nueva cuenta
+          </button>
+        </div>
       </div>
 
       {/* Error */}
@@ -107,7 +140,10 @@ export function AccountList() {
             <AccountCard
               key={account.id}
               account={account}
+              showBalance={showBalance}
               onClick={handleCardClick}
+              onDeposit={(acc) => handleOpenActionModal(acc, 'deposit')}
+              onWithdraw={(acc) => handleOpenActionModal(acc, 'withdraw')}
             />
           ))}
         </div>
@@ -123,6 +159,13 @@ export function AccountList() {
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         onSuccess={handleCreateSuccess}
+      />
+      <DepositWithdrawModal
+        account={actionModal.account}
+        type={actionModal.type}
+        isOpen={actionModal.isOpen}
+        onClose={() => setActionModal({ ...actionModal, isOpen: false })}
+        onSuccess={() => refetch()}
       />
     </>
   );

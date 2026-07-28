@@ -5,6 +5,7 @@ import { X, PiggyBank, CreditCard, Briefcase, ChevronRight } from 'lucide-react'
 import { AccountType, ACCOUNT_TYPE_LABELS } from '../types/account.types';
 import { useCreateAccount } from '../hooks/useCreateAccount';
 import { Account } from '../types/account.types';
+import { useToast } from '@/shared/components/feedback/ToastProvider';
 
 interface CreateAccountModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ type Step = 'select-type' | 'fill-details';
  * Paso 2: El usuario rellena los detalles opcionales del tipo elegido.
  */
 export function CreateAccountModal({ isOpen, onClose, onSuccess }: CreateAccountModalProps) {
+  const toast = useToast();
   const [step, setStep] = useState<Step>('select-type');
   const [selectedType, setSelectedType] = useState<AccountType | null>(null);
   const [details, setDetails] = useState({
@@ -77,6 +79,7 @@ export function CreateAccountModal({ isOpen, onClose, onSuccess }: CreateAccount
         companyName: selectedType === AccountType.NOMINA ? details.companyName : undefined,
       },
       (account) => {
+        toast.success('Cuenta creada', `Tu ${ACCOUNT_TYPE_LABELS[account.accountType].toLowerCase()} ya esta lista.`);
         onSuccess(account);
         handleClose();
       },
@@ -242,7 +245,7 @@ function Field({
   label: string;
   value: string;
   onChange: (v: string) => void;
-} & React.InputHTMLAttributes<HTMLInputElement>) {
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) {
   return (
     <div>
       <label className="block text-white/50 text-xs mb-1.5">{label}</label>
@@ -255,6 +258,7 @@ function Field({
     </div>
   );
 }
+
 
 function ConditionRow({ label, value }: { label: string; value: string }) {
   return (

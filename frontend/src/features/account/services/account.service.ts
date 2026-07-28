@@ -34,6 +34,25 @@ class AccountService {
     const response = await apiClient.post<Account>('/accounts', payload);
     return response.data;
   }
+
+  /**
+   * Depositar saldo a una cuenta.
+   * POST /accounts/:id/deposit
+   */
+  async deposit(accountId: string, amount: number, description?: string): Promise<Account> {
+    const response = await apiClient.post<Account>(`/accounts/${accountId}/deposit`, { amount, description });
+    return response.data;
+  }
+
+  /**
+   * Retirar dinero de una cuenta.
+   * POST /accounts/:id/withdraw
+   */
+  async withdraw(accountId: string, amount: number, description?: string): Promise<Account> {
+    const response = await apiClient.post<Account>(`/accounts/${accountId}/withdraw`, { amount, description });
+    return response.data;
+  }
 }
 
 export const accountService = new AccountService();
+

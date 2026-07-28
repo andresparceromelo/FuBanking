@@ -7,6 +7,7 @@ import { Button } from '@/shared/components/ui/Button';
 import { User, Mail, CreditCard, Phone, Calendar, ShieldCheck, ShieldAlert, Loader2 } from 'lucide-react';
 import { authService } from '@/features/auth/services/auth.service';
 import { useAuth } from '@/shared/hooks/useAuth';
+import { useToast } from '@/shared/components/feedback/ToastProvider';
 
 interface ProfileCardProps {
   user: PublicUser;
@@ -16,6 +17,7 @@ interface ProfileCardProps {
 
 export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardProps) {
   const { updateUser } = useAuth();
+  const toast = useToast();
   const [isUpdating2FA, setIsUpdating2FA] = useState(false);
 
   const formatDate = (dateString: string) => {
@@ -32,19 +34,23 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
       if (user.twoFactorEnabled) {
         await authService.disableTwoFactor();
         updateUser({ ...user, twoFactorEnabled: false });
+        toast.success('2FA desactivado', 'Tu inicio de sesion ya no pedira codigo temporal.');
       } else {
         await authService.enableTwoFactor();
         updateUser({ ...user, twoFactorEnabled: true });
+        toast.success('2FA activado', 'Agregamos una capa extra de seguridad a tu cuenta.');
       }
       // Notificamos al padre para que actualice la vista (useProfile)
       if (onToggleSuccess) {
         onToggleSuccess();
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error al actualizar 2FA', error);
-      // Extraer el mensaje del error si existe
-      const msg = error?.response?.data?.message || 'Hubo un error al actualizar la autenticación de dos factores.';
-      alert(msg);
+      const message =
+        error && typeof error === 'object' && 'message' in error
+          ? String((error as { message?: string }).message)
+          : 'Hubo un error al actualizar la autenticacion de dos factores.';
+      toast.error('No pudimos actualizar 2FA', message);
     } finally {
       setIsUpdating2FA(false);
     }

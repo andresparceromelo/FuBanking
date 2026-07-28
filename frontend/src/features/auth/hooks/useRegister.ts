@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { authService } from '../services/auth.service';
 import { RegisterInput } from '../schemas/auth.schemas';
-import { AuthError } from '../types/auth.types';
+import { AuthError, AuthDirectResponse } from '../types/auth.types';
 
 export function useRegister() {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,7 +13,7 @@ export function useRegister() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await authService.register(data);
+      const response = await authService.register(data) as AuthDirectResponse;
       login(response.user, response.token);
     } catch (err: any) {
       setError(err as AuthError);
@@ -28,3 +28,4 @@ export function useRegister() {
     error,
   };
 }
+
