@@ -37,9 +37,14 @@ export class UpdatePocket {
     if (dto.amount !== undefined && dto.amount !== pocket.amount) {
       const totalReserved = await this.pocketRepository.getTotalAmountByAccountId(account.id);
       const reservedWithoutCurrent = totalReserved - pocket.amount;
-      if (reservedWithoutCurrent + dto.amount > account.balance) {
+      const newReservedTotal = reservedWithoutCurrent + dto.amount;
+      if (newReservedTotal > account.balance + totalReserved) {
         throw new AppError('No tienes saldo disponible suficiente para ajustar este bolsillo', 400, 'INSUFFICIENT_AVAILABLE_BALANCE');
       }
+
+      const balanceDelta = dto.amount - pocket.amount;
+      const newAccountBalance = account.balance - balanceDelta;
+      await this.accountRepository.updateBalance(account.id, newAccountBalance);
       pocket.updateAmount(dto.amount);
     }
 

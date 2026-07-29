@@ -12,6 +12,9 @@ interface PocketRow {
   updated_at: string;
 }
 
+const fallbackStore = new Map<string, Pocket>();
+let fallbackEnabled = false;
+
 export class SupabasePocketRepository implements IPocketRepository {
   private readonly TABLE = 'pockets';
 
@@ -30,29 +33,70 @@ export class SupabasePocketRepository implements IPocketRepository {
     return new Pocket(props);
   }
 
-  async findById(id: string): Promise<Pocket | null> {
-    const { data, error } = await this.client
-      .from(this.TABLE)
-      .select('*')
-      .eq('id', id)
-      .single();
+  private isMissingTableError(error: any): boolean {
+    const message = `${error?.message ?? ''} ${error?.details ?? ''}`.toLowerCase();
+    return error?.code === '42P01' || message.includes('could not find the table') || message.includes('relation') && message.includes('does not exist');
+  }
 
-    if (error || !data) return null;
-    return this.mapRowToPocket(data as PocketRow);
+  private handleMissingTable(error: any): never {
+    fallbackEnabled = true;
+    console.warn('Supabase pockets table is not available. Using in-memory fallback for pockets.');
+    if (error) {
+      throw new AppError('La tabla de bolsillos aún no está creada en Supabase. Se está usando almacenamiento temporal en memoria.', 500, 'DB_TABLE_MISSING');
+    }
+    throw new AppError('La tabla de bolsillos aún no está creada en Supabase. Se está usando almacenamiento temporal en memoria.', 500, 'DB_TABLE_MISSING');
+  }
+
+  async findById(id: string): Promise<Pocket | null> {
+    if (fallbackEnabled) {
+      return fallbackStore.get(id) ?? null;
+    }
+
+    try {
+      const { data, error } = await this.client
+        .from(this.TABLE)
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (error || !data) return null;
+      return this.mapRowToPocket(data as PocketRow);
+    } catch (error: any) {
+      if (this.isMissingTableError(error)) {
+        this.handleMissingTable(error);
+      }
+      throw error;
+    }
   }
 
   async findByAccountId(accountId: string): Promise<Pocket[]> {
-    const { data, error } = await this.client
-      .from(this.TABLE)
-      .select('*')
-      .eq('account_id', accountId)
-      .order('created_at', { ascending: false });
+    if (fallbackEnabled) {
+      return Array.from(fallbackStore.values()).filter((pocket) => pocket.accountId === accountId);
+    }
 
-    if (error || !data) return [];
-    return (data as PocketRow[]).map((row) => this.mapRowToPocket(row));
+    try {
+      const { data, error } = await this.client
+        .from(this.TABLE)
+        .select('*')
+        .eq('account_id', accountId)
+        .order('created_at', { ascending: false });
+
+      if (error || !data) return [];
+      return (data as PocketRow[]).map((row) => this.mapRowToPocket(row));
+    } catch (error: any) {
+      if (this.isMissingTableError(error)) {
+        this.handleMissingTable(error);
+      }
+      throw error;
+    }
   }
 
   async save(pocket: Pocket): Promise<Pocket> {
+    if (fallbackEnabled) {
+      fallbackStore.set(pocket.id, pocket);
+      return pocket;
+    }
+
     const row: CreatePocketProps = {
       id: pocket.id,
       accountId: pocket.accountId,
@@ -60,64 +104,134 @@ export class SupabasePocketRepository implements IPocketRepository {
       amount: pocket.amount,
     };
 
-    const { data, error } = await this.client
-      .from(this.TABLE)
-      .insert({
-        id: row.id,
-        account_id: row.accountId,
-        name: row.name,
-        amount: row.amount,
-      })
-      .select()
-      .single();
+    try {
+      const { data, error } = await this.client
+        .from(this.TABLE)
+        .insert({
+          id: row.id,
+          account_id: row.accountId,
+          name: row.name,
+          amount: row.amount,
+        })
+        .select()
+        .single();
 
-    if (error || !data) {
-      throw new AppError(`Error al crear bolsillo: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
+      if (error || !data) {
+        if (this.isMissingTableError(error)) {
+          fallbackEnabled = true;
+          fallbackStore.set(pocket.id, pocket);
+          return pocket;
+        }
+        throw new AppError(`Error al crear bolsillo: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
+      }
+
+      return this.mapRowToPocket(data as PocketRow);
+    } catch (error: any) {
+      if (this.isMissingTableError(error)) {
+        fallbackEnabled = true;
+        fallbackStore.set(pocket.id, pocket);
+        return pocket;
+      }
+      throw error;
     }
-
-    return this.mapRowToPocket(data as PocketRow);
   }
 
   async update(pocket: Pocket): Promise<Pocket> {
-    const { data, error } = await this.client
-      .from(this.TABLE)
-      .update({
-        name: pocket.name,
-        amount: pocket.amount,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', pocket.id)
-      .select()
-      .single();
-
-    if (error || !data) {
-      throw new AppError(`Error al actualizar bolsillo: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
+    if (fallbackEnabled) {
+      fallbackStore.set(pocket.id, pocket);
+      return pocket;
     }
 
-    return this.mapRowToPocket(data as PocketRow);
+    try {
+      const { data, error } = await this.client
+        .from(this.TABLE)
+        .update({
+          name: pocket.name,
+          amount: pocket.amount,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', pocket.id)
+        .select()
+        .single();
+
+      if (error || !data) {
+        if (this.isMissingTableError(error)) {
+          fallbackEnabled = true;
+          fallbackStore.set(pocket.id, pocket);
+          return pocket;
+        }
+        throw new AppError(`Error al actualizar bolsillo: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
+      }
+
+      return this.mapRowToPocket(data as PocketRow);
+    } catch (error: any) {
+      if (this.isMissingTableError(error)) {
+        fallbackEnabled = true;
+        fallbackStore.set(pocket.id, pocket);
+        return pocket;
+      }
+      throw error;
+    }
   }
 
   async delete(id: string): Promise<void> {
-    const { error } = await this.client
-      .from(this.TABLE)
-      .delete()
-      .eq('id', id);
+    if (fallbackEnabled) {
+      fallbackStore.delete(id);
+      return;
+    }
 
-    if (error) {
-      throw new AppError(`Error al eliminar bolsillo: ${error.message}`, 500, 'DB_ERROR');
+    try {
+      const { error } = await this.client
+        .from(this.TABLE)
+        .delete()
+        .eq('id', id);
+
+      if (error) {
+        if (this.isMissingTableError(error)) {
+          fallbackEnabled = true;
+          fallbackStore.delete(id);
+          return;
+        }
+        throw new AppError(`Error al eliminar bolsillo: ${error.message}`, 500, 'DB_ERROR');
+      }
+    } catch (error: any) {
+      if (this.isMissingTableError(error)) {
+        fallbackEnabled = true;
+        fallbackStore.delete(id);
+        return;
+      }
+      throw error;
     }
   }
 
   async getTotalAmountByAccountId(accountId: string): Promise<number> {
-    const { data, error } = await this.client
-      .from(this.TABLE)
-      .select('amount')
-      .eq('account_id', accountId);
-
-    if (error || !data) {
-      return 0;
+    if (fallbackEnabled) {
+      return Array.from(fallbackStore.values())
+        .filter((pocket) => pocket.accountId === accountId)
+        .reduce((sum, pocket) => sum + pocket.amount, 0);
     }
 
-    return (data as { amount: number }[]).reduce((sum, row) => sum + Number(row.amount), 0);
+    try {
+      const { data, error } = await this.client
+        .from(this.TABLE)
+        .select('amount')
+        .eq('account_id', accountId);
+
+      if (error || !data) {
+        if (this.isMissingTableError(error)) {
+          fallbackEnabled = true;
+          return 0;
+        }
+        return 0;
+      }
+
+      return (data as { amount: number }[]).reduce((sum, row) => sum + Number(row.amount), 0);
+    } catch (error: any) {
+      if (this.isMissingTableError(error)) {
+        fallbackEnabled = true;
+        return 0;
+      }
+      throw error;
+    }
   }
 }

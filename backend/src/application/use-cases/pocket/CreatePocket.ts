@@ -32,6 +32,8 @@ export class CreatePocket {
       throw new AppError('No tienes saldo disponible suficiente para crear este bolsillo', 400, 'INSUFFICIENT_AVAILABLE_BALANCE');
     }
 
+    await this.accountRepository.updateBalance(account.id, account.balance - dto.amount);
+
     const pocket = Pocket.create({
       id: randomUUID(),
       accountId: dto.accountId,

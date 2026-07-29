@@ -10,6 +10,7 @@ import { Pocket } from '../domain/entities/Pocket';
 import { CreatePocket } from '../application/use-cases/pocket/CreatePocket';
 import { GetAccountPockets } from '../application/use-cases/pocket/GetAccountPockets';
 import { UpdatePocket } from '../application/use-cases/pocket/UpdatePocket';
+import { DeletePocket } from '../application/use-cases/pocket/DeletePocket';
 import { TransferPocketBalance } from '../application/use-cases/pocket/TransferPocketBalance';
 import { randomUUID } from 'crypto';
 import { runLoanTests } from './loan-tests';
@@ -121,27 +122,32 @@ async function run() {
 
   // --- Tests de bolsillos ------------------------------------------------
   const pocketRepo = new InMemoryPocketRepo();
+  const pocketAccount = Account.create({ id: randomUUID(), userId: 'user1', accountNumber: 'BA987654321', accountType: AccountType.AHORROS });
+  await accountRepo.save(pocketAccount);
+  await accountRepo.updateBalance(pocketAccount.id, 1000);
+
   const createPocket = new CreatePocket(accountRepo as any, pocketRepo as any);
   const getAccountPockets = new GetAccountPockets(accountRepo as any, pocketRepo as any);
   const updatePocket = new UpdatePocket(accountRepo as any, pocketRepo as any);
+  const deletePocket = new DeletePocket(accountRepo as any, pocketRepo as any);
   const transferPocketBalance = new TransferPocketBalance(accountRepo as any, pocketRepo as any);
 
-  const pocketA = await createPocket.execute({ userId: 'user1', accountId: acc.id, name: 'Vacaciones', amount: 300 });
+  const pocketA = await createPocket.execute({ userId: 'user1', accountId: pocketAccount.id, name: 'Vacaciones', amount: 300 });
   assert(pocketA.amount === 300, 'El monto del bolsillo A debe ser 300');
   assert(pocketA.name === 'Vacaciones', 'El nombre del bolsillo A debe ser Vacaciones');
 
-  const pocketB = await createPocket.execute({ userId: 'user1', accountId: acc.id, name: 'Laptop', amount: 200 });
+  const pocketB = await createPocket.execute({ userId: 'user1', accountId: pocketAccount.id, name: 'Laptop', amount: 200 });
   assert(pocketB.amount === 200, 'El monto del bolsillo B debe ser 200');
 
-  const pockets = await getAccountPockets.execute({ userId: 'user1', accountId: acc.id });
+  const pockets = await getAccountPockets.execute({ userId: 'user1', accountId: pocketAccount.id });
   assert(pockets.length === 2, 'Debe haber 2 bolsillos en la cuenta');
 
   const updatedB = await updatePocket.execute({ userId: 'user1', pocketId: pocketB.id, amount: 300 });
   assert(updatedB.amount === 300, 'El bolso B debe actualizarse a 300');
 
   try {
-    await updatePocket.execute({ userId: 'user1', pocketId: pocketB.id, amount: 700 });
-    throw new Error('Debería haber fallado al exceder saldo disponible');
+    await updatePocket.execute({ userId: 'user1', pocketId: pocketB.id, amount: 1001 });
+    throw new Error('Debería haber fallado al exceder la capacidad de reserva de la cuenta');
   } catch (err: any) {
     if (!/No tienes saldo disponible suficiente/.test(err.message)) throw err;
   }
@@ -149,6 +155,14 @@ async function run() {
   const transferResult = await transferPocketBalance.execute({ userId: 'user1', fromPocketId: pocketA.id, toPocketId: pocketB.id, amount: 200 });
   assert(transferResult.fromPocket.amount === 100, 'El bolsillo A debe quedar con 100');
   assert(transferResult.toPocket.amount === 500, 'El bolsillo B debe quedar con 500');
+
+  const accountAfterTransfer = await accountRepo.findById(pocketAccount.id);
+  assert(accountAfterTransfer?.balance === 400, 'El saldo reservado en la cuenta debe permanecer igual al transferir entre bolsillos');
+
+  const deletedPocket = await deletePocket.execute({ userId: 'user1', pocketId: pocketB.id });
+  assert(deletedPocket.id === pocketB.id, 'Debe devolver el bolsillo eliminado');
+  const accountAfterDelete = await accountRepo.findById(pocketAccount.id);
+  assert(accountAfterDelete?.balance === 900, 'La cuenta debe recibir el saldo al eliminar el bolsillo');
 
   console.log('All pocket tests passed');
   console.log('All payment tests passed');

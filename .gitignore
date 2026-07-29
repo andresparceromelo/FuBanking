@@ -1,0 +1,14 @@
+# Next.js
+fronted/.next/
+frontend/.next/
+
+# Dependencias
+fronted/node_modules/
+frontend/node_modules/
+
+# Variables de entorno
+.env
+.env.local
+
+# Logs
+*.log
