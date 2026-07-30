@@ -5,10 +5,15 @@ frontend/.next/
 # Dependencias
 fronted/node_modules/
 frontend/node_modules/
+node_modules/
+
+# Build
+backend/dist/
 
 # Variables de entorno
 .env
 .env.local
+backend/.env
 
 # Logs
 *.log
