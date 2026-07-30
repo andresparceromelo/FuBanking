@@ -38,11 +38,12 @@ export class MoneyRequestController {
   respond = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const requestId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-      const { accept } = req.body;
+      const { accept, accountId } = req.body;
       const updatedRequest = await this.respondMoneyRequest.execute({
         userId: req.user!.id,
         requestId,
         accept: Boolean(accept),
+        accountId,
       });
       sendSuccess(res, updatedRequest, 'Respuesta a la solicitud registrada exitosamente');
     } catch (error) {

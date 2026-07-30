@@ -6,6 +6,8 @@ import { RespondMoneyRequest } from '../../application/use-cases/money-request/R
 import { SupabaseMoneyRequestRepository } from '../../infrastructure/repositories/SupabaseMoneyRequestRepository';
 import { SupabaseUserRepository } from '../../infrastructure/repositories/SupabaseUserRepository';
 import { SupabaseNotificationRepository } from '../../infrastructure/repositories/SupabaseNotificationRepository';
+import { SupabaseAccountRepository } from '../../infrastructure/repositories/SupabaseAccountRepository';
+import { SupabaseTransactionRepository } from '../../infrastructure/repositories/SupabaseTransactionRepository';
 import supabaseClient from '../../infrastructure/database/supabase.client';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
@@ -14,10 +16,12 @@ const router = Router();
 const moneyRequestRepo = new SupabaseMoneyRequestRepository(supabaseClient);
 const userRepo = new SupabaseUserRepository(supabaseClient);
 const notificationRepo = new SupabaseNotificationRepository(supabaseClient);
+const accountRepo = new SupabaseAccountRepository(supabaseClient);
+const transactionRepo = new SupabaseTransactionRepository(supabaseClient);
 
 const createMoneyRequest = new CreateMoneyRequest(moneyRequestRepo, userRepo, notificationRepo);
 const getUserMoneyRequests = new GetUserMoneyRequests(moneyRequestRepo);
-const respondMoneyRequest = new RespondMoneyRequest(moneyRequestRepo, userRepo, notificationRepo);
+const respondMoneyRequest = new RespondMoneyRequest(moneyRequestRepo, userRepo, accountRepo, transactionRepo, notificationRepo);
 
 const controller = new MoneyRequestController(createMoneyRequest, getUserMoneyRequests, respondMoneyRequest);
 

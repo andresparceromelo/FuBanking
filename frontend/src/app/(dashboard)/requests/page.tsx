@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { HandCoins, Send, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { useMoneyRequests } from '@/features/money-request/hooks/useMoneyRequests';
+import { useAccounts } from '@/features/account/hooks/useAccounts';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { useToast } from '@/shared/components/feedback/ToastProvider';
 import { cn } from '@/shared/utils/cn';
@@ -11,6 +12,8 @@ export default function RequestsPage() {
   const toast = useToast();
   const { user } = useAuth();
   const { requests, isLoading, fetchRequests, createRequest, respond } = useMoneyRequests();
+  const { accounts } = useAccounts();
+  const [selectedAccounts, setSelectedAccounts] = useState<Record<string, string>>({});
 
   const [email, setEmail] = useState('');
   const [amount, setAmount] = useState('');
@@ -38,9 +41,10 @@ export default function RequestsPage() {
   };
 
   const handleRespond = async (id: string, accept: boolean) => {
-    const result = await respond(id, accept);
+    const accountId = accept ? (selectedAccounts[id] || accounts[0]?.id) : undefined;
+    const result = await respond(id, accept, accountId);
     if (result) {
-      toast.success(accept ? 'Cobro aceptado' : 'Cobro rechazado', 'Se ha actualizado el estado de la solicitud.');
+      toast.success(accept ? 'Cobro aceptado y pagado' : 'Cobro rechazado', 'Se ha actualizado el estado de la solicitud.');
     }
   };
 
@@ -187,21 +191,34 @@ export default function RequestsPage() {
                         </span>
                         
                         {isReceived && isPending && (
-                          <div className="flex items-center gap-2 w-full sm:w-auto">
-                            <button
-                              onClick={() => handleRespond(req.id, false)}
-                              disabled={isLoading}
-                              className="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold text-destructive bg-destructive/10 hover:bg-destructive hover:text-destructive-foreground transition-colors disabled:opacity-50"
+                          <div className="flex flex-col gap-3 w-full sm:w-auto mt-2 sm:mt-0">
+                            <select
+                              value={selectedAccounts[req.id] || (accounts.length > 0 ? accounts[0].id : '')}
+                              onChange={(e) => setSelectedAccounts(prev => ({ ...prev, [req.id]: e.target.value }))}
+                              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-xs font-semibold outline-none focus:ring-2 focus:ring-primary shadow-sm"
                             >
-                              Rechazar
-                            </button>
-                            <button
-                              onClick={() => handleRespond(req.id, true)}
-                              disabled={isLoading}
-                              className="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-colors disabled:opacity-50"
-                            >
-                              Aceptar y Pagar
-                            </button>
+                              {accounts.map(acc => (
+                                <option key={acc.id} value={acc.id}>
+                                  {acc.type === 'CORRIENTE' ? 'Corriente' : 'Ahorros'} - ****{acc.accountNumber.slice(-4)} ({formatCurrency(acc.balance)})
+                                </option>
+                              ))}
+                            </select>
+                            <div className="flex items-center gap-2 w-full sm:w-auto">
+                              <button
+                                onClick={() => handleRespond(req.id, false)}
+                                disabled={isLoading}
+                                className="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold text-destructive bg-destructive/10 hover:bg-destructive hover:text-destructive-foreground transition-colors disabled:opacity-50"
+                              >
+                                Rechazar
+                              </button>
+                              <button
+                                onClick={() => handleRespond(req.id, true)}
+                                disabled={isLoading || accounts.length === 0}
+                                className="flex-1 sm:flex-none px-4 py-2 rounded-xl text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-colors disabled:opacity-50"
+                              >
+                                Aceptar y Pagar
+                              </button>
+                            </div>
                           </div>
                         )}
                       </div>

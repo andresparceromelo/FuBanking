@@ -46,4 +46,16 @@ export class Notification {
   markAsRead(): void {
     this._read = true;
   }
+
+  toJSON(): Record<string, unknown> {
+    return {
+      id: this._id,
+      userId: this._userId,
+      title: this._title,
+      message: this._message,
+      type: this._type,
+      read: this._read,
+      createdAt: this._createdAt,
+    };
+  }
 }

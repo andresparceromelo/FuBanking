@@ -47,8 +47,8 @@ export class SupabaseMoneyRequestRepository implements IMoneyRequestRepository {
       .single();
 
     if (error || !data) {
-      console.warn('Advertencia DB money_requests:', error?.message);
-      return request;
+      console.error('Error DB money_requests:', error?.message, error?.details);
+      throw new Error(`Error al guardar solicitud de dinero: ${error?.message}`);
     }
 
     return this.mapRowToRequest(data as MoneyRequestRow);

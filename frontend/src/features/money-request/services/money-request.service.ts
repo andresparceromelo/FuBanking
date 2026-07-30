@@ -12,8 +12,8 @@ class MoneyRequestService {
     return response.data;
   }
 
-  async respond(requestId: string, accept: boolean): Promise<MoneyRequest> {
-    const response = await apiClient.patch<MoneyRequest>(`/money-requests/${requestId}/respond`, { accept });
+  async respond(requestId: string, accept: boolean, accountId?: string): Promise<MoneyRequest> {
+    const response = await apiClient.patch<MoneyRequest>(`/money-requests/${requestId}/respond`, { accept, accountId });
     return response.data;
   }
 }

@@ -45,11 +45,11 @@ export function useMoneyRequests() {
     }
   }, []);
 
-  const respond = useCallback(async (requestId: string, accept: boolean) => {
+  const respond = useCallback(async (requestId: string, accept: boolean, accountId?: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      const request = await moneyRequestService.respond(requestId, accept);
+      const request = await moneyRequestService.respond(requestId, accept, accountId);
       setRequests((current) => current.map((item) => (item.id === request.id ? request : item)));
       return request;
     } catch (err) {

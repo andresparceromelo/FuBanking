@@ -57,4 +57,16 @@ export class MoneyRequest {
     }
     this._status = accept ? MoneyRequestStatus.ACEPTADA : MoneyRequestStatus.RECHAZADA;
   }
+
+  toJSON(): Record<string, unknown> {
+    return {
+      id: this._id,
+      requesterUserId: this._requesterUserId,
+      requestedUserId: this._requestedUserId,
+      amount: this._amount,
+      description: this._description,
+      status: this._status,
+      createdAt: this._createdAt,
+    };
+  }
 }
