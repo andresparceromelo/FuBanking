@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { CreateVirtualCard } from '../../application/use-cases/card/CreateVirtualCard';
 import { GetUserCards } from '../../application/use-cases/card/GetUserCards';
 import { ToggleCardLock } from '../../application/use-cases/card/ToggleCardLock';
+import { RevealVirtualCardDetails } from '../../application/use-cases/card/RevealVirtualCardDetails';
 import { sendSuccess } from '../../shared/utils/response';
 
 export class CardController {
@@ -9,6 +10,7 @@ export class CardController {
     private readonly createVirtualCard: CreateVirtualCard,
     private readonly getUserCards: GetUserCards,
     private readonly toggleCardLock: ToggleCardLock,
+    private readonly revealVirtualCardDetails: RevealVirtualCardDetails,
   ) {}
 
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -41,6 +43,19 @@ export class CardController {
         cardId,
       });
       sendSuccess(res, card, 'Estado de tarjeta actualizado exitosamente');
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  revealDetails = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const cardId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const details = await this.revealVirtualCardDetails.execute({
+        userId: req.user!.id,
+        cardId,
+      });
+      sendSuccess(res, details, 'Datos de tarjeta obtenidos exitosamente');
     } catch (error) {
       next(error);
     }

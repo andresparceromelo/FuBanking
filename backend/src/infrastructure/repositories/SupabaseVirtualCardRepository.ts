@@ -57,8 +57,11 @@ export class SupabaseVirtualCardRepository implements IVirtualCardRepository {
       .single();
 
     if (error || !data) {
-      console.warn('Advertencia DB virtual_cards:', error?.message);
-      return card;
+      throw new AppError(
+        `Error al guardar la tarjeta virtual: ${error?.message ?? 'Sin datos retornados'}. Verifica que la tabla virtual_cards exista y tenga permisos correctos.`,
+        500,
+        'DB_ERROR'
+      );
     }
 
     return this.mapRowToCard(data as VirtualCardRow);
