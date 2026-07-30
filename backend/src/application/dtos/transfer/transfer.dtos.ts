@@ -68,4 +68,5 @@ export interface TransferHistoryItemDto {
   direction: 'INCOMING' | 'OUTGOING'; // Si recibió o envió el dinero
   relatedAccount: string;             // La cuenta contraparte (enmascarada)
   relatedName: string;                // El nombre de la contraparte
+  resultingBalance?: number;
 }

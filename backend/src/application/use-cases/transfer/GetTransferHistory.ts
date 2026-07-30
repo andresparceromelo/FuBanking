@@ -1,4 +1,4 @@
-﻿import { ITransactionRepository } from '../../../domain/repositories/ITransactionRepository';
+import { ITransactionRepository } from '../../../domain/repositories/ITransactionRepository';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { GetTransferHistoryDto, TransferHistoryItemDto } from '../../dtos/transfer/transfer.dtos';
@@ -61,11 +61,27 @@ export class GetTransferHistory {
         direction:       isOutgoing ? 'OUTGOING' : 'INCOMING',
         relatedAccount:  relatedMasked,
         relatedName:     relatedName,
+        resultingBalance: 0, // Computed below
       };
       return item;
     });
 
-    return Promise.all(historyPromises);
+    const resolvedHistory = await Promise.all(historyPromises);
+
+    // Compute approximate resulting balances working backwards from current balance
+    let currentBalance = account.balance;
+    for (let i = 0; i < resolvedHistory.length; i++) {
+      const item = resolvedHistory[i];
+      item.resultingBalance = currentBalance;
+      // Revert the transaction to find the balance before this transaction
+      if (item.direction === 'INCOMING') {
+        currentBalance -= item.amount;
+      } else {
+        currentBalance += item.amount;
+      }
+    }
+
+    return resolvedHistory;
   }
 
   private mask(n: string): string {
