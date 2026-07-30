@@ -39,6 +39,7 @@ export interface TransactionHistoryItem {
   direction: 'INCOMING' | 'OUTGOING';
   relatedAccount: string;
   relatedName: string;
+  resultingBalance?: number;
 }
 
 class TransferService {

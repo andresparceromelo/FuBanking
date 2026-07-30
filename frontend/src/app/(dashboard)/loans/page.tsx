@@ -1,8 +1,8 @@
 import { LoansClient } from '@/features/loans/components/LoansClient';
 
 export const metadata = {
-  title: 'Créditos y Préstamos | FuBanking',
-  description: 'Simula y solicita créditos en FuBanking.',
+  title: 'Creditos y Prestamos | FuBanking',
+  description: 'Simula y solicita creditos en FuBanking.',
 };
 
 export default function LoansPage() {

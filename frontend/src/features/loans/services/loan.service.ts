@@ -21,6 +21,7 @@ export interface LoanSimulation {
   amount: number;
   installments: number;
   annualRate: number;
+  monthlyRate: number;
   monthlyPayment: number;
   totalToPay: number;
   totalInterest: number;
@@ -50,9 +51,17 @@ class LoanService {
     return response.data;
   }
 
+  async simulateLoan(payload: SimulateLoanPayload): Promise<LoanSimulation> {
+    return this.simulate(payload);
+  }
+
   async create(payload: CreateLoanPayload): Promise<LoanApplication> {
     const response = await apiClient.post<LoanApplication>('/loans', payload);
     return response.data;
+  }
+
+  async createLoan(payload: CreateLoanPayload): Promise<LoanApplication> {
+    return this.create(payload);
   }
 }
 

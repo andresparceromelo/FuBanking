@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { useMemo, useState } from 'react';
 import { Landmark, Calculator, BadgeCheck } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';

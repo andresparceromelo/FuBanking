@@ -52,7 +52,7 @@ export function TransactionHistoryTable({ transactions }: TransactionHistoryTabl
         return (
           <div
             key={tx.id}
-            className="grid grid-cols-[40px_minmax(0,1fr)] gap-3 rounded-2xl border border-border bg-card px-4 py-3.5 transition hover:bg-muted sm:grid-cols-[40px_minmax(0,1fr)_116px_92px_130px] sm:items-center"
+            className="grid grid-cols-[40px_minmax(0,1fr)] gap-3 rounded-2xl border border-border bg-card px-4 py-3.5 transition hover:bg-muted sm:grid-cols-[40px_minmax(0,1fr)_110px_80px_110px_110px] sm:items-center"
           >
             <div
               className={`flex h-10 w-10 items-center justify-center rounded-full ${
@@ -88,6 +88,15 @@ export function TransactionHistoryTable({ transactions }: TransactionHistoryTabl
               <p className={`text-base font-bold ${isOutgoing ? 'text-rose-500' : 'text-emerald-500'}`}>
                 {isOutgoing ? '-' : '+'}
                 {formattedAmount}
+              </p>
+            </div>
+            
+            <div className="col-start-2 text-left sm:col-start-auto sm:text-right">
+              <p className="text-xs text-muted-foreground font-semibold">Saldo resultante</p>
+              <p className="text-sm font-bold text-foreground">
+                {tx.resultingBalance !== undefined 
+                  ? new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }).format(tx.resultingBalance)
+                  : 'No disp.'}
               </p>
             </div>
           </div>

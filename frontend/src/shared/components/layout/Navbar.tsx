@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/shared/hooks/useAuth';
+import { useNotifications } from '@/features/notification/hooks/useNotifications';
 import { 
   LogOut, 
   Wallet, 
@@ -22,13 +23,19 @@ import { cn } from '@/shared/utils/cn';
 export function Navbar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+  const { unreadCount, fetchNotifications } = useNotifications();
+
+  React.useEffect(() => {
+    if (user) {
+      void fetchNotifications();
+    }
+  }, [user, fetchNotifications]);
 
   const navLinks = [
     { href: '/accounts', label: 'Cuentas', icon: Wallet },
     { href: '/transfers', label: 'Transferir', icon: Send },
     { href: '/history', label: 'Historial', icon: History },
     { href: '/pockets', label: 'Bolsillos', icon: PiggyBank },
-    { href: '/services', label: 'Servicios', icon: Receipt },
     { href: '/loans', label: 'Créditos', icon: Landmark },
     { href: '/cards', label: 'Tarjeta', icon: CreditCard },
     { href: '/requests', label: 'Cobros', icon: HandCoins },
@@ -58,7 +65,14 @@ export function Navbar() {
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   )}
                 >
-                  <Icon size={14} />
+                  <div className="relative">
+                    <Icon size={14} />
+                    {href === '/notifications' && unreadCount > 0 && (
+                      <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 items-center justify-center rounded-full bg-destructive text-[8px] text-destructive-foreground font-bold border border-background">
+                        {unreadCount > 9 ? '9+' : unreadCount}
+                      </span>
+                    )}
+                  </div>
                   {label}
                 </Link>
               ))}
@@ -92,7 +106,12 @@ export function Navbar() {
                   : 'text-muted-foreground hover:bg-muted'
               )}
             >
-              <Icon size={13} />
+              <div className="relative">
+                <Icon size={13} />
+                {href === '/notifications' && unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2 rounded-full bg-destructive border border-background" />
+                )}
+              </div>
               {label}
             </Link>
           ))}
