@@ -9,12 +9,14 @@ export default function ForgotPasswordPage() {
         Te enviaremos un enlace para restablecer tu contraseña.
       </p>
       <ForgotPasswordForm />
-      <p className="mt-6 text-sm text-muted-foreground text-center">
-        ¿Recordaste tu contraseña?{' '}
-        <Link href="/login" className="text-primary hover:underline font-medium">
-          Volver al login
-        </Link>
-      </p>
+      <div className="mt-8 pt-6 border-t border-border text-center">
+        <p className="text-sm text-muted-foreground">
+          ¿Recordaste tu contraseña?{' '}
+          <Link href="/login" className="text-primary hover:underline font-semibold">
+            Volver al login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

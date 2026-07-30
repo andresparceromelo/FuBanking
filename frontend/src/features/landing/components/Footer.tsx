@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -8,7 +9,18 @@ export function Footer() {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-start gap-12 mb-12">
           <div>
-            <h3 className="text-2xl font-bold text-white mb-3">fubank</h3>
+            <div className="flex items-center gap-3 mb-4">
+              <Image
+                src="/logo.png"
+                alt="FuBank"
+                width={40}
+                height={40}
+                className="rounded-xl"
+              />
+              <h3 className="text-2xl font-black text-white font-display tracking-[0.06em] uppercase">
+                Fubank
+              </h3>
+            </div>
             <p className="text-white/50 max-w-sm leading-relaxed">
               Banca digital segura, rápida y sin complicaciones. Tu dinero bajo tu control.
             </p>

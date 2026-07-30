@@ -26,12 +26,14 @@ export default async function ResetPasswordPage({ searchParams }: PageProps) {
         Asegúrate de que sea segura y fácil de recordar.
       </p>
       <ResetPasswordForm token={token} />
-      <p className="mt-6 text-sm text-muted-foreground text-center">
-        ¿Recordaste tu contraseña?{' '}
-        <Link href="/login" className="text-primary hover:underline font-medium">
-          Volver al login
-        </Link>
-      </p>
+      <div className="mt-8 pt-6 border-t border-border text-center">
+        <p className="text-sm text-muted-foreground">
+          ¿Recordaste tu contraseña?{' '}
+          <Link href="/login" className="text-primary hover:underline font-semibold">
+            Volver al login
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

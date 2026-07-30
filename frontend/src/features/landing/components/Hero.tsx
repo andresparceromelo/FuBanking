@@ -3,30 +3,20 @@
 import { motion } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#0a0a1a] via-[#0f0a20] to-background">
-      {/* Background stars */}
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 40 }, (_, i) => (
-          <div
-            key={i}
-            className="absolute rounded-full bg-white animate-star-twinkle"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              width: `${Math.random() * 2 + 1}px`,
-              height: `${Math.random() * 2 + 1}px`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${Math.random() * 3 + 2}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Nebula */}
-      <div className="absolute top-[10%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-primary/8 blur-[120px]" />
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      {/* Background image */}
+      <Image
+        src="/auth-background.jpg"
+        alt=""
+        fill
+        className="object-cover"
+        priority
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80" />
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-3xl">
@@ -34,9 +24,17 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="flex items-center gap-5 mb-6"
         >
-          <h1 className="text-6xl sm:text-8xl font-bold text-white mb-2 tracking-tight">
-            fubank
+          <Image
+            src="/logo.png"
+            alt="FuBank"
+            width={72}
+            height={72}
+            className="rounded-2xl"
+          />
+          <h1 className="text-7xl sm:text-9xl font-black text-white tracking-[0.06em] font-display uppercase">
+            Fubank
           </h1>
         </motion.div>
 
@@ -44,7 +42,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-          className="text-xl sm:text-2xl text-white/60 mb-10 max-w-xl leading-relaxed"
+          className="text-xl sm:text-2xl text-white/70 mb-10 max-w-xl leading-relaxed font-light"
         >
           Tu dinero, tu control. Banca digital segura y sin complicaciones.
         </motion.p>
@@ -63,7 +61,7 @@ export function Hero() {
           </Link>
           <Link
             href="/login"
-            className="px-8 py-4 border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/5 transition-colors"
+            className="px-8 py-4 border border-white/20 text-white rounded-full font-semibold text-lg hover:bg-white/5 transition-colors backdrop-blur-sm"
           >
             Iniciar sesión
           </Link>

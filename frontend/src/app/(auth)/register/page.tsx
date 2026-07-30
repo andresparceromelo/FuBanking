@@ -9,12 +9,14 @@ export default function RegisterPage() {
         Empieza a manejar tu dinero de forma digital.
       </p>
       <RegisterForm />
-      <p className="mt-6 text-sm text-muted-foreground text-center">
-        ¿Ya tienes cuenta?{' '}
-        <Link href="/login" className="text-primary hover:underline font-medium">
-          Inicia sesión
-        </Link>
-      </p>
+      <div className="mt-8 pt-6 border-t border-border text-center">
+        <p className="text-sm text-muted-foreground">
+          ¿Ya tienes cuenta?{' '}
+          <Link href="/login" className="text-primary hover:underline font-semibold">
+            Inicia sesión
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }

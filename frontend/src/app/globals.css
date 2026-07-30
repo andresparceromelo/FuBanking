@@ -29,8 +29,9 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   
-  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  --font-sans: 'Poppins', Arial, Helvetica, sans-serif;
   --font-mono: var(--font-geist-mono);
+  --font-display: 'Nunito', 'Poppins', Arial, sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
