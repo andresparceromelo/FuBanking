@@ -16,7 +16,8 @@ import {
   Landmark, 
   CreditCard, 
   HandCoins, 
-  Bell 
+  Bell,
+  Shield 
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import Image from 'next/image';
@@ -37,11 +38,12 @@ export function Navbar() {
     { href: '/transfers', label: 'Transferir', icon: Send },
     { href: '/history', label: 'Historial', icon: History },
     { href: '/pockets', label: 'Bolsillos', icon: PiggyBank },
-    { href: '/loans', label: 'Créditos', icon: Landmark },
+    { href: '/loans', label: 'Creditos', icon: Landmark },
     { href: '/cards', label: 'Tarjeta', icon: CreditCard },
     { href: '/requests', label: 'Cobros', icon: HandCoins },
     { href: '/notifications', label: 'Avisos', icon: Bell },
     { href: '/profile', label: 'Perfil', icon: UserIcon },
+    ...(user?.role === 'admin' ? [{ href: '/admin/loans', label: 'Admin', icon: Shield }] : []),
   ];
 
   return (

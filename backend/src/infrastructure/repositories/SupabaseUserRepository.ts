@@ -22,6 +22,7 @@ interface UserRow {
   password: string;
   is_active: boolean;
   two_factor_enabled: boolean;
+  role: string;
   created_at: string;
   updated_at: string;
 }
@@ -56,6 +57,7 @@ export class SupabaseUserRepository implements IUserRepository {
       passwordHash: row.password,
       isActive: row.is_active,
       twoFactorEnabled: row.two_factor_enabled ?? false,
+      role: row.role ?? 'user',
       createdAt: new Date(row.created_at),
       updatedAt: new Date(row.updated_at),
     };
@@ -212,5 +214,15 @@ export class SupabaseUserRepository implements IUserRepository {
     }
 
     return this.mapRowToUser(data as UserRow);
+  }
+
+  async findByRole(role: string): Promise<User[]> {
+    const { data, error } = await this.client
+      .from(this.TABLE)
+      .select('*')
+      .eq('role', role);
+
+    if (error || !data) return [];
+    return (data as UserRow[]).map(row => this.mapRowToUser(row));
   }
 }

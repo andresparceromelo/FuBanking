@@ -7,6 +7,7 @@ export enum AccountType {
   AHORROS = 'AHORROS',
   CORRIENTE = 'CORRIENTE',
   NOMINA = 'NOMINA',
+  CREDITO = 'CREDITO',
 }
 
 /**
@@ -27,6 +28,8 @@ export interface AccountDetails {
   overdraftLimit?: number | null;  // Límite de sobregiro (Corriente)
   allowsCheckbook?: boolean | null;// Permite chequera (Corriente)
   companyName?: string | null;     // Empresa asociada (Nómina)
+  loanId?: string | null;          // Préstamo asociado (Crédito)
+  installments?: number | null;    // Cuotas del crédito (Crédito)
 }
 
 /**

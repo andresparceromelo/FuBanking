@@ -12,6 +12,7 @@ export interface PublicUser {
   avatarUrl: string | null;
   isActive: boolean;
   twoFactorEnabled: boolean;
+  role: string;
   createdAt: string;
 }
 

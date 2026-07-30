@@ -6,116 +6,137 @@ Este archivo es la memoria principal del proyecto. Al iniciar una sesion nueva, 
 
 - Proyecto: FuBanking, app bancaria con backend Express/TypeScript + Supabase y frontend Next.js/React.
 - Rama actual: `main`.
-- Remoto `origin/main` ya fue traido e integrado el 2026-07-29. Commit remoto integrado: `edfbc0a Update pockets`.
-- Hay una rama de respaldo creada antes del merge: `codex/backup-before-pull-merge`.
-- Hay un stash de respaldo que no se borro: `stash@{0}: codex-before-origin-main-merge`.
 - Carpeta activa del frontend: `frontend/`.
-- No desarrollar en `fronted/`; es carpeta vieja/duplicada y se esta eliminando del trabajo local.
+- No desarrollar en `fronted/`; es carpeta vieja/duplicada.
 - Supabase esta conectado correctamente desde `backend/.env`.
-- La tabla `public.virtual_cards` ya fue creada en Supabase ejecutando la migracion SQL de este repo.
-- Tarjetas virtuales ya permiten crear, listar, bloquear/desbloquear y revelar numero completo/CVV desde el reverso.
-- Decision de producto: la tarjeta virtual actual funciona como tarjeta asociada a cuenta. La idea futura es que un credito aprobado pueda ser usado por tarjeta virtual.
-- Backend compila actualmente con `npm run build`.
-- Lint global del frontend aun falla por deuda previa en auth/profile/account/Label/useAuth/Navbar, pero el lint focalizado de tarjetas paso.
-- No revertir cambios locales existentes. Hay muchos cambios pendientes de commit.
+- Backend compila con `npm run build`. Frontend compila con `npx next build`.
+- Tablas creadas en Supabase: `users`, `accounts`, `account_details`, `virtual_cards`, `notifications`, `loan_applications`.
+- Todas las foreign keys apuntan a `public.users(id)` (NO `auth.users(id)`).
 
-## Cambios Hechos Hoy
+## Modulos Implementados
 
-### Pull Pendiente Integrado
+| Modulo | Estado | Detalle |
+|---|---|---|
+| Usuarios/auth | Completo | Registro, login, logout, recuperacion, 2FA. |
+| Perfil | Completo | Edicion de perfil. |
+| Cuentas | Completo | Crear, listar, depositar, retirar, mostrar/ocultar saldo. |
+| Transferencias | Completo | Buscar destinatario, transferir, comprobante. |
+| Historial | Parcial | Falta saldo resultante real y filtros completos. |
+| Bolsillos | Avanzado | Crear, editar, eliminar, transferir entre bolsillos. |
+| Creditos/Prestamos | Completo | Simular, solicitar, ver estado, admin aprueba/rechaza. |
+| Tarjetas virtuales | Completo | Crear, listar, bloquear/desbloquear, revelar numero/CVV. |
+| Solicitar dinero | Avanzado | Crear, responder solicitudes. |
+| Notificaciones | Completo | Crear, listar, marcar leida. Notificaciones automaticas en creditos. |
+| Admin creditos | Completo | Middleware admin, listar todas las solicitudes, aprobar/rechazar. |
 
-Se ejecuto `git fetch origin` y `git merge --ff-only origin/main`.
+## Sistema De Creditos — Flujo Completo
 
-El remoto avanzo:
+### Backend
+
+1. **Crear solicitud** — `POST /loans`
+   - Valida que el usuario no tenga un prestamo PENDING
+   - Guarda en `loan_applications` con status PENDING
+   - Crea notificacion al usuario
+   - Crea notificacion a todos los admins
+
+2. **Ver mis prestamos** — `GET /loans/me`
+   - Devuelve todos los prestamos del usuario con sus estados
+
+3. **Simular prestamo** — `POST /loans/simulate`
+   - Calcula cuota mensual, total a pagar, intereses
+
+4. **Admin: listar todos** — `GET /loans/admin` (requiere role admin)
+   - Devuelve todas las solicitudes de prestamo
+
+5. **Admin: aprobar** — `PATCH /loans/admin/:id/approve`
+   - Cambia status a APPROVED
+   - Crea cuenta CREDITO con loanId y cuotas en details
+   - Notifica al usuario
+
+6. **Admin: rechazar** — `PATCH /loans/admin/:id/reject`
+   - Cambia status a REJECTED
+   - Notifica al usuario
+
+### Frontend
+
+- `/loans` — Pagina del usuario: simulador, solicitar, ver historial de solicitudes con estado
+- `/admin/loans` — Pagina del admin: listar todas, filtrar por estado, aprobar/rechazar
+
+### Reglas De Negocio
+
+- Solo 1 prestamo PENDING por usuario a la vez
+- Al aprobar se crea una cuenta tipo CREDITO automaticamente
+- El admin recibe notificacion cuando alguien solicita un prestamo
+- El usuario recibe notificacion cuando su prestamo es aprobado o rechazado
+
+### Tabla loan_applications
+
+```sql
+CREATE TABLE public.loan_applications (
+  id UUID PRIMARY KEY,
+  user_id UUID REFERENCES public.users(id),
+  amount NUMERIC(15,2),
+  installments INTEGER,
+  annual_rate NUMERIC(5,2),
+  monthly_income NUMERIC(15,2),
+  monthly_payment NUMERIC(15,2),
+  total_to_pay NUMERIC(15,2),
+  total_interest NUMERIC(15,2),
+  document_verified BOOLEAN,
+  age_verified BOOLEAN,
+  income_verified BOOLEAN,
+  credit_history_verified BOOLEAN,
+  eligibility JSONB,
+  status TEXT CHECK (status IN ('PENDING', 'APPROVED', 'REJECTED')),
+  created_at TIMESTAMPTZ
+);
+```
+
+### Cuenta CREDITO
+
+Cuando se aprueba un prestamo, se crea una cuenta con:
+- `account_type = 'CREDITO'`
+- `details.loanId` = ID del prestamo
+- `details.installments` = numero de cuotas
+- `balance = 0` (se usa como cupo, no como saldo)
+
+## Admin Setup
+
+### Crear usuario admin
+
+1. Registrar usuario normal desde la app
+2. Ejecutar en Supabase SQL Editor:
+
+```sql
+UPDATE public.users SET role = 'admin' WHERE email = 'admin@fubanking.com';
+```
+
+### Credenciales de prueba
+
+| Campo | Valor |
+|-------|-------|
+| Email | admin@fubanking.com |
+| Password | Admin123! |
+
+### Middleware admin
+
+`backend/src/presentation/middlewares/adminMiddleware.ts` — verifica JWT + role = 'admin'.
+
+Las rutas admin en `loan.routes.ts` usan `authMiddleware` + `adminMiddleware`.
+
+## Migraciones SQL (Ejecutar en Supabase SQL Editor)
+
+Las migraciones estan en `backend/supabase/migrations/`. Se ejecutan manualmente copiando y pegando en el SQL Editor de Supabase.
 
 ```txt
-5303580 -> edfbc0a Update pockets
+202607290001_create_virtual_cards.sql
+202607290002_create_notifications.sql
+202607290003_create_loan_applications.sql
+202607300001_add_admin_role_and_credit_account.sql
+202607300002_fix_loan_applications_fk.sql
 ```
 
-Conflictos resueltos:
-
-- `frontend/src/app/(dashboard)/loans/page.tsx`
-- `frontend/src/app/(dashboard)/pockets/page.tsx`
-
-Resolucion aplicada:
-
-- Mantener la arquitectura nueva del pull: paginas como wrappers server que importan clientes.
-- `loans/page.tsx` renderiza `LoansClient`.
-- `pockets/page.tsx` renderiza `PocketsClient`.
-- Se agrego compatibilidad en `frontend/src/features/loans/services/loan.service.ts` para soportar nombres usados por ambos lados: `simulate/create` y `simulateLoan/createLoan`.
-
-### Supabase: Tabla De Tarjetas Virtuales
-
-El error original era:
-
-```txt
-Could not find the table 'public.virtual_cards' in the schema cache
-```
-
-Diagnostico:
-
-- La conexion a Supabase estaba bien.
-- El backend leia `backend/.env`.
-- El backend usaba `SUPABASE_SERVICE_ROLE_KEY`.
-- El problema real era que la tabla `public.virtual_cards` no existia en el proyecto Supabase.
-
-Se creo esta migracion:
-
-```txt
-backend/supabase/migrations/202607290001_create_virtual_cards.sql
-```
-
-La migracion crea:
-
-- `public.virtual_cards`
-- columnas: `id`, `user_id`, `account_id`, `card_holder_name`, `card_number`, `last_four`, `expiration_date`, `cvv`, `status`, `created_at`, `updated_at`
-- indices por `user_id`, `account_id`, `created_at`
-- checks de formato para numero, ultimos 4, fecha, CVV y estado
-- trigger `set_virtual_cards_updated_at`
-
-Ya fue ejecutada en Supabase y verificada con consulta directa. Resultado:
-
-```json
-{ "ok": true, "table": "virtual_cards", "rows": 0 }
-```
-
-### Tarjeta Virtual: Revelar Numero Y CVV
-
-Problema:
-
-- En el reverso de la tarjeta se veia un elemento tipo boton para ver CVV.
-- No era funcional porque el backend solo devolvia `cvvMasked: '***'`.
-
-Solucion implementada:
-
-- Nuevo caso de uso backend:
-  - `backend/src/application/use-cases/card/RevealVirtualCardDetails.ts`
-- Nuevo endpoint:
-  - `GET /api/v1/cards/:id/reveal`
-- El endpoint:
-  - requiere JWT
-  - busca la tarjeta por ID
-  - valida que pertenezca al usuario autenticado
-  - no revela datos si esta cancelada
-  - devuelve `cardNumber` y `cvv`
-- Frontend:
-  - `frontend/src/features/cards/services/card.service.ts` agrega `revealDetails(cardId)`
-  - `frontend/src/features/cards/types/card.types.ts` agrega `RevealedVirtualCardDetails`
-  - `frontend/src/features/cards/components/VirtualCard.tsx` ahora tiene boton real:
-    - `Ver numero y CVV`
-    - `Ocultar numero y CVV`
-  - El boton detiene propagacion para no voltear la tarjeta accidentalmente.
-
-Validaciones realizadas:
-
-```bash
-cd backend
-npm run build
-
-cd ../frontend
-npx eslint src/features/cards/components/VirtualCard.tsx src/features/cards/services/card.service.ts src/features/cards/types/card.types.ts
-```
-
-Ambas pasaron.
+IMPORTANTE: Las foreign keys deben apuntar a `public.users(id)`, NO a `auth.users(id)`. La app genera sus propios UUIDs con `randomUUID()`.
 
 ## Como Ejecutar El Proyecto
 
@@ -127,13 +148,9 @@ npm install
 npm run dev
 ```
 
-Backend esperado:
+Backend: `http://localhost:3001/api/v1`
 
-```txt
-http://localhost:3001/api/v1
-```
-
-Variables requeridas en `backend/.env`:
+Variables en `backend/.env`:
 
 ```env
 PORT=3001
@@ -148,8 +165,6 @@ GMAIL_USSER=...
 GMAIL_PASS=...
 ```
 
-Importante: `SUPABASE_SERVICE_ROLE_KEY` no debe exponerse en frontend ni versionarse. Actualmente `backend/.env.example` contiene llaves reales; pendiente limpiarlo y rotar la llave en Supabase.
-
 ### Frontend
 
 ```bash
@@ -158,19 +173,7 @@ npm install
 npm run dev
 ```
 
-Frontend esperado:
-
-```txt
-http://localhost:3000
-```
-
-El frontend usa:
-
-```ts
-NEXT_PUBLIC_API_URL || 'http://localhost:3001/api/v1'
-```
-
-Si hace falta:
+Frontend: `http://localhost:3000`
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
@@ -178,109 +181,70 @@ NEXT_PUBLIC_API_URL=http://localhost:3001/api/v1
 
 ## Endpoints Principales
 
-Base:
+Base: `/api/v1`
 
-```txt
-/api/v1
-```
-
-La mayoria requieren:
+### Creditos / Prestamos
 
 ```http
-Authorization: Bearer <token>
+POST   /loans/simulate          # Simular prestamo
+POST   /loans                   # Solicitar prestamo (1 pending max)
+GET    /loans/me                # Ver mis prestamos
+GET    /loans/admin             # Admin: listar todos
+PATCH  /loans/admin/:id/approve # Admin: aprobar (crea cuenta CREDITO)
+PATCH  /loans/admin/:id/reject  # Admin: rechazar
 ```
 
 ### Cuentas
 
 ```http
-GET /accounts/me
-GET /accounts/:id
+GET  /accounts/me
+GET  /accounts/:id
 POST /accounts
 POST /accounts/:id/deposit
 POST /accounts/:id/withdraw
-GET /accounts/search?accountNumber=...
+GET  /accounts/search?accountNumber=...
 ```
 
 ### Transferencias
 
 ```http
 POST /transfers
-GET /transfers/:id
-GET /transfers/account/:accountId
-GET /transfers/search/email?email=...
+GET  /transfers/:id
+GET  /transfers/account/:accountId
+GET  /transfers/search/email?email=...
 ```
 
 ### Bolsillos
 
 ```http
-POST /pockets
-GET /pockets/account/:accountId
-PATCH /pockets/:pocketId
+POST   /pockets
+GET    /pockets/account/:accountId
+PATCH  /pockets/:pocketId
 DELETE /pockets/:pocketId
-POST /pockets/transfer
-```
-
-### Creditos / Prestamos
-
-```http
-POST /loans/simulate
-POST /loans
+POST   /pockets/transfer
 ```
 
 ### Tarjetas Virtuales
 
 ```http
-POST /cards
-GET /cards/me
-GET /cards/:id/reveal
+POST  /cards
+GET   /cards/me
+GET   /cards/:id/reveal
 PATCH /cards/:id/toggle-lock
-```
-
-Payload crear:
-
-```ts
-{
-  accountId: string;
-}
-```
-
-Respuesta publica:
-
-```ts
-{
-  id: string;
-  userId: string;
-  accountId: string;
-  cardHolderName: string;
-  lastFour: string;
-  expirationDate: string;
-  cvvMasked: string;
-  status: 'ACTIVA' | 'BLOQUEADA' | 'CANCELADA';
-  createdAt: string;
-}
-```
-
-Respuesta reveal:
-
-```ts
-{
-  cardNumber: string;
-  cvv: string;
-}
 ```
 
 ### Solicitar Dinero
 
 ```http
-POST /money-requests
-GET /money-requests/me
-PATCH /money-requests/:id/respond
+POST   /money-requests
+GET    /money-requests/me
+PATCH  /money-requests/:id/respond
 ```
 
 ### Notificaciones
 
 ```http
-GET /notifications/me
+GET   /notifications/me
 PATCH /notifications/:id/read
 ```
 
@@ -288,164 +252,71 @@ PATCH /notifications/:id/read
 
 ```http
 POST /payments
-GET /payments/me
+GET  /payments/me
 ```
-
-## Estado Por Modulo
-
-| Modulo | Estado | Notas |
-|---|---:|---|
-| Usuarios/auth | Hecho base | Registro, login, logout, recuperacion y 2FA existen. Lint pendiente por `any` y reglas React. |
-| Perfil | Hecho base | Edicion existe. Lint pendiente. |
-| Cuentas | Hecho | Crear, listar, depositar, retirar, mostrar/ocultar saldo. |
-| Transferencias | Hecho base | Buscar destinatario, transferir, comprobante, historial base. |
-| Historial | Parcial | Falta saldo resultante real y filtros completos. |
-| Bolsillos | Avanzado | Pull remoto agrego UI/servicios `features/pockets`; tambien existe trabajo local en `features/pocket`. Revisar duplicidad antes de ampliar. |
-| Prestamos/creditos | Avanzado | Hay `LoansClient`, servicios y hooks. Falta validar UX completa contra backend. |
-| Tarjetas virtuales | Avanzado | Crear/listar/bloquear/revelar numero y CVV. Falta QA manual end-to-end. |
-| Solicitar dinero | Avanzado/parcial | Hay archivos locales en `features/money-request`; revisar flujo manual. |
-| Notificaciones | Avanzado/parcial | Hay archivos locales en `features/notification`; falta badge/dropdown opcional y QA. |
-| Pagos servicios | Pendiente/revisar | La ruta vieja `/services` fue eliminada localmente; revisar si se reemplazo o falta reconstruir pantalla. |
-
-## Pendientes Tecnicos Importantes
-
-### 1. Limpiar Secretos
-
-`backend/.env.example` contiene llaves reales de Supabase, incluida `SUPABASE_SERVICE_ROLE_KEY`.
-
-Acciones recomendadas:
-
-1. Quitar llaves reales de `.env.example`.
-2. Dejar placeholders.
-3. Rotar `SERVICE_ROLE_KEY` en Supabase.
-4. Confirmar que `.env` no se commitea.
-
-### 2. Resolver Deuda De Lint Global Frontend
-
-`npm run lint` en `frontend/` falla por errores preexistentes, principalmente:
-
-- `frontend/src/features/account/hooks/useAccounts.ts`
-- `frontend/src/features/auth/components/TwoFactorVerifyForm.tsx`
-- `frontend/src/features/auth/hooks/useLogin.ts`
-- `frontend/src/features/auth/hooks/usePasswordReset.ts`
-- `frontend/src/features/auth/hooks/useRegister.ts`
-- `frontend/src/features/auth/hooks/useTwoFactor.ts`
-- `frontend/src/features/profile/hooks/useProfile.ts`
-- `frontend/src/features/profile/hooks/useUpdateProfile.ts`
-- `frontend/src/shared/components/ui/Label.tsx`
-- `frontend/src/shared/hooks/useAuth.tsx`
-
-Tipos de error:
-
-- `@typescript-eslint/no-explicit-any`
-- `react-hooks/set-state-in-effect`
-- `@typescript-eslint/no-empty-object-type`
-
-### 3. Revisar Duplicidad `pocket` vs `pockets`
-
-Existen dos lineas de implementacion:
-
-```txt
-frontend/src/features/pocket/
-frontend/src/features/pockets/
-```
-
-El pull remoto usa `features/pockets` para `PocketsClient`.
-El trabajo local previo usa `features/pocket`.
-
-Antes de seguir, elegir una sola convencion para no duplicar servicios/hooks.
-
-### 4. Revisar Duplicidad `fronted` vs `frontend`
-
-`frontend/` es la carpeta activa.
-`fronted/` parece historica/duplicada y actualmente aparece con eliminaciones locales.
-
-No recuperar archivos de `fronted/` salvo que haya algo puntual que falte migrar.
-
-### 5. Historial: Saldo Resultante
-
-El requisito pide saldo resultante por movimiento. Actualmente no llega desde backend.
-
-Opciones:
-
-1. Agregar `resultingBalance` al modelo de transacciones y devolverlo en historial.
-2. Mostrar temporalmente `No disponible`, sin inventarlo en frontend.
-
-### 6. Modelo De Credito Y Tarjeta
-
-Decision de producto conversada:
-
-- Nubank-like: primero se aprueba un credito/cupo.
-- Luego ese cupo se puede usar mediante tarjeta virtual, avances u otros productos.
-- En FuBanking actualmente la tarjeta virtual esta asociada a cuenta.
-
-Proximo paso futuro:
-
-- Crear relacion entre credito aprobado/cupo y tarjeta virtual.
-- Definir si la tarjeta debita cuenta, cupo aprobado, o ambos segun tipo.
 
 ## Convenciones
 
 ### API Client
 
-Usar:
-
 ```ts
 import { apiClient } from '@/shared/services/api.client';
-```
-
-El interceptor devuelve el wrapper del backend. Patron actual:
-
-```ts
 const response = await apiClient.get<T>('/endpoint');
 return response.data;
 ```
 
 ### Toasts
 
-Usar:
-
 ```ts
 import { useToast } from '@/shared/components/feedback/ToastProvider';
-
 const toast = useToast();
-
-toast.success('Operacion realizada', 'Detalle breve.');
-toast.error('No pudimos completar la operacion', 'Detalle breve.');
+toast.success('Titulo', 'Detalle');
+toast.error('Titulo', 'Detalle');
 ```
 
 No usar `alert()`.
 
 ### UI
 
-- Mantener estetica banking limpia tipo Nubank/FuBanking.
-- Usar `lucide-react`.
-- Usar tokens existentes: `bg-card`, `border`, `foreground`, `muted`, `primary`.
-- Evitar landing pages en rutas internas.
-- Cada ruta debe ser una herramienta usable.
+- Estetica banking limpia tipo Nubank.
+- Iconos: `lucide-react`.
+- Tokens: `bg-card`, `border`, `foreground`, `muted`, `primary`.
 - Mobile responsive obligatorio.
+
+### Entidades y Serializacion
+
+Las entidades de dominio (Account, User, LoanApplication) tienen metodos `toPublic()` o `toDto()` que devuelven objetos planos. **Siempre usar estos metodos** antes de enviar datos al frontend, porque `JSON.stringify` en clases no serializa getters del prototipo.
+
+### Brand
+
+- Color primario: purple `#820AD1`
+- Logo: `frontend/public/logo.png`
+- Navbar: "Fu" en purple, "bank" en foreground
+- Fuentes: Nunito (display), Poppins (cuerpo)
+
+## Pendientes Tecnicos
+
+1. **Limpiar secretos** — `backend/.env.example` tiene llaves reales. Quitar placeholders, rotar key.
+2. **Lint global frontend** — Errores preexistentes en auth/profile/account/Label/useAuth/Navbar.
+3. **Duplicidad pocket vs pockets** — Elegir una convencion.
+4. **Historial: saldo resultante** — Falta devolver saldo resultante por movimiento.
+5. **Relacion credito-tarjeta** — Un credito aprobado podria asociarse a una tarjeta virtual.
 
 ## Orden Recomendado Para La Proxima Sesion
 
-1. Probar manualmente crear tarjeta virtual y revelar numero/CVV con backend y frontend corriendo.
-2. Limpiar secretos de `.env.example` y documentar rotacion de Supabase key.
-3. Resolver lint global del frontend o al menos los errores mas bloqueantes.
-4. Decidir `features/pocket` vs `features/pockets` y consolidar.
-5. Revisar `/services`, porque aparece eliminado localmente.
-6. QA de `/loans`, `/pockets`, `/requests`, `/notifications`.
-7. Implementar `saldo resultante` en historial.
-8. Preparar commits pequenos por modulo.
+1. QA completo del flujo de creditos: solicitar -> admin aprueba -> usuario ve cuenta CREDITO.
+2. Crear cuenta CREDITO visible en `/accounts` con saldo/cupo.
+3. Probar tarjeta virtual asociada a cuenta CREDITO.
+4. Resolver lint global del frontend.
+5. Consolidar `pocket` vs `pockets`.
+6. Implementar saldo resultante en historial.
+7. QA de todos los modulos restantes.
 
-## Checklist De QA Final
+## Checklist De QA
 
 ```bash
-cd backend
-npm run build
-npm run test
-
-cd ../frontend
-npm run build
-npm run lint
+cd backend && npm run build
+cd ../frontend && npx next build
 ```
 
 Flujos manuales:
@@ -466,10 +337,12 @@ Flujos manuales:
 - crear bolsillo
 - mover dinero entre bolsillos
 - simular credito
-- solicitar credito
+- solicitar credito (verificar: 1 pendiente max, notificacion a admin)
+- ver mis prestamos con estado
+- admin: ver solicitudes, aprobar, rechazar
+- usuario: ver cambio de estado + notificacion
 - crear tarjeta virtual
 - revelar numero/CVV
-- ocultar numero/CVV
 - bloquear/desbloquear tarjeta
 - solicitar dinero
 - aceptar/rechazar solicitud

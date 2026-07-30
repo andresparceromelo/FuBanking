@@ -3,7 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS public.notifications (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   message TEXT NOT NULL,
   type TEXT NOT NULL CHECK (type IN ('TRANSFERENCIA', 'PAGO', 'BOLSILLO', 'SOLICITUD_DINERO', 'SISTEMA')),

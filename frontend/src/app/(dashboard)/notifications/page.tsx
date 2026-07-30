@@ -73,12 +73,12 @@ export default function NotificationsPage() {
           </div>
         ) : (
           <div className="space-y-3">
-            {notifications.map((notif) => {
+            {notifications.map((notif, index) => {
               const isUnread = notif.isRead === false || notif.read === false || (!('isRead' in notif) && !('read' in notif));
               
               return (
                 <div 
-                  key={notif.id} 
+                  key={notif.id ?? index} 
                   className={cn(
                     "flex gap-4 p-5 rounded-2xl border transition-all",
                     isUnread ? "bg-card border-primary/30 shadow-md relative overflow-hidden" : "bg-muted/30 border-border opacity-70"

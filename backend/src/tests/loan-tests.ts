@@ -17,8 +17,24 @@ class InMemoryLoanRepo implements ILoanApplicationRepository {
     return loan;
   }
 
+  async findById(id: string) {
+    return this.store.get(id) ?? null;
+  }
+
   async findByUserId(userId: string) {
     return Array.from(this.store.values()).filter((loan) => loan.userId === userId);
+  }
+
+  async findAll() {
+    return Array.from(this.store.values());
+  }
+
+  async updateStatus(id: string, status: string) {
+    const loan = this.store.get(id);
+    if (!loan) throw new Error('Loan not found');
+    if (status === 'APPROVED') loan.approve();
+    else if (status === 'REJECTED') loan.reject();
+    return loan;
   }
 }
 
@@ -71,6 +87,10 @@ class InMemoryUserRepo implements IUserRepository {
 
   async delete(id: string) {
     this.store.delete(id);
+  }
+
+  async findByRole(role: string) {
+    return Array.from(this.store.values()).filter((user) => user.role === role);
   }
 }
 

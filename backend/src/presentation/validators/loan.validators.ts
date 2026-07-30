@@ -17,5 +17,10 @@ export const createLoanSchema = z.object({
   creditHistoryVerified: z.boolean(),
 });
 
+export const loanIdParamSchema = z.object({
+  id: z.string().uuid('ID de préstamo inválido'),
+});
+
 export type SimulateLoanInput = z.infer<typeof simulateLoanSchema>;
 export type CreateLoanInput = z.infer<typeof createLoanSchema>;
+export type LoanIdParam = z.infer<typeof loanIdParamSchema>;

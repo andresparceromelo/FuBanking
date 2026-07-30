@@ -18,6 +18,7 @@ export interface UserProps {
   passwordHash: string;
   isActive: boolean;
   twoFactorEnabled: boolean;
+  role: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -58,6 +59,7 @@ export interface PublicUser {
   avatarUrl: string | null;
   isActive: boolean;
   twoFactorEnabled: boolean;
+  role: string;
   createdAt: string;
 }
 
@@ -81,6 +83,7 @@ export class User {
   private _passwordHash: string;
   private _isActive: boolean;
   private _twoFactorEnabled: boolean;
+  private _role: string;
   private readonly _createdAt: Date;
   private _updatedAt: Date;
 
@@ -98,6 +101,7 @@ export class User {
     this._passwordHash = props.passwordHash;
     this._isActive = props.isActive;
     this._twoFactorEnabled = props.twoFactorEnabled;
+    this._role = props.role;
     this._createdAt = props.createdAt;
     this._updatedAt = props.updatedAt;
   }
@@ -122,6 +126,7 @@ export class User {
   get avatarUrl(): string | null { return this._avatarUrl; }
   get isActive(): boolean { return this._isActive; }
   get twoFactorEnabled(): boolean { return this._twoFactorEnabled; }
+  get role(): string { return this._role; }
   get createdAt(): Date { return this._createdAt; }
   get updatedAt(): Date { return this._updatedAt; }
 
@@ -182,6 +187,10 @@ export class User {
     this._updatedAt = new Date();
   }
 
+  isAdmin(): boolean {
+    return this._role === 'admin';
+  }
+
   /**
    * Retorna la representación pública del usuario.
    * Omite completamente el hash de contraseña.
@@ -201,6 +210,7 @@ export class User {
       avatarUrl: this._avatarUrl,
       isActive: this._isActive,
       twoFactorEnabled: this._twoFactorEnabled,
+      role: this._role,
       createdAt: this._createdAt.toISOString(),
     };
   }
@@ -225,6 +235,7 @@ export class User {
       passwordHash: props.passwordHash,
       isActive: true,
       twoFactorEnabled: props.twoFactorEnabled ?? false,
+      role: 'user',
       createdAt: new Date(),
       updatedAt: new Date(),
     });

@@ -58,7 +58,7 @@ export class LoanApplication {
   private readonly _incomeVerified: boolean;
   private readonly _creditHistoryVerified: boolean;
   private readonly _eligibility: LoanEligibility;
-  private readonly _status: LoanApplicationStatus;
+  private _status: LoanApplicationStatus;
   private readonly _createdAt: Date;
 
   constructor(props: LoanApplicationProps) {
@@ -96,6 +96,41 @@ export class LoanApplication {
   get eligibility(): LoanEligibility { return this._eligibility; }
   get status(): LoanApplicationStatus { return this._status; }
   get createdAt(): Date { return this._createdAt; }
+
+  approve(): void {
+    if (this._status !== LoanApplicationStatus.PENDING) {
+      throw new AppError('Solo se pueden aprobar préstamos en estado PENDING', 400, 'LOAN_NOT_PENDING');
+    }
+    this._status = LoanApplicationStatus.APPROVED;
+  }
+
+  reject(): void {
+    if (this._status !== LoanApplicationStatus.PENDING) {
+      throw new AppError('Solo se pueden rechazar préstamos en estado PENDING', 400, 'LOAN_NOT_PENDING');
+    }
+    this._status = LoanApplicationStatus.REJECTED;
+  }
+
+  toPublic() {
+    return {
+      id: this._id,
+      userId: this._userId,
+      amount: this._amount,
+      installments: this._installments,
+      annualRate: this._annualRate,
+      monthlyIncome: this._monthlyIncome,
+      monthlyPayment: this._monthlyPayment,
+      totalToPay: this._totalToPay,
+      totalInterest: this._totalInterest,
+      documentVerified: this._documentVerified,
+      ageVerified: this._ageVerified,
+      incomeVerified: this._incomeVerified,
+      creditHistoryVerified: this._creditHistoryVerified,
+      eligibility: this._eligibility,
+      status: this._status,
+      createdAt: this._createdAt.toISOString(),
+    };
+  }
 
   static create(props: CreateLoanApplicationProps): LoanApplication {
     const monthlyRate = props.annualRate / 100 / 12;

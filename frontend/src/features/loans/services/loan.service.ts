@@ -63,6 +63,11 @@ class LoanService {
   async createLoan(payload: CreateLoanPayload): Promise<LoanApplication> {
     return this.create(payload);
   }
+
+  async getMyLoans(): Promise<LoanApplication[]> {
+    const response = await apiClient.get<LoanApplication[]>('/loans/me');
+    return response.data;
+  }
 }
 
 export const loanService = new LoanService();

@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { INotificationRepository } from '../../domain/repositories/INotificationRepository';
 import { Notification, NotificationProps, NotificationType } from '../../domain/entities/Notification';
+import { AppError } from '../../shared/errors/AppError';
 
 interface NotificationRow {
   id: string;
@@ -47,8 +48,8 @@ export class SupabaseNotificationRepository implements INotificationRepository {
       .single();
 
     if (error || !data) {
-      console.warn('Advertencia DB notifications:', error?.message);
-      return notification;
+      console.error('Error al guardar notificación:', error?.message, error?.details);
+      throw new AppError(`Error al guardar notificación: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
     }
 
     return this.mapRowToNotification(data as NotificationRow);

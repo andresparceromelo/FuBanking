@@ -18,6 +18,19 @@ export class CreateLoanApplication {
     const user = await this.userRepository.findById(dto.userId);
     if (!user) throw new AppError('Usuario no encontrado', 404, 'USER_NOT_FOUND');
 
+    // Verificar que no tenga un préstamo pendiente
+    const existingLoans = await this.loanRepository.findByUserId(dto.userId);
+    const hasPending = existingLoans.some(
+      (loan) => loan.status === LoanApplicationStatus.PENDING
+    );
+    if (hasPending) {
+      throw new AppError(
+        'Ya tienes una solicitud de préstamo pendiente. Espera a que sea aprobada o rechazada antes de solicitar otra.',
+        400,
+        'LOAN_ALREADY_PENDING',
+      );
+    }
+
     const loan = LoanApplication.create({
       id: randomUUID(),
       userId: dto.userId,
@@ -34,15 +47,30 @@ export class CreateLoanApplication {
     const saved = await this.loanRepository.save(loan);
 
     if (this.notificationRepository) {
+      // Notificar al usuario
       await this.notificationRepository.save(new Notification({
         id: randomUUID(),
         userId: dto.userId,
-        title: 'Solicitud de crédito',
-        message: `Solicitaste un crédito de $${dto.amount.toLocaleString('es-CO')} en ${dto.installments} cuotas`,
+        title: 'Solicitud de crédito enviada',
+        message: `Solicitaste un crédito de $${dto.amount.toLocaleString('es-CO')} en ${dto.installments} cuotas. Pendiente de revisión.`,
         type: NotificationType.SISTEMA,
         read: false,
         createdAt: new Date(),
       }));
+
+      // Notificar a todos los admins
+      const admins = await this.userRepository.findByRole('admin');
+      for (const admin of admins) {
+        await this.notificationRepository.save(new Notification({
+          id: randomUUID(),
+          userId: admin.id,
+          title: 'Nueva solicitud de crédito',
+          message: `${user.fullName} solicitó un crédito de $${dto.amount.toLocaleString('es-CO')} en ${dto.installments} cuotas.`,
+          type: NotificationType.SISTEMA,
+          read: false,
+          createdAt: new Date(),
+        }));
+      }
     }
 
     return {
@@ -56,7 +84,7 @@ export class CreateLoanApplication {
       totalToPay: saved.totalToPay,
       totalInterest: saved.totalInterest,
       eligibility: saved.eligibility,
-      status: LoanApplicationStatus.PENDING,
+      status: saved.status,
       createdAt: saved.createdAt.toISOString(),
     };
   }

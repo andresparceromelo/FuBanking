@@ -69,4 +69,9 @@ export interface IUserRepository {
    * Elimina lógicamente un usuario (soft delete vía is_active = false).
    */
   delete(id: string): Promise<void>;
+
+  /**
+   * Busca todos los usuarios con un rol específico.
+   */
+  findByRole(role: string): Promise<User[]>;
 }

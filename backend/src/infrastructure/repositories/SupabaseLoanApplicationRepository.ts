@@ -75,11 +75,21 @@ export class SupabaseLoanApplicationRepository implements ILoanApplicationReposi
       .single();
 
     if (error || !data) {
-      // Si la tabla aún no existe en Supabase o da error, retornamos el loan recién instanciado
-      console.warn('Advertencia DB préstamos:', error?.message);
-      return loan;
+      console.error('Error al guardar préstamo:', error?.message, error?.details);
+      throw new AppError(`Error al guardar préstamo: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
     }
 
+    return this.mapRowToLoan(data as LoanApplicationRow);
+  }
+
+  async findById(id: string): Promise<LoanApplication | null> {
+    const { data, error } = await this.client
+      .from(this.TABLE)
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !data) return null;
     return this.mapRowToLoan(data as LoanApplicationRow);
   }
 
@@ -92,5 +102,34 @@ export class SupabaseLoanApplicationRepository implements ILoanApplicationReposi
 
     if (error || !data) return [];
     return (data as LoanApplicationRow[]).map(row => this.mapRowToLoan(row));
+  }
+
+  async findAll(): Promise<LoanApplication[]> {
+    const { data, error } = await this.client
+      .from(this.TABLE)
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error al obtener préstamos:', error.message, error.details);
+      return [];
+    }
+    if (!data) return [];
+    return (data as LoanApplicationRow[]).map(row => this.mapRowToLoan(row));
+  }
+
+  async updateStatus(id: string, status: string): Promise<LoanApplication> {
+    const { data, error } = await this.client
+      .from(this.TABLE)
+      .update({ status })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error || !data) {
+      throw new Error('Error al actualizar estado del préstamo');
+    }
+
+    return this.mapRowToLoan(data as LoanApplicationRow);
   }
 }
