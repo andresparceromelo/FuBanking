@@ -18,7 +18,7 @@ export function Footer() {
                 className="rounded-xl"
               />
               <h3 className="text-2xl font-black text-white font-display tracking-[0.06em] uppercase">
-                Fubank
+                <span className="text-primary">Fu</span>bank
               </h3>
             </div>
             <p className="text-white/50 max-w-sm leading-relaxed">

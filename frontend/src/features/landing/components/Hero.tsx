@@ -34,7 +34,7 @@ export function Hero() {
             className="rounded-2xl"
           />
           <h1 className="text-7xl sm:text-9xl font-black text-white tracking-[0.06em] font-display uppercase">
-            Fubank
+            <span className="text-primary">Fu</span>bank
           </h1>
         </motion.div>
 

@@ -51,7 +51,7 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <Link href="/accounts" className="flex items-center gap-2 mr-2">
               <Image src="/logo.png" alt="FuBank" width={28} height={28} className="rounded-lg" />
-              <span className="text-xl font-black text-primary font-display tracking-[0.06em] uppercase">Fubank</span>
+              <span className="text-xl font-black font-display tracking-[0.06em] uppercase"><span className="text-primary">Fu</span>bank</span>
             </Link>
 
             {/* Nav links */}

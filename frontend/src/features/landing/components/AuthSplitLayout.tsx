@@ -32,8 +32,8 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
               className="rounded-2xl"
             />
           </div>
-          <h1 className="text-7xl sm:text-8xl font-black text-white mb-6 font-display tracking-[0.06em] uppercase">
-            Fubank
+          <h1 className="text-7xl sm:text-8xl font-black mb-6 font-display tracking-[0.06em] uppercase">
+            <span className="text-primary">Fu</span><span className="text-white">bank</span>
           </h1>
           <p className="text-xl sm:text-2xl text-white/75 max-w-md leading-relaxed font-light">
             Tu dinero, tu control. Banca digital segura y sin complicaciones.
@@ -53,8 +53,8 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
               height={44}
               className="rounded-xl"
             />
-            <h1 className="text-4xl font-black text-primary font-display tracking-[0.06em] uppercase">
-              Fubank
+            <h1 className="text-4xl font-black font-display tracking-[0.06em] uppercase">
+              <span className="text-primary">Fu</span>bank
             </h1>
           </div>
           {children}
