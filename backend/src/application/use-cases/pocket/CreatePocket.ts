@@ -1,7 +1,9 @@
 import { randomUUID } from 'crypto';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { IPocketRepository } from '../../../domain/repositories/IPocketRepository';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { Pocket } from '../../../domain/entities/Pocket';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { CreatePocketDto, CreatePocketResponseDto } from '../../dtos/pocket/pocket.dtos';
 import { AppError } from '../../../shared/errors/AppError';
 
@@ -9,6 +11,7 @@ export class CreatePocket {
   constructor(
     private readonly accountRepository: IAccountRepository,
     private readonly pocketRepository: IPocketRepository,
+    private readonly notificationRepository?: INotificationRepository,
   ) {}
 
   async execute(dto: CreatePocketDto): Promise<CreatePocketResponseDto> {
@@ -42,6 +45,19 @@ export class CreatePocket {
     });
 
     const saved = await this.pocketRepository.save(pocket);
+
+    if (this.notificationRepository) {
+      await this.notificationRepository.save(new Notification({
+        id: randomUUID(),
+        userId: dto.userId,
+        title: 'Bolsillo creado',
+        message: `Creaste el bolsillo "${dto.name}" con $${dto.amount.toLocaleString('es-CO')}`,
+        type: NotificationType.BOLSILLO,
+        read: false,
+        createdAt: new Date(),
+      }));
+    }
+
     return saved.toPublic();
   }
 }

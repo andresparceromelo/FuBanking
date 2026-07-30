@@ -1,7 +1,9 @@
 import { randomUUID } from 'node:crypto';
 import { IMoneyRequestRepository } from '../../../domain/repositories/IMoneyRequestRepository';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { MoneyRequest, MoneyRequestStatus } from '../../../domain/entities/MoneyRequest';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { AppError } from '../../../shared/errors/AppError';
 
 export interface CreateMoneyRequestDto {
@@ -15,6 +17,7 @@ export class CreateMoneyRequest {
   constructor(
     private readonly moneyRequestRepository: IMoneyRequestRepository,
     private readonly userRepository: IUserRepository,
+    private readonly notificationRepository?: INotificationRepository,
   ) {}
 
   async execute(dto: CreateMoneyRequestDto): Promise<MoneyRequest> {
@@ -33,6 +36,23 @@ export class CreateMoneyRequest {
       createdAt: new Date(),
     });
 
-    return await this.moneyRequestRepository.save(request);
+    const saved = await this.moneyRequestRepository.save(request);
+
+    if (this.notificationRepository) {
+      const requester = await this.userRepository.findById(dto.requesterUserId);
+      const requesterName = requester ? `${requester.firstName} ${requester.lastName}` : 'Alguien';
+
+      await this.notificationRepository.save(new Notification({
+        id: randomUUID(),
+        userId: requestedUser.id,
+        title: 'Solicitud de dinero',
+        message: `${requesterName} te solicita $${dto.amount.toLocaleString('es-CO')}`,
+        type: NotificationType.SOLICITUD_DINERO,
+        read: false,
+        createdAt: new Date(),
+      }));
+    }
+
+    return saved;
   }
 }

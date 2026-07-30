@@ -3,12 +3,15 @@ import { AppError } from '../../../shared/errors/AppError';
 import { LoanApplication, LoanApplicationStatus } from '../../../domain/entities/LoanApplication';
 import { ILoanApplicationRepository } from '../../../domain/repositories/ILoanApplicationRepository';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { CreateLoanApplicationDto, CreateLoanApplicationResponseDto } from '../../dtos/loan/loan.dtos';
 
 export class CreateLoanApplication {
   constructor(
     private readonly loanRepository: ILoanApplicationRepository,
     private readonly userRepository: IUserRepository,
+    private readonly notificationRepository?: INotificationRepository,
   ) {}
 
   async execute(dto: CreateLoanApplicationDto): Promise<CreateLoanApplicationResponseDto> {
@@ -29,6 +32,18 @@ export class CreateLoanApplication {
     });
 
     const saved = await this.loanRepository.save(loan);
+
+    if (this.notificationRepository) {
+      await this.notificationRepository.save(new Notification({
+        id: randomUUID(),
+        userId: dto.userId,
+        title: 'Solicitud de crédito',
+        message: `Solicitaste un crédito de $${dto.amount.toLocaleString('es-CO')} en ${dto.installments} cuotas`,
+        type: NotificationType.SISTEMA,
+        read: false,
+        createdAt: new Date(),
+      }));
+    }
 
     return {
       id: saved.id,

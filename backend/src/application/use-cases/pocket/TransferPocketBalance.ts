@@ -1,5 +1,8 @@
+import { randomUUID } from 'crypto';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { IPocketRepository } from '../../../domain/repositories/IPocketRepository';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { TransferPocketBalanceDto, TransferPocketBalanceResponseDto } from '../../dtos/pocket/pocket.dtos';
 import { AppError } from '../../../shared/errors/AppError';
 
@@ -7,6 +10,7 @@ export class TransferPocketBalance {
   constructor(
     private readonly accountRepository: IAccountRepository,
     private readonly pocketRepository: IPocketRepository,
+    private readonly notificationRepository?: INotificationRepository,
   ) {}
 
   async execute(dto: TransferPocketBalanceDto): Promise<TransferPocketBalanceResponseDto> {
@@ -52,6 +56,18 @@ export class TransferPocketBalance {
 
     const updatedFrom = await this.pocketRepository.update(fromPocket);
     const updatedTo = await this.pocketRepository.update(toPocket);
+
+    if (this.notificationRepository) {
+      await this.notificationRepository.save(new Notification({
+        id: randomUUID(),
+        userId: dto.userId,
+        title: 'Movimiento entre bolsillos',
+        message: `Moviste $${dto.amount.toLocaleString('es-CO')} de "${fromPocket.name}" a "${toPocket.name}"`,
+        type: NotificationType.BOLSILLO,
+        read: false,
+        createdAt: new Date(),
+      }));
+    }
 
     return {
       fromPocket: updatedFrom.toPublic(),

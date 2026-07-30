@@ -1,8 +1,10 @@
+import { randomUUID } from 'crypto';
 import { IServicePaymentRepository } from '../../../domain/repositories/IServicePaymentRepository';
 import { ServicePayment } from '../../../domain/entities/ServicePayment';
 import { CreateServicePaymentDto, CreateServicePaymentResponseDto } from '../../dtos/payment/payment.dtos';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
-import { randomUUID } from 'crypto';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { AppError } from '../../../shared/errors/AppError';
 import { IPaymentGateway } from '../../../infrastructure/services/MockPaymentGateway';
 
@@ -11,6 +13,7 @@ export class CreateServicePayment {
     private readonly paymentRepository: IServicePaymentRepository,
     private readonly accountRepository: IAccountRepository,
     private readonly paymentGateway: IPaymentGateway,
+    private readonly notificationRepository?: INotificationRepository,
   ) {}
 
   async execute(dto: CreateServicePaymentDto): Promise<CreateServicePaymentResponseDto> {
@@ -47,6 +50,19 @@ export class CreateServicePayment {
       // 7. Marcar pago como success y actualizar
       saved.markSuccess();
       saved = await this.paymentRepository.update(saved);
+
+      if (this.notificationRepository) {
+        await this.notificationRepository.save(new Notification({
+          id: randomUUID(),
+          userId: dto.userId,
+          title: 'Pago de servicio',
+          message: `Pagaste ${dto.serviceType} por $${dto.amount.toLocaleString('es-CO')}`,
+          type: NotificationType.PAGO,
+          read: false,
+          createdAt: new Date(),
+        }));
+      }
+
       return saved.toPublic();
     }
 

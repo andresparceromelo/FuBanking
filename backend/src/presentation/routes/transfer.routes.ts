@@ -8,6 +8,7 @@ import { SearchUserByEmail } from '../../application/use-cases/user/SearchUserBy
 import { SupabaseTransactionRepository } from '../../infrastructure/repositories/SupabaseTransactionRepository';
 import { SupabaseAccountRepository } from '../../infrastructure/repositories/SupabaseAccountRepository';
 import { SupabaseUserRepository } from '../../infrastructure/repositories/SupabaseUserRepository';
+import { SupabaseNotificationRepository } from '../../infrastructure/repositories/SupabaseNotificationRepository';
 import supabaseClient from '../../infrastructure/database/supabase.client';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
@@ -20,12 +21,13 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 const router = Router();
 
 // -- Instanciar repositorios --
-const transactionRepository = new SupabaseTransactionRepository(supabaseClient);
-const accountRepository     = new SupabaseAccountRepository(supabaseClient);
-const userRepository        = new SupabaseUserRepository(supabaseClient);
+const transactionRepository    = new SupabaseTransactionRepository(supabaseClient);
+const accountRepository        = new SupabaseAccountRepository(supabaseClient);
+const userRepository           = new SupabaseUserRepository(supabaseClient);
+const notificationRepository   = new SupabaseNotificationRepository(supabaseClient);
 
 // -- Instanciar casos de uso --
-const createTransfer         = new CreateTransfer(accountRepository, transactionRepository, userRepository);
+const createTransfer         = new CreateTransfer(accountRepository, transactionRepository, userRepository, notificationRepository);
 const getTransfer            = new GetTransfer(transactionRepository, accountRepository, userRepository);
 const getTransferHistory     = new GetTransferHistory(transactionRepository, accountRepository, userRepository);
 const searchAccountByNumber  = new SearchAccountByNumber(accountRepository, userRepository);

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { Bell, Check, Info, AlertTriangle, ShieldCheck, CreditCard } from 'lucide-react';
+import { Bell, Check, Info, Send, PiggyBank, HandCoins, Receipt, CreditCard } from 'lucide-react';
 import { useNotifications } from '@/features/notification/hooks/useNotifications';
 import { cn } from '@/shared/utils/cn';
 
@@ -20,12 +20,16 @@ export default function NotificationsPage() {
 
   const getIcon = (type?: string) => {
     switch (type) {
-      case 'SECURITY':
-        return <ShieldCheck size={20} className="text-green-500" />;
-      case 'TRANSACTION':
-        return <CreditCard size={20} className="text-blue-500" />;
-      case 'ALERT':
-        return <AlertTriangle size={20} className="text-yellow-500" />;
+      case 'TRANSFERENCIA':
+        return <Send size={20} className="text-blue-500" />;
+      case 'PAGO':
+        return <Receipt size={20} className="text-green-500" />;
+      case 'BOLSILLO':
+        return <PiggyBank size={20} className="text-amber-500" />;
+      case 'SOLICITUD_DINERO':
+        return <HandCoins size={20} className="text-orange-500" />;
+      case 'SISTEMA':
+        return <CreditCard size={20} className="text-primary" />;
       default:
         return <Info size={20} className="text-primary" />;
     }
@@ -33,12 +37,16 @@ export default function NotificationsPage() {
 
   const getIconBg = (type?: string) => {
     switch (type) {
-      case 'SECURITY':
-        return 'bg-green-500/10';
-      case 'TRANSACTION':
+      case 'TRANSFERENCIA':
         return 'bg-blue-500/10';
-      case 'ALERT':
-        return 'bg-yellow-500/10';
+      case 'PAGO':
+        return 'bg-green-500/10';
+      case 'BOLSILLO':
+        return 'bg-amber-500/10';
+      case 'SOLICITUD_DINERO':
+        return 'bg-orange-500/10';
+      case 'SISTEMA':
+        return 'bg-primary/10';
       default:
         return 'bg-primary/10';
     }

@@ -1,6 +1,9 @@
+import { randomUUID } from 'crypto';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { AppError } from '../../../shared/errors/AppError';
 import { Account } from '../../../domain/entities/Account';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 
 export interface WithdrawMoneyDto {
   userId: string;
@@ -10,7 +13,10 @@ export interface WithdrawMoneyDto {
 }
 
 export class WithdrawMoney {
-  constructor(private readonly accountRepository: IAccountRepository) {}
+  constructor(
+    private readonly accountRepository: IAccountRepository,
+    private readonly notificationRepository?: INotificationRepository,
+  ) {}
 
   async execute(dto: WithdrawMoneyDto): Promise<Account> {
     if (!dto.amount || dto.amount <= 0) {
@@ -34,6 +40,18 @@ export class WithdrawMoney {
 
     const newBalance = account.balance - dto.amount;
     const updatedAccount = await this.accountRepository.updateBalance(account.id, newBalance);
+
+    if (this.notificationRepository) {
+      await this.notificationRepository.save(new Notification({
+        id: randomUUID(),
+        userId: dto.userId,
+        title: 'Retiro realizado',
+        message: `Retiro de $${dto.amount.toLocaleString('es-CO')} de tu cuenta ****${account.accountNumber.slice(-4)}`,
+        type: NotificationType.SISTEMA,
+        read: false,
+        createdAt: new Date(),
+      }));
+    }
 
     return updatedAccount;
   }

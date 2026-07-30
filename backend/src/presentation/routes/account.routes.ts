@@ -14,6 +14,7 @@ import { GetTransferHistory } from '../../application/use-cases/transfer/GetTran
 import { SupabaseAccountRepository } from '../../infrastructure/repositories/SupabaseAccountRepository';
 import { SupabaseUserRepository } from '../../infrastructure/repositories/SupabaseUserRepository';
 import { SupabaseTransactionRepository } from '../../infrastructure/repositories/SupabaseTransactionRepository';
+import { SupabaseNotificationRepository } from '../../infrastructure/repositories/SupabaseNotificationRepository';
 import supabaseClient from '../../infrastructure/database/supabase.client';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
@@ -28,19 +29,20 @@ import { authMiddleware } from '../middlewares/authMiddleware';
 const router = Router();
 
 // ── Instanciar dependencias (Dependency Injection manual) ─────────────────
-const accountRepository     = new SupabaseAccountRepository(supabaseClient);
-const userRepository        = new SupabaseUserRepository(supabaseClient);
-const transactionRepository = new SupabaseTransactionRepository(supabaseClient);
+const accountRepository       = new SupabaseAccountRepository(supabaseClient);
+const userRepository          = new SupabaseUserRepository(supabaseClient);
+const transactionRepository   = new SupabaseTransactionRepository(supabaseClient);
+const notificationRepository  = new SupabaseNotificationRepository(supabaseClient);
 
 // ── Casos de uso ──────────────────────────────────────────────────────────
 const createAccount        = new CreateAccount(accountRepository);
 const getUserAccounts      = new GetUserAccounts(accountRepository);
 const getAccountDetails    = new GetAccountDetails(accountRepository);
-const depositMoney         = new DepositMoney(accountRepository, transactionRepository);
-const withdrawMoney        = new WithdrawMoney(accountRepository);
+const depositMoney         = new DepositMoney(accountRepository, transactionRepository, notificationRepository);
+const withdrawMoney        = new WithdrawMoney(accountRepository, notificationRepository);
 const searchAccountByNumber = new SearchAccountByNumber(accountRepository, userRepository);
 const searchUserByEmail    = new SearchUserByEmail(userRepository, accountRepository);
-const createTransfer       = new CreateTransfer(accountRepository, transactionRepository, userRepository);
+const createTransfer       = new CreateTransfer(accountRepository, transactionRepository, userRepository, notificationRepository);
 const getTransfer          = new GetTransfer(transactionRepository, accountRepository, userRepository);
 const getTransferHistory   = new GetTransferHistory(transactionRepository, accountRepository, userRepository);
 

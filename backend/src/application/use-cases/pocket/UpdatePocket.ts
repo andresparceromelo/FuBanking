@@ -1,5 +1,8 @@
+import { randomUUID } from 'crypto';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { IPocketRepository } from '../../../domain/repositories/IPocketRepository';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { UpdatePocketDto, UpdatePocketResponseDto } from '../../dtos/pocket/pocket.dtos';
 import { AppError } from '../../../shared/errors/AppError';
 
@@ -7,6 +10,7 @@ export class UpdatePocket {
   constructor(
     private readonly accountRepository: IAccountRepository,
     private readonly pocketRepository: IPocketRepository,
+    private readonly notificationRepository?: INotificationRepository,
   ) {}
 
   async execute(dto: UpdatePocketDto): Promise<UpdatePocketResponseDto> {
@@ -57,6 +61,19 @@ export class UpdatePocket {
     }
 
     const updated = await this.pocketRepository.update(pocket);
+
+    if (this.notificationRepository) {
+      await this.notificationRepository.save(new Notification({
+        id: randomUUID(),
+        userId: dto.userId,
+        title: 'Bolsillo actualizado',
+        message: `Actualizaste el bolsillo "${updated.name}"`,
+        type: NotificationType.BOLSILLO,
+        read: false,
+        createdAt: new Date(),
+      }));
+    }
+
     return updated.toPublic();
   }
 }

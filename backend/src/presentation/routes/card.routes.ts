@@ -7,6 +7,7 @@ import { RevealVirtualCardDetails } from '../../application/use-cases/card/Revea
 import { SupabaseVirtualCardRepository } from '../../infrastructure/repositories/SupabaseVirtualCardRepository';
 import { SupabaseAccountRepository } from '../../infrastructure/repositories/SupabaseAccountRepository';
 import { SupabaseUserRepository } from '../../infrastructure/repositories/SupabaseUserRepository';
+import { SupabaseNotificationRepository } from '../../infrastructure/repositories/SupabaseNotificationRepository';
 import supabaseClient from '../../infrastructure/database/supabase.client';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
@@ -15,10 +16,11 @@ const router = Router();
 const cardRepo = new SupabaseVirtualCardRepository(supabaseClient);
 const accountRepo = new SupabaseAccountRepository(supabaseClient);
 const userRepo = new SupabaseUserRepository(supabaseClient);
+const notificationRepo = new SupabaseNotificationRepository(supabaseClient);
 
-const createVirtualCard = new CreateVirtualCard(cardRepo, accountRepo, userRepo);
+const createVirtualCard = new CreateVirtualCard(cardRepo, accountRepo, userRepo, notificationRepo);
 const getUserCards = new GetUserCards(cardRepo);
-const toggleCardLock = new ToggleCardLock(cardRepo);
+const toggleCardLock = new ToggleCardLock(cardRepo, notificationRepo);
 const revealVirtualCardDetails = new RevealVirtualCardDetails(cardRepo);
 
 const controller = new CardController(createVirtualCard, getUserCards, toggleCardLock, revealVirtualCardDetails);

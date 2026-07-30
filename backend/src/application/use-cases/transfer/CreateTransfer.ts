@@ -1,7 +1,10 @@
+import { randomUUID } from 'crypto';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { ITransactionRepository } from '../../../domain/repositories/ITransactionRepository';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { Transaction } from '../../../domain/entities/Transaction';
+import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { CreateTransferDto, TransferReceiptDto } from '../../dtos/transfer/transfer.dtos';
 import { AppError } from '../../../shared/errors/AppError';
 
@@ -24,6 +27,7 @@ export class CreateTransfer {
     private readonly accountRepository: IAccountRepository,
     private readonly transactionRepository: ITransactionRepository,
     private readonly userRepository: IUserRepository,
+    private readonly notificationRepository: INotificationRepository,
   ) {}
 
   async execute(dto: CreateTransferDto): Promise<TransferReceiptDto> {
@@ -104,7 +108,33 @@ export class CreateTransfer {
       ? `${receiverUser.firstName} ${receiverUser.lastName}`
       : 'Usuario';
 
-    // 10. Retornar comprobante con números enmascarados
+    // 10. Crear notificaciones para emisor y receptor
+    const senderUser = await this.userRepository.findById(dto.userId);
+    const senderName = senderUser
+      ? `${senderUser.firstName} ${senderUser.lastName}`
+      : 'Usuario';
+
+    await this.notificationRepository.save(new Notification({
+      id: randomUUID(),
+      userId: dto.userId,
+      title: 'Transferencia enviada',
+      message: `Transferiste $${dto.amount.toLocaleString('es-CO')} a ${receiverName}`,
+      type: NotificationType.TRANSFERENCIA,
+      read: false,
+      createdAt: new Date(),
+    }));
+
+    await this.notificationRepository.save(new Notification({
+      id: randomUUID(),
+      userId: receiverAccount.userId,
+      title: 'Transferencia recibida',
+      message: `Recibiste $${dto.amount.toLocaleString('es-CO')} de ${senderName}`,
+      type: NotificationType.TRANSFERENCIA,
+      read: false,
+      createdAt: new Date(),
+    }));
+
+    // 11. Retornar comprobante con números enmascarados
     return {
       id:              transaction.id,
       referenceNumber: transaction.referenceNumber,

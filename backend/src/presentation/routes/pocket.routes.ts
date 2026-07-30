@@ -7,6 +7,7 @@ import { DeletePocket } from '../../application/use-cases/pocket/DeletePocket';
 import { TransferPocketBalance } from '../../application/use-cases/pocket/TransferPocketBalance';
 import { SupabaseAccountRepository } from '../../infrastructure/repositories/SupabaseAccountRepository';
 import { SupabasePocketRepository } from '../../infrastructure/repositories/SupabasePocketRepository';
+import { SupabaseNotificationRepository } from '../../infrastructure/repositories/SupabaseNotificationRepository';
 import supabaseClient from '../../infrastructure/database/supabase.client';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
@@ -14,12 +15,13 @@ const router = Router();
 
 const accountRepository = new SupabaseAccountRepository(supabaseClient);
 const pocketRepository = new SupabasePocketRepository(supabaseClient);
+const notificationRepository = new SupabaseNotificationRepository(supabaseClient);
 
-const createPocket = new CreatePocket(accountRepository, pocketRepository);
+const createPocket = new CreatePocket(accountRepository, pocketRepository, notificationRepository);
 const getAccountPockets = new GetAccountPockets(accountRepository, pocketRepository);
-const updatePocket = new UpdatePocket(accountRepository, pocketRepository);
-const deletePocket = new DeletePocket(accountRepository, pocketRepository);
-const transferPocketBalance = new TransferPocketBalance(accountRepository, pocketRepository);
+const updatePocket = new UpdatePocket(accountRepository, pocketRepository, notificationRepository);
+const deletePocket = new DeletePocket(accountRepository, pocketRepository, notificationRepository);
+const transferPocketBalance = new TransferPocketBalance(accountRepository, pocketRepository, notificationRepository);
 
 const controller = new PocketController(
   createPocket,
