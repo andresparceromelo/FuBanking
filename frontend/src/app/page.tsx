@@ -1,6 +1,15 @@
-import { redirect } from 'next/navigation';
+import { Hero } from '@/features/landing/components/Hero';
+import { FeaturesCarousel } from '@/features/landing/components/FeaturesCarousel';
+import { ReviewsCarousel } from '@/features/landing/components/ReviewsCarousel';
+import { Footer } from '@/features/landing/components/Footer';
 
 export default function Home() {
-  // Redirigir siempre a la página de login al entrar a la raíz
-  redirect('/login');
+  return (
+    <main>
+      <Hero />
+      <FeaturesCarousel />
+      <ReviewsCarousel />
+      <Footer />
+    </main>
+  );
 }

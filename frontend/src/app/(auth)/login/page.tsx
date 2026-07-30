@@ -1,19 +1,20 @@
 import { LoginForm } from '@/features/auth/components/LoginForm';
+import Link from 'next/link';
 
 export default function LoginPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-background relative overflow-hidden">
-      
-      {/* Decorative Fubank-style blob */}
-      <div className="absolute top-[-20%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-primary/5 blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[40vw] h-[40vw] rounded-full bg-primary/10 blur-[100px] pointer-events-none" />
-
-      <div className="w-full max-w-sm flex flex-col items-start relative z-10">
-        <h1 className="text-4xl font-semibold mb-2 text-primary">fubank</h1>
-        <h2 className="text-2xl font-medium mb-8">Inicia sesión en tu cuenta</h2>
-        
-        <LoginForm />
-      </div>
-    </main>
+    <div>
+      <h2 className="text-2xl font-semibold mb-1">Inicia sesión</h2>
+      <p className="text-muted-foreground mb-8">
+        Bienvenido de vuelta a tu cuenta.
+      </p>
+      <LoginForm />
+      <p className="mt-6 text-sm text-muted-foreground text-center">
+        ¿No tienes cuenta?{' '}
+        <Link href="/register" className="text-primary hover:underline font-medium">
+          Créala aquí
+        </Link>
+      </p>
+    </div>
   );
 }

@@ -97,3 +97,53 @@ input[type="number"]::-webkit-outer-spin-button {
     transform: translateX(100%);
   }
 }
+
+/* Landing page animations */
+@keyframes star-twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+.animate-star-twinkle {
+  animation: star-twinkle ease-in-out infinite;
+}
+
+@keyframes nebula-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -20px); }
+}
+.animate-nebula-drift {
+  animation: nebula-drift 20s ease-in-out infinite;
+}
+
+@keyframes nebula-drift-reverse {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-20px, 15px); }
+}
+.animate-nebula-drift-reverse {
+  animation: nebula-drift-reverse 25s ease-in-out infinite;
+}
+
+@keyframes planet-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+.animate-planet-float {
+  animation: planet-float 6s ease-in-out infinite;
+}
+
+@keyframes reviews-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-reviews-scroll {
+  animation: reviews-scroll 40s linear infinite;
+}
+
+/* Hide scrollbar for carousels */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
