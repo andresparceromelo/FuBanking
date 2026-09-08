@@ -17,3 +17,8 @@ backend/.env
 
 # Logs
 *.log
+fronted/
+pruebas_info/
+densidad_fallos_registro.md
+cobertura_registro.md
+FUBANKING_HANDOFF.md

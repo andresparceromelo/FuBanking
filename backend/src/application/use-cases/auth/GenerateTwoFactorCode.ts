@@ -23,7 +23,7 @@ export class GenerateTwoFactorCode {
     private readonly emailService: IEmailService,
     private readonly tokenService: ITokenService,
     private readonly passwordService?: IPasswordService,
-  ) {}
+  ) { }
 
   async execute(
     userId: string,
@@ -52,7 +52,7 @@ export class GenerateTwoFactorCode {
     // 6. Generar token temporal (identifica al usuario durante el flujo 2FA, 10 min)
     const temporaryToken = this.tokenService.generate(
       { userId, email },
-      { expiresIn: '10m' },
+      { expiresIn: '20s' },
     );
 
     // 7. Enmascarar el email para mostrarlo en el frontend (j***@gmail.com)

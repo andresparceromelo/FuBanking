@@ -15,7 +15,7 @@ export class RequestPasswordReset {
     private readonly userRepository: IUserRepository,
     private readonly tokenService: ITokenService,
     private readonly emailService: IEmailService,
-  ) {}
+  ) { }
 
   async execute(dto: RequestPasswordResetDto): Promise<void> {
     const email = dto.email.toLowerCase().trim();
@@ -32,13 +32,13 @@ export class RequestPasswordReset {
 
     console.log('[RequestPasswordReset] Usuario encontrado, ID:', user.id);
 
-    // Generar token JWT válido por 15 minutos
+    // Generar token JWT válido por 30 segundos (TEMPORAL - solo para pruebas, cambiar a '15m' en producción)
     const token = this.tokenService.generate(
       { userId: user.id, email: user.email.toString(), type: 'reset' },
       { expiresIn: '15m' }
     );
 
-    // Construir enlace de recuperación
+    // Construir enlace de recuperacisón
     const resetLink = `${process.env['CLIENT_URL']}/reset-password?token=${token}`;
     console.log('[RequestPasswordReset] Enlace generado:', resetLink);
 
