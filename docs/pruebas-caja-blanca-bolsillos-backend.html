@@ -1,0 +1,1346 @@
+<title>Caminos de Bolsillos FuBank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --ground: #FBFAFC;
+  --surface: #FFFFFF;
+  --surface-2: #F4F1F7;
+  --ink: #1A1620;
+  --ink-soft: #4A4255;
+  --muted: #6E6579;
+  --line: #E7E2EC;
+  --line-soft: #F0ECF4;
+  --accent: #820AD1;
+  --accent-soft: #F3E6FC;
+  --ok: #0F7B4F;
+  --ok-soft: #E3F4EB;
+  --fail: #C0341A;
+  --fail-soft: #FBE7E2;
+  --na: #9A6400;
+  --na-soft: #FBF0DC;
+  --sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --cond: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --rail: 236px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #141118;
+    --surface: #1C1822;
+    --surface-2: #241E2C;
+    --ink: #EDE9F2;
+    --ink-soft: #C6BED2;
+    --muted: #9E95AC;
+    --line: #2E2836;
+    --line-soft: #262030;
+    --accent: #A855E8;
+    --accent-soft: #2C1A3D;
+    --ok: #42C98A;
+    --ok-soft: #14301F;
+    --fail: #FF7A5C;
+    --fail-soft: #391A16;
+    --na: #E5A93C;
+    --na-soft: #33270F;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #141118;
+  --surface: #1C1822;
+  --surface-2: #241E2C;
+  --ink: #EDE9F2;
+  --ink-soft: #C6BED2;
+  --muted: #9E95AC;
+  --line: #2E2836;
+  --line-soft: #262030;
+  --accent: #A855E8;
+  --accent-soft: #2C1A3D;
+  --ok: #42C98A;
+  --ok-soft: #14301F;
+  --fail: #FF7A5C;
+  --fail-soft: #391A16;
+  --na: #E5A93C;
+  --na-soft: #33270F;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  align-items: start;
+}
+
+/* ── Rail ────────────────────────────────────────────────────────────── */
+
+.rail {
+  position: sticky;
+  top: 0;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.rail__marca {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.rail__marca em { font-style: normal; color: var(--accent); }
+
+.rail__grupo { display: flex; flex-direction: column; gap: 8px; }
+
+.rail__titulo {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rail ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+.rail a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 13.5px;
+  border-left: 2px solid transparent;
+}
+.rail a:hover { background: var(--surface-2); color: var(--ink); border-left-color: var(--accent); }
+.rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.rail__cuenta {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.rail__cuenta--alerta { color: var(--fail); font-weight: 500; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.filtro {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filtro:hover { border-color: var(--accent); color: var(--ink); }
+.filtro:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filtro[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── Cuerpo ──────────────────────────────────────────────────────────── */
+
+main { padding: 40px 0 96px; min-width: 0; }
+
+.hero { padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+
+.hero__eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 14px;
+}
+
+.hero h1 {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+.hero__intro {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--ink-soft);
+  font-size: 16.5px;
+}
+
+.ficha-tecnica {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px;
+  margin-top: 32px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ficha-tecnica div { background: var(--surface); padding: 14px 16px; }
+.ficha-tecnica dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+.ficha-tecnica dd { margin: 0; font-size: 14px; font-family: var(--mono); color: var(--ink); }
+
+/* ── Resumen ─────────────────────────────────────────────────────────── */
+
+.resumen { padding: 40px 0; border-bottom: 1px solid var(--line); }
+
+.resumen__cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+h2 {
+  font-family: var(--cond);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.marcador { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.marcador strong { color: var(--ink); font-weight: 600; }
+
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+.tarjeta:hover { border-color: var(--accent); }
+.tarjeta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.tarjeta__nombre { font-size: 13px; color: var(--muted); }
+.tarjeta__cifra {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.tarjeta__de { color: var(--muted); font-size: 17px; font-weight: 600; }
+
+.barra { display: flex; gap: 2px; height: 4px; border-radius: 2px; overflow: hidden; }
+.barra__seg--ok { background: var(--ok); }
+.barra__seg--fail { background: var(--fail); }
+.barra__seg--na { background: var(--na); }
+
+.tarjeta__nota { font-size: 12px; color: var(--muted); }
+
+/* ── Secciones y fichas ──────────────────────────────────────────────── */
+
+.seccion { padding: 44px 0 8px; scroll-margin-top: 24px; }
+
+.seccion__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+}
+
+.seccion__caso-de-uso { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+.casos { display: flex; flex-direction: column; gap: 14px; }
+
+.caso {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ok);
+  border-radius: 8px;
+  padding: 18px 20px;
+  scroll-margin-top: 24px;
+}
+.caso--fail { border-left-color: var(--fail); }
+.caso--na { border-left-color: var(--na); }
+.caso[hidden] { display: none; }
+
+.caso__head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+
+.caso__id {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.caso__titulo {
+  font-family: var(--cond);
+  font-weight: 600;
+  font-size: 19px;
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.chip--ok { background: var(--ok-soft); color: var(--ok); }
+.chip--fail { background: var(--fail-soft); color: var(--fail); }
+.chip--na { background: var(--na-soft); color: var(--na); }
+
+/* Cadena de nodos: la traza del camino recorrido. */
+.cadena {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 3px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.nodo {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.nodo + .nodo::before {
+  content: "→";
+  color: var(--muted);
+  margin-right: 7px;
+  margin-left: -3px;
+  font-weight: 400;
+}
+.nodo--fin { font-weight: 600; }
+.nodo--fin.nodo--ok { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.nodo--fin.nodo--fail { background: var(--fail-soft); border-color: var(--fail); color: var(--fail); }
+.nodo--fin.nodo--na { background: var(--na-soft); border-color: var(--na); color: var(--na); }
+
+.campos { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 1px 0; margin: 0; }
+.campos dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 9px 14px 9px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.campos dd { margin: 0; padding: 9px 0; border-top: 1px solid var(--line-soft); min-width: 0; }
+.campos dd p { margin: 0; }
+
+.items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.items li { position: relative; padding-left: 15px; font-size: 14px; color: var(--ink-soft); }
+.items li::before { content: "·"; position: absolute; left: 4px; color: var(--accent); font-weight: 700; }
+
+.obtenido { font-family: var(--mono); font-size: 12.5px; line-height: 1.65; }
+.obtenido--ok { color: var(--ink-soft); }
+.obtenido--fail { color: var(--fail); }
+.obtenido--na { color: var(--na); }
+
+/* ── Hallazgos ───────────────────────────────────────────────────────── */
+
+.hallazgos { padding: 48px 0 0; border-top: 1px solid var(--line); margin-top: 44px; }
+.hallazgos .lista { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+
+.hallazgo {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--fail);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.hallazgo--na { border-left-color: var(--na); }
+.hallazgo header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+.hallazgo h3 { font-family: var(--cond); font-weight: 600; font-size: 17px; margin: 0; }
+.hallazgo h3 a { color: var(--accent); text-decoration: none; font-family: var(--mono); font-size: 14px; }
+.hallazgo h3 a:hover { text-decoration: underline; }
+.hallazgo p { margin: 0 0 8px; font-size: 14px; color: var(--ink-soft); }
+.hallazgo p:last-child { margin-bottom: 0; }
+.hallazgo strong { color: var(--ink); }
+
+.vacio { color: var(--muted); font-style: italic; }
+
+code {
+  font-family: var(--mono);
+  font-size: 0.92em;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.seccion__caso-de-uso, footer code { background: none; padding: 0; }
+
+footer {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: var(--mono);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0 20px; }
+  .rail {
+    position: static;
+    max-height: none;
+    padding: 28px 0 0;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 24px;
+  }
+  .rail ul { flex-direction: row; flex-wrap: wrap; }
+  .rail a { border-left: none; border: 1px solid var(--line); border-radius: 999px; }
+  .campos { grid-template-columns: minmax(0, 1fr); }
+  .campos dt { padding-bottom: 2px; border-top: 1px solid var(--line-soft); }
+  .campos dd { padding-top: 2px; border-top: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div class="layout">
+  <nav class="rail" aria-label="Contenido">
+    <div class="rail__marca"><em>Fu</em>Bank<br>Caja blanca</div>
+
+    <div class="rail__grupo">
+      <span class="rail__titulo">Funcionalidades</span>
+      <ul><li><a href="#crear-bolsillo"><span>Crear bolsillo</span><span class="rail__cuenta rail__cuenta--alerta">6/7</span></a></li><li><a href="#actualizar-bolsillo"><span>Actualizar bolsillo</span><span class="rail__cuenta">11/11</span></a></li><li><a href="#eliminar-bolsillo"><span>Eliminar bolsillo</span><span class="rail__cuenta">5/5</span></a></li><li><a href="#transferir-entre-bolsillos"><span>Transferir entre bolsillos</span><span class="rail__cuenta">10/10</span></a></li><li><a href="#consultar-bolsillos"><span>Consultar bolsillos</span><span class="rail__cuenta">3/3</span></a></li></ul>
+    </div>
+
+    <div class="rail__grupo">
+      <span class="rail__titulo">Filtrar</span>
+      <div class="filtros">
+        <button class="filtro" type="button" data-filtro="todos" aria-pressed="true">Todos</button>
+        <button class="filtro" type="button" data-filtro="Aprobado" aria-pressed="false">Aprobados</button>
+        <button class="filtro" type="button" data-filtro="Fallido" aria-pressed="false">Fallidos</button>
+        <button class="filtro" type="button" data-filtro="No ejecutable" aria-pressed="false">No ejecutables</button>
+      </div>
+    </div>
+
+    <div class="rail__grupo">
+      <span class="rail__titulo">Otras secciones</span>
+      <ul><li><a href="#hallazgos"><span>Hallazgos</span></a></li></ul>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <p class="hero__eyebrow">Pruebas unitarias · Módulo Bolsillos · Backend</p>
+      <h1>Caminos derivados de la tabla de caminos</h1>
+      <p class="hero__intro">
+        Cada caso corresponde a una fila de la tabla de caminos de una de las cinco hojas del diagrama
+        <code>Backend.drawio</code>. Se declara la secuencia de nodos, las condiciones que hay que forzar en cada
+        decisión y las entradas concretas que lo consiguen; el resultado obtenido proviene de ejecutar el caso de uso
+        real contra repositorios en memoria.
+      </p>
+
+      <dl class="ficha-tecnica">
+        <div><dt>Fecha de ejecución</dt><dd>2026-08-25</dd></div>
+        <div><dt>Versión probada</dt><dd>main-04800eb</dd></div>
+        <div><dt>Entorno</dt><dd>Node + tsx · en memoria</dd></div>
+        <div><dt>Reproducir</dt><dd>npm run test:paths</dd></div>
+      </dl>
+    </header>
+
+    <section class="resumen">
+      <div class="resumen__cabeza">
+        <h2>Resumen</h2>
+        <p class="marcador">
+          <strong>35</strong> aprobados · <strong>1</strong> fallidos ·
+          <strong>0</strong> no ejecutables · <strong>36</strong> caminos
+        </p>
+      </div>
+      <div class="tarjetas">
+<a class="tarjeta" href="#crear-bolsillo">
+  <span class="tarjeta__nombre">Crear bolsillo</span>
+  <span class="tarjeta__cifra">6<span class="tarjeta__de">/7</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:6"></span><span class="barra__seg barra__seg--fail" style="flex:1"></span></span>
+  <span class="tarjeta__nota">1 fallido</span>
+</a>
+<a class="tarjeta" href="#actualizar-bolsillo">
+  <span class="tarjeta__nombre">Actualizar bolsillo</span>
+  <span class="tarjeta__cifra">11<span class="tarjeta__de">/11</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:11"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a>
+<a class="tarjeta" href="#eliminar-bolsillo">
+  <span class="tarjeta__nombre">Eliminar bolsillo</span>
+  <span class="tarjeta__cifra">5<span class="tarjeta__de">/5</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:5"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a>
+<a class="tarjeta" href="#transferir-entre-bolsillos">
+  <span class="tarjeta__nombre">Transferir entre bolsillos</span>
+  <span class="tarjeta__cifra">10<span class="tarjeta__de">/10</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:10"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a>
+<a class="tarjeta" href="#consultar-bolsillos">
+  <span class="tarjeta__nombre">Consultar bolsillos</span>
+  <span class="tarjeta__cifra">3<span class="tarjeta__de">/3</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:3"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a></div>
+    </section>
+
+    
+<section class="seccion" id="crear-bolsillo">
+  <header class="seccion__head">
+    <h2>Crear bolsillo</h2>
+    <code class="seccion__caso-de-uso">CreatePocket.execute</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="BE-CR-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CR-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (dto.amount &lt; 0) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta de ahorros ACTIVA del propietario, saldo = $1.000, sin bolsillos</li><li>dto = { userId: propietario, accountId: cuenta.id, name: &quot;Monto negativo&quot;, amount: -1 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError INVALID_POCKET_AMOUNT (HTTP 400) en el nodo 3. No se consulta la cuenta ni se altera el saldo.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo no puede ser negativo&quot; · saldo intacto en $1.000 · bolsillos creados: 0</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-CR-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CR-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (dto.amount &lt; 0) = FALSO</li><li>N4 (!account) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Repositorio de cuentas vacío</li><li>dto = { userId: propietario, accountId: UUID aleatorio inexistente, name: &quot;Fantasma&quot;, amount: 100 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se ejecuta findById (nodo 2), devuelve null y se lanza AppError ACCOUNT_NOT_FOUND (HTTP 404) en el nodo 6.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_FOUND · HTTP 404 · &quot;Cuenta no encontrada&quot; · accountId consultado: 2fe76d3b-ba0e-41c8-97f6-744e122443e3 · bolsillos creados: 0</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-CR-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CR-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (dto.amount &lt; 0) = FALSO</li><li>N4 (!account) = FALSO</li><li>N5 (assertBelongsTo) no lanza: el usuario es el propietario</li><li>N7 (!account.isOperational()) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta de ahorros del propietario en estado BLOQUEADA, saldo = $1.000</li><li>dto = { userId: propietario, accountId: cuenta.id, name: &quot;Cuenta bloqueada&quot;, amount: 100 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>assertBelongsTo pasa (nodo 5) y, al no estar la cuenta ACTIVA, se lanza AppError ACCOUNT_NOT_OPERATIONAL (HTTP 400) en el nodo 9.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · &quot;La cuenta no está disponible para generar bolsillos&quot; · estado de la cuenta: BLOQUEADA · saldo intacto en $1.000</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-CR-C4" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CR-C4</span>
+    <h3 class="caso__titulo">Camino 4</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">12</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N4 = FALSO</li><li>N7 = FALSO (cuenta ACTIVA)</li><li>N10 (currentReserved + dto.amount &gt; account.balance) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta de ahorros ACTIVA del propietario, saldo = $1.000, sin bolsillos (currentReserved = $0)</li><li>dto = { userId: propietario, accountId: cuenta.id, name: &quot;Excede saldo&quot;, amount: 1001 }</li><li>Valor límite: monto = saldo + 1</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>currentReserved (0) + 1001 &gt; 1000, por lo que se lanza AppError INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400) en el nodo 12 sin tocar el saldo.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · &quot;No tienes saldo disponible suficiente para crear este bolsillo&quot; · reservado previo $0 + monto $1.001 &gt; saldo $1.000 · saldo intacto en $1.000</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-CR-C5" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CR-C5</span>
+    <h3 class="caso__titulo">Camino 5</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo">15</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N4 = FALSO</li><li>N7 = FALSO</li><li>N10 = FALSO (hay saldo disponible suficiente)</li><li>N14 (notificationRepository presente) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta de ahorros ACTIVA del propietario, saldo = $1.000, sin bolsillos</li><li>CreatePocket construido CON repositorio de notificaciones</li><li>dto = { userId: propietario, accountId: cuenta.id, name: &quot;Vacaciones&quot;, amount: 300 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se descuenta el monto del saldo (nodo 11), se guarda el bolsillo (nodo 13), se registra la notificación &quot;Bolsillo creado&quot; (nodo 16) y se retorna saved.toPublic() (nodo 15). Saldo final = $700.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Bolsillo &quot;Vacaciones&quot; creado por $300 · saldo $1.000 → $700 · notificación registrada: &quot;Bolsillo creado&quot; (BOLSILLO) · respuesta toPublic() con id 2c17c921-04e9-4ed2-873e-f578142cb226</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-CR-C6" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CR-C6</span>
+    <h3 class="caso__titulo">Camino 6</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">15</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N4 = FALSO</li><li>N7 = FALSO</li><li>N10 = FALSO</li><li>N14 (notificationRepository presente) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta de ahorros ACTIVA del propietario, saldo = $1.000, sin bolsillos</li><li>CreatePocket construido SIN repositorio de notificaciones (parámetro opcional omitido)</li><li>dto = { userId: propietario, accountId: cuenta.id, name: &quot;Sin notificación&quot;, amount: 300 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El bolsillo se crea y el saldo baja a $700 igual que en el camino 5, pero se salta el nodo 16: no se registra ninguna notificación.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Bolsillo &quot;Sin notificación&quot; creado por $300 · saldo $1.000 → $700 · notificaciones registradas: 0 (nodo 16 no recorrido)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--fail" id="BE-CR-C5b" data-estado="Fallido">
+  <header class="caso__head">
+    <span class="caso__id">BE-CR-C5b</span>
+    <h3 class="caso__titulo">Camino 5 (variante con reserva previa)</h3>
+    <span class="chip chip--fail">Fallido</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo">15</li><li class="nodo nodo--fin nodo--fail">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N4 = FALSO</li><li>N7 = FALSO</li><li>N10 = FALSO — el monto solicitado cabe en el saldo disponible</li><li>N14 = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta de ahorros ACTIVA del propietario, saldo inicial = $1.000</li><li>Bolsillo previo &quot;Reserva grande&quot; de $800 (tras crearlo el saldo disponible queda en $200)</li><li>dto = { userId: propietario, accountId: cuenta.id, name: &quot;Segundo bolsillo&quot;, amount: 150 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El monto $150 cabe en el saldo disponible de $200, por lo que N10 debe ser FALSO y el bolsillo debe crearse dejando el saldo disponible en $50.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--fail">FALLO: El flujo tomó el camino 4 (nodo 12) en lugar del camino 5: INSUFFICIENT_AVAILABLE_BALANCE — &quot;No tienes saldo disponible suficiente para crear este bolsillo&quot;. Saldo disponible $200, ya reservado $800, monto solicitado $150. Defecto: la decisión del nodo 10 compara &quot;currentReserved + amount &gt; account.balance&quot;, pero account.balance ya es el saldo DISPONIBLE (el reservado se descontó en el nodo 11 de creaciones anteriores), de modo que el monto reservado se cuenta dos veces y se rechazan bolsillos que sí caben.</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="actualizar-bolsillo">
+  <header class="seccion__head">
+    <h2>Actualizar bolsillo</h2>
+    <code class="seccion__caso-de-uso">UpdatePocket.execute</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="BE-AC-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (name definido y sin contenido tras trim) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>No hace falta estado previo: la validación precede a toda consulta</li><li>dto = { userId: propietario, pocketId: UUID cualquiera, name: &quot;   &quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError INVALID_POCKET_NAME (HTTP 400) en el nodo 3, sin consultar el repositorio de bolsillos.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INVALID_POCKET_NAME · HTTP 400 · &quot;El nombre del bolsillo no puede estar vacío&quot; · entrada name = &quot;   &quot; (3 espacios, longitud tras trim = 0)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">5</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO (name no se envía)</li><li>N2 (amount definido y &lt; 0) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>dto = { userId: propietario, pocketId: UUID cualquiera, amount: -1 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError INVALID_POCKET_AMOUNT (HTTP 400) en el nodo 5.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo no puede ser negativo&quot; · entrada amount = -1 (valor límite inmediatamente inferior a 0)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N2 = FALSO</li><li>N7 (!pocket) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Repositorio de bolsillos vacío</li><li>dto = { userId: propietario, pocketId: UUID aleatorio inexistente, amount: 100 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>findById (nodos 4-6) devuelve null y se lanza AppError POCKET_NOT_FOUND (HTTP 404) en el nodo 9.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo no encontrado&quot; · pocketId consultado: 5b214277-92df-4e77-9f13-5835ff20a2e9</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C4" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C4</span>
+    <h3 class="caso__titulo">Camino 4</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">12</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N2 = FALSO</li><li>N7 = FALSO</li><li>N10 (!account) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Bolsillo &quot;Huérfano&quot; de $100 sembrado directamente en el repositorio, apuntando a un accountId que no existe</li><li>dto = { userId: propietario, pocketId: bolsillo.id, amount: 200 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El bolsillo se encuentra (nodo 7 falso) pero su cuenta no (nodo 10 verdadero): se lanza AppError ACCOUNT_NOT_FOUND (HTTP 404) en el nodo 12.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_FOUND · HTTP 404 · &quot;Cuenta no encontrada&quot; · accountId del bolsillo: b510e0a2-5106-472e-aa73-631ed232920d · monto del bolsillo intacto en $100</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C5" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C5</span>
+    <h3 class="caso__titulo">Camino 5</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">15</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N2 = FALSO</li><li>N7 = FALSO</li><li>N10 = FALSO</li><li>N11 (assertBelongsTo) no lanza: el usuario es el propietario</li><li>N13 (!account.isOperational()) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta de ahorros del propietario con un bolsillo &quot;Vacaciones&quot; de $300; la cuenta se bloquea después de crearlo</li><li>dto = { userId: propietario, pocketId: bolsillo.id, amount: 400 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError ACCOUNT_NOT_OPERATIONAL (HTTP 400) en el nodo 15 y el bolsillo conserva su monto original.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · &quot;La cuenta no está disponible para modificar bolsillos&quot; · estado de la cuenta: BLOQUEADA · monto del bolsillo intacto en $300</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C6" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C6</span>
+    <h3 class="caso__titulo">Camino 6</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">17</li><li class="nodo">19</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N13 = FALSO (cuenta ACTIVA)</li><li>N14 (amount definido y distinto del actual) = VERDADERO</li><li>N17 (newReservedTotal &gt; account.balance + totalReserved) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300 (saldo disponible $700, reservado $300)</li><li>dto = { userId: propietario, pocketId: bolsillo.id, amount: 1001 }</li><li>Valor límite: 1001 &gt; 700 + 300 = 1000</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400) en el nodo 19 sin tocar el saldo ni el bolsillo.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · &quot;No tienes saldo disponible suficiente para ajustar este bolsillo&quot; · saldo disponible intacto en $700 · monto del bolsillo intacto en $300</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C7" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C7</span>
+    <h3 class="caso__titulo">Camino 7</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">17</li><li class="nodo">18</li><li class="nodo">26</li><li class="nodo">25</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N14 (amount definido y distinto) = VERDADERO</li><li>N17 (saldo insuficiente) = FALSO</li><li>N24 (notificationRepository presente) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300 (saldo disponible $700)</li><li>dto = { userId: propietario, pocketId: bolsillo.id, amount: 500 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El nodo 18 ajusta el saldo por la diferencia (delta = 500 − 300 = 200) dejándolo en $500, el bolsillo pasa a $500, se registra la notificación &quot;Bolsillo actualizado&quot; (nodo 26) y se retorna updated.toPublic() (nodo 25).</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Monto $300 → $500 · saldo disponible $700 → $500 · notificación: &quot;Bolsillo actualizado&quot; — &quot;Actualizaste el bolsillo &quot;Vacaciones&quot;&quot;</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C8" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C8</span>
+    <h3 class="caso__titulo">Camino 8</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo">21</li><li class="nodo">26</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N14 (amount definido y distinto) = FALSO — no se envía amount</li><li>N16 (name definido y distinto del actual) = VERDADERO</li><li>N24 = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300 (saldo disponible $700)</li><li>dto = { userId: propietario, pocketId: bolsillo.id, name: &quot;Viaje a la costa&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El nodo 21 renombra el bolsillo, el monto y el saldo quedan igual ($300 y $700) y se registra la notificación.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Nombre &quot;Vacaciones&quot; → &quot;Viaje a la costa&quot; · monto sin cambios $300 · saldo sin cambios $700 · notificación registrada</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C9" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C9</span>
+    <h3 class="caso__titulo">Camino 9</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo">20</li><li class="nodo">23</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N14 = FALSO (no se envía amount)</li><li>N16 = FALSO (no se envía name)</li><li>N20 (amount y name ambos undefined) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300</li><li>dto = { userId: propietario, pocketId: bolsillo.id } — sin name ni amount</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError NO_CHANGES_PROVIDED (HTTP 400) en el nodo 23; el bolsillo no se guarda ni se notifica.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con NO_CHANGES_PROVIDED · HTTP 400 · &quot;No se proporcionaron cambios para el bolsillo&quot; · dto sin name ni amount · notificaciones de actualización registradas: 0</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C10" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C10</span>
+    <h3 class="caso__titulo">Camino 10</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo">20</li><li class="nodo">22</li><li class="nodo">24</li><li class="nodo">26</li><li class="nodo">25</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N14 = FALSO (no se envía amount)</li><li>N16 = FALSO (el name enviado es IGUAL al actual)</li><li>N20 = FALSO (name sí está definido)</li><li>N24 (notificationRepository presente) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300</li><li>dto = { userId: propietario, pocketId: bolsillo.id, name: &quot;Vacaciones&quot; } — mismo nombre que ya tiene</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>No hay cambio real: se salta el nodo 21, se persiste el bolsillo tal cual (nodo 22), se registra la notificación (nodo 26) y se retorna updated.toPublic() (nodo 25) con nombre &quot;Vacaciones&quot; y monto $300.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Operación aceptada sin cambio real — nombre &quot;Vacaciones&quot;, monto $300, saldo $700 · notificación registrada: &quot;Bolsillo actualizado&quot;</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-AC-C11" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-AC-C11</span>
+    <h3 class="caso__titulo">Camino 11</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo">11</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo">20</li><li class="nodo">22</li><li class="nodo">24</li><li class="nodo">25</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N14 = FALSO</li><li>N16 = FALSO</li><li>N20 = FALSO</li><li>N24 (notificationRepository presente) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300</li><li>UpdatePocket construido SIN repositorio de notificaciones</li><li>dto = { userId: propietario, pocketId: bolsillo.id, name: &quot;Vacaciones&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Igual que el camino 10 pero saltando el nodo 26: la operación se acepta y no se registra ninguna notificación.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Operación aceptada — nombre &quot;Vacaciones&quot;, monto $300 · notificaciones de actualización registradas: 0 (nodo 26 no recorrido)</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="eliminar-bolsillo">
+  <header class="seccion__head">
+    <h2>Eliminar bolsillo</h2>
+    <code class="seccion__caso-de-uso">DeletePocket.execute</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="BE-EL-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-EL-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 (!pocket) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Repositorio de bolsillos vacío</li><li>dto = { userId: propietario, pocketId: UUID aleatorio inexistente }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>findById (nodo 1) devuelve null y se lanza AppError POCKET_NOT_FOUND (HTTP 404) en el nodo 4.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo no encontrado&quot; · pocketId consultado: 3116de5c-ffe8-4ff7-ae53-1adf086ec127</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-EL-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-EL-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 (!pocket) = FALSO</li><li>N5 (!account) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Bolsillo &quot;Huérfano&quot; de $100 sembrado en el repositorio, apuntando a un accountId que no existe</li><li>dto = { userId: propietario, pocketId: bolsillo.id }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError ACCOUNT_NOT_FOUND (HTTP 404) en el nodo 7 y el bolsillo NO se elimina.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_FOUND · HTTP 404 · &quot;Cuenta no encontrada&quot; · accountId del bolsillo: 848f20ca-c0f8-4958-9a9e-5838c64cb556 · el bolsillo sigue registrado (nodo 11 no recorrido)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-EL-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-EL-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 = FALSO</li><li>N5 = FALSO</li><li>N6 (assertBelongsTo) no lanza: el usuario es el propietario</li><li>N8 (!account.isOperational()) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta del propietario con un bolsillo &quot;Vacaciones&quot; de $300; la cuenta se bloquea después de crearlo</li><li>dto = { userId: propietario, pocketId: bolsillo.id }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError ACCOUNT_NOT_OPERATIONAL (HTTP 400) en el nodo 10; el bolsillo sigue existiendo y el saldo no cambia.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · &quot;La cuenta no está disponible para eliminar bolsillos&quot; · estado de la cuenta: BLOQUEADA · bolsillo aún registrado · saldo intacto en $700</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-EL-C4" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-EL-C4</span>
+    <h3 class="caso__titulo">Camino 4</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo">9</li><li class="nodo">11</li><li class="nodo">12</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">15</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 = FALSO</li><li>N5 = FALSO</li><li>N8 = FALSO</li><li>N14 (notificationRepository presente) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300 (saldo disponible $700)</li><li>DeletePocket construido CON repositorio de notificaciones</li><li>dto = { userId: propietario, pocketId: bolsillo.id }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El bolsillo se elimina (nodo 11), el monto reservado vuelve al saldo dejándolo en $1.000 (nodos 12-13), se registra la notificación &quot;Bolsillo eliminado&quot; (nodo 15) y se retorna el bolsillo eliminado.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Bolsillo &quot;Vacaciones&quot; ($300) eliminado · saldo $700 → $1.000 · notificación: &quot;Bolsillo eliminado&quot; — &quot;Eliminaste el bolsillo &quot;Vacaciones&quot;&quot;</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-EL-C5" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-EL-C5</span>
+    <h3 class="caso__titulo">Camino 5</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo">9</li><li class="nodo">11</li><li class="nodo">12</li><li class="nodo">13</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 = FALSO</li><li>N5 = FALSO</li><li>N8 = FALSO</li><li>N14 (notificationRepository presente) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con saldo inicial $1.000 y bolsillo &quot;Vacaciones&quot; de $300</li><li>DeletePocket construido SIN repositorio de notificaciones</li><li>dto = { userId: propietario, pocketId: bolsillo.id }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El bolsillo se elimina y el saldo vuelve a $1.000 igual que en el camino 4, pero se salta el nodo 15: no se registra notificación de eliminación.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Bolsillo &quot;Vacaciones&quot; ($300) eliminado · saldo $700 → $1.000 · notificaciones de eliminación registradas: 0 (nodo 15 no recorrido)</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="transferir-entre-bolsillos">
+  <header class="seccion__head">
+    <h2>Transferir entre bolsillos</h2>
+    <code class="seccion__caso-de-uso">TransferPocketBalance.execute</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="BE-TR-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (dto.amount &lt;= 0) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>No hace falta estado previo: la validación precede a toda consulta</li><li>dto = { userId: propietario, fromPocketId: UUID, toPocketId: UUID distinto, amount: 0 }</li><li>Valor límite: amount = 0 (el mínimo válido es 1)</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError INVALID_TRANSFER_AMOUNT (HTTP 400) en el nodo 3.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INVALID_TRANSFER_AMOUNT · HTTP 400 · &quot;El monto de transferencia debe ser mayor que cero&quot; · entrada amount = 0 (valor límite)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">5</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N2 (fromPocketId === toPocketId) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>dto = { userId: propietario, fromPocketId: X, toPocketId: X, amount: 100 } — mismo identificador en origen y destino</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError INVALID_TRANSFER_TARGET (HTTP 400) en el nodo 5.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INVALID_TRANSFER_TARGET · HTTP 400 · &quot;Los bolsillos de origen y destino deben ser diferentes&quot; · fromPocketId = toPocketId = ad4e50f7-400d-463c-b475-c9d06f18b99e</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N2 = FALSO</li><li>N6 (!fromPocket) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con un bolsillo destino &quot;Destino&quot; de $100</li><li>dto = { userId: propietario, fromPocketId: UUID inexistente, toPocketId: destino.id, amount: 50 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError SOURCE_POCKET_NOT_FOUND (HTTP 404) en el nodo 8.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con SOURCE_POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo de origen no encontrado&quot; · fromPocketId consultado: 7a54fb27-e88a-4340-9952-a7c52e270518 · destino intacto en $100</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C4" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C4</span>
+    <h3 class="caso__titulo">Camino 4</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">11</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N2 = FALSO</li><li>N6 = FALSO</li><li>N9 (!toPocket) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con un bolsillo origen &quot;Origen&quot; de $300</li><li>dto = { userId: propietario, fromPocketId: origen.id, toPocketId: UUID inexistente, amount: 50 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError TARGET_POCKET_NOT_FOUND (HTTP 404) en el nodo 11.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con TARGET_POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo de destino no encontrado&quot; · toPocketId consultado: 5db2372e-4f3a-4a8c-8d98-0d70a744ff5f · origen intacto en $300</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C5" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C5</span>
+    <h3 class="caso__titulo">Camino 5</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo">13</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N2 = FALSO</li><li>N6 = FALSO</li><li>N9 = FALSO</li><li>N10 (fromPocket.accountId !== toPocket.accountId) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Dos cuentas ACTIVAS del mismo propietario: cuenta A con bolsillo &quot;Origen&quot; de $300 y cuenta B con bolsillo &quot;Destino&quot; de $100</li><li>dto = { userId: propietario, fromPocketId: origen.id (cuenta A), toPocketId: destino.id (cuenta B), amount: 50 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError POCKETS_DIFFERENT_ACCOUNT (HTTP 400) en el nodo 13; ningún bolsillo se modifica.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con POCKETS_DIFFERENT_ACCOUNT · HTTP 400 · &quot;Los bolsillos deben pertenecer a la misma cuenta&quot; · cuenta del origen: dd96c9c8-5a1d-4cf1-a130-c6e47c83ecac · cuenta del destino: 275cdfb8-a420-4901-aab5-b1600aca3697 · montos intactos ($300 / $100)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C6" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C6</span>
+    <h3 class="caso__titulo">Camino 6</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo">12</li><li class="nodo">14</li><li class="nodo">16</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N10 = FALSO (misma cuenta)</li><li>N14 (!account) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Dos bolsillos sembrados con el MISMO accountId, pero esa cuenta no existe en el repositorio de cuentas</li><li>dto = { userId: propietario, fromPocketId: origen.id, toPocketId: destino.id, amount: 50 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError ACCOUNT_NOT_FOUND (HTTP 404) en el nodo 16.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_FOUND · HTTP 404 · &quot;Cuenta no encontrada&quot; · accountId compartido por ambos bolsillos: 4b0ac7f2-026d-4a84-999f-144edd3e8246 · montos intactos ($300 / $100)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C7" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C7</span>
+    <h3 class="caso__titulo">Camino 7</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo">12</li><li class="nodo">14</li><li class="nodo">15</li><li class="nodo">17</li><li class="nodo">19</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N14 = FALSO</li><li>N15 (assertBelongsTo) no lanza: el usuario es el propietario</li><li>N17 (!account.isOperational()) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta del propietario en estado BLOQUEADA con bolsillos &quot;Origen&quot; $300 y &quot;Destino&quot; $100</li><li>dto = { userId: propietario, fromPocketId: origen.id, toPocketId: destino.id, amount: 50 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError ACCOUNT_NOT_OPERATIONAL (HTTP 400) en el nodo 19.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · &quot;La cuenta no está disponible para transferir entre bolsillos&quot; · estado de la cuenta: BLOQUEADA · montos intactos ($300 / $100)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C8" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C8</span>
+    <h3 class="caso__titulo">Camino 8</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo">12</li><li class="nodo">14</li><li class="nodo">15</li><li class="nodo">17</li><li class="nodo">18</li><li class="nodo">21</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N17 = FALSO (cuenta ACTIVA)</li><li>N18 (fromPocket.amount &lt; dto.amount) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con bolsillos &quot;Origen&quot; $300 y &quot;Destino&quot; $100</li><li>dto = { userId: propietario, fromPocketId: origen.id, toPocketId: destino.id, amount: 301 }</li><li>Valor límite: monto = saldo del bolsillo origen + 1</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError INSUFFICIENT_POCKET_BALANCE (HTTP 400) en el nodo 21; ningún bolsillo se modifica.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con INSUFFICIENT_POCKET_BALANCE · HTTP 400 · &quot;Saldo insuficiente en el bolsillo de origen&quot; · saldo del origen $300 &lt; monto solicitado $301 · montos intactos ($300 / $100)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C9" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C9</span>
+    <h3 class="caso__titulo">Camino 9</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo">12</li><li class="nodo">14</li><li class="nodo">15</li><li class="nodo">17</li><li class="nodo">18</li><li class="nodo">20</li><li class="nodo">22</li><li class="nodo">23</li><li class="nodo">24</li><li class="nodo">25</li><li class="nodo">26</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>Todas las decisiones de error en FALSO</li><li>N18 (saldo insuficiente en el origen) = FALSO</li><li>N25 (notificationRepository presente) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con bolsillos &quot;Origen&quot; $300 y &quot;Destino&quot; $100</li><li>TransferPocketBalance construido CON repositorio de notificaciones</li><li>dto = { userId: propietario, fromPocketId: origen.id, toPocketId: destino.id, amount: 120 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El origen baja a $180 (nodo 20), el destino sube a $220 (nodo 22), ambos se persisten (nodos 23-24), se registra la notificación &quot;Movimiento entre bolsillos&quot; (nodo 26) y se retornan los dos bolsillos actualizados. El saldo de la cuenta no cambia.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Origen $300 → $180 · destino $100 → $220 · saldo de la cuenta sin cambios $1.000 · notificación: &quot;Moviste $120 de &quot;Origen&quot; a &quot;Destino&quot;&quot;</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-TR-C11" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-TR-C11</span>
+    <h3 class="caso__titulo">Camino 11</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo">12</li><li class="nodo">14</li><li class="nodo">15</li><li class="nodo">17</li><li class="nodo">18</li><li class="nodo">20</li><li class="nodo">22</li><li class="nodo">23</li><li class="nodo">24</li><li class="nodo">25</li><li class="nodo">27</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>Todas las decisiones de error en FALSO</li><li>N18 (saldo insuficiente en el origen) = FALSO</li><li>N25 (notificationRepository presente) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con bolsillos &quot;Origen&quot; $300 y &quot;Destino&quot; $100</li><li>TransferPocketBalance construido SIN repositorio de notificaciones (parámetro opcional omitido)</li><li>dto = { userId: propietario, fromPocketId: origen.id, toPocketId: destino.id, amount: 120 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>La transferencia se realiza igual que en el camino 9 —origen $180, destino $220, saldo de la cuenta sin cambios— pero se salta el nodo 26: no se registra notificación y se retorna directamente por el nodo 27.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Origen $300 → $180 · destino $100 → $220 · saldo de la cuenta sin cambios $1.000 · notificaciones registradas: 0 (nodo 26 no recorrido)</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="consultar-bolsillos">
+  <header class="seccion__head">
+    <h2>Consultar bolsillos</h2>
+    <code class="seccion__caso-de-uso">GetAccountPockets.execute</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="BE-CO-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CO-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 (!account) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Repositorio de cuentas vacío</li><li>dto = { userId: propietario, accountId: UUID aleatorio inexistente }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>findById (nodo 1) devuelve null y se lanza AppError ACCOUNT_NOT_FOUND (HTTP 404) en el nodo 4, sin consultar bolsillos.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con ACCOUNT_NOT_FOUND · HTTP 404 · &quot;Cuenta no encontrada&quot; · accountId consultado: 43d3b8a6-172b-4dc9-b4b9-de48addcbc59</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-CO-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CO-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 (!account) = FALSO</li><li>N3 (assertBelongsTo) no lanza: el usuario es el propietario</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario con saldo $1.000 y dos bolsillos: &quot;Vacaciones&quot; $300 y &quot;Laptop&quot; $200</li><li>dto = { userId: propietario, accountId: cuenta.id }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se retorna la lista con los dos bolsillos convertidos con toPublic() (nodo 6), conservando nombre, monto y accountId.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Lista de 2 bolsillos retornada: &quot;Vacaciones&quot; ($300), &quot;Laptop&quot; ($200)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="BE-CO-C2b" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">BE-CO-C2b</span>
+    <h3 class="caso__titulo">Camino 2 (rechazo en el nodo 3, no tabulado)</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin (salida por excepción)</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N2 (!account) = FALSO</li><li>N3 (assertBelongsTo) LANZA: el usuario no es el propietario</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta ACTIVA del propietario &quot;user-bolsillos&quot; con un bolsillo &quot;Privado&quot; de $200</li><li>dto = { userId: &quot;user-intruso&quot;, accountId: cuenta.id }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se lanza AppError FORBIDDEN (HTTP 403) desde el nodo 3 y no se alcanzan los nodos 5 ni 6, por lo que no se expone ningún bolsillo.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Rechazado con FORBIDDEN · HTTP 403 · &quot;No tienes permiso para acceder a esta cuenta&quot; · no se expuso ningún bolsillo al usuario &quot;user-intruso&quot; (nodos 5 y 6 no recorridos)</p></dd>
+  </dl>
+</article></div>
+</section>
+
+    <section class="hallazgos" id="hallazgos">
+      <h2>Hallazgos</h2>
+      <div class="lista">
+<article class="hallazgo hallazgo--fail">
+  <header>
+    <span class="chip chip--fail">Fallido</span>
+    <h3><a href="#BE-CR-C5b">BE-CR-C5b</a> · Crear bolsillo · Camino 5 (variante con reserva previa)</h3>
+  </header>
+  <p><strong>Esperado:</strong> El monto $150 cabe en el saldo disponible de $200, por lo que N10 debe ser FALSO y el bolsillo debe crearse dejando el saldo disponible en $50.</p>
+  <p><strong>Obtenido:</strong> FALLO: El flujo tomó el camino 4 (nodo 12) en lugar del camino 5: INSUFFICIENT_AVAILABLE_BALANCE — &quot;No tienes saldo disponible suficiente para crear este bolsillo&quot;. Saldo disponible $200, ya reservado $800, monto solicitado $150. Defecto: la decisión del nodo 10 compara &quot;currentReserved + amount &gt; account.balance&quot;, pero account.balance ya es el saldo DISPONIBLE (el reservado se descontó en el nodo 11 de creaciones anteriores), de modo que el monto reservado se cuenta dos veces y se rechazan bolsillos que sí caben.</p>
+</article></div>
+    </section>
+
+    <footer>
+      Informe generado por <code>npm run test:paths</code>. El resultado obtenido de cada camino proviene de la
+      ejecución real del caso de uso, no de una transcripción manual.<br>
+      Técnica: Prueba de caminos básicos derivada de las tablas de camino de Backend.drawio.
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  var botones = Array.prototype.slice.call(document.querySelectorAll('.filtro'));
+  var casos = Array.prototype.slice.call(document.querySelectorAll('.caso'));
+
+  botones.forEach(function (boton) {
+    boton.addEventListener('click', function () {
+      var filtro = boton.getAttribute('data-filtro');
+      botones.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b === boton));
+      });
+      casos.forEach(function (caso) {
+        caso.hidden = filtro !== 'todos' && caso.getAttribute('data-estado') !== filtro;
+      });
+      document.querySelectorAll('.seccion').forEach(function (seccion) {
+        var visibles = seccion.querySelectorAll('.caso:not([hidden])').length;
+        seccion.hidden = visibles === 0;
+      });
+    });
+  });
+})();
+</script>

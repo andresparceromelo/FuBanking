@@ -1,0 +1,971 @@
+<title>Caminos de Bolsillos Frontend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root {
+  --ground: #FBFAFC;
+  --surface: #FFFFFF;
+  --surface-2: #F4F1F7;
+  --ink: #1A1620;
+  --ink-soft: #4A4255;
+  --muted: #6E6579;
+  --line: #E7E2EC;
+  --line-soft: #F0ECF4;
+  --accent: #820AD1;
+  --accent-soft: #F3E6FC;
+  --ok: #0F7B4F;
+  --ok-soft: #E3F4EB;
+  --fail: #C0341A;
+  --fail-soft: #FBE7E2;
+  --na: #9A6400;
+  --na-soft: #FBF0DC;
+  --sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --cond: "IBM Plex Sans Condensed", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --rail: 236px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #141118;
+    --surface: #1C1822;
+    --surface-2: #241E2C;
+    --ink: #EDE9F2;
+    --ink-soft: #C6BED2;
+    --muted: #9E95AC;
+    --line: #2E2836;
+    --line-soft: #262030;
+    --accent: #A855E8;
+    --accent-soft: #2C1A3D;
+    --ok: #42C98A;
+    --ok-soft: #14301F;
+    --fail: #FF7A5C;
+    --fail-soft: #391A16;
+    --na: #E5A93C;
+    --na-soft: #33270F;
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #141118;
+  --surface: #1C1822;
+  --surface-2: #241E2C;
+  --ink: #EDE9F2;
+  --ink-soft: #C6BED2;
+  --muted: #9E95AC;
+  --line: #2E2836;
+  --line-soft: #262030;
+  --accent: #A855E8;
+  --accent-soft: #2C1A3D;
+  --ok: #42C98A;
+  --ok-soft: #14301F;
+  --fail: #FF7A5C;
+  --fail-soft: #391A16;
+  --na: #E5A93C;
+  --na-soft: #33270F;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  align-items: start;
+}
+
+/* ── Rail ────────────────────────────────────────────────────────────── */
+
+.rail {
+  position: sticky;
+  top: 0;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-height: 100vh;
+  overflow-y: auto;
+}
+
+.rail__marca {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.rail__marca em { font-style: normal; color: var(--accent); }
+.rail__capa {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.rail__grupo { display: flex; flex-direction: column; gap: 8px; }
+
+.rail__titulo {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.rail ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+
+.rail a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 13.5px;
+  border-left: 2px solid transparent;
+}
+.rail a:hover { background: var(--surface-2); color: var(--ink); border-left-color: var(--accent); }
+.rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.rail__cuenta {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.rail__cuenta--alerta { color: var(--fail); font-weight: 500; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.filtro {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filtro:hover { border-color: var(--accent); color: var(--ink); }
+.filtro:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.filtro[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* ── Cuerpo ──────────────────────────────────────────────────────────── */
+
+main { padding: 40px 0 96px; min-width: 0; }
+
+.hero { padding-bottom: 32px; border-bottom: 1px solid var(--line); }
+
+.hero__eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 14px;
+}
+
+.hero h1 {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+.hero__intro {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--ink-soft);
+  font-size: 16.5px;
+}
+
+.ficha-tecnica {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 1px;
+  margin-top: 32px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ficha-tecnica div { background: var(--surface); padding: 14px 16px; }
+.ficha-tecnica dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 5px;
+}
+.ficha-tecnica dd { margin: 0; font-size: 14px; font-family: var(--mono); color: var(--ink); }
+
+/* ── Resumen ─────────────────────────────────────────────────────────── */
+
+.resumen { padding: 40px 0; border-bottom: 1px solid var(--line); }
+
+.resumen__cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+h2 {
+  font-family: var(--cond);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.marcador { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.marcador strong { color: var(--ink); font-weight: 600; }
+
+.tarjetas { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+}
+.tarjeta:hover { border-color: var(--accent); }
+.tarjeta:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.tarjeta__nombre { font-size: 13px; color: var(--muted); }
+.tarjeta__cifra {
+  font-family: var(--cond);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.tarjeta__de { color: var(--muted); font-size: 17px; font-weight: 600; }
+
+.barra { display: flex; gap: 2px; height: 4px; border-radius: 2px; overflow: hidden; }
+.barra__seg--ok { background: var(--ok); }
+.barra__seg--fail { background: var(--fail); }
+.barra__seg--na { background: var(--na); }
+
+.tarjeta__nota { font-size: 12px; color: var(--muted); }
+
+/* ── Secciones y fichas ──────────────────────────────────────────────── */
+
+.seccion { padding: 44px 0 8px; scroll-margin-top: 24px; }
+
+.seccion__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+}
+
+.seccion__caso-de-uso { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+.casos { display: flex; flex-direction: column; gap: 14px; }
+
+.caso {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ok);
+  border-radius: 8px;
+  padding: 18px 20px;
+  scroll-margin-top: 24px;
+}
+.caso--fail { border-left-color: var(--fail); }
+.caso--na { border-left-color: var(--na); }
+.caso[hidden] { display: none; }
+
+.caso__head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+
+.caso__id {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.caso__titulo {
+  font-family: var(--cond);
+  font-weight: 600;
+  font-size: 19px;
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.chip {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.chip--ok { background: var(--ok-soft); color: var(--ok); }
+.chip--fail { background: var(--fail-soft); color: var(--fail); }
+.chip--na { background: var(--na-soft); color: var(--na); }
+
+/* Cadena de nodos: la traza del camino recorrido. */
+.cadena {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 3px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.nodo {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.nodo + .nodo::before {
+  content: "→";
+  color: var(--muted);
+  margin-right: 7px;
+  margin-left: -3px;
+  font-weight: 400;
+}
+.nodo--fin { font-weight: 600; }
+.nodo--fin.nodo--ok { background: var(--ok-soft); border-color: var(--ok); color: var(--ok); }
+.nodo--fin.nodo--fail { background: var(--fail-soft); border-color: var(--fail); color: var(--fail); }
+.nodo--fin.nodo--na { background: var(--na-soft); border-color: var(--na); color: var(--na); }
+
+.campos { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 1px 0; margin: 0; }
+.campos dt {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 9px 14px 9px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.campos dd { margin: 0; padding: 9px 0; border-top: 1px solid var(--line-soft); min-width: 0; }
+.campos dd p { margin: 0; }
+
+.items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.items li { position: relative; padding-left: 15px; font-size: 14px; color: var(--ink-soft); }
+.items li::before { content: "·"; position: absolute; left: 4px; color: var(--accent); font-weight: 700; }
+
+.obtenido { font-family: var(--mono); font-size: 12.5px; line-height: 1.65; }
+.obtenido--ok { color: var(--ink-soft); }
+.obtenido--fail { color: var(--fail); }
+.obtenido--na { color: var(--na); }
+
+/* ── Hallazgos ───────────────────────────────────────────────────────── */
+
+.hallazgos { padding: 48px 0 0; border-top: 1px solid var(--line); margin-top: 44px; }
+.hallazgos .lista { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
+
+.hallazgo {
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--fail);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.hallazgo--na { border-left-color: var(--na); }
+.hallazgo header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+.hallazgo h3 { font-family: var(--cond); font-weight: 600; font-size: 17px; margin: 0; }
+.hallazgo h3 a { color: var(--accent); text-decoration: none; font-family: var(--mono); font-size: 14px; }
+.hallazgo h3 a:hover { text-decoration: underline; }
+.hallazgo p { margin: 0 0 8px; font-size: 14px; color: var(--ink-soft); }
+.hallazgo p:last-child { margin-bottom: 0; }
+.hallazgo strong { color: var(--ink); }
+
+.vacio { color: var(--muted); font-style: italic; }
+
+code {
+  font-family: var(--mono);
+  font-size: 0.92em;
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+.seccion__caso-de-uso, footer code { background: none; padding: 0; }
+
+footer {
+  margin-top: 56px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+  font-family: var(--mono);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 0 20px; }
+  .rail {
+    position: static;
+    max-height: none;
+    padding: 28px 0 0;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 24px;
+  }
+  .rail ul { flex-direction: row; flex-wrap: wrap; }
+  .rail a { border-left: none; border: 1px solid var(--line); border-radius: 999px; }
+  .campos { grid-template-columns: minmax(0, 1fr); }
+  .campos dt { padding-bottom: 2px; border-top: 1px solid var(--line-soft); }
+  .campos dd { padding-top: 2px; border-top: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+
+<div class="layout">
+  <nav class="rail" aria-label="Contenido">
+    <div class="rail__marca"><em>Fu</em>Bank<br>Caja blanca<br><span class="rail__capa">Frontend</span></div>
+
+    <div class="rail__grupo">
+      <span class="rail__titulo">Funcionalidades</span>
+      <ul><li><a href="#crear-bolsillo"><span>Crear bolsillo</span><span class="rail__cuenta">4/4</span></a></li><li><a href="#actualizar-bolsillo"><span>Actualizar bolsillo</span><span class="rail__cuenta">3/3</span></a></li><li><a href="#eliminar-bolsillo"><span>Eliminar bolsillo</span><span class="rail__cuenta">3/3</span></a></li><li><a href="#transferir-entre-bolsillos"><span>Transferir entre bolsillos</span><span class="rail__cuenta">4/4</span></a></li><li><a href="#consultar-bolsillos"><span>Consultar bolsillos</span><span class="rail__cuenta">3/3</span></a></li></ul>
+    </div>
+
+    <div class="rail__grupo">
+      <span class="rail__titulo">Filtrar</span>
+      <div class="filtros">
+        <button class="filtro" type="button" data-filtro="todos" aria-pressed="true">Todos</button>
+        <button class="filtro" type="button" data-filtro="Aprobado" aria-pressed="false">Aprobados</button>
+        <button class="filtro" type="button" data-filtro="Fallido" aria-pressed="false">Fallidos</button>
+        <button class="filtro" type="button" data-filtro="No ejecutable" aria-pressed="false">No ejecutables</button>
+      </div>
+    </div>
+
+    <div class="rail__grupo">
+      <span class="rail__titulo">Otras secciones</span>
+      <ul><li><a href="#hallazgos"><span>Hallazgos</span></a></li></ul>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <p class="hero__eyebrow">Pruebas unitarias · Módulo Bolsillos · Frontend</p>
+      <h1>Caminos derivados de la tabla de caminos</h1>
+      <p class="hero__intro">
+        Cada caso corresponde a una fila de la tabla de caminos de una de las cinco hojas del diagrama
+        <code>Frontend.drawio</code>. Se declara la secuencia de nodos, las condiciones que hay que forzar en cada
+        decisión y las entradas concretas que lo consiguen; el resultado obtenido proviene de ejecutar el handler real
+        con el servicio HTTP, la API de toasts y el estado de React sustituidos por dobles.
+      </p>
+
+      <dl class="ficha-tecnica">
+        <div><dt>Fecha de ejecución</dt><dd>2026-08-25</dd></div>
+        <div><dt>Versión probada</dt><dd>main-04800eb</dd></div>
+        <div><dt>Entorno</dt><dd>Node + tsx · con dobles</dd></div>
+        <div><dt>Reproducir</dt><dd>npm run test:paths</dd></div>
+      </dl>
+    </header>
+
+    <section class="resumen">
+      <div class="resumen__cabeza">
+        <h2>Resumen</h2>
+        <p class="marcador">
+          <strong>17</strong> aprobados · <strong>0</strong> fallidos ·
+          <strong>0</strong> no ejecutables · <strong>17</strong> caminos
+        </p>
+      </div>
+      <div class="tarjetas">
+<a class="tarjeta" href="#crear-bolsillo">
+  <span class="tarjeta__nombre">Crear bolsillo</span>
+  <span class="tarjeta__cifra">4<span class="tarjeta__de">/4</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:4"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a>
+<a class="tarjeta" href="#actualizar-bolsillo">
+  <span class="tarjeta__nombre">Actualizar bolsillo</span>
+  <span class="tarjeta__cifra">3<span class="tarjeta__de">/3</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:3"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a>
+<a class="tarjeta" href="#eliminar-bolsillo">
+  <span class="tarjeta__nombre">Eliminar bolsillo</span>
+  <span class="tarjeta__cifra">3<span class="tarjeta__de">/3</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:3"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a>
+<a class="tarjeta" href="#transferir-entre-bolsillos">
+  <span class="tarjeta__nombre">Transferir entre bolsillos</span>
+  <span class="tarjeta__cifra">4<span class="tarjeta__de">/4</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:4"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a>
+<a class="tarjeta" href="#consultar-bolsillos">
+  <span class="tarjeta__nombre">Consultar bolsillos</span>
+  <span class="tarjeta__cifra">3<span class="tarjeta__de">/3</span></span>
+  <span class="barra"><span class="barra__seg barra__seg--ok" style="flex:3"></span></span>
+  <span class="tarjeta__nota">100% de los caminos recorridos como se esperaba</span>
+</a></div>
+    </section>
+
+    
+<section class="seccion" id="crear-bolsillo">
+  <header class="seccion__head">
+    <h2>Crear bolsillo</h2>
+    <code class="seccion__caso-de-uso">handleCreate()</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="FE-CR-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-CR-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (!accountId || !name) = VERDADERO — no hay cuenta seleccionada</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Formulario con la cuenta sin seleccionar</li><li>input = { accountId: &quot;&quot;, name: &quot;Vacaciones&quot;, amount: &quot;300&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se muestra el toast de advertencia &quot;Falta información&quot; y la función retorna en el nodo 3: no se llama al servicio ni se activa el indicador de carga.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast warning · &quot;Falta información&quot; — &quot;Selecciona una cuenta y escribe el nombre del bolsillo.&quot; · llamadas a pocketService.create: 0 · setLoading invocado 0 veces (nodos 2 y 9 no recorridos)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-CR-C1b" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-CR-C1b</span>
+    <h3 class="caso__titulo">Camino 1 (segunda cláusula de la condición)</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (!accountId || !name) = VERDADERO — por !name, con accountId presente</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Cuenta seleccionada correctamente</li><li>input = { accountId: &quot;account-1&quot;, name: &quot;&quot;, amount: &quot;300&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>La segunda cláusula de la condición compuesta también corta el flujo en el nodo 3 con el mismo toast de advertencia.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast warning · &quot;Falta información&quot; — &quot;Selecciona una cuenta y escribe el nombre del bolsillo.&quot; · cláusula activada: !name · llamadas al servicio: 0</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-CR-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-CR-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo">9</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (!accountId || !name) = FALSO</li><li>N4 (¿pocketService.create lanzó error?) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Formulario completo: input = { accountId: &quot;account-1&quot;, name: &quot;Vacaciones&quot;, amount: &quot;300&quot; }</li><li>pocketService.create rechaza con { message: &quot;No tienes saldo disponible suficiente para crear este bolsillo&quot; } (respuesta del backend)</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El catch (nodo 6) toma el mensaje del backend, el nodo 8 lo muestra en un toast de error, el finally (nodo 9) apaga el indicador de carga y la lista de bolsillos no cambia.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast error · &quot;No fue posible crear el bolsillo&quot; — &quot;No tienes saldo disponible suficiente para crear este bolsillo&quot; · mensaje del backend propagado · bolsillos en la lista: 0 · setLoading: [true, false]</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-CR-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-CR-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N4 (¿lanzó error?) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Lista con un bolsillo previo &quot;Laptop&quot; ($200)</li><li>input = { accountId: &quot;account-1&quot;, name: &quot;Vacaciones&quot;, amount: &quot;300&quot; }</li><li>pocketService.create resuelve con el bolsillo &quot;Vacaciones&quot; de $300</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El nodo 5 antepone el bolsillo creado a la lista y limpia los campos del formulario, el nodo 7 muestra el toast &quot;Bolsillo creado&quot; y el finally (nodo 9) apaga el indicador de carga.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Bolsillo &quot;Vacaciones&quot; ($300) antepuesto a la lista — ahora 2 bolsillos · campos limpiados (name=&quot;&quot;, amount=&quot;&quot;) · toast success · &quot;Bolsillo creado&quot; — &quot;Tu ahorro quedó organizado correctamente.&quot; · setLoading: [true, false]</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="actualizar-bolsillo">
+  <header class="seccion__head">
+    <h2>Actualizar bolsillo</h2>
+    <code class="seccion__caso-de-uso">handleSaveEdit()</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="FE-AC-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-AC-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (!editingName.trim()) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Bolsillo &quot;Vacaciones&quot; ($300) en modo edición</li><li>input = { pocketId: &quot;pocket-1&quot;, editingName: &quot;   &quot;, editingAmount: &quot;300&quot; } — nombre de solo espacios</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se muestra el toast de advertencia &quot;Nombre inválido&quot; y la función retorna en el nodo 3: no se llama al servicio ni se sale del modo edición.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast warning · &quot;Nombre inválido&quot; — &quot;El nombre del bolsillo no puede quedar vacío.&quot; · entrada editingName = &quot;   &quot; (longitud tras trim = 0) · llamadas a pocketService.update: 0 · sigue en edición (editingPocketId = &quot;pocket-1&quot;)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-AC-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-AC-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N5 (¿pocketService.update lanzó error?) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Bolsillo &quot;Vacaciones&quot; ($300) en modo edición</li><li>input = { pocketId: &quot;pocket-1&quot;, editingName: &quot;Viaje a la costa&quot;, editingAmount: &quot;1500&quot; }</li><li>pocketService.update rechaza con { message: &quot;No tienes saldo disponible suficiente para ajustar este bolsillo&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El catch (nodo 7) toma el mensaje del backend, el nodo 9 lo muestra en un toast de error, el finally (nodo 10) apaga el indicador de carga y se permanece en modo edición con el bolsillo sin cambios.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast error · &quot;No fue posible actualizar el bolsillo&quot; — &quot;No tienes saldo disponible suficiente para ajustar este bolsillo&quot; · el bolsillo conserva nombre &quot;Vacaciones&quot; y monto $300 · sigue en edición · setLoading: [true, false]</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-AC-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-AC-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N5 (¿lanzó error?) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Lista con dos bolsillos: &quot;Vacaciones&quot; ($300, en edición) y &quot;Laptop&quot; ($200)</li><li>input = { pocketId: &quot;pocket-1&quot;, editingName: &quot;  Viaje a la costa  &quot;, editingAmount: &quot;500&quot; }</li><li>pocketService.update resuelve con el bolsillo actualizado</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El nombre se envía recortado con trim() y el monto convertido a número; el nodo 6 reemplaza el bolsillo en la lista y sale del modo edición, el nodo 8 muestra &quot;Bolsillo actualizado&quot; y el finally (nodo 10) apaga el indicador de carga.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Enviado al servicio { name: &quot;Viaje a la costa&quot;, amount: 500 } (trim aplicado) · lista actualizada: &quot;Viaje a la costa&quot; $500, &quot;Laptop&quot; intacto · modo edición cerrado (editingPocketId = null) · toast success · &quot;Bolsillo actualizado&quot; — &quot;Los cambios quedaron guardados.&quot;</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="eliminar-bolsillo">
+  <header class="seccion__head">
+    <h2>Eliminar bolsillo</h2>
+    <code class="seccion__caso-de-uso">confirmDelete()</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="FE-EL-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-EL-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (!pendingDeletePocket) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Lista con un bolsillo &quot;Vacaciones&quot; ($300)</li><li>pendingDeletePocket = null — se confirma sin que haya un bolsillo marcado para eliminar</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>La función retorna de inmediato en el nodo 3: no se llama al servicio, no se emite ningún toast y la lista no cambia.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Retorno inmediato sin efectos · toasts emitidos: 0 · llamadas a pocketService.remove: 0 · bolsillos en la lista: 1 (sin cambios)</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-EL-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-EL-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N5 (¿pocketService.remove lanzó error?) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Lista con un bolsillo &quot;Vacaciones&quot; ($300)</li><li>pendingDeletePocket = ese bolsillo</li><li>pocketService.remove rechaza con { message: &quot;La cuenta no está disponible para eliminar bolsillos&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El catch (nodo 7) toma el mensaje del backend, el nodo 9 lo muestra en un toast de error, el bolsillo permanece en la lista y el finally (nodo 10) apaga el indicador de carga y cierra el modal.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast error · &quot;No fue posible eliminar el bolsillo&quot; — &quot;La cuenta no está disponible para eliminar bolsillos&quot; · el bolsillo &quot;Vacaciones&quot; sigue en la lista · modal cerrado (pendingDeletePocket = null) · setLoading: [true, false]</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-EL-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-EL-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N5 (¿lanzó error?) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Lista con dos bolsillos: &quot;Vacaciones&quot; ($300) y &quot;Laptop&quot; ($200)</li><li>pendingDeletePocket = &quot;Vacaciones&quot;</li><li>pocketService.remove resuelve correctamente</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El nodo 6 quita el bolsillo de la lista dejando solo &quot;Laptop&quot;, el nodo 8 muestra &quot;Bolsillo eliminado&quot; y el finally (nodo 10) apaga el indicador de carga y cierra el modal.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Bolsillo &quot;Vacaciones&quot; ($300) retirado de la lista — queda &quot;Laptop&quot; · toast success · &quot;Bolsillo eliminado&quot; — &quot;El saldo volvió a la cuenta correctamente.&quot; · modal cerrado · setLoading: [true, false]</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="transferir-entre-bolsillos">
+  <header class="seccion__head">
+    <h2>Transferir entre bolsillos</h2>
+    <code class="seccion__caso-de-uso">handleTransfer()</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="FE-TR-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-TR-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 (!fromPocketId || !toPocketId || !transferAmount) = VERDADERO — no se eligió bolsillo destino</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Formulario de transferencia incompleto</li><li>input = { fromPocketId: &quot;pocket-1&quot;, toPocketId: &quot;&quot;, transferAmount: &quot;120&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>Se muestra el toast de advertencia &quot;Falta información&quot; y la función retorna en el nodo 3: no se llama al servicio ni se recarga la lista.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast warning · &quot;Falta información&quot; — &quot;Selecciona los bolsillos y un monto para transferir.&quot; · cláusula activada: !toPocketId · llamadas a pocketService.transfer: 0 · recargas de la lista: 0</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-TR-C1b" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-TR-C1b</span>
+    <h3 class="caso__titulo">Camino 1 (tercera cláusula de la condición)</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">3</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = VERDADERO — por !transferAmount, con ambos bolsillos elegidos</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>Ambos bolsillos seleccionados pero el monto vacío</li><li>input = { fromPocketId: &quot;pocket-1&quot;, toPocketId: &quot;pocket-2&quot;, transferAmount: &quot;&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>La tercera cláusula de la condición compuesta también corta el flujo en el nodo 3 con el mismo toast de advertencia.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast warning · &quot;Falta información&quot; — &quot;Selecciona los bolsillos y un monto para transferir.&quot; · cláusula activada: !transferAmount · llamadas al servicio: 0</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-TR-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-TR-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">7</li><li class="nodo">9</li><li class="nodo">10</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N5 (¿pocketService.transfer lanzó error?) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>input = { fromPocketId: &quot;pocket-1&quot;, toPocketId: &quot;pocket-2&quot;, transferAmount: &quot;500&quot; }</li><li>pocketService.transfer rechaza con { message: &quot;Saldo insuficiente en el bolsillo de origen&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El catch (nodo 7) toma el mensaje del backend, el nodo 9 lo muestra en un toast de error, NO se recarga la lista (nodo 8 no recorrido) y el finally (nodo 10) apaga el indicador de carga.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast error · &quot;No fue posible transferir el saldo&quot; — &quot;Saldo insuficiente en el bolsillo de origen&quot; · recargas de la lista: 0 · setLoading: [true, false]</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-TR-C3" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-TR-C3</span>
+    <h3 class="caso__titulo">Camino 3</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">4</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">8</li><li class="nodo">10</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N1 = FALSO</li><li>N5 (¿lanzó error?) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>input = { fromPocketId: &quot;pocket-1&quot;, toPocketId: &quot;pocket-2&quot;, transferAmount: &quot;120&quot; }</li><li>pocketService.transfer resuelve con { fromPocket: &quot;Origen&quot; $180, toPocket: &quot;Destino&quot; $220 }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El monto se envía convertido a número; el nodo 6 muestra el toast &quot;Transferencia realizada&quot; con los nombres origen → destino y el nodo 8 recarga la lista llamando a loadPockets(). El finally (nodo 10) apaga el indicador de carga.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Enviado al servicio { from: &quot;pocket-1&quot;, to: &quot;pocket-2&quot;, amount: 120 } · toast success · &quot;Transferencia realizada&quot; — &quot;Origen → Destino&quot; · resultado $180 / $220 · loadPockets() invocado 1 vez · setLoading: [true, false]</p></dd>
+  </dl>
+</article></div>
+</section>
+<section class="seccion" id="consultar-bolsillos">
+  <header class="seccion__head">
+    <h2>Consultar bolsillos</h2>
+    <code class="seccion__caso-de-uso">loadPockets()</code>
+  </header>
+  <div class="casos">
+<article class="caso caso--ok" id="FE-CO-C1" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-CO-C1</span>
+    <h3 class="caso__titulo">Camino 1</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N3 (¿pocketService.getByAccount lanzó error?) = VERDADERO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>accountId = &quot;account-1&quot;</li><li>pocketService.getByAccount rechaza con { message: &quot;No tienes permiso para acceder a esta cuenta&quot; }</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El catch (nodo 5) toma el mensaje del backend, el nodo 6 lo muestra en un toast de error, la lista de bolsillos no se toca (nodo 4 no recorrido) y el finally (nodo 7) apaga el indicador de carga.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast error · &quot;No fue posible cargar los bolsillos&quot; — &quot;No tienes permiso para acceder a esta cuenta&quot; · la lista conserva 1 bolsillo (&quot;Laptop&quot;) · setLoading: [true, false]</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-CO-C2" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-CO-C2</span>
+    <h3 class="caso__titulo">Camino 2</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">4</li><li class="nodo">7</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N3 (¿lanzó error?) = FALSO</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>accountId = &quot;account-1&quot;</li><li>pocketService.getByAccount resuelve con dos bolsillos: &quot;Vacaciones&quot; ($300) y &quot;Laptop&quot; ($200)</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El nodo 4 reemplaza la lista con los datos recibidos, no se emite ningún toast y el finally (nodo 7) apaga el indicador de carga.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Lista cargada con 2 bolsillos: &quot;Vacaciones&quot; ($300), &quot;Laptop&quot; ($200) · toasts emitidos: 0 · setLoading: [true, false]</p></dd>
+  </dl>
+</article>
+<article class="caso caso--ok" id="FE-CO-C1b" data-estado="Aprobado">
+  <header class="caso__head">
+    <span class="caso__id">FE-CO-C1b</span>
+    <h3 class="caso__titulo">Camino 1 (mensaje de respaldo, no tabulado)</h3>
+    <span class="chip chip--ok">Aprobado</span>
+  </header>
+
+  <ol class="cadena" aria-label="Secuencia de nodos recorrida"><li class="nodo">1</li><li class="nodo">2</li><li class="nodo">3</li><li class="nodo">5</li><li class="nodo">6</li><li class="nodo">7</li><li class="nodo nodo--fin nodo--ok">Fin</li></ol>
+
+  <dl class="campos">
+    <dt>Condiciones forzadas</dt>
+    <dd><ul class="items"><li>N3 (¿lanzó error?) = VERDADERO</li><li>El error no trae `message` ni `error.message`: se usa el texto de respaldo del nodo 5</li></ul></dd>
+    <dt>Entradas</dt>
+    <dd><ul class="items"><li>accountId = &quot;account-1&quot;</li><li>pocketService.getByAccount rechaza con un objeto vacío {} (por ejemplo, una caída de red sin cuerpo)</li></ul></dd>
+    <dt>Resultado esperado</dt>
+    <dd><p>El nodo 5 recurre al mensaje de respaldo &quot;No fue posible cargar los bolsillos.&quot; y el nodo 6 lo muestra como descripción del toast de error.</p></dd>
+    <dt>Resultado obtenido</dt>
+    <dd><p class="obtenido obtenido--ok">Toast error · &quot;No fue posible cargar los bolsillos&quot; — &quot;No fue posible cargar los bolsillos.&quot; · se aplicó el texto de respaldo del nodo 5</p></dd>
+  </dl>
+</article></div>
+</section>
+
+    <section class="hallazgos" id="hallazgos">
+      <h2>Hallazgos</h2>
+      <div class="lista"><p class="vacio">Todos los caminos ejecutados terminaron en el nodo esperado.</p></div>
+    </section>
+
+    <footer>
+      Informe generado por <code>npm run test:paths</code>. El resultado obtenido de cada camino proviene de la
+      ejecución real del caso de uso, no de una transcripción manual.<br>
+      Técnica: Prueba de caminos básicos derivada de las tablas de camino de Frontend.drawio.
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  var botones = Array.prototype.slice.call(document.querySelectorAll('.filtro'));
+  var casos = Array.prototype.slice.call(document.querySelectorAll('.caso'));
+
+  botones.forEach(function (boton) {
+    boton.addEventListener('click', function () {
+      var filtro = boton.getAttribute('data-filtro');
+      botones.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b === boton));
+      });
+      casos.forEach(function (caso) {
+        caso.hidden = filtro !== 'todos' && caso.getAttribute('data-estado') !== filtro;
+      });
+      document.querySelectorAll('.seccion').forEach(function (seccion) {
+        var visibles = seccion.querySelectorAll('.caso:not([hidden])').length;
+        seccion.hidden = visibles === 0;
+      });
+    });
+  });
+})();
+</script>

@@ -8,6 +8,7 @@ import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/Card';
 import { pocketService, PocketItem } from '@/features/pockets/services/pocket.service';
+import * as pocketHandlers from '@/features/pockets/handlers/pocket.handlers';
 import { accountService } from '@/features/account/services/account.service';
 import { Account } from '@/features/account/types/account.types';
 import { useToast } from '@/shared/components/feedback/ToastProvider';
@@ -50,60 +51,24 @@ export function PocketsClient() {
   };
 
   const loadPockets = async () => {
-    setLoading(true);
-    try {
-      const data = await pocketService.getByAccount(accountId);
-      setPockets(data);
-    } catch (error: any) {
-      const backendMessage = error?.message || error?.error?.message || 'No fue posible cargar los bolsillos.';
-      toast.error('No fue posible cargar los bolsillos', backendMessage);
-    } finally {
-      setLoading(false);
-    }
+    await pocketHandlers.loadPockets(
+      { service: pocketService, toast, setLoading, setPockets },
+      accountId,
+    );
   };
 
   const handleCreate = async () => {
-    if (!accountId || !name) {
-      toast.warning('Falta información', 'Selecciona una cuenta y escribe el nombre del bolsillo.');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const created = await pocketService.create({ accountId, name, amount: Number(amount || 0) });
-      setPockets((prev) => [created, ...prev]);
-      setName('');
-      setAmount('');
-      toast.success('Bolsillo creado', 'Tu ahorro quedó organizado correctamente.');
-    } catch (error: any) {
-      const backendMessage = error?.message || error?.error?.message || 'No fue posible crear el bolsillo.';
-      toast.error('No fue posible crear el bolsillo', backendMessage);
-    } finally {
-      setLoading(false);
-    }
+    await pocketHandlers.handleCreate(
+      { service: pocketService, toast, setLoading, setPockets, setName, setAmount },
+      { accountId, name, amount },
+    );
   };
 
   const handleTransfer = async () => {
-    if (!fromPocketId || !toPocketId || !transferAmount) {
-      toast.warning('Falta información', 'Selecciona los bolsillos y un monto para transferir.');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const result = await pocketService.transfer({
-        fromPocketId,
-        toPocketId,
-        amount: Number(transferAmount),
-      });
-      toast.success('Transferencia realizada', `${result.fromPocket.name} → ${result.toPocket.name}`);
-      await loadPockets();
-    } catch (error: any) {
-      const backendMessage = error?.message || error?.error?.message || 'No fue posible transferir el saldo.';
-      toast.error('No fue posible transferir el saldo', backendMessage);
-    } finally {
-      setLoading(false);
-    }
+    await pocketHandlers.handleTransfer(
+      { service: pocketService, toast, setLoading, loadPockets },
+      { fromPocketId, toPocketId, transferAmount },
+    );
   };
 
   const handleEditStart = (pocket: PocketItem) => {
@@ -113,26 +78,10 @@ export function PocketsClient() {
   };
 
   const handleSaveEdit = async (pocketId: string) => {
-    if (!editingName.trim()) {
-      toast.warning('Nombre inválido', 'El nombre del bolsillo no puede quedar vacío.');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const updated = await pocketService.update(pocketId, {
-        name: editingName.trim(),
-        amount: Number(editingAmount || 0),
-      });
-      setPockets((prev) => prev.map((pocket) => pocket.id === pocketId ? updated : pocket));
-      setEditingPocketId(null);
-      toast.success('Bolsillo actualizado', 'Los cambios quedaron guardados.');
-    } catch (error: any) {
-      const backendMessage = error?.message || error?.error?.message || 'No fue posible actualizar el bolsillo.';
-      toast.error('No fue posible actualizar el bolsillo', backendMessage);
-    } finally {
-      setLoading(false);
-    }
+    await pocketHandlers.handleSaveEdit(
+      { service: pocketService, toast, setLoading, setPockets, setEditingPocketId },
+      { pocketId, editingName, editingAmount },
+    );
   };
 
   const handleDelete = async (pocketId: string) => {
@@ -143,20 +92,10 @@ export function PocketsClient() {
   };
 
   const confirmDelete = async () => {
-    if (!pendingDeletePocket) return;
-
-    setLoading(true);
-    try {
-      await pocketService.remove(pendingDeletePocket.id);
-      setPockets((prev) => prev.filter((pocket) => pocket.id !== pendingDeletePocket.id));
-      toast.success('Bolsillo eliminado', 'El saldo volvió a la cuenta correctamente.');
-    } catch (error: any) {
-      const backendMessage = error?.message || error?.error?.message || 'No fue posible eliminar el bolsillo.';
-      toast.error('No fue posible eliminar el bolsillo', backendMessage);
-    } finally {
-      setLoading(false);
-      setPendingDeletePocket(null);
-    }
+    await pocketHandlers.confirmDelete(
+      { service: pocketService, toast, setLoading, setPockets, setPendingDeletePocket },
+      pendingDeletePocket,
+    );
   };
 
   return (
