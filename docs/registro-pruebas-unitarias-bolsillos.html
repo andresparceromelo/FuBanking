@@ -1,0 +1,882 @@
+<title>Registro Unitario Bolsillos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Serif:wght@400;500&display=swap">
+<style>
+:root{--ground:#FBFAFC;--surface:#FFF;--surface-2:#F5F2F8;--ink:#1A1420;--ink-soft:#5C5566;
+--ink-faint:#8B8496;--rule:#E6E1EC;--rule-strong:#D2C9DC;--accent:#820AD1;--accent-soft:#F4E9FD;
+--accent-ink:#6A0AAB;--pass:#16714F;--pass-soft:#E3F3EC;--fail:#B32B45;--fail-soft:#FBE8EC;
+--warn:#8F5A0A;--warn-soft:#FBF0DC;
+--f-display:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+--f-body:"IBM Plex Serif",Georgia,serif;--f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+--ground:#131019;--surface:#1B1624;--surface-2:#241D30;--ink:#ECE7F2;--ink-soft:#ADA4BB;
+--ink-faint:#7C7389;--rule:#2E2739;--rule-strong:#443A53;--accent:#C079F5;--accent-soft:#2C1B3F;
+--accent-ink:#D6A5FA;--pass:#56C79C;--pass-soft:#14302A;--fail:#F0839A;--fail-soft:#37161F;
+--warn:#DCA850;--warn-soft:#34260F;}}
+:root[data-theme="dark"]{--ground:#131019;--surface:#1B1624;--surface-2:#241D30;--ink:#ECE7F2;
+--ink-soft:#ADA4BB;--ink-faint:#7C7389;--rule:#2E2739;--rule-strong:#443A53;--accent:#C079F5;
+--accent-soft:#2C1B3F;--accent-ink:#D6A5FA;--pass:#56C79C;--pass-soft:#14302A;--fail:#F0839A;
+--fail-soft:#37161F;--warn:#DCA850;--warn-soft:#34260F;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-body);
+font-size:16px;line-height:1.62;-webkit-font-smoothing:antialiased}
+.wrap{max-width:940px;margin:0 auto;padding:44px 24px 96px}
+.eyebrow{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+color:var(--accent-ink);margin:0 0 14px}
+h1{font-family:var(--f-display);font-size:clamp(28px,4.2vw,42px);line-height:1.1;
+letter-spacing:-.025em;font-weight:700;margin:0 0 18px;text-wrap:balance}
+.standfirst{font-size:18px;color:var(--ink-soft);max-width:62ch;margin:0 0 28px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
+background:var(--rule);border:1px solid var(--rule);border-radius:4px;overflow:hidden;margin-bottom:34px}
+.meta div{background:var(--surface);padding:12px 14px}
+.meta dt{font-family:var(--f-display);font-size:10.5px;font-weight:600;letter-spacing:.12em;
+text-transform:uppercase;color:var(--ink-faint);margin:0 0 4px}
+.meta dd{margin:0;font-family:var(--f-mono);font-size:13px;font-variant-numeric:tabular-nums}
+h2{font-family:var(--f-display);font-size:23px;letter-spacing:-.018em;font-weight:600;
+margin:48px 0 6px;padding-bottom:12px;border-bottom:2px solid var(--ink)}
+h3{font-family:var(--f-display);font-size:15px;font-weight:600;margin:28px 0 10px}
+p{margin:0 0 14px;max-width:68ch}
+code{font-family:var(--f-mono);font-size:.87em;background:var(--surface-2);padding:1px 5px;
+border-radius:3px}
+.scroll{overflow-x:auto;margin:0 0 20px}
+table{border-collapse:collapse;width:100%;font-family:var(--f-display);font-size:13.5px;min-width:520px}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+color:var(--ink-faint);border-bottom:1px solid var(--rule-strong);white-space:nowrap}
+td.num,th.num{text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.aviso{background:var(--warn-soft);border-left:3px solid var(--warn);border-radius:0 4px 4px 0;
+padding:16px 18px;margin:0 0 28px}
+.aviso b{display:block;font-family:var(--f-display);font-size:13px;letter-spacing:.04em;
+text-transform:uppercase;color:var(--warn);margin-bottom:6px}
+.aviso p{font-size:14.5px;margin:0}
+.caso{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--pass);
+border-radius:4px;padding:16px 18px;margin:0 0 12px}
+.caso.no{border-left-color:var(--fail)}
+.caso-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+.cid{font-family:var(--f-mono);font-size:11.5px;font-weight:600;color:var(--accent-ink);
+background:var(--accent-soft);padding:2px 6px;border-radius:3px}
+.ctit{font-family:var(--f-display);font-size:15.5px;font-weight:600;margin:0;flex:1 1 240px}
+.badge{font-family:var(--f-display);font-size:9.5px;font-weight:700;letter-spacing:.1em;
+text-transform:uppercase;padding:3px 7px;border-radius:3px}
+.badge.ok{background:var(--pass-soft);color:var(--pass)}
+.badge.no{background:var(--fail-soft);color:var(--fail)}
+.badge.def{background:var(--fail-soft);color:var(--fail)}
+.campo{margin:0 0 8px;font-size:14px}
+.campo b{font-family:var(--f-display);font-size:10.5px;font-weight:600;letter-spacing:.12em;
+text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:2px}
+.campo span{font-family:var(--f-mono);font-size:12.5px;line-height:1.55;display:block;
+background:var(--surface-2);padding:7px 9px;border-radius:3px;word-break:break-word}
+footer{border-top:1px solid var(--rule);margin-top:44px;padding-top:20px;color:var(--ink-faint);
+font-size:13.5px}
+@media print{.caso{break-inside:avoid}}
+</style>
+<div class="wrap">
+<p class="eyebrow">Validación y Verificación · FuBank</p>
+<h1>Registro de pruebas unitarias del módulo Bolsillos</h1>
+<p class="standfirst">Corrida generada automáticamente por <code>npm run test:unit</code>. El resultado obtenido de cada caso proviene de la ejecución real de la unidad bajo prueba. La suite no usa mocks, dobles ni stubs.</p>
+<dl class="meta">
+<div><dt>Fecha</dt><dd>2026-08-31</dd></div>
+<div><dt>Versión</dt><dd>main-04800eb</dd></div>
+<div><dt>Casos</dt><dd>69</dd></div>
+<div><dt>Aprobados</dt><dd>64</dd></div>
+<div><dt>Fallidos</dt><dd>5</dd></div>
+<div><dt>Dobles usados</dt><dd>0</dd></div>
+</dl>
+<h2>Resumen por grupo</h2>
+<div class="scroll"><table><thead><tr><th>Grupo</th><th class="num">Casos</th>
+<th class="num">Aprobados</th><th class="num">Fallidos</th></tr></thead><tbody>
+<tr><td>Entidad Pocket · construcción</td><td class="num">7</td><td class="num">6</td><td class="num">1</td></tr>
+<tr><td>Entidad Pocket · mutadores</td><td class="num">6</td><td class="num">6</td><td class="num">0</td></tr>
+<tr><td>Entidad Account</td><td class="num">4</td><td class="num">4</td><td class="num">0</td></tr>
+<tr><td>Schemas de validación</td><td class="num">15</td><td class="num">12</td><td class="num">3</td></tr>
+<tr><td>Crear bolsillo</td><td class="num">9</td><td class="num">8</td><td class="num">1</td></tr>
+<tr><td>Actualizar bolsillo</td><td class="num">10</td><td class="num">10</td><td class="num">0</td></tr>
+<tr><td>Eliminar bolsillo</td><td class="num">4</td><td class="num">4</td><td class="num">0</td></tr>
+<tr><td>Transferir entre bolsillos</td><td class="num">9</td><td class="num">9</td><td class="num">0</td></tr>
+<tr><td>Consultar bolsillos</td><td class="num">5</td><td class="num">5</td><td class="num">0</td></tr>
+<tr><td><b>Total</b></td><td class="num"><b>69</b></td><td class="num"><b>64</b></td><td class="num"><b>5</b></td></tr>
+</tbody></table></div>
+<h2>Entidad Pocket · construcción</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-01</span>
+<h3 class="ctit">El factory recorta los espacios sobrantes del nombre</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.create</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;  Vacaciones  &quot;</span></div>
+<div class="campo"><b>Esperado</b><span>El bolsillo queda con name = &quot;Vacaciones&quot;, sin espacios en los extremos</span></div>
+<div class="campo"><b>Obtenido</b><span>name = &quot;Vacaciones&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-02</span>
+<h3 class="ctit">Valor límite inferior del monto: se acepta el cero</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.create</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 0</span></div>
+<div class="campo"><b>Esperado</b><span>El bolsillo se construye con amount = 0, sin lanzar</span></div>
+<div class="campo"><b>Obtenido</b><span>amount = 0</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-03</span>
+<h3 class="ctit">Un monto negativo se rechaza al construir</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.assertValidAmount</span></div>
+<div class="campo"><b>Entrada</b><span>amount = -1</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo debe ser un número mayor o igual a cero&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-04</span>
+<h3 class="ctit">NaN se rechaza al construir</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.assertValidAmount</span></div>
+<div class="campo"><b>Entrada</b><span>amount = NaN</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo debe ser un número mayor o igual a cero&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-05</span>
+<h3 class="ctit">Una cadena numérica se rechaza: la comprobación es de tipo, no de valor</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.assertValidAmount</span></div>
+<div class="campo"><b>Entrada</b><span>amount = &quot;100&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400) porque typeof !== &quot;number&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo debe ser un número mayor o igual a cero&quot;</span></div>
+</div>
+<div class="caso no">
+<div class="caso-head">
+<span class="cid">PU-06</span>
+<h3 class="ctit">Un nombre vacío debe rechazarse al construir, igual que al modificar</h3>
+<span class="badge def">Defecto D-01</span>
+<span class="badge no">Fallido</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket (constructor)</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_NAME (HTTP 400), la misma regla que aplica updateName(&quot;&quot;)</span></div>
+<div class="campo"><b>Obtenido</b><span>FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {&quot;_id&quot;:&quot;p1&quot;,&quot;_accountId&quot;:&quot;a1&quot;,&quot;_name&quot;:&quot;&quot;,&quot;_amount&quot;:100,&quot;_createdAt&quot;:&quot;2026-09-01T03:09:21.838Z&quot;,&quot;_updatedAt&quot;:&quot;2026-09-01T03:09:21.838Z&quot;}</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-07</span>
+<h3 class="ctit">La representación pública expone seis campos y ningún dato interno</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.toPublic</span></div>
+<div class="campo"><b>Entrada</b><span>Bolsillo válido recién construido</span></div>
+<div class="campo"><b>Esperado</b><span>toPublic() devuelve exactamente id, accountId, name, amount, createdAt y updatedAt, con las fechas como cadena ISO</span></div>
+<div class="campo"><b>Obtenido</b><span>claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-01T03:09:21.839Z</span></div>
+</div>
+<h2>Entidad Pocket · mutadores</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-08</span>
+<h3 class="ctit">Valor límite inferior al mutar: se acepta el cero</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.updateAmount</span></div>
+<div class="campo"><b>Entrada</b><span>Bolsillo de $300.000, updateAmount(0)</span></div>
+<div class="campo"><b>Esperado</b><span>El monto queda en 0, sin lanzar</span></div>
+<div class="campo"><b>Obtenido</b><span>amount = 0</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-09</span>
+<h3 class="ctit">Un monto negativo se rechaza al mutar</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.updateAmount</span></div>
+<div class="campo"><b>Entrada</b><span>updateAmount(-1)</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo debe ser un número mayor o igual a cero&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-10</span>
+<h3 class="ctit">NaN se rechaza al mutar</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.updateAmount</span></div>
+<div class="campo"><b>Entrada</b><span>updateAmount(NaN)</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo debe ser un número mayor o igual a cero&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-11</span>
+<h3 class="ctit">El mutador también recorta los espacios sobrantes</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.updateName</span></div>
+<div class="campo"><b>Entrada</b><span>updateName(&quot;  Bici  &quot;)</span></div>
+<div class="campo"><b>Esperado</b><span>El nombre queda en &quot;Bici&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>name = &quot;Bici&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-12</span>
+<h3 class="ctit">Un nombre de solo espacios se rechaza al mutar</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.updateName</span></div>
+<div class="campo"><b>Entrada</b><span>updateName(&quot;   &quot;)</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_NAME (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Lanzó INVALID_POCKET_NAME · HTTP 400 · &quot;El nombre del bolsillo no puede estar vacío&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">PU-13</span>
+<h3 class="ctit">Mutar refresca la marca de tiempo de modificación</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Pocket.updateAmount</span></div>
+<div class="campo"><b>Entrada</b><span>Bolsillo recién creado, updateAmount(20)</span></div>
+<div class="campo"><b>Esperado</b><span>updatedAt queda igual o posterior al valor previo a la mutación</span></div>
+<div class="campo"><b>Obtenido</b><span>updatedAt 1788232161840 → 1788232161840 (delta 0 ms)</span></div>
+</div>
+<h2>Entidad Account</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">AU-01</span>
+<h3 class="ctit">Una cuenta ACTIVA sí puede operar</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Account.isOperational</span></div>
+<div class="campo"><b>Entrada</b><span>status = ACTIVA</span></div>
+<div class="campo"><b>Esperado</b><span>isOperational() devuelve true</span></div>
+<div class="campo"><b>Obtenido</b><span>isOperational() = true</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">AU-02</span>
+<h3 class="ctit">Solo ACTIVA opera: BLOQUEADA y CERRADA quedan fuera</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Account.isOperational</span></div>
+<div class="campo"><b>Entrada</b><span>status = BLOQUEADA y status = CERRADA</span></div>
+<div class="campo"><b>Esperado</b><span>isOperational() devuelve false en ambos casos</span></div>
+<div class="campo"><b>Obtenido</b><span>BLOQUEADA = false · CERRADA = false</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">AU-03</span>
+<h3 class="ctit">El dueño de la cuenta pasa la comprobación de propiedad</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Account.assertBelongsTo</span></div>
+<div class="campo"><b>Entrada</b><span>Cuenta de &quot;u1&quot;, se comprueba contra &quot;u1&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>assertBelongsTo no lanza ninguna excepción</span></div>
+<div class="campo"><b>Obtenido</b><span>assertBelongsTo(&quot;u1&quot;) no lanzó excepción</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">AU-04</span>
+<h3 class="ctit">Un usuario ajeno es rechazado en la capa de dominio</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Account.assertBelongsTo</span></div>
+<div class="campo"><b>Entrada</b><span>Cuenta de &quot;u1&quot;, se comprueba contra &quot;u2&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Lanza AppError FORBIDDEN (HTTP 403)</span></div>
+<div class="campo"><b>Obtenido</b><span>Lanzó FORBIDDEN · HTTP 403 · &quot;No tienes permiso para acceder a esta cuenta&quot;</span></div>
+</div>
+<h2>Schemas de validación</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-01</span>
+<h3 class="ctit">Una carga válida se acepta y conserva los tres campos</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>{ accountId: UUID, name: &quot;Vacaciones&quot;, amount: 300000 }</span></div>
+<div class="campo"><b>Esperado</b><span>Acepta y devuelve amount = 300000 sin alterarlo</span></div>
+<div class="campo"><b>Obtenido</b><span>Aceptó y parseó a {&quot;accountId&quot;:&quot;3f2504e0-4f89-41d3-9a0c-0305e82c3301&quot;,&quot;name&quot;:&quot;Vacaciones&quot;,&quot;amount&quot;:300000}</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-02</span>
+<h3 class="ctit">Una cadena numérica se coacciona a número</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>amount = &quot;300000&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Acepta y coacciona a amount = 300000 (número), por z.coerce.number()</span></div>
+<div class="campo"><b>Obtenido</b><span>Aceptó y parseó a {&quot;accountId&quot;:&quot;3f2504e0-4f89-41d3-9a0c-0305e82c3301&quot;,&quot;name&quot;:&quot;V&quot;,&quot;amount&quot;:300000}</span></div>
+</div>
+<div class="caso no">
+<div class="caso-head">
+<span class="cid">VU-03</span>
+<h3 class="ctit">Un booleano no es un monto y debe rechazarse</h3>
+<span class="badge def">Defecto D-02</span>
+<span class="badge no">Fallido</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>amount = true</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza: un booleano no representa una cantidad de dinero</span></div>
+<div class="campo"><b>Obtenido</b><span>FALLO: VU-03: un booleano debe rechazarse como monto — el schema aceptó datos que debía rechazar; los parseó a {&quot;accountId&quot;:&quot;3f2504e0-4f89-41d3-9a0c-0305e82c3301&quot;,&quot;name&quot;:&quot;V&quot;,&quot;amount&quot;:1}</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-04</span>
+<h3 class="ctit">Un monto negativo se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>amount = -1</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con &quot;El monto del bolsillo no puede ser negativo&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con amount: El monto del bolsillo no puede ser negativo</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-05</span>
+<h3 class="ctit">Un accountId que no es UUID se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>accountId = &quot;abc&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con &quot;accountId debe ser un UUID válido&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con accountId: accountId debe ser un UUID válido</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-06</span>
+<h3 class="ctit">Un nombre vacío se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con &quot;El nombre del bolsillo es obligatorio&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con name: El nombre del bolsillo es obligatorio</span></div>
+</div>
+<div class="caso no">
+<div class="caso-head">
+<span class="cid">VU-07</span>
+<h3 class="ctit">Un nombre de solo espacios está vacío en la práctica y debe rechazarse</h3>
+<span class="badge def">Defecto D-03</span>
+<span class="badge no">Fallido</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;   &quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza: tres espacios no son un nombre</span></div>
+<div class="campo"><b>Obtenido</b><span>FALLO: VU-07: un nombre de solo espacios debe rechazarse — el schema aceptó datos que debía rechazar; los parseó a {&quot;accountId&quot;:&quot;3f2504e0-4f89-41d3-9a0c-0305e82c3301&quot;,&quot;name&quot;:&quot;   &quot;,&quot;amount&quot;:1}</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-08</span>
+<h3 class="ctit">Valor límite superior del nombre: 150 caracteres se aceptan</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>name con 150 caracteres</span></div>
+<div class="campo"><b>Esperado</b><span>Acepta, porque el máximo declarado es 150</span></div>
+<div class="campo"><b>Obtenido</b><span>Aceptó un nombre de 150 caracteres</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-09</span>
+<h3 class="ctit">Valor límite superior del nombre: 151 caracteres se rechazan</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>createPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>name con 151 caracteres</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con &quot;El nombre del bolsillo no puede superar 150 caracteres&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con name: El nombre del bolsillo no puede superar 150 caracteres</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-10</span>
+<h3 class="ctit">Un cuerpo sin ningún campo se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>updatePocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>{}</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con &quot;Debes enviar al menos un campo para actualizar&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con (raíz): Debes enviar al menos un campo para actualizar</span></div>
+</div>
+<div class="caso no">
+<div class="caso-head">
+<span class="cid">VU-11</span>
+<h3 class="ctit">Una cadena numérica se coacciona igual que al crear (VU-02)</h3>
+<span class="badge def">Defecto D-04</span>
+<span class="badge no">Fallido</span>
+</div>
+<div class="campo"><b>Unidad</b><span>updatePocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>amount = &quot;500&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Acepta y coacciona a amount = 500, con el mismo criterio que createPocketSchema</span></div>
+<div class="campo"><b>Obtenido</b><span>FALLO: VU-11: una cadena numérica debe coaccionarse igual que al crear — el schema rechazó datos que debía aceptar: amount: Invalid input: expected number, received string</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-12</span>
+<h3 class="ctit">Ajustar un bolsillo a cero es un cambio válido</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>updatePocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 0</span></div>
+<div class="campo"><b>Esperado</b><span>Acepta con amount = 0</span></div>
+<div class="campo"><b>Obtenido</b><span>Aceptó y parseó a {&quot;amount&quot;:0}</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-13</span>
+<h3 class="ctit">Valor límite inferior: transferir cero se rechaza, a diferencia de ajustar</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>transferPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 0</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con &quot;El monto de transferencia debe ser mayor que cero&quot; (condición gt(0))</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con amount: El monto de transferencia debe ser mayor que cero</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-14</span>
+<h3 class="ctit">Se admiten fracciones de peso</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>transferPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 0.01</span></div>
+<div class="campo"><b>Esperado</b><span>Acepta con amount = 0.01</span></div>
+<div class="campo"><b>Obtenido</b><span>Aceptó y parseó a {&quot;fromPocketId&quot;:&quot;3f2504e0-4f89-41d3-9a0c-0305e82c3301&quot;,&quot;toPocketId&quot;:&quot;3f2504e0-4f89-41d3-9a0c-0305e82c3301&quot;,&quot;amount&quot;:0.01}</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">VU-15</span>
+<h3 class="ctit">Un fromPocketId que no es UUID se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>transferPocketSchema</span></div>
+<div class="campo"><b>Entrada</b><span>fromPocketId = &quot;abc&quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con &quot;fromPocketId debe ser un UUID válido&quot;</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con fromPocketId: fromPocketId debe ser un UUID válido</span></div>
+</div>
+<h2>Crear bolsillo</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-01</span>
+<h3 class="ctit">Un monto negativo corta el flujo antes de consultar la cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = -1 sobre la cuenta principal</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INVALID_POCKET_AMOUNT (HTTP 400). Rama inalcanzable por HTTP</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo no puede ser negativo&quot; · saldo intacto en $1.000.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-02</span>
+<h3 class="ctit">Una cuenta inexistente se rechaza tras consultar el repositorio</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>accountId = UUID válido pero inexistente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con ACCOUNT_NOT_FOUND (HTTP 404)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · &quot;Cuenta no encontrada&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-03</span>
+<h3 class="ctit">Un usuario que no es el dueño no puede crear bolsillos en la cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>userId ajeno sobre la cuenta principal</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con FORBIDDEN (HTTP 403), por assertBelongsTo</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con FORBIDDEN · HTTP 403 · &quot;No tienes permiso para acceder a esta cuenta&quot; · saldo intacto en $1.000.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-04</span>
+<h3 class="ctit">Valor límite: un peso por encima del disponible se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 1.000.001 con disponible 1.000.000 y reservado 0</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · &quot;No tienes saldo disponible suficiente para crear este bolsillo&quot; · se pidió $1.000.001 contra un disponible de $1.000.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-05</span>
+<h3 class="ctit">Camino principal: el bolsillo se crea y el monto se reserva</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;Vacaciones&quot;, amount = 300.000, disponible 1.000.000</span></div>
+<div class="campo"><b>Esperado</b><span>Devuelve el bolsillo con amount 300.000 y deja el disponible en 700.000 y lo reservado en 300.000</span></div>
+<div class="campo"><b>Obtenido</b><span>Bolsillo &quot;Vacaciones&quot; por $300.000 · disponible $700.000 · reservado $300.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-06</span>
+<h3 class="ctit">El bolsillo creado queda realmente persistido y es recuperable por id</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute + SupabasePocketRepository</span></div>
+<div class="campo"><b>Entrada</b><span>findById sobre el id devuelto en CU-CR-05</span></div>
+<div class="campo"><b>Esperado</b><span>El repositorio devuelve el bolsillo con los mismos nombre y monto</span></div>
+<div class="campo"><b>Obtenido</b><span>Recuperado de la base: &quot;Vacaciones&quot; por $300.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-07</span>
+<h3 class="ctit">Se pueden acumular varios bolsillos en la misma cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;Estudio&quot;, amount = 200.000, disponible 700.000</span></div>
+<div class="campo"><b>Esperado</b><span>Se crea el segundo bolsillo y el disponible baja a 500.000</span></div>
+<div class="campo"><b>Obtenido</b><span>Segundo bolsillo por $200.000 · disponible $500.000 · reservado $500.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CR-08</span>
+<h3 class="ctit">Una cuenta no operativa no admite bolsillos nuevos</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>Cuenta puesta en estado BLOQUEADA antes de la llamada</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con ACCOUNT_NOT_OPERATIONAL (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · &quot;La cuenta no está disponible para generar bolsillos&quot;</span></div>
+</div>
+<div class="caso no">
+<div class="caso-head">
+<span class="cid">CU-CR-09</span>
+<h3 class="ctit">Un bolsillo que cabe en el saldo disponible debe crearse aunque la cuenta ya tenga reservas</h3>
+<span class="badge def">Defecto D-05</span>
+<span class="badge no">Fallido</span>
+</div>
+<div class="campo"><b>Unidad</b><span>CreatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 400.000 con disponible 500.000 y reservado 500.000</span></div>
+<div class="campo"><b>Esperado</b><span>Se crea el bolsillo, dejando el disponible en 100.000 y lo reservado en 900.000, porque 400.000 ≤ 500.000 disponibles</span></div>
+<div class="campo"><b>Obtenido</b><span>FALLO: No tienes saldo disponible suficiente para crear este bolsillo</span></div>
+</div>
+<h2>Actualizar bolsillo</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-01</span>
+<h3 class="ctit">Un nombre de solo espacios se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;   &quot;</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INVALID_POCKET_NAME (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INVALID_POCKET_NAME · HTTP 400 · &quot;El nombre del bolsillo no puede estar vacío&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-02</span>
+<h3 class="ctit">Un monto negativo se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = -100</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INVALID_POCKET_AMOUNT (HTTP 400). Rama inalcanzable por HTTP</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INVALID_POCKET_AMOUNT · HTTP 400 · &quot;El monto del bolsillo no puede ser negativo&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-03</span>
+<h3 class="ctit">Una actualización sin ningún campo se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>Ni name ni amount</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con NO_CHANGES_PROVIDED (HTTP 400). Rama inalcanzable por HTTP</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con NO_CHANGES_PROVIDED · HTTP 400 · &quot;No se proporcionaron cambios para el bolsillo&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-04</span>
+<h3 class="ctit">Un bolsillo inexistente se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>pocketId = UUID válido pero inexistente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con POCKET_NOT_FOUND (HTTP 404)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo no encontrado&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-05</span>
+<h3 class="ctit">Un usuario ajeno no puede modificar el bolsillo</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>userId ajeno sobre un bolsillo existente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con FORBIDDEN (HTTP 403)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con FORBIDDEN · HTTP 403 · &quot;No tienes permiso para acceder a esta cuenta&quot; · monto intacto en $300.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-06</span>
+<h3 class="ctit">Aumentar el monto reserva más saldo de la cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 600.000 sobre un bolsillo de 300.000, disponible 500.000</span></div>
+<div class="campo"><b>Esperado</b><span>El bolsillo queda en 600.000 y el disponible baja a 200.000</span></div>
+<div class="campo"><b>Obtenido</b><span>Monto $300.000 → $600.000 · disponible $200.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-07</span>
+<h3 class="ctit">Valor límite: se puede reservar exactamente el total de fondos de la cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 800.000 con disponible 200.000 y reservado 800.000</span></div>
+<div class="campo"><b>Esperado</b><span>Acepta y deja el disponible en 0, porque la condición usa &gt; estricto</span></div>
+<div class="campo"><b>Obtenido</b><span>disponible $0 · reservado $1.000.000 · total $1.000.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-08</span>
+<h3 class="ctit">Valor límite: un peso por encima del total de fondos se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 800.001 con disponible 0 y reservado 1.000.000</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · &quot;No tienes saldo disponible suficiente para ajustar este bolsillo&quot; · el bolsillo sigue en $800.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-09</span>
+<h3 class="ctit">Disminuir el monto libera saldo y lo devuelve al disponible</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 300.000 sobre un bolsillo de 800.000, disponible 0</span></div>
+<div class="campo"><b>Esperado</b><span>El bolsillo queda en 300.000 y el disponible vuelve a 500.000</span></div>
+<div class="campo"><b>Obtenido</b><span>Monto $800.000 → $300.000 · disponible $0 → $500.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-AC-10</span>
+<h3 class="ctit">Cambiar solo el nombre no toca el saldo de la cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>UpdatePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>name = &quot;Vacaciones 2026&quot;, sin amount</span></div>
+<div class="campo"><b>Esperado</b><span>Cambia el nombre, conserva el monto y deja el disponible en 500.000</span></div>
+<div class="campo"><b>Obtenido</b><span>name = &quot;Vacaciones 2026&quot; · monto $300.000 · disponible intacto en $500.000</span></div>
+</div>
+<h2>Eliminar bolsillo</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-EL-01</span>
+<h3 class="ctit">Un bolsillo inexistente se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>DeletePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>pocketId = UUID válido pero inexistente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con POCKET_NOT_FOUND (HTTP 404)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo no encontrado&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-EL-02</span>
+<h3 class="ctit">Un usuario ajeno no puede eliminar el bolsillo</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>DeletePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>userId ajeno sobre un bolsillo existente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con FORBIDDEN (HTTP 403) y el bolsillo sigue existiendo</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con FORBIDDEN · HTTP 403 · &quot;No tienes permiso para acceder a esta cuenta&quot; · el bolsillo sigue en la base</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-EL-03</span>
+<h3 class="ctit">Eliminar un bolsillo devuelve su monto al saldo disponible</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>DeletePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>Bolsillo de 200.000, disponible 500.000</span></div>
+<div class="campo"><b>Esperado</b><span>Devuelve el bolsillo borrado, el disponible sube a 700.000 y lo reservado baja a 300.000</span></div>
+<div class="campo"><b>Obtenido</b><span>Eliminado &quot;Estudio&quot; por $200.000 · disponible $500.000 → $700.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-EL-04</span>
+<h3 class="ctit">Eliminar dos veces no vuelve a acreditar el monto</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>DeletePocket.execute</span></div>
+<div class="campo"><b>Entrada</b><span>Mismo pocketId ya eliminado en CU-EL-03</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con POCKET_NOT_FOUND (HTTP 404) y el disponible sigue en 700.000</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo no encontrado&quot; · disponible sin cambios en $700.000</span></div>
+</div>
+<h2>Transferir entre bolsillos</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-01</span>
+<h3 class="ctit">Transferir cero se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 0</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INVALID_TRANSFER_AMOUNT (HTTP 400). Rama inalcanzable por HTTP</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INVALID_TRANSFER_AMOUNT · HTTP 400 · &quot;El monto de transferencia debe ser mayor que cero&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-02</span>
+<h3 class="ctit">Origen y destino no pueden ser el mismo bolsillo</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>fromPocketId = toPocketId</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INVALID_TRANSFER_TARGET (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INVALID_TRANSFER_TARGET · HTTP 400 · &quot;Los bolsillos de origen y destino deben ser diferentes&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-03</span>
+<h3 class="ctit">Un bolsillo de origen inexistente se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>fromPocketId = UUID inexistente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con SOURCE_POCKET_NOT_FOUND (HTTP 404)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con SOURCE_POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo de origen no encontrado&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-04</span>
+<h3 class="ctit">Un bolsillo de destino inexistente se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>toPocketId = UUID inexistente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con TARGET_POCKET_NOT_FOUND (HTTP 404)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con TARGET_POCKET_NOT_FOUND · HTTP 404 · &quot;Bolsillo de destino no encontrado&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-05</span>
+<h3 class="ctit">No se puede transferir entre bolsillos de cuentas distintas</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>Origen en la cuenta principal, destino en la cuenta secundaria</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con POCKETS_DIFFERENT_ACCOUNT (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con POCKETS_DIFFERENT_ACCOUNT · HTTP 400 · &quot;Los bolsillos deben pertenecer a la misma cuenta&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-06</span>
+<h3 class="ctit">Un usuario ajeno no puede mover dinero entre bolsillos de la cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>userId ajeno sobre dos bolsillos válidos de la misma cuenta</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con FORBIDDEN (HTTP 403)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con FORBIDDEN · HTTP 403 · &quot;No tienes permiso para acceder a esta cuenta&quot; · origen intacto en $300.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-07</span>
+<h3 class="ctit">Valor límite: un peso más de lo que tiene el origen se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 300.001 sobre un origen de 300.000</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con INSUFFICIENT_POCKET_BALANCE (HTTP 400)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con INSUFFICIENT_POCKET_BALANCE · HTTP 400 · &quot;Saldo insuficiente en el bolsillo de origen&quot; · se pidió $300.001 de un bolsillo con $300.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-08</span>
+<h3 class="ctit">Camino principal: mueve dinero entre reservas sin tocar el disponible</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 100.000, origen 300.000, destino 200.000</span></div>
+<div class="campo"><b>Esperado</b><span>El origen queda en 200.000, el destino en 300.000 y el disponible de la cuenta no cambia</span></div>
+<div class="campo"><b>Obtenido</b><span>origen $300.000 → $200.000 · destino $200.000 → $300.000 · disponible intacto en $500.000</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-TR-09</span>
+<h3 class="ctit">Valor límite: transferir el saldo completo del origen se acepta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>TransferPocketBalance.execute</span></div>
+<div class="campo"><b>Entrada</b><span>amount = 200.000 sobre un origen de 200.000</span></div>
+<div class="campo"><b>Esperado</b><span>El origen queda en 0 y el destino en 500.000, porque la condición usa &lt; estricto</span></div>
+<div class="campo"><b>Obtenido</b><span>origen $0 · destino $500.000</span></div>
+</div>
+<h2>Consultar bolsillos</h2>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CO-01</span>
+<h3 class="ctit">Una cuenta inexistente se rechaza</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>GetAccountPockets.execute</span></div>
+<div class="campo"><b>Entrada</b><span>accountId = UUID válido pero inexistente</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con ACCOUNT_NOT_FOUND (HTTP 404)</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · &quot;Cuenta no encontrada&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CO-02</span>
+<h3 class="ctit">Un usuario ajeno no puede listar los bolsillos de la cuenta</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>GetAccountPockets.execute</span></div>
+<div class="campo"><b>Entrada</b><span>userId ajeno sobre la cuenta principal</span></div>
+<div class="campo"><b>Esperado</b><span>Rechaza con FORBIDDEN (HTTP 403), sin devolver ningún bolsillo</span></div>
+<div class="campo"><b>Obtenido</b><span>Rechazó con FORBIDDEN · HTTP 403 · &quot;No tienes permiso para acceder a esta cuenta&quot;</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CO-03</span>
+<h3 class="ctit">Devuelve los bolsillos de la cuenta en su representación pública</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>GetAccountPockets.execute</span></div>
+<div class="campo"><b>Entrada</b><span>Cuenta principal con dos bolsillos</span></div>
+<div class="campo"><b>Esperado</b><span>Arreglo de 2 elementos, cada uno con exactamente id, accountId, name, amount, createdAt y updatedAt</span></div>
+<div class="campo"><b>Obtenido</b><span>2 bolsillos: Estudio=$500.000, Vacaciones 2026=$0</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CO-04</span>
+<h3 class="ctit">Una cuenta sin bolsillos devuelve un arreglo vacío, no un error</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>GetAccountPockets.execute</span></div>
+<div class="campo"><b>Entrada</b><span>Cuenta sin depósito ni bolsillos</span></div>
+<div class="campo"><b>Esperado</b><span>Devuelve [] con longitud 0</span></div>
+<div class="campo"><b>Obtenido</b><span>Arreglo vacío (longitud 0)</span></div>
+</div>
+<div class="caso">
+<div class="caso-head">
+<span class="cid">CU-CO-05</span>
+<h3 class="ctit">Tras crear, actualizar, eliminar y transferir, lo reservado más lo disponible sigue siendo lo depositado</h3>
+<span class="badge ok">Aprobado</span>
+</div>
+<div class="campo"><b>Unidad</b><span>Invariante de saldo</span></div>
+<div class="campo"><b>Entrada</b><span>Cuenta principal al final de la corrida</span></div>
+<div class="campo"><b>Esperado</b><span>disponible + reservado = 1.000.000, el depósito inicial</span></div>
+<div class="campo"><b>Obtenido</b><span>disponible $500.000 + reservado $500.000 = $1.000.000</span></div>
+</div>
+<h2>Limpieza de la base de datos</h2>
+<p>La suite borra al terminar todo lo que creó, dejando la base como estaba.</p>
+<div class="scroll"><table><thead><tr><th>Tabla</th><th class="num">Filas borradas</th></tr></thead><tbody>
+<tr><td><code>pockets</code></td><td class="num">3</td></tr>
+<tr><td><code>notifications</code></td><td class="num">11</td></tr>
+<tr><td><code>account_details</code></td><td class="num">3</td></tr>
+<tr><td><code>accounts</code></td><td class="num">3</td></tr>
+</tbody></table></div>
+<footer><p>Documento regenerado en cada ejecución de <code>npm run test:unit</code>. No editar a mano: los cambios se pierden en la siguiente corrida.</p></footer>
+</div>

@@ -1,0 +1,832 @@
+{
+  "fecha": "2026-08-31",
+  "version": "main-04800eb",
+  "entorno": "Backend (Node + tsx). Parte A en memoria; Parte B contra Supabase real.",
+  "usuario": "tomashmetaute@gmail.com",
+  "limpieza": {
+    "bolsillos": 3,
+    "notificaciones": 11,
+    "detalles": 3,
+    "cuentas": 3,
+    "errores": []
+  },
+  "notaParteB": null,
+  "resumen": {
+    "total": 69,
+    "aprobados": 64,
+    "fallidos": 5,
+    "porGrupo": {
+      "Entidad Pocket · construcción": {
+        "total": 7,
+        "aprobados": 6,
+        "fallidos": 1
+      },
+      "Entidad Pocket · mutadores": {
+        "total": 6,
+        "aprobados": 6,
+        "fallidos": 0
+      },
+      "Entidad Account": {
+        "total": 4,
+        "aprobados": 4,
+        "fallidos": 0
+      },
+      "Schemas de validación": {
+        "total": 15,
+        "aprobados": 12,
+        "fallidos": 3
+      },
+      "Crear bolsillo": {
+        "total": 9,
+        "aprobados": 8,
+        "fallidos": 1
+      },
+      "Actualizar bolsillo": {
+        "total": 10,
+        "aprobados": 10,
+        "fallidos": 0
+      },
+      "Eliminar bolsillo": {
+        "total": 4,
+        "aprobados": 4,
+        "fallidos": 0
+      },
+      "Transferir entre bolsillos": {
+        "total": 9,
+        "aprobados": 9,
+        "fallidos": 0
+      },
+      "Consultar bolsillos": {
+        "total": 5,
+        "aprobados": 5,
+        "fallidos": 0
+      }
+    }
+  },
+  "casos": [
+    {
+      "id": "PU-01",
+      "grupo": "Entidad Pocket · construcción",
+      "unidad": "Pocket.create",
+      "descripcion": "El factory recorta los espacios sobrantes del nombre",
+      "entrada": "name = \"  Vacaciones  \"",
+      "esperado": "El bolsillo queda con name = \"Vacaciones\", sin espacios en los extremos",
+      "obtenido": "name = \"Vacaciones\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-02",
+      "grupo": "Entidad Pocket · construcción",
+      "unidad": "Pocket.create",
+      "descripcion": "Valor límite inferior del monto: se acepta el cero",
+      "entrada": "amount = 0",
+      "esperado": "El bolsillo se construye con amount = 0, sin lanzar",
+      "obtenido": "amount = 0",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-03",
+      "grupo": "Entidad Pocket · construcción",
+      "unidad": "Pocket.assertValidAmount",
+      "descripcion": "Un monto negativo se rechaza al construir",
+      "entrada": "amount = -1",
+      "esperado": "Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)",
+      "obtenido": "Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo debe ser un número mayor o igual a cero\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-04",
+      "grupo": "Entidad Pocket · construcción",
+      "unidad": "Pocket.assertValidAmount",
+      "descripcion": "NaN se rechaza al construir",
+      "entrada": "amount = NaN",
+      "esperado": "Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)",
+      "obtenido": "Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo debe ser un número mayor o igual a cero\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-05",
+      "grupo": "Entidad Pocket · construcción",
+      "unidad": "Pocket.assertValidAmount",
+      "descripcion": "Una cadena numérica se rechaza: la comprobación es de tipo, no de valor",
+      "entrada": "amount = \"100\"",
+      "esperado": "Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400) porque typeof !== \"number\"",
+      "obtenido": "Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo debe ser un número mayor o igual a cero\"",
+      "estado": "Aprobado",
+      "duracionMs": 1
+    },
+    {
+      "id": "PU-06",
+      "grupo": "Entidad Pocket · construcción",
+      "unidad": "Pocket (constructor)",
+      "descripcion": "Un nombre vacío debe rechazarse al construir, igual que al modificar",
+      "entrada": "name = \"\"",
+      "esperado": "Lanza AppError INVALID_POCKET_NAME (HTTP 400), la misma regla que aplica updateName(\"\")",
+      "defecto": "D-01",
+      "obtenido": "FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {\"_id\":\"p1\",\"_accountId\":\"a1\",\"_name\":\"\",\"_amount\":100,\"_createdAt\":\"2026-09-01T03:09:21.838Z\",\"_updatedAt\":\"2026-09-01T03:09:21.838Z\"}",
+      "estado": "Fallido",
+      "duracionMs": 1
+    },
+    {
+      "id": "PU-07",
+      "grupo": "Entidad Pocket · construcción",
+      "unidad": "Pocket.toPublic",
+      "descripcion": "La representación pública expone seis campos y ningún dato interno",
+      "entrada": "Bolsillo válido recién construido",
+      "esperado": "toPublic() devuelve exactamente id, accountId, name, amount, createdAt y updatedAt, con las fechas como cadena ISO",
+      "obtenido": "claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-01T03:09:21.839Z",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-08",
+      "grupo": "Entidad Pocket · mutadores",
+      "unidad": "Pocket.updateAmount",
+      "descripcion": "Valor límite inferior al mutar: se acepta el cero",
+      "entrada": "Bolsillo de $300.000, updateAmount(0)",
+      "esperado": "El monto queda en 0, sin lanzar",
+      "obtenido": "amount = 0",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-09",
+      "grupo": "Entidad Pocket · mutadores",
+      "unidad": "Pocket.updateAmount",
+      "descripcion": "Un monto negativo se rechaza al mutar",
+      "entrada": "updateAmount(-1)",
+      "esperado": "Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)",
+      "obtenido": "Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo debe ser un número mayor o igual a cero\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-10",
+      "grupo": "Entidad Pocket · mutadores",
+      "unidad": "Pocket.updateAmount",
+      "descripcion": "NaN se rechaza al mutar",
+      "entrada": "updateAmount(NaN)",
+      "esperado": "Lanza AppError INVALID_POCKET_AMOUNT (HTTP 400)",
+      "obtenido": "Lanzó INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo debe ser un número mayor o igual a cero\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-11",
+      "grupo": "Entidad Pocket · mutadores",
+      "unidad": "Pocket.updateName",
+      "descripcion": "El mutador también recorta los espacios sobrantes",
+      "entrada": "updateName(\"  Bici  \")",
+      "esperado": "El nombre queda en \"Bici\"",
+      "obtenido": "name = \"Bici\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "PU-12",
+      "grupo": "Entidad Pocket · mutadores",
+      "unidad": "Pocket.updateName",
+      "descripcion": "Un nombre de solo espacios se rechaza al mutar",
+      "entrada": "updateName(\"   \")",
+      "esperado": "Lanza AppError INVALID_POCKET_NAME (HTTP 400)",
+      "obtenido": "Lanzó INVALID_POCKET_NAME · HTTP 400 · \"El nombre del bolsillo no puede estar vacío\"",
+      "estado": "Aprobado",
+      "duracionMs": 1
+    },
+    {
+      "id": "PU-13",
+      "grupo": "Entidad Pocket · mutadores",
+      "unidad": "Pocket.updateAmount",
+      "descripcion": "Mutar refresca la marca de tiempo de modificación",
+      "entrada": "Bolsillo recién creado, updateAmount(20)",
+      "esperado": "updatedAt queda igual o posterior al valor previo a la mutación",
+      "obtenido": "updatedAt 1788232161840 → 1788232161840 (delta 0 ms)",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "AU-01",
+      "grupo": "Entidad Account",
+      "unidad": "Account.isOperational",
+      "descripcion": "Una cuenta ACTIVA sí puede operar",
+      "entrada": "status = ACTIVA",
+      "esperado": "isOperational() devuelve true",
+      "obtenido": "isOperational() = true",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "AU-02",
+      "grupo": "Entidad Account",
+      "unidad": "Account.isOperational",
+      "descripcion": "Solo ACTIVA opera: BLOQUEADA y CERRADA quedan fuera",
+      "entrada": "status = BLOQUEADA y status = CERRADA",
+      "esperado": "isOperational() devuelve false en ambos casos",
+      "obtenido": "BLOQUEADA = false · CERRADA = false",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "AU-03",
+      "grupo": "Entidad Account",
+      "unidad": "Account.assertBelongsTo",
+      "descripcion": "El dueño de la cuenta pasa la comprobación de propiedad",
+      "entrada": "Cuenta de \"u1\", se comprueba contra \"u1\"",
+      "esperado": "assertBelongsTo no lanza ninguna excepción",
+      "obtenido": "assertBelongsTo(\"u1\") no lanzó excepción",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "AU-04",
+      "grupo": "Entidad Account",
+      "unidad": "Account.assertBelongsTo",
+      "descripcion": "Un usuario ajeno es rechazado en la capa de dominio",
+      "entrada": "Cuenta de \"u1\", se comprueba contra \"u2\"",
+      "esperado": "Lanza AppError FORBIDDEN (HTTP 403)",
+      "obtenido": "Lanzó FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-01",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Una carga válida se acepta y conserva los tres campos",
+      "entrada": "{ accountId: UUID, name: \"Vacaciones\", amount: 300000 }",
+      "esperado": "Acepta y devuelve amount = 300000 sin alterarlo",
+      "obtenido": "Aceptó y parseó a {\"accountId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"name\":\"Vacaciones\",\"amount\":300000}",
+      "estado": "Aprobado",
+      "duracionMs": 1
+    },
+    {
+      "id": "VU-02",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Una cadena numérica se coacciona a número",
+      "entrada": "amount = \"300000\"",
+      "esperado": "Acepta y coacciona a amount = 300000 (número), por z.coerce.number()",
+      "obtenido": "Aceptó y parseó a {\"accountId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"name\":\"V\",\"amount\":300000}",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-03",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Un booleano no es un monto y debe rechazarse",
+      "entrada": "amount = true",
+      "esperado": "Rechaza: un booleano no representa una cantidad de dinero",
+      "defecto": "D-02",
+      "obtenido": "FALLO: VU-03: un booleano debe rechazarse como monto — el schema aceptó datos que debía rechazar; los parseó a {\"accountId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"name\":\"V\",\"amount\":1}",
+      "estado": "Fallido",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-04",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Un monto negativo se rechaza",
+      "entrada": "amount = -1",
+      "esperado": "Rechaza con \"El monto del bolsillo no puede ser negativo\"",
+      "obtenido": "Rechazó con amount: El monto del bolsillo no puede ser negativo",
+      "estado": "Aprobado",
+      "duracionMs": 1
+    },
+    {
+      "id": "VU-05",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Un accountId que no es UUID se rechaza",
+      "entrada": "accountId = \"abc\"",
+      "esperado": "Rechaza con \"accountId debe ser un UUID válido\"",
+      "obtenido": "Rechazó con accountId: accountId debe ser un UUID válido",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-06",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Un nombre vacío se rechaza",
+      "entrada": "name = \"\"",
+      "esperado": "Rechaza con \"El nombre del bolsillo es obligatorio\"",
+      "obtenido": "Rechazó con name: El nombre del bolsillo es obligatorio",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-07",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Un nombre de solo espacios está vacío en la práctica y debe rechazarse",
+      "entrada": "name = \"   \"",
+      "esperado": "Rechaza: tres espacios no son un nombre",
+      "defecto": "D-03",
+      "obtenido": "FALLO: VU-07: un nombre de solo espacios debe rechazarse — el schema aceptó datos que debía rechazar; los parseó a {\"accountId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"name\":\"   \",\"amount\":1}",
+      "estado": "Fallido",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-08",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Valor límite superior del nombre: 150 caracteres se aceptan",
+      "entrada": "name con 150 caracteres",
+      "esperado": "Acepta, porque el máximo declarado es 150",
+      "obtenido": "Aceptó un nombre de 150 caracteres",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-09",
+      "grupo": "Schemas de validación",
+      "unidad": "createPocketSchema",
+      "descripcion": "Valor límite superior del nombre: 151 caracteres se rechazan",
+      "entrada": "name con 151 caracteres",
+      "esperado": "Rechaza con \"El nombre del bolsillo no puede superar 150 caracteres\"",
+      "obtenido": "Rechazó con name: El nombre del bolsillo no puede superar 150 caracteres",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-10",
+      "grupo": "Schemas de validación",
+      "unidad": "updatePocketSchema",
+      "descripcion": "Un cuerpo sin ningún campo se rechaza",
+      "entrada": "{}",
+      "esperado": "Rechaza con \"Debes enviar al menos un campo para actualizar\"",
+      "obtenido": "Rechazó con (raíz): Debes enviar al menos un campo para actualizar",
+      "estado": "Aprobado",
+      "duracionMs": 1
+    },
+    {
+      "id": "VU-11",
+      "grupo": "Schemas de validación",
+      "unidad": "updatePocketSchema",
+      "descripcion": "Una cadena numérica se coacciona igual que al crear (VU-02)",
+      "entrada": "amount = \"500\"",
+      "esperado": "Acepta y coacciona a amount = 500, con el mismo criterio que createPocketSchema",
+      "defecto": "D-04",
+      "obtenido": "FALLO: VU-11: una cadena numérica debe coaccionarse igual que al crear — el schema rechazó datos que debía aceptar: amount: Invalid input: expected number, received string",
+      "estado": "Fallido",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-12",
+      "grupo": "Schemas de validación",
+      "unidad": "updatePocketSchema",
+      "descripcion": "Ajustar un bolsillo a cero es un cambio válido",
+      "entrada": "amount = 0",
+      "esperado": "Acepta con amount = 0",
+      "obtenido": "Aceptó y parseó a {\"amount\":0}",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-13",
+      "grupo": "Schemas de validación",
+      "unidad": "transferPocketSchema",
+      "descripcion": "Valor límite inferior: transferir cero se rechaza, a diferencia de ajustar",
+      "entrada": "amount = 0",
+      "esperado": "Rechaza con \"El monto de transferencia debe ser mayor que cero\" (condición gt(0))",
+      "obtenido": "Rechazó con amount: El monto de transferencia debe ser mayor que cero",
+      "estado": "Aprobado",
+      "duracionMs": 1
+    },
+    {
+      "id": "VU-14",
+      "grupo": "Schemas de validación",
+      "unidad": "transferPocketSchema",
+      "descripcion": "Se admiten fracciones de peso",
+      "entrada": "amount = 0.01",
+      "esperado": "Acepta con amount = 0.01",
+      "obtenido": "Aceptó y parseó a {\"fromPocketId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"toPocketId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"amount\":0.01}",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "VU-15",
+      "grupo": "Schemas de validación",
+      "unidad": "transferPocketSchema",
+      "descripcion": "Un fromPocketId que no es UUID se rechaza",
+      "entrada": "fromPocketId = \"abc\"",
+      "esperado": "Rechaza con \"fromPocketId debe ser un UUID válido\"",
+      "obtenido": "Rechazó con fromPocketId: fromPocketId debe ser un UUID válido",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "CU-CR-01",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Un monto negativo corta el flujo antes de consultar la cuenta",
+      "entrada": "amount = -1 sobre la cuenta principal",
+      "esperado": "Rechaza con INVALID_POCKET_AMOUNT (HTTP 400). Rama inalcanzable por HTTP",
+      "obtenido": "Rechazó con INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo no puede ser negativo\" · saldo intacto en $1.000.000",
+      "estado": "Aprobado",
+      "duracionMs": 398
+    },
+    {
+      "id": "CU-CR-02",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Una cuenta inexistente se rechaza tras consultar el repositorio",
+      "entrada": "accountId = UUID válido pero inexistente",
+      "esperado": "Rechaza con ACCOUNT_NOT_FOUND (HTTP 404)",
+      "obtenido": "Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · \"Cuenta no encontrada\"",
+      "estado": "Aprobado",
+      "duracionMs": 183
+    },
+    {
+      "id": "CU-CR-03",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Un usuario que no es el dueño no puede crear bolsillos en la cuenta",
+      "entrada": "userId ajeno sobre la cuenta principal",
+      "esperado": "Rechaza con FORBIDDEN (HTTP 403), por assertBelongsTo",
+      "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · saldo intacto en $1.000.000",
+      "estado": "Aprobado",
+      "duracionMs": 569
+    },
+    {
+      "id": "CU-CR-04",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Valor límite: un peso por encima del disponible se rechaza",
+      "entrada": "amount = 1.000.001 con disponible 1.000.000 y reservado 0",
+      "esperado": "Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400)",
+      "obtenido": "Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · \"No tienes saldo disponible suficiente para crear este bolsillo\" · se pidió $1.000.001 contra un disponible de $1.000.000",
+      "estado": "Aprobado",
+      "duracionMs": 762
+    },
+    {
+      "id": "CU-CR-05",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Camino principal: el bolsillo se crea y el monto se reserva",
+      "entrada": "name = \"Vacaciones\", amount = 300.000, disponible 1.000.000",
+      "esperado": "Devuelve el bolsillo con amount 300.000 y deja el disponible en 700.000 y lo reservado en 300.000",
+      "obtenido": "Bolsillo \"Vacaciones\" por $300.000 · disponible $700.000 · reservado $300.000",
+      "estado": "Aprobado",
+      "duracionMs": 1307
+    },
+    {
+      "id": "CU-CR-06",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute + SupabasePocketRepository",
+      "descripcion": "El bolsillo creado queda realmente persistido y es recuperable por id",
+      "entrada": "findById sobre el id devuelto en CU-CR-05",
+      "esperado": "El repositorio devuelve el bolsillo con los mismos nombre y monto",
+      "obtenido": "Recuperado de la base: \"Vacaciones\" por $300.000",
+      "estado": "Aprobado",
+      "duracionMs": 197
+    },
+    {
+      "id": "CU-CR-07",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Se pueden acumular varios bolsillos en la misma cuenta",
+      "entrada": "name = \"Estudio\", amount = 200.000, disponible 700.000",
+      "esperado": "Se crea el segundo bolsillo y el disponible baja a 500.000",
+      "obtenido": "Segundo bolsillo por $200.000 · disponible $500.000 · reservado $500.000",
+      "estado": "Aprobado",
+      "duracionMs": 1328
+    },
+    {
+      "id": "CU-CR-08",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Una cuenta no operativa no admite bolsillos nuevos",
+      "entrada": "Cuenta puesta en estado BLOQUEADA antes de la llamada",
+      "esperado": "Rechaza con ACCOUNT_NOT_OPERATIONAL (HTTP 400)",
+      "obtenido": "Rechazó con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · \"La cuenta no está disponible para generar bolsillos\"",
+      "estado": "Aprobado",
+      "duracionMs": 560
+    },
+    {
+      "id": "CU-CR-09",
+      "grupo": "Crear bolsillo",
+      "unidad": "CreatePocket.execute",
+      "descripcion": "Un bolsillo que cabe en el saldo disponible debe crearse aunque la cuenta ya tenga reservas",
+      "entrada": "amount = 400.000 con disponible 500.000 y reservado 500.000",
+      "esperado": "Se crea el bolsillo, dejando el disponible en 100.000 y lo reservado en 900.000, porque 400.000 ≤ 500.000 disponibles",
+      "defecto": "D-05",
+      "obtenido": "FALLO: No tienes saldo disponible suficiente para crear este bolsillo",
+      "estado": "Fallido",
+      "duracionMs": 752
+    },
+    {
+      "id": "CU-AC-01",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Un nombre de solo espacios se rechaza",
+      "entrada": "name = \"   \"",
+      "esperado": "Rechaza con INVALID_POCKET_NAME (HTTP 400)",
+      "obtenido": "Rechazó con INVALID_POCKET_NAME · HTTP 400 · \"El nombre del bolsillo no puede estar vacío\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "CU-AC-02",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Un monto negativo se rechaza",
+      "entrada": "amount = -100",
+      "esperado": "Rechaza con INVALID_POCKET_AMOUNT (HTTP 400). Rama inalcanzable por HTTP",
+      "obtenido": "Rechazó con INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo no puede ser negativo\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "CU-AC-03",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Una actualización sin ningún campo se rechaza",
+      "entrada": "Ni name ni amount",
+      "esperado": "Rechaza con NO_CHANGES_PROVIDED (HTTP 400). Rama inalcanzable por HTTP",
+      "obtenido": "Rechazó con NO_CHANGES_PROVIDED · HTTP 400 · \"No se proporcionaron cambios para el bolsillo\"",
+      "estado": "Aprobado",
+      "duracionMs": 371
+    },
+    {
+      "id": "CU-AC-04",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Un bolsillo inexistente se rechaza",
+      "entrada": "pocketId = UUID válido pero inexistente",
+      "esperado": "Rechaza con POCKET_NOT_FOUND (HTTP 404)",
+      "obtenido": "Rechazó con POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo no encontrado\"",
+      "estado": "Aprobado",
+      "duracionMs": 185
+    },
+    {
+      "id": "CU-AC-05",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Un usuario ajeno no puede modificar el bolsillo",
+      "entrada": "userId ajeno sobre un bolsillo existente",
+      "esperado": "Rechaza con FORBIDDEN (HTTP 403)",
+      "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · monto intacto en $300.000",
+      "estado": "Aprobado",
+      "duracionMs": 770
+    },
+    {
+      "id": "CU-AC-06",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Aumentar el monto reserva más saldo de la cuenta",
+      "entrada": "amount = 600.000 sobre un bolsillo de 300.000, disponible 500.000",
+      "esperado": "El bolsillo queda en 600.000 y el disponible baja a 200.000",
+      "obtenido": "Monto $300.000 → $600.000 · disponible $200.000",
+      "estado": "Aprobado",
+      "duracionMs": 1328
+    },
+    {
+      "id": "CU-AC-07",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Valor límite: se puede reservar exactamente el total de fondos de la cuenta",
+      "entrada": "amount = 800.000 con disponible 200.000 y reservado 800.000",
+      "esperado": "Acepta y deja el disponible en 0, porque la condición usa > estricto",
+      "obtenido": "disponible $0 · reservado $1.000.000 · total $1.000.000",
+      "estado": "Aprobado",
+      "duracionMs": 1515
+    },
+    {
+      "id": "CU-AC-08",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Valor límite: un peso por encima del total de fondos se rechaza",
+      "entrada": "amount = 800.001 con disponible 0 y reservado 1.000.000",
+      "esperado": "Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400)",
+      "obtenido": "Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · \"No tienes saldo disponible suficiente para ajustar este bolsillo\" · el bolsillo sigue en $800.000",
+      "estado": "Aprobado",
+      "duracionMs": 766
+    },
+    {
+      "id": "CU-AC-09",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Disminuir el monto libera saldo y lo devuelve al disponible",
+      "entrada": "amount = 300.000 sobre un bolsillo de 800.000, disponible 0",
+      "esperado": "El bolsillo queda en 300.000 y el disponible vuelve a 500.000",
+      "obtenido": "Monto $800.000 → $300.000 · disponible $0 → $500.000",
+      "estado": "Aprobado",
+      "duracionMs": 1310
+    },
+    {
+      "id": "CU-AC-10",
+      "grupo": "Actualizar bolsillo",
+      "unidad": "UpdatePocket.execute",
+      "descripcion": "Cambiar solo el nombre no toca el saldo de la cuenta",
+      "entrada": "name = \"Vacaciones 2026\", sin amount",
+      "esperado": "Cambia el nombre, conserva el monto y deja el disponible en 500.000",
+      "obtenido": "name = \"Vacaciones 2026\" · monto $300.000 · disponible intacto en $500.000",
+      "estado": "Aprobado",
+      "duracionMs": 1135
+    },
+    {
+      "id": "CU-EL-01",
+      "grupo": "Eliminar bolsillo",
+      "unidad": "DeletePocket.execute",
+      "descripcion": "Un bolsillo inexistente se rechaza",
+      "entrada": "pocketId = UUID válido pero inexistente",
+      "esperado": "Rechaza con POCKET_NOT_FOUND (HTTP 404)",
+      "obtenido": "Rechazó con POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo no encontrado\"",
+      "estado": "Aprobado",
+      "duracionMs": 184
+    },
+    {
+      "id": "CU-EL-02",
+      "grupo": "Eliminar bolsillo",
+      "unidad": "DeletePocket.execute",
+      "descripcion": "Un usuario ajeno no puede eliminar el bolsillo",
+      "entrada": "userId ajeno sobre un bolsillo existente",
+      "esperado": "Rechaza con FORBIDDEN (HTTP 403) y el bolsillo sigue existiendo",
+      "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · el bolsillo sigue en la base",
+      "estado": "Aprobado",
+      "duracionMs": 564
+    },
+    {
+      "id": "CU-EL-03",
+      "grupo": "Eliminar bolsillo",
+      "unidad": "DeletePocket.execute",
+      "descripcion": "Eliminar un bolsillo devuelve su monto al saldo disponible",
+      "entrada": "Bolsillo de 200.000, disponible 500.000",
+      "esperado": "Devuelve el bolsillo borrado, el disponible sube a 700.000 y lo reservado baja a 300.000",
+      "obtenido": "Eliminado \"Estudio\" por $200.000 · disponible $500.000 → $700.000",
+      "estado": "Aprobado",
+      "duracionMs": 1549
+    },
+    {
+      "id": "CU-EL-04",
+      "grupo": "Eliminar bolsillo",
+      "unidad": "DeletePocket.execute",
+      "descripcion": "Eliminar dos veces no vuelve a acreditar el monto",
+      "entrada": "Mismo pocketId ya eliminado en CU-EL-03",
+      "esperado": "Rechaza con POCKET_NOT_FOUND (HTTP 404) y el disponible sigue en 700.000",
+      "obtenido": "Rechazó con POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo no encontrado\" · disponible sin cambios en $700.000",
+      "estado": "Aprobado",
+      "duracionMs": 560
+    },
+    {
+      "id": "CU-TR-01",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Transferir cero se rechaza",
+      "entrada": "amount = 0",
+      "esperado": "Rechaza con INVALID_TRANSFER_AMOUNT (HTTP 400). Rama inalcanzable por HTTP",
+      "obtenido": "Rechazó con INVALID_TRANSFER_AMOUNT · HTTP 400 · \"El monto de transferencia debe ser mayor que cero\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "CU-TR-02",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Origen y destino no pueden ser el mismo bolsillo",
+      "entrada": "fromPocketId = toPocketId",
+      "esperado": "Rechaza con INVALID_TRANSFER_TARGET (HTTP 400)",
+      "obtenido": "Rechazó con INVALID_TRANSFER_TARGET · HTTP 400 · \"Los bolsillos de origen y destino deben ser diferentes\"",
+      "estado": "Aprobado",
+      "duracionMs": 0
+    },
+    {
+      "id": "CU-TR-03",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Un bolsillo de origen inexistente se rechaza",
+      "entrada": "fromPocketId = UUID inexistente",
+      "esperado": "Rechaza con SOURCE_POCKET_NOT_FOUND (HTTP 404)",
+      "obtenido": "Rechazó con SOURCE_POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo de origen no encontrado\"",
+      "estado": "Aprobado",
+      "duracionMs": 201
+    },
+    {
+      "id": "CU-TR-04",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Un bolsillo de destino inexistente se rechaza",
+      "entrada": "toPocketId = UUID inexistente",
+      "esperado": "Rechaza con TARGET_POCKET_NOT_FOUND (HTTP 404)",
+      "obtenido": "Rechazó con TARGET_POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo de destino no encontrado\"",
+      "estado": "Aprobado",
+      "duracionMs": 367
+    },
+    {
+      "id": "CU-TR-05",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "No se puede transferir entre bolsillos de cuentas distintas",
+      "entrada": "Origen en la cuenta principal, destino en la cuenta secundaria",
+      "esperado": "Rechaza con POCKETS_DIFFERENT_ACCOUNT (HTTP 400)",
+      "obtenido": "Rechazó con POCKETS_DIFFERENT_ACCOUNT · HTTP 400 · \"Los bolsillos deben pertenecer a la misma cuenta\"",
+      "estado": "Aprobado",
+      "duracionMs": 382
+    },
+    {
+      "id": "CU-TR-06",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Un usuario ajeno no puede mover dinero entre bolsillos de la cuenta",
+      "entrada": "userId ajeno sobre dos bolsillos válidos de la misma cuenta",
+      "esperado": "Rechaza con FORBIDDEN (HTTP 403)",
+      "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · origen intacto en $300.000",
+      "estado": "Aprobado",
+      "duracionMs": 943
+    },
+    {
+      "id": "CU-TR-07",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Valor límite: un peso más de lo que tiene el origen se rechaza",
+      "entrada": "amount = 300.001 sobre un origen de 300.000",
+      "esperado": "Rechaza con INSUFFICIENT_POCKET_BALANCE (HTTP 400)",
+      "obtenido": "Rechazó con INSUFFICIENT_POCKET_BALANCE · HTTP 400 · \"Saldo insuficiente en el bolsillo de origen\" · se pidió $300.001 de un bolsillo con $300.000",
+      "estado": "Aprobado",
+      "duracionMs": 750
+    },
+    {
+      "id": "CU-TR-08",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Camino principal: mueve dinero entre reservas sin tocar el disponible",
+      "entrada": "amount = 100.000, origen 300.000, destino 200.000",
+      "esperado": "El origen queda en 200.000, el destino en 300.000 y el disponible de la cuenta no cambia",
+      "obtenido": "origen $300.000 → $200.000 · destino $200.000 → $300.000 · disponible intacto en $500.000",
+      "estado": "Aprobado",
+      "duracionMs": 1534
+    },
+    {
+      "id": "CU-TR-09",
+      "grupo": "Transferir entre bolsillos",
+      "unidad": "TransferPocketBalance.execute",
+      "descripcion": "Valor límite: transferir el saldo completo del origen se acepta",
+      "entrada": "amount = 200.000 sobre un origen de 200.000",
+      "esperado": "El origen queda en 0 y el destino en 500.000, porque la condición usa < estricto",
+      "obtenido": "origen $0 · destino $500.000",
+      "estado": "Aprobado",
+      "duracionMs": 1121
+    },
+    {
+      "id": "CU-CO-01",
+      "grupo": "Consultar bolsillos",
+      "unidad": "GetAccountPockets.execute",
+      "descripcion": "Una cuenta inexistente se rechaza",
+      "entrada": "accountId = UUID válido pero inexistente",
+      "esperado": "Rechaza con ACCOUNT_NOT_FOUND (HTTP 404)",
+      "obtenido": "Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · \"Cuenta no encontrada\"",
+      "estado": "Aprobado",
+      "duracionMs": 199
+    },
+    {
+      "id": "CU-CO-02",
+      "grupo": "Consultar bolsillos",
+      "unidad": "GetAccountPockets.execute",
+      "descripcion": "Un usuario ajeno no puede listar los bolsillos de la cuenta",
+      "entrada": "userId ajeno sobre la cuenta principal",
+      "esperado": "Rechaza con FORBIDDEN (HTTP 403), sin devolver ningún bolsillo",
+      "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\"",
+      "estado": "Aprobado",
+      "duracionMs": 182
+    },
+    {
+      "id": "CU-CO-03",
+      "grupo": "Consultar bolsillos",
+      "unidad": "GetAccountPockets.execute",
+      "descripcion": "Devuelve los bolsillos de la cuenta en su representación pública",
+      "entrada": "Cuenta principal con dos bolsillos",
+      "esperado": "Arreglo de 2 elementos, cada uno con exactamente id, accountId, name, amount, createdAt y updatedAt",
+      "obtenido": "2 bolsillos: Estudio=$500.000, Vacaciones 2026=$0",
+      "estado": "Aprobado",
+      "duracionMs": 384
+    },
+    {
+      "id": "CU-CO-04",
+      "grupo": "Consultar bolsillos",
+      "unidad": "GetAccountPockets.execute",
+      "descripcion": "Una cuenta sin bolsillos devuelve un arreglo vacío, no un error",
+      "entrada": "Cuenta sin depósito ni bolsillos",
+      "esperado": "Devuelve [] con longitud 0",
+      "obtenido": "Arreglo vacío (longitud 0)",
+      "estado": "Aprobado",
+      "duracionMs": 363
+    },
+    {
+      "id": "CU-CO-05",
+      "grupo": "Consultar bolsillos",
+      "unidad": "Invariante de saldo",
+      "descripcion": "Tras crear, actualizar, eliminar y transferir, lo reservado más lo disponible sigue siendo lo depositado",
+      "entrada": "Cuenta principal al final de la corrida",
+      "esperado": "disponible + reservado = 1.000.000, el depósito inicial",
+      "obtenido": "disponible $500.000 + reservado $500.000 = $1.000.000",
+      "estado": "Aprobado",
+      "duracionMs": 462
+    }
+  ]
+}

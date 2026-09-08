@@ -1,0 +1,1012 @@
+<title>Bitácora Unitaria Bolsillos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@0,400;0,500&display=swap">
+
+<style>
+  :root {
+    --ground: #FBFAFC;
+    --surface: #FFFFFF;
+    --surface-2: #F5F2F8;
+    --slab: #211A2B;
+    --slab-ink: #E8E1F0;
+    --ink: #1A1420;
+    --ink-soft: #5C5566;
+    --ink-faint: #8B8496;
+    --rule: #E6E1EC;
+    --rule-strong: #D2C9DC;
+    --accent: #820AD1;
+    --accent-soft: #F4E9FD;
+    --accent-ink: #6A0AAB;
+    --pass: #16714F;
+    --pass-soft: #E3F3EC;
+    --fail: #B32B45;
+    --fail-soft: #FBE8EC;
+    --block: #8F5A0A;
+    --block-soft: #FBF0DC;
+    --shadow: 0 1px 2px rgba(26, 20, 32, .05), 0 8px 24px -12px rgba(26, 20, 32, .18);
+
+    --f-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --f-body: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #131019; --surface: #1B1624; --surface-2: #241D30;
+      --slab: #0E0B14; --slab-ink: #DDD4E8;
+      --ink: #ECE7F2; --ink-soft: #ADA4BB; --ink-faint: #7C7389;
+      --rule: #2E2739; --rule-strong: #443A53;
+      --accent: #C079F5; --accent-soft: #2C1B3F; --accent-ink: #D6A5FA;
+      --pass: #56C79C; --pass-soft: #14302A;
+      --fail: #F0839A; --fail-soft: #37161F;
+      --block: #DCA850; --block-soft: #34260F;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #131019; --surface: #1B1624; --surface-2: #241D30;
+    --slab: #0E0B14; --slab-ink: #DDD4E8;
+    --ink: #ECE7F2; --ink-soft: #ADA4BB; --ink-faint: #7C7389;
+    --rule: #2E2739; --rule-strong: #443A53;
+    --accent: #C079F5; --accent-soft: #2C1B3F; --accent-ink: #D6A5FA;
+    --pass: #56C79C; --pass-soft: #14302A;
+    --fail: #F0839A; --fail-soft: #37161F;
+    --block: #DCA850; --block-soft: #34260F;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Barra ───────────────────────────────────────────────────── */
+
+  .tally {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .tally-in {
+    max-width: 1240px; margin: 0 auto; padding: 10px 24px;
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  }
+  .tally-name {
+    font-family: var(--f-display); font-weight: 700; font-size: 13px;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--accent-ink); margin-right: auto;
+  }
+  .pips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pip {
+    font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    padding: 3px 9px; border-radius: 3px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-soft); background: var(--surface);
+  }
+  .pip b { font-weight: 600; }
+  .pip.ok { color: var(--pass); border-color: color-mix(in srgb, var(--pass) 40%, transparent); background: var(--pass-soft); }
+  .pip.no { color: var(--fail); border-color: color-mix(in srgb, var(--fail) 40%, transparent); background: var(--fail-soft); }
+  .pip.bl { color: var(--block); border-color: color-mix(in srgb, var(--block) 40%, transparent); background: var(--block-soft); }
+
+  .btn {
+    font-family: var(--f-display); font-size: 12px; font-weight: 600;
+    padding: 5px 11px; border-radius: 3px;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface); color: var(--ink-soft); cursor: pointer;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent-ink); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ── Estructura ──────────────────────────────────────────────── */
+
+  .shell {
+    max-width: 1240px; margin: 0 auto; padding: 0 24px 96px;
+    display: grid; grid-template-columns: 210px minmax(0, 1fr);
+    gap: 44px; align-items: start;
+  }
+
+  nav.rail {
+    position: sticky; top: 64px; padding-top: 44px;
+    display: flex; flex-direction: column; gap: 2px;
+    max-height: calc(100vh - 80px); overflow-y: auto;
+  }
+  .rail-label {
+    font-family: var(--f-display); font-size: 10px; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-faint); padding: 14px 0 8px;
+  }
+  .rail-label:first-child { padding-top: 0; }
+  .rail a {
+    font-family: var(--f-display); font-size: 13.5px;
+    color: var(--ink-soft); text-decoration: none;
+    padding: 5px 10px; border-radius: 3px;
+    display: flex; justify-content: space-between; gap: 8px; align-items: baseline;
+  }
+  .rail a:hover { background: var(--surface-2); color: var(--ink); }
+  .rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .rail a .n {
+    font-family: var(--f-mono); font-size: 11px;
+    font-variant-numeric: tabular-nums; color: var(--ink-faint);
+  }
+
+  main { padding-top: 44px; min-width: 0; }
+
+  /* ── Portada ─────────────────────────────────────────────────── */
+
+  header.lede { margin-bottom: 52px; }
+  .eyebrow {
+    font-family: var(--f-mono); font-size: 11.5px; font-weight: 500;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent-ink); margin: 0 0 14px;
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-size: clamp(30px, 4.4vw, 46px); line-height: 1.08;
+    letter-spacing: -.025em; font-weight: 700;
+    margin: 0 0 18px; text-wrap: balance;
+  }
+  .standfirst {
+    font-size: 18px; line-height: 1.6; color: var(--ink-soft);
+    max-width: 62ch; margin: 0 0 28px;
+  }
+  .meta {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1px; background: var(--rule);
+    border: 1px solid var(--rule); border-radius: 4px; overflow: hidden;
+  }
+  .meta div { background: var(--surface); padding: 12px 14px; }
+  .meta dt {
+    font-family: var(--f-display); font-size: 10.5px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 0 0 4px;
+  }
+  .meta dd {
+    margin: 0; font-family: var(--f-mono); font-size: 13px;
+    color: var(--ink); font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Secciones ───────────────────────────────────────────────── */
+
+  section { margin-bottom: 56px; scroll-margin-top: 68px; }
+
+  .parte {
+    font-family: var(--f-display); font-size: 11px; font-weight: 700;
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--accent-ink); background: var(--accent-soft);
+    display: inline-block; padding: 4px 10px; border-radius: 3px;
+    margin-bottom: 14px;
+  }
+
+  h2 {
+    font-family: var(--f-display); font-size: 24px;
+    letter-spacing: -.018em; font-weight: 600;
+    margin: 0 0 6px; padding-bottom: 12px;
+    border-bottom: 2px solid var(--ink);
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+  h2 .count {
+    font-family: var(--f-mono); font-size: 12px; font-weight: 500;
+    color: var(--ink-faint); letter-spacing: 0;
+  }
+  h3 {
+    font-family: var(--f-display); font-size: 14px; font-weight: 600;
+    letter-spacing: .05em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 30px 0 12px;
+  }
+  .sec-note { color: var(--ink-soft); font-size: 15px; margin: 14px 0 22px; max-width: 68ch; }
+  p { margin: 0 0 14px; max-width: 68ch; }
+
+  code {
+    font-family: var(--f-mono); font-size: .87em;
+    background: var(--surface-2); padding: 1px 5px;
+    border-radius: 3px; color: var(--ink);
+  }
+  pre.repl {
+    font-family: var(--f-mono); font-size: 12.5px; line-height: 1.7;
+    background: var(--slab); color: var(--slab-ink);
+    padding: 14px 16px; border-radius: 4px;
+    overflow-x: auto; margin: 0 0 16px; white-space: pre;
+  }
+  pre.repl .kw { color: #C079F5; }
+  pre.repl .str { color: #8FD3B4; }
+  pre.repl .cm { color: #7C7389; }
+
+  .note {
+    border-left: 2px solid var(--rule-strong);
+    padding: 2px 0 2px 12px; font-size: 14.5px;
+    color: var(--ink-soft); margin: 0 0 16px; max-width: 68ch;
+  }
+  .note.warn { border-left-color: var(--block); }
+  .note b { color: var(--ink); }
+
+  .scroll { overflow-x: auto; margin: 0 0 20px; }
+  table { border-collapse: collapse; width: 100%; font-family: var(--f-display); font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+  th {
+    font-size: 10.5px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule-strong); white-space: nowrap;
+  }
+  td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+  .info { min-width: 460px; }
+
+  /* ── Tabla de casos ──────────────────────────────────────────── */
+
+  table.casos { min-width: 900px; }
+  table.casos tr[data-case] > td { background: var(--surface); }
+  table.casos tr[data-case="x"] { }
+  table.casos td.c-id {
+    width: 84px;
+    border-left: 3px solid var(--rule-strong);
+  }
+  tr[data-state="ok"] td.c-id { border-left-color: var(--pass); }
+  tr[data-state="no"] td.c-id { border-left-color: var(--fail); }
+  tr[data-state="bl"] td.c-id { border-left-color: var(--block); }
+
+  .c-id span {
+    font-family: var(--f-mono); font-size: 11.5px; font-weight: 600;
+    color: var(--accent-ink); background: var(--accent-soft);
+    padding: 2px 6px; border-radius: 3px; white-space: nowrap;
+  }
+  td.c-exp { width: 38%; }
+  td.c-exp code {
+    display: block; background: var(--slab); color: var(--slab-ink);
+    padding: 8px 10px; border-radius: 3px;
+    font-size: 12px; line-height: 1.55;
+    white-space: pre-wrap; word-break: break-word;
+  }
+  td.c-esp { width: 30%; font-size: 13.5px; line-height: 1.5; }
+  td.c-esp .verdict {
+    font-family: var(--f-mono); font-weight: 600; font-size: 12px;
+    padding: 1px 5px; border-radius: 3px; margin-right: 4px;
+  }
+  td.c-esp .verdict.ok { background: var(--pass-soft); color: var(--pass); }
+  td.c-esp .verdict.err { background: var(--fail-soft); color: var(--fail); }
+  td.c-esp .flag {
+    display: inline-block; font-family: var(--f-display);
+    font-size: 9.5px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; padding: 2px 6px;
+    border-radius: 3px; margin-top: 6px;
+  }
+  td.c-esp .flag.defect { background: var(--fail-soft); color: var(--fail); }
+  td.c-esp .flag.gain { background: var(--accent-soft); color: var(--accent-ink); }
+  td.c-esp .flag.limit { background: var(--surface-2); color: var(--ink-soft); }
+
+  td.c-res { width: 22%; }
+  td.c-res textarea {
+    width: 100%; min-height: 54px;
+    font-family: var(--f-mono); font-size: 12px; line-height: 1.5;
+    color: var(--ink); background: var(--ground);
+    border: 1px solid var(--rule-strong); border-radius: 3px;
+    padding: 6px 8px; resize: vertical;
+  }
+  td.c-res textarea::placeholder { color: var(--ink-faint); }
+  td.c-res textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+
+  td.c-est { width: 96px; }
+  .seg { display: flex; }
+  .seg button {
+    font-family: var(--f-mono); font-size: 12px; font-weight: 600;
+    width: 30px; padding: 6px 0; cursor: pointer;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface); color: var(--ink-faint);
+    margin-left: -1px;
+  }
+  .seg button:first-child { border-radius: 3px 0 0 3px; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 3px 3px 0; }
+  .seg button:hover { color: var(--ink); }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 1; }
+  .seg button[aria-pressed="true"] { z-index: 1; }
+  .seg button[data-v="ok"][aria-pressed="true"] { background: var(--pass); border-color: var(--pass); color: #fff; }
+  .seg button[data-v="no"][aria-pressed="true"] { background: var(--fail); border-color: var(--fail); color: #fff; }
+  .seg button[data-v="bl"][aria-pressed="true"] { background: var(--block); border-color: var(--block); color: #fff; }
+
+  /* ── Hallazgos ───────────────────────────────────────────────── */
+
+  .finding {
+    background: var(--surface); border: 1px solid var(--rule);
+    border-radius: 4px; padding: 18px 20px; margin: 0 0 14px;
+  }
+  .finding-head { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 8px; }
+  .fid { font-family: var(--f-mono); font-size: 12px; font-weight: 600; color: var(--ink-faint); }
+  .finding h4 { font-family: var(--f-display); font-size: 16px; font-weight: 600; margin: 0; flex: 1 1 240px; }
+  .sev {
+    font-family: var(--f-display); font-size: 10px; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 7px; border-radius: 3px;
+  }
+  .sev.alta { background: var(--fail-soft); color: var(--fail); }
+  .sev.media { background: var(--block-soft); color: var(--block); }
+  .sev.baja { background: var(--surface-2); color: var(--ink-soft); }
+  .finding p { font-size: 14.5px; margin-bottom: 10px; }
+  .finding p:last-child { margin-bottom: 0; }
+
+  footer.end {
+    border-top: 1px solid var(--rule); padding-top: 20px;
+    color: var(--ink-faint); font-size: 13.5px;
+  }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    nav.rail { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+  @media print {
+    .tally, nav.rail, .seg { display: none; }
+    .shell { grid-template-columns: 1fr; padding: 0; }
+    .finding { box-shadow: none; break-inside: avoid; }
+    pre.repl, td.c-exp code { background: #fff; color: #000; border: 1px solid #999; }
+  }
+</style>
+
+<div class="tally">
+  <div class="tally-in">
+    <span class="tally-name">Bolsillos · Unitarias</span>
+    <div class="pips">
+      <span class="pip ok">Aprobados <b id="p-ok">0</b></span>
+      <span class="pip no">Fallidos <b id="p-no">0</b></span>
+      <span class="pip bl">Bloqueados <b id="p-bl">0</b></span>
+      <span class="pip">Pendientes <b id="p-pe">69</b></span>
+    </div>
+    <button class="btn" id="reset" type="button">Limpiar registro</button>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Secciones">
+    <span class="rail-label">Arranque</span>
+    <a href="#repl">REPL y ayudantes</a>
+    <span class="rail-label">Parte A · sin dependencias</span>
+    <a href="#pocket-c">Pocket · construcción <span class="n" id="n-pocket-c">0/7</span></a>
+    <a href="#pocket-m">Pocket · mutadores <span class="n" id="n-pocket-m">0/6</span></a>
+    <a href="#account">Account <span class="n" id="n-account">0/4</span></a>
+    <a href="#schemas">Schemas <span class="n" id="n-schemas">0/15</span></a>
+    <span class="rail-label">Parte B · repos reales</span>
+    <a href="#setup">Preparación</a>
+    <a href="#crear">Crear <span class="n" id="n-crear">0/9</span></a>
+    <a href="#actualizar">Actualizar <span class="n" id="n-actualizar">0/10</span></a>
+    <a href="#eliminar">Eliminar <span class="n" id="n-eliminar">0/4</span></a>
+    <a href="#transferir">Transferir <span class="n" id="n-transferir">0/9</span></a>
+    <a href="#consultar">Consultar <span class="n" id="n-consultar">0/5</span></a>
+    <span class="rail-label">Cierre</span>
+    <a href="#limpieza">Limpieza</a>
+    <a href="#hallazgos">Hallazgos</a>
+  </nav>
+
+  <main>
+    <header class="lede">
+      <p class="eyebrow">Validación y Verificación · FuBank</p>
+      <h1>Pruebas unitarias manuales del módulo Bolsillos</h1>
+      <p class="standfirst">
+        69 casos escritos a mano en el REPL de <code>tsx</code>. Sin mocks, sin dobles y sin
+        framework de pruebas: cada caso es una expresión que se teclea en la consola y cuyo
+        resultado se anota.
+      </p>
+      <dl class="meta">
+        <div><dt>Nivel</dt><dd>Unitario</dd></div>
+        <div><dt>Casos</dt><dd>69</dd></div>
+        <div><dt>Parte A</dt><dd>32 · aisladas</dd></div>
+        <div><dt>Parte B</dt><dd>37 · repos reales</dd></div>
+        <div><dt>Vehículo</dt><dd>npx tsx</dd></div>
+        <div><dt>Dobles usados</dt><dd>0</dd></div>
+      </dl>
+    </header>
+
+    <section id="repl">
+      <h2>Arranque del REPL</h2>
+      <p class="sec-note">
+        Las unidades del módulo se parten en dos según sus dependencias, y el protocolo las
+        trata por separado porque el grado de aislamiento no es el mismo.
+      </p>
+
+      <div class="scroll">
+        <table class="info">
+          <thead><tr><th>Parte</th><th>Qué contiene</th><th>Aislamiento</th><th class="num">Casos</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>A</b></td>
+              <td>Entidades <code>Pocket</code> y <code>Account</code>, y los schemas de validación</td>
+              <td>Total: no colaboran con nada, no hay qué sustituir</td>
+              <td class="num">32</td>
+            </tr>
+            <tr>
+              <td><b>B</b></td>
+              <td>Los cinco casos de uso del módulo</td>
+              <td>Aislados de Express, rutas, middleware y Zod; <b>no</b> de la base de datos</td>
+              <td class="num">37</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <b>Sobre el aislamiento de la Parte B.</b> Los casos de uso reciben los repositorios
+        por constructor: no se pueden instanciar sin pasarles algo. Se les inyectan los
+        repositorios Supabase reales, no dobles. Un fallo en la Parte B puede originarse en
+        el caso de uso o en el repositorio, y hay que distinguirlo al registrar el resultado.
+        La Parte A no tiene esa ambigüedad.
+      </div>
+
+      <h3>Lo que se gana respecto de probar por HTTP</h3>
+      <p>
+        Al invocar el método directamente, los schemas Zod no intervienen. Tres ramas de
+        error que por HTTP eran inalcanzables aquí sí se ejecutan: las cubren
+        <b>CU-CR-01</b>, <b>CU-AC-03</b> y <b>CU-TR-01</b>.
+      </p>
+
+      <h3>Abrir el REPL</h3>
+      <pre class="repl"><span class="cm"># desde una terminal interactiva: el REPL solo abre si hay TTY</span>
+cd backend
+npx tsx</pre>
+      <p>
+        Al primer <code>require</code> que cargue la configuración aparece una línea como
+        <code>◇ injected env (10) from .env</code>: es <code>dotenv</code> leyendo
+        <code>backend/.env</code>, es normal. Si en cambio el proceso se cierra solo, ese
+        archivo está incompleto — <code>env.ts</code> valida las variables y llama a
+        <code>process.exit(1)</code>.
+      </p>
+
+      <h3>Bloque de arranque</h3>
+      <p>
+        Pegar tal cual. La Parte A solo necesita las tres primeras líneas; el resto hace
+        falta a partir de la Parte B.
+      </p>
+      <pre class="repl"><span class="kw">var</span> { Pocket } = require(<span class="str">'./src/domain/entities/Pocket'</span>)
+<span class="kw">var</span> { Account, AccountType, AccountStatus } = require(<span class="str">'./src/domain/entities/Account'</span>)
+<span class="kw">var</span> V = require(<span class="str">'./src/presentation/validators/pocket.validators'</span>)
+
+<span class="kw">var</span> supabase = require(<span class="str">'./src/infrastructure/database/supabase.client'</span>).default
+<span class="kw">var</span> { SupabaseAccountRepository } = require(<span class="str">'./src/infrastructure/repositories/SupabaseAccountRepository'</span>)
+<span class="kw">var</span> { SupabasePocketRepository } = require(<span class="str">'./src/infrastructure/repositories/SupabasePocketRepository'</span>)
+<span class="kw">var</span> { SupabaseNotificationRepository } = require(<span class="str">'./src/infrastructure/repositories/SupabaseNotificationRepository'</span>)
+<span class="kw">var</span> { SupabaseUserRepository } = require(<span class="str">'./src/infrastructure/repositories/SupabaseUserRepository'</span>)
+
+<span class="kw">var</span> accRepo = <span class="kw">new</span> SupabaseAccountRepository(supabase)
+<span class="kw">var</span> pocRepo = <span class="kw">new</span> SupabasePocketRepository(supabase)
+<span class="kw">var</span> notRepo = <span class="kw">new</span> SupabaseNotificationRepository(supabase)
+<span class="kw">var</span> usrRepo = <span class="kw">new</span> SupabaseUserRepository(supabase)
+
+<span class="kw">var</span> { CreatePocket } = require(<span class="str">'./src/application/use-cases/pocket/CreatePocket'</span>)
+<span class="kw">var</span> { UpdatePocket } = require(<span class="str">'./src/application/use-cases/pocket/UpdatePocket'</span>)
+<span class="kw">var</span> { DeletePocket } = require(<span class="str">'./src/application/use-cases/pocket/DeletePocket'</span>)
+<span class="kw">var</span> { TransferPocketBalance } = require(<span class="str">'./src/application/use-cases/pocket/TransferPocketBalance'</span>)
+<span class="kw">var</span> { GetAccountPockets } = require(<span class="str">'./src/application/use-cases/pocket/GetAccountPockets'</span>)
+<span class="kw">var</span> { CreateAccount } = require(<span class="str">'./src/application/use-cases/account/CreateAccount'</span>)
+<span class="kw">var</span> { DepositMoney } = require(<span class="str">'./src/application/use-cases/account/DepositMoney'</span>)
+
+<span class="kw">var</span> crear = <span class="kw">new</span> CreatePocket(accRepo, pocRepo, notRepo)
+<span class="kw">var</span> actualizar = <span class="kw">new</span> UpdatePocket(accRepo, pocRepo, notRepo)
+<span class="kw">var</span> eliminar = <span class="kw">new</span> DeletePocket(accRepo, pocRepo, notRepo)
+<span class="kw">var</span> transferir = <span class="kw">new</span> TransferPocketBalance(accRepo, pocRepo, notRepo)
+<span class="kw">var</span> consultar = <span class="kw">new</span> GetAccountPockets(accRepo, pocRepo)
+<span class="kw">var</span> crearCuenta = <span class="kw">new</span> CreateAccount(accRepo)
+<span class="kw">var</span> depositar = <span class="kw">new</span> DepositMoney(accRepo)</pre>
+
+      <p>Comprobar que quedó montado — debe imprimir <code>true</code>:</p>
+      <pre class="repl">[crear, actualizar, eliminar, transferir, consultar].every(u => <span class="kw">typeof</span> u.execute === <span class="str">'function'</span>)</pre>
+
+      <h3>Ayudantes</h3>
+      <pre class="repl"><span class="kw">var</span> ver = (p) => p.then(r => console.log(<span class="str">'OK   '</span>, JSON.stringify(r &amp;&amp; r.toPublic ? r.toPublic() : r, null, 1))).catch(e => console.log(<span class="str">'ERROR'</span>, e.code, <span class="str">'| HTTP'</span>, e.statusCode, <span class="str">'|'</span>, e.message))
+
+<span class="kw">var</span> lanza = (fn) => { <span class="kw">try</span> { <span class="kw">var</span> r = fn(); console.log(<span class="str">'SIN ERROR ->'</span>, JSON.stringify(r)); } <span class="kw">catch</span> (e) { console.log(<span class="str">'ERROR'</span>, e.code, <span class="str">'| HTTP'</span>, e.statusCode, <span class="str">'|'</span>, e.message); } }
+
+<span class="kw">var</span> val = (schema, datos) => { <span class="kw">var</span> r = schema.safeParse(datos); console.log(r.success ? <span class="str">'ACEPTA '</span> + JSON.stringify(r.data) : <span class="str">'RECHAZA '</span> + r.error.issues.map(i => (i.path.join(<span class="str">'.'</span>) || <span class="str">'(raiz)'</span>) + <span class="str">': '</span> + i.message).join(<span class="str">' ; '</span>)); }</pre>
+
+      <div class="note warn">
+        <b>Por qué todo va con <code>var</code>.</b> Los casos se escriben uno tras otro en la
+        misma sesión y varios reutilizan el mismo nombre. Con <code>const</code> el segundo
+        fallaría con <code>Identifier has already been declared</code> y habría que reiniciar
+        la sesión. <code>var</code> admite redeclaración.
+      </div>
+    </section>
+
+    <section id="pocket-c">
+      <span class="parte">Parte A · sin dependencias</span>
+      <h2>Entidad Pocket — construcción <span class="count">7 casos</span></h2>
+      <p class="sec-note">
+        <code>assertValidAmount</code> exige que el monto sea un <code>number</code>, no
+        <code>NaN</code>, y mayor o igual a cero. <code>Pocket.create</code> además recorta el
+        nombre. Cada caso es autónomo: no hay que preparar nada.
+      </p>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-pocket-c"></tbody></table></div>
+    </section>
+
+    <section id="pocket-m">
+      <span class="parte">Parte A · sin dependencias</span>
+      <h2>Entidad Pocket — mutadores <span class="count">6 casos</span></h2>
+      <p class="sec-note">Preparar una instancia antes de esta sección:</p>
+      <pre class="repl"><span class="kw">var</span> p = Pocket.create({id:<span class="str">'p1'</span>, accountId:<span class="str">'a1'</span>, name:<span class="str">'Vacaciones'</span>, amount:300000})</pre>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-pocket-m"></tbody></table></div>
+    </section>
+
+    <section id="account">
+      <span class="parte">Parte A · sin dependencias</span>
+      <h2>Entidad Account <span class="count">4 casos</span></h2>
+      <p class="sec-note">
+        Los cuatro casos de uso del módulo consultan <code>isOperational()</code> y
+        <code>assertBelongsTo()</code>. Se prueban aquí aislados, sin necesidad de una cuenta
+        persistida. Preparar una fábrica local:
+      </p>
+      <pre class="repl"><span class="kw">var</span> cuenta = (status, userId) => <span class="kw">new</span> Account({id:<span class="str">'a1'</span>, userId:userId||<span class="str">'u1'</span>, accountNumber:<span class="str">'BA1'</span>, accountType:AccountType.AHORROS, balance:1000, status:status, details:null, createdAt:<span class="kw">new</span> Date()})</pre>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-account"></tbody></table></div>
+    </section>
+
+    <section id="schemas">
+      <span class="parte">Parte A · sin dependencias</span>
+      <h2>Schemas de validación <span class="count">15 casos</span></h2>
+      <p class="sec-note">Preparar un UUID de ejemplo:</p>
+      <pre class="repl"><span class="kw">var</span> U = <span class="str">'3f2504e0-4f89-41d3-9a0c-0305e82c3301'</span></pre>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-schemas"></tbody></table></div>
+    </section>
+
+    <section id="setup">
+      <span class="parte">Parte B · repositorios reales</span>
+      <h2>Preparación <span class="count">5 pasos · no cuentan en el marcador</span></h2>
+
+      <div class="note warn">
+        <b>Advertencia.</b> Desde aquí se escribe en la base de datos real: se crean cuentas,
+        bolsillos y notificaciones que quedan persistidos. Ejecutar contra un proyecto de
+        Supabase de desarrollo, nunca contra producción.
+      </div>
+
+      <h3>B-SETUP-01 · Obtener el USER_ID</h3>
+      <p>Usar un usuario que ya exista. Buscarlo por correo y copiar su <code>id</code>:</p>
+      <pre class="repl">ver(usrRepo.findByEmail(<span class="str">'tu-correo@ejemplo.com'</span>))
+
+<span class="kw">var</span> USER_ID = <span class="str">'...'</span>
+<span class="kw">var</span> FAKE = <span class="str">'00000000-0000-4000-8000-000000000000'</span>
+<span class="kw">var</span> AJENO = <span class="str">'11111111-1111-4111-8111-111111111111'</span></pre>
+      <div class="note">
+        <code>AJENO</code> no necesita existir: <code>assertBelongsTo</code> compara el
+        <code>userId</code> del DTO contra el dueño de la cuenta y lanza antes de consultar
+        nada más. Por eso no hace falta registrar un segundo usuario para los casos de
+        autorización.
+      </div>
+
+      <h3>B-SETUP-02 · Crear las tres cuentas</h3>
+      <p>Ejecutar tres veces y copiar los <code>id</code>. Cada una sale con <code>balance: 0</code> y <code>status: "ACTIVA"</code>.</p>
+      <pre class="repl">ver(crearCuenta.execute({ userId: USER_ID, type: <span class="str">'AHORROS'</span> }))
+
+<span class="kw">var</span> ACC1 = <span class="str">'...'</span>
+<span class="kw">var</span> ACC2 = <span class="str">'...'</span>
+<span class="kw">var</span> ACC3 = <span class="str">'...'</span></pre>
+
+      <h3>B-SETUP-03 · Depositar los fondos</h3>
+      <pre class="repl">ver(depositar.execute({ userId: USER_ID, accountId: ACC1, amount: 1000000 }))
+ver(depositar.execute({ userId: USER_ID, accountId: ACC2, amount: 200000 }))</pre>
+      <p>
+        <code>ACC3</code> se deja en $0 y sin bolsillos: es la cuenta vacía de CU-CO-04.
+        <code>DepositMoney</code> se construyó con un solo argumento, así que no registra
+        transacción ni notificación — menos efectos colaterales que limpiar después.
+      </p>
+
+      <h3>B-SETUP-04 · Bolsillo auxiliar de ACC2</h3>
+      <p>Copiar el <code>id</code> en <code>OTRA</code>. Sirve para CU-TR-05.</p>
+      <pre class="repl">ver(crear.execute({ userId: USER_ID, accountId: ACC2, name: <span class="str">'Otra cuenta'</span>, amount: 50000 }))</pre>
+
+      <div class="scroll">
+        <table class="info">
+          <thead><tr><th>Cuenta</th><th class="num">Disponible</th><th class="num">Reservado</th><th class="num">Total</th></tr></thead>
+          <tbody>
+            <tr><td><code>ACC1</code></td><td class="num">1.000.000</td><td class="num">0</td><td class="num">1.000.000</td></tr>
+            <tr><td><code>ACC2</code></td><td class="num">150.000</td><td class="num">50.000</td><td class="num">200.000</td></tr>
+            <tr><td><code>ACC3</code></td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>B-SETUP-05 · (Opcional) Cuenta bloqueada</h3>
+      <p>
+        Ni la API ni los casos de uso exponen forma de bloquear una cuenta, así que el estado
+        se cambia a mano: Supabase → Table editor → tabla <code>accounts</code> → fila
+        <code>ACC3</code> → columna <code>status</code> de <code>ACTIVA</code> a
+        <code>BLOQUEADA</code>. Solo hace falta para CU-CR-08; si se omite, ese caso se marca
+        Bloqueado. Devolver <code>ACC3</code> a <code>ACTIVA</code> antes de CU-CO-04.
+      </p>
+    </section>
+
+    <section id="crear">
+      <span class="parte">Parte B · repositorios reales</span>
+      <h2>CreatePocket.execute <span class="count">9 casos</span></h2>
+      <p class="sec-note">
+        Estado inicial: <code>ACC1</code> disponible $1.000.000, reservado $0, sin bolsillos.
+        Los cuatro primeros casos no modifican nada; a partir de CU-CR-05 el estado avanza.
+      </p>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-crear"></tbody></table></div>
+    </section>
+
+    <section id="actualizar">
+      <span class="parte">Parte B · repositorios reales</span>
+      <h2>UpdatePocket.execute <span class="count">10 casos</span></h2>
+      <p class="sec-note">
+        Estado inicial: <code>ACC1</code> disponible $500.000, reservado $500.000
+        (<code>VAC</code> $300.000, <code>EST</code> $200.000).
+      </p>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-actualizar"></tbody></table></div>
+      <p>Comprobar el saldo al terminar — debe imprimir <code>"balance":500000</code>:</p>
+      <pre class="repl">ver(accRepo.findById(ACC1))</pre>
+    </section>
+
+    <section id="eliminar">
+      <span class="parte">Parte B · repositorios reales</span>
+      <h2>DeletePocket.execute <span class="count">4 casos</span></h2>
+      <p class="sec-note">Estado inicial: <code>ACC1</code> disponible $500.000, reservado $500.000.</p>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-eliminar"></tbody></table></div>
+      <h3>Restauración antes de transferir</h3>
+      <p>
+        Transferir necesita dos bolsillos en <code>ACC1</code>. Recrear el que se borró y
+        copiar el nuevo <code>id</code> en <code>EST</code>:
+      </p>
+      <pre class="repl">ver(crear.execute({ userId: USER_ID, accountId: ACC1, name: <span class="str">'Estudio'</span>, amount: 200000 }))</pre>
+    </section>
+
+    <section id="transferir">
+      <span class="parte">Parte B · repositorios reales</span>
+      <h2>TransferPocketBalance.execute <span class="count">9 casos</span></h2>
+      <p class="sec-note">
+        Una transferencia entre bolsillos <b>no altera el saldo disponible de la cuenta</b>:
+        solo mueve dinero entre dos reservas. El disponible debe seguir en $500.000 al
+        terminar la sección.
+      </p>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-transferir"></tbody></table></div>
+    </section>
+
+    <section id="consultar">
+      <span class="parte">Parte B · repositorios reales</span>
+      <h2>GetAccountPockets.execute <span class="count">5 casos</span></h2>
+      <p class="sec-note">
+        Estado inicial: <code>ACC1</code> disponible $500.000, <code>VAC</code> $0,
+        <code>EST</code> $500.000.
+      </p>
+      <div class="scroll"><table class="casos"><thead><tr><th>ID</th><th>Expresión en el REPL</th><th>Resultado esperado</th><th>Resultado obtenido</th><th>Est.</th></tr></thead><tbody id="host-consultar"></tbody></table></div>
+    </section>
+
+    <section id="limpieza">
+      <h2>Limpieza posterior</h2>
+      <p class="sec-note">
+        Los datos de la Parte B quedan en la base real. Desde el Table editor de Supabase, en
+        este orden:
+      </p>
+      <ol>
+        <li><code>pockets</code> — borrar las filas cuyo <code>account_id</code> sea <code>ACC1</code>, <code>ACC2</code> o <code>ACC3</code>.</li>
+        <li><code>notifications</code> — borrar las notificaciones de tipo <code>BOLSILLO</code> generadas en la corrida.</li>
+        <li><code>account_details</code> y luego <code>accounts</code> — borrar las tres cuentas.</li>
+      </ol>
+      <p>El usuario no se toca: se reutilizó uno existente.</p>
+    </section>
+
+    <section id="hallazgos">
+      <h2>Hallazgos</h2>
+      <p class="sec-note">
+        Los cuatro primeros se comprobaron ejecutando las unidades puras; el resto se derivan
+        del código. Ninguno se corrigió: el alcance acordado es corregir las pruebas, no el
+        código de producción.
+      </p>
+      <div id="host-hallazgos"></div>
+    </section>
+
+    <footer class="end">
+      <p>
+        Lo registrado en esta página se guarda solo en este navegador. Para la entrega,
+        trasladar los resultados al informe o imprimir la página una vez completada.
+      </p>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var KEY = "fubank-bolsillos-unitarias-v1";
+
+  function ok(t) { return '<span class="verdict ok">OK</span>' + t; }
+  function err(t) { return '<span class="verdict err">ERROR</span>' + t; }
+
+  var GRUPOS = {
+    "pocket-c": [
+      ["PU-01", "lanza(() => Pocket.create({id:'p',accountId:'a',name:'  Vacaciones  ',amount:100}).name)",
+       'SIN ERROR -&gt; "Vacaciones" — el factory recorta los espacios'],
+      ["PU-02", "lanza(() => Pocket.create({id:'p',accountId:'a',name:'x',amount:0}).amount)",
+       'SIN ERROR -&gt; 0 — valor límite inferior, se acepta<span class="flag limit">Valor límite</span>'],
+      ["PU-03", "lanza(() => Pocket.create({id:'p',accountId:'a',name:'x',amount:-1}))",
+       err(' INVALID_POCKET_AMOUNT | HTTP 400 | El monto del bolsillo debe ser un número mayor o igual a cero')],
+      ["PU-04", "lanza(() => Pocket.create({id:'p',accountId:'a',name:'x',amount:NaN}))",
+       err(' INVALID_POCKET_AMOUNT') + ' — <code>Number.isNaN</code> lo rechaza'],
+      ["PU-05", "lanza(() => Pocket.create({id:'p',accountId:'a',name:'x',amount:'100'}))",
+       err(' INVALID_POCKET_AMOUNT') + ' — la comprobación es <code>typeof !== \'number\'</code>, así que una cadena numérica también se rechaza'],
+      ["PU-06", "lanza(() => Pocket.create({id:'p',accountId:'a',name:'',amount:1}).name)",
+       '<b>Por la regla:</b> ' + err(' INVALID_POCKET_NAME') + '.<br><b>El código no valida el nombre al construir</b>, así que devolverá <code>SIN ERROR -&gt; ""</code>. Registrar Fallido.<span class="flag defect">Defecto D-01</span>'],
+      ["PU-07", "lanza(() => Object.keys(Pocket.create({id:'p',accountId:'a',name:'x',amount:1}).toPublic()).join(','))",
+       'SIN ERROR -&gt; "id,accountId,name,amount,createdAt,updatedAt" — exactamente seis campos, ninguno interno']
+    ],
+    "pocket-m": [
+      ["PU-08", "lanza(() => { p.updateAmount(0); return p.amount })",
+       'SIN ERROR -&gt; 0 — el cero es válido también al mutar'],
+      ["PU-09", "lanza(() => p.updateAmount(-1))", err(' INVALID_POCKET_AMOUNT | HTTP 400')],
+      ["PU-10", "lanza(() => p.updateAmount(NaN))", err(' INVALID_POCKET_AMOUNT | HTTP 400')],
+      ["PU-11", "lanza(() => { p.updateName('  Bici  '); return p.name })",
+       'SIN ERROR -&gt; "Bici" — recorta al mutar'],
+      ["PU-12", "lanza(() => p.updateName('   '))",
+       err(' INVALID_POCKET_NAME | HTTP 400 | El nombre del bolsillo no puede estar vacío') + ' — aquí sí valida, a diferencia de PU-06'],
+      ["PU-13", "var q = Pocket.create({id:'q',accountId:'a',name:'X',amount:10}); var t0 = q.updatedAt.getTime(); q.updateAmount(20); q.updatedAt.getTime() >= t0",
+       '<code>true</code> — mutar refresca <code>updatedAt</code>']
+    ],
+    "account": [
+      ["AU-01", "cuenta(AccountStatus.ACTIVA).isOperational()", '<code>true</code>'],
+      ["AU-02", "[cuenta(AccountStatus.BLOQUEADA).isOperational(), cuenta(AccountStatus.CERRADA).isOperational()]",
+       '<code>[ false, false ]</code> — solo ACTIVA opera'],
+      ["AU-03", "lanza(() => { cuenta(AccountStatus.ACTIVA,'u1').assertBelongsTo('u1'); return 'sin excepcion' })",
+       'SIN ERROR -&gt; "sin excepcion" — el dueño pasa'],
+      ["AU-04", "lanza(() => cuenta(AccountStatus.ACTIVA,'u1').assertBelongsTo('u2'))",
+       err(' FORBIDDEN | HTTP 403 | No tienes permiso para acceder a esta cuenta')]
+    ],
+    "schemas": [
+      ["VU-01", "val(V.createPocketSchema, {accountId:U,name:'Vacaciones',amount:300000})",
+       'ACEPTA con <code>"amount":300000</code>'],
+      ["VU-02", "val(V.createPocketSchema, {accountId:U,name:'V',amount:'300000'})",
+       'ACEPTA con <code>"amount":300000</code> — <code>z.coerce.number()</code> convierte la cadena'],
+      ["VU-03", "val(V.createPocketSchema, {accountId:U,name:'V',amount:true})",
+       '<b>Por la regla:</b> RECHAZA, un booleano no es un monto.<br><b>El código lo coacciona a 1</b>, así que imprimirá <code>ACEPTA</code> con <code>"amount":1</code>. Registrar Fallido.<span class="flag defect">Defecto D-02</span>'],
+      ["VU-04", "val(V.createPocketSchema, {accountId:U,name:'V',amount:-1})",
+       'RECHAZA <code>amount: El monto del bolsillo no puede ser negativo</code>'],
+      ["VU-05", "val(V.createPocketSchema, {accountId:'abc',name:'V',amount:1})",
+       'RECHAZA <code>accountId: accountId debe ser un UUID válido</code>'],
+      ["VU-06", "val(V.createPocketSchema, {accountId:U,name:'',amount:1})",
+       'RECHAZA <code>name: El nombre del bolsillo es obligatorio</code>'],
+      ["VU-07", "val(V.createPocketSchema, {accountId:U,name:'   ',amount:1})",
+       '<b>Por la regla:</b> RECHAZA, un nombre de solo espacios está vacío.<br><b>El schema valida longitud pero no contenido</b>, así que imprimirá <code>ACEPTA</code>. Registrar Fallido.<span class="flag defect">Defecto D-03</span>'],
+      ["VU-08", "val(V.createPocketSchema, {accountId:U,name:'A'.repeat(150),amount:1})",
+       'ACEPTA — 150 es el límite superior y se admite<span class="flag limit">Valor límite</span>'],
+      ["VU-09", "val(V.createPocketSchema, {accountId:U,name:'A'.repeat(151),amount:1})",
+       'RECHAZA <code>name: El nombre del bolsillo no puede superar 150 caracteres</code><span class="flag limit">Valor límite</span>'],
+      ["VU-10", "val(V.updatePocketSchema, {})",
+       'RECHAZA <code>(raiz): Debes enviar al menos un campo para actualizar</code>'],
+      ["VU-11", "val(V.updatePocketSchema, {amount:'500'})",
+       '<b>Por coherencia con VU-02:</b> ACEPTA con 500.<br><b>El schema usa <code>z.number()</code> sin coerce</b>, así que imprimirá <code>RECHAZA amount: Invalid input: expected number, received string</code>. Registrar Fallido.<span class="flag defect">Defecto D-04</span>'],
+      ["VU-12", "val(V.updatePocketSchema, {amount:0})",
+       'ACEPTA <code>{"amount":0}</code> — el cero es un ajuste válido'],
+      ["VU-13", "val(V.transferPocketSchema, {fromPocketId:U,toPocketId:U,amount:0})",
+       'RECHAZA <code>amount: El monto de transferencia debe ser mayor que cero</code> — la condición es <code>gt(0)</code>. Contrasta con VU-12: al ajustar el cero vale, al transferir no<span class="flag limit">Valor límite</span>'],
+      ["VU-14", "val(V.transferPocketSchema, {fromPocketId:U,toPocketId:U,amount:0.01})",
+       'ACEPTA con <code>"amount":0.01</code> — se admiten fracciones de peso'],
+      ["VU-15", "val(V.transferPocketSchema, {fromPocketId:'abc',toPocketId:U,amount:100})",
+       'RECHAZA <code>fromPocketId: fromPocketId debe ser un UUID válido</code>']
+    ],
+    "crear": [
+      ["CU-CR-01", "ver(crear.execute({userId:USER_ID, accountId:ACC1, name:'Negativo', amount:-1}))",
+       err(' INVALID_POCKET_AMOUNT | HTTP 400 | El monto del bolsillo no puede ser negativo') + ' — corta en la primera línea, sin consultar la cuenta<span class="flag gain">Inalcanzable por HTTP</span>'],
+      ["CU-CR-02", "ver(crear.execute({userId:USER_ID, accountId:FAKE, name:'Fantasma', amount:50000}))",
+       err(' ACCOUNT_NOT_FOUND | HTTP 404 | Cuenta no encontrada')],
+      ["CU-CR-03", "ver(crear.execute({userId:AJENO, accountId:ACC1, name:'Ajena', amount:10000}))",
+       err(' FORBIDDEN | HTTP 403 | No tienes permiso para acceder a esta cuenta')],
+      ["CU-CR-04", "ver(crear.execute({userId:USER_ID, accountId:ACC1, name:'Excede', amount:1000001}))",
+       err(' INSUFFICIENT_AVAILABLE_BALANCE | HTTP 400') + ' — con reservado $0 el máximo aceptable es el disponible, y se pide uno más<span class="flag limit">Valor límite</span>'],
+      ["CU-CR-05", "ver(crear.execute({userId:USER_ID, accountId:ACC1, name:'Vacaciones', amount:300000}))",
+       ok(' con <code>"name":"Vacaciones"</code> y <code>"amount":300000</code>. Copiar el <code>id</code> en <code>VAC</code>')],
+      ["CU-CR-06", "ver(accRepo.findById(ACC1))",
+       ok(' con <code>"balance":700000</code> — el monto se descontó del disponible')],
+      ["CU-CR-07", "ver(crear.execute({userId:USER_ID, accountId:ACC1, name:'Estudio', amount:200000}))",
+       ok(' con <code>"amount":200000</code>. Copiar el <code>id</code> en <code>EST</code>. El disponible queda en $500.000')],
+      ["CU-CR-08", "ver(crear.execute({userId:USER_ID, accountId:ACC3, name:'Bloqueada', amount:1000}))",
+       'Requiere B-SETUP-05. ' + err(' ACCOUNT_NOT_OPERATIONAL | HTTP 400 | La cuenta no está disponible para generar bolsillos') + '. Sin ese paso, marcar Bloqueado'],
+      ["CU-CR-09", "ver(crear.execute({userId:USER_ID, accountId:ACC1, name:'Emergencia', amount:400000}))",
+       '<b>Precondición:</b> disponible $500.000, reservado $500.000. El monto pedido cabe holgadamente.<br><b>Por la regla:</b> ' + ok(', dejando el disponible en $100.000.') + '<br><b>Lo que hará el código:</b> ' + err(' INSUFFICIENT_AVAILABLE_BALANCE') + ', porque <code>500.000 + 400.000 &gt; 500.000</code>. Registrar Fallido.<span class="flag defect">Defecto D-05</span>']
+    ],
+    "actualizar": [
+      ["CU-AC-01", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC, name:'   '}))",
+       err(' INVALID_POCKET_NAME | HTTP 400 | El nombre del bolsillo no puede estar vacío')],
+      ["CU-AC-02", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC, amount:-100}))",
+       err(' INVALID_POCKET_AMOUNT | HTTP 400 | El monto del bolsillo no puede ser negativo') + '<span class="flag gain">Inalcanzable por HTTP</span>'],
+      ["CU-AC-03", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC}))",
+       err(' NO_CHANGES_PROVIDED | HTTP 400 | No se proporcionaron cambios para el bolsillo') + ' — esta comprobación va al final: primero busca el bolsillo y valida la cuenta<span class="flag gain">Inalcanzable por HTTP</span>'],
+      ["CU-AC-04", "ver(actualizar.execute({userId:USER_ID, pocketId:FAKE, amount:1000}))",
+       err(' POCKET_NOT_FOUND | HTTP 404 | Bolsillo no encontrado')],
+      ["CU-AC-05", "ver(actualizar.execute({userId:AJENO, pocketId:VAC, amount:1000}))",
+       err(' FORBIDDEN | HTTP 403')],
+      ["CU-AC-06", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC, amount:600000}))",
+       ok(' con <code>"amount":600000</code>. El disponible baja a $200.000 y lo reservado sube a $800.000')],
+      ["CU-AC-07", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC, amount:800000}))",
+       ok(' con <code>"amount":800000</code>. Lo reservado iguala el total y el disponible queda en $0; la condición usa <code>&gt;</code> estricto, así que se acepta') + '<span class="flag limit">Valor límite</span>'],
+      ["CU-AC-08", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC, amount:800001}))",
+       err(' INSUFFICIENT_AVAILABLE_BALANCE | HTTP 400 | No tienes saldo disponible suficiente para ajustar este bolsillo') + ' — un peso por encima del total<span class="flag limit">Valor límite</span>'],
+      ["CU-AC-09", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC, amount:300000}))",
+       ok(' con <code>"amount":300000</code>. Bajar el monto libera saldo: el disponible vuelve a $500.000')],
+      ["CU-AC-10", "ver(actualizar.execute({userId:USER_ID, pocketId:VAC, name:'Vacaciones 2026'}))",
+       ok(' con <code>"name":"Vacaciones 2026"</code> y <code>"amount":300000</code> sin cambios. Sin <code>amount</code> no se toca el saldo')]
+    ],
+    "eliminar": [
+      ["CU-EL-01", "ver(eliminar.execute({userId:USER_ID, pocketId:FAKE}))",
+       err(' POCKET_NOT_FOUND | HTTP 404 | Bolsillo no encontrado')],
+      ["CU-EL-02", "ver(eliminar.execute({userId:AJENO, pocketId:EST}))",
+       err(' FORBIDDEN | HTTP 403') + ' — el bolsillo sigue existiendo'],
+      ["CU-EL-03", "ver(eliminar.execute({userId:USER_ID, pocketId:EST}))",
+       ok(' devolviendo el bolsillo borrado (<code>"name":"Estudio"</code>, <code>"amount":200000</code>). El disponible sube a $700.000 y lo reservado baja a $300.000')],
+      ["CU-EL-04", "ver(eliminar.execute({userId:USER_ID, pocketId:EST}))",
+       err(' POCKET_NOT_FOUND | HTTP 404') + ' — el disponible sigue en $700.000: <b>no</b> debe volver a acreditarse el monto']
+    ],
+    "transferir": [
+      ["CU-TR-01", "ver(transferir.execute({userId:USER_ID, fromPocketId:VAC, toPocketId:EST, amount:0}))",
+       err(' INVALID_TRANSFER_AMOUNT | HTTP 400 | El monto de transferencia debe ser mayor que cero') + '<span class="flag gain">Inalcanzable por HTTP</span>'],
+      ["CU-TR-02", "ver(transferir.execute({userId:USER_ID, fromPocketId:VAC, toPocketId:VAC, amount:10000}))",
+       err(' INVALID_TRANSFER_TARGET | HTTP 400 | Los bolsillos de origen y destino deben ser diferentes')],
+      ["CU-TR-03", "ver(transferir.execute({userId:USER_ID, fromPocketId:FAKE, toPocketId:EST, amount:10000}))",
+       err(' SOURCE_POCKET_NOT_FOUND | HTTP 404 | Bolsillo de origen no encontrado')],
+      ["CU-TR-04", "ver(transferir.execute({userId:USER_ID, fromPocketId:VAC, toPocketId:FAKE, amount:10000}))",
+       err(' TARGET_POCKET_NOT_FOUND | HTTP 404 | Bolsillo de destino no encontrado')],
+      ["CU-TR-05", "ver(transferir.execute({userId:USER_ID, fromPocketId:VAC, toPocketId:OTRA, amount:10000}))",
+       err(' POCKETS_DIFFERENT_ACCOUNT | HTTP 400 | Los bolsillos deben pertenecer a la misma cuenta')],
+      ["CU-TR-06", "ver(transferir.execute({userId:AJENO, fromPocketId:VAC, toPocketId:EST, amount:10000}))",
+       err(' FORBIDDEN | HTTP 403') + ' — los dos bolsillos existen y son de la misma cuenta, pero el usuario no es el dueño'],
+      ["CU-TR-07", "ver(transferir.execute({userId:USER_ID, fromPocketId:VAC, toPocketId:EST, amount:300001}))",
+       err(' INSUFFICIENT_POCKET_BALANCE | HTTP 400 | Saldo insuficiente en el bolsillo de origen') + ' — un peso más de lo que tiene el origen<span class="flag limit">Valor límite</span>'],
+      ["CU-TR-08", "ver(transferir.execute({userId:USER_ID, fromPocketId:VAC, toPocketId:EST, amount:100000}))",
+       ok(' con <code>fromPocket.amount = 200000</code> y <code>toPocket.amount = 300000</code>')],
+      ["CU-TR-09", "ver(transferir.execute({userId:USER_ID, fromPocketId:VAC, toPocketId:EST, amount:200000}))",
+       ok(' con <code>fromPocket.amount = 0</code> y <code>toPocket.amount = 500000</code>. Se transfiere el total del origen; la condición es <code>&lt;</code> estricto, así que se acepta') + '<span class="flag limit">Valor límite</span>']
+    ],
+    "consultar": [
+      ["CU-CO-01", "ver(consultar.execute({userId:USER_ID, accountId:FAKE}))",
+       err(' ACCOUNT_NOT_FOUND | HTTP 404 | Cuenta no encontrada')],
+      ["CU-CO-02", "ver(consultar.execute({userId:AJENO, accountId:ACC1}))",
+       err(' FORBIDDEN | HTTP 403') + ' — no debe devolverse ningún bolsillo'],
+      ["CU-CO-03", "ver(consultar.execute({userId:USER_ID, accountId:ACC1}))",
+       ok(' con un arreglo de 2 elementos: <code>"Vacaciones 2026"</code> con <code>amount</code> 0 y <code>"Estudio"</code> con <code>amount</code> 500000, cada uno con los seis campos de <code>toPublic()</code>')],
+      ["CU-CO-04", "ver(consultar.execute({userId:USER_ID, accountId:ACC3}))",
+       ok(' con <code>[]</code>. Una cuenta sin bolsillos devuelve arreglo vacío, no un 404. Requiere <code>ACC3</code> en estado ACTIVA')],
+      ["CU-CO-05", "Promise.all([accRepo.findById(ACC1), pocRepo.getTotalAmountByAccountId(ACC1)]).then(([a, r]) => console.log('disponible', a.balance, '+ reservado', r, '=', a.balance + r))",
+       '<code>disponible 500000 + reservado 500000 = 1000000</code> — tras crear, actualizar, eliminar y transferir, lo reservado más lo disponible sigue siendo lo depositado']
+    ]
+  };
+
+  var HALLAZGOS = [
+    ["D-01", "Pocket no valida el nombre al construir", "media", "PU-06 · <code>src/domain/entities/Pocket.ts</code>",
+     "El constructor llama a <code>assertValidAmount</code> pero no valida el nombre, así que <code>Pocket.create({ name: '' })</code> produce un bolsillo sin nombre. En cambio <code>updateName('')</code> sí lanza <code>INVALID_POCKET_NAME</code>. La misma entidad aplica dos reglas distintas al mismo campo según se cree o se modifique."],
+    ["D-02", "Un booleano se convierte en un monto de $1", "media", "VU-03 · <code>pocket.validators.ts</code>",
+     "<code>amount: z.coerce.number()</code> convierte <code>true</code> en <code>1</code>, así que un cliente que mande un booleano crea un bolsillo de un peso en lugar de recibir un error de validación."],
+    ["D-03", "Un nombre de solo espacios pasa la validación de creación", "baja", "VU-07",
+     "<code>createPocketSchema</code> valida longitud con <code>min(1)</code> pero no recorta, así que <code>\"   \"</code> pasa. Combinado con D-01, un bolsillo puede terminar persistido con nombre vacío."],
+    ["D-04", "amount se trata distinto al crear y al actualizar", "baja", "VU-11",
+     "<code>createPocketSchema</code> usa <code>z.coerce.number()</code> y acepta <code>\"500\"</code>; <code>updatePocketSchema</code> usa <code>z.number()</code> y lo rechaza. La misma entrada da resultados opuestos según la operación."],
+    ["D-05", "El saldo reservado se cuenta dos veces al crear un bolsillo", "alta", "CU-CR-09 · <code>CreatePocket.ts</code>",
+     "La decisión es <code>currentReserved + dto.amount &gt; account.balance</code>, pero <code>account.balance</code> ya es el saldo <b>disponible</b>: lo reservado se descontó al crear los bolsillos anteriores. La comparación suma lo reservado a un valor que ya lo excluye, así que se rechazan bolsillos que sí caben. En cuanto lo reservado supera lo disponible no se puede crear ningún bolsillo nuevo, ni siquiera de $1.<br><br><code>UpdatePocket</code> resuelve el mismo problema correctamente, comparando contra <code>account.balance + totalReserved</code>. Las dos operaciones aplican reglas distintas al mismo invariante."],
+    ["D-06", "No hay forma de bloquear una cuenta desde el código de aplicación", "baja", "CU-CR-08",
+     "<code>Account</code> expone <code>block()</code> y <code>close()</code>, y los cuatro casos de uso comprueban <code>isOperational()</code>, pero ningún caso de uso ni ruta cambia el estado de una cuenta. A nivel de caso de uso esa rama solo se ejercita editando la columna <code>status</code> a mano; a nivel de entidad sí queda cubierta, en AU-02."],
+    ["D-07", "El repositorio de bolsillos tiene un modo de respaldo en memoria", "media", "<code>SupabasePocketRepository.ts</code>",
+     "Si la tabla <code>pockets</code> no existe, el repositorio activa un <code>fallbackStore</code> en memoria a nivel de módulo y sigue operando. Con esa bandera activa los datos no se persisten y se pierden al reiniciar el proceso.<br><br><b>Implicación para la Parte B:</b> si en la consola aparece <code>\"Supabase pockets table is not available. Using in-memory fallback for pockets.\"</code>, los resultados de la Parte B quedan invalidados."]
+  ];
+
+  // ── Estado ───────────────────────────────────────────────────────────────
+
+  var state = {};
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) state = JSON.parse(raw) || {};
+  } catch (e) { state = {}; }
+
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* almacenamiento no disponible */ }
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  // ── Render ───────────────────────────────────────────────────────────────
+
+  var CLAVES = Object.keys(GRUPOS);
+
+  CLAVES.forEach(function (k) {
+    var host = document.getElementById("host-" + k);
+    var html = GRUPOS[k].map(function (c) {
+      return '<tr data-case="' + c[0] + '">' +
+        '<td class="c-id"><span>' + c[0] + "</span></td>" +
+        '<td class="c-exp"><code>' + esc(c[1]) + "</code></td>" +
+        '<td class="c-esp">' + c[2] + "</td>" +
+        '<td class="c-res"><textarea aria-label="Resultado obtenido de ' + c[0] +
+          '" placeholder="Lo que imprimió el REPL"></textarea></td>' +
+        '<td class="c-est"><div class="seg" role="group" aria-label="Estado de ' + c[0] + '">' +
+          '<button type="button" data-v="ok" aria-pressed="false" title="Aprobado">A</button>' +
+          '<button type="button" data-v="no" aria-pressed="false" title="Fallido">F</button>' +
+          '<button type="button" data-v="bl" aria-pressed="false" title="Bloqueado">B</button>' +
+        "</div></td></tr>";
+    }).join("");
+    host.innerHTML = html;
+  });
+
+  document.getElementById("host-hallazgos").innerHTML = HALLAZGOS.map(function (h) {
+    return '<div class="finding"><div class="finding-head">' +
+      '<span class="fid">' + h[0] + "</span>" +
+      "<h4>" + h[1] + "</h4>" +
+      '<span class="sev ' + h[2] + '">' + h[2] + "</span></div>" +
+      "<p><b>Dónde:</b> " + h[3] + "</p><p>" + h[4] + "</p></div>";
+  }).join("");
+
+  // ── Interacción ──────────────────────────────────────────────────────────
+
+  var filas = Array.prototype.slice.call(document.querySelectorAll("tr[data-case]"));
+
+  function aplicar(fila) {
+    var id = fila.getAttribute("data-case");
+    var rec = state[id] || {};
+    var ta = fila.querySelector("textarea");
+    if (ta && typeof rec.txt === "string") ta.value = rec.txt;
+    fila.setAttribute("data-state", rec.v || "");
+    Array.prototype.forEach.call(fila.querySelectorAll(".seg button"), function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-v") === rec.v ? "true" : "false");
+    });
+  }
+
+  function marcador() {
+    var n = { ok: 0, no: 0, bl: 0 };
+    var per = {};
+    CLAVES.forEach(function (k) { per[k] = 0; });
+
+    filas.forEach(function (fila) {
+      var v = (state[fila.getAttribute("data-case")] || {}).v;
+      if (!v) return;
+      n[v]++;
+      var sec = fila.closest("section");
+      if (sec && per.hasOwnProperty(sec.id)) per[sec.id]++;
+    });
+
+    document.getElementById("p-ok").textContent = n.ok;
+    document.getElementById("p-no").textContent = n.no;
+    document.getElementById("p-bl").textContent = n.bl;
+    document.getElementById("p-pe").textContent = filas.length - n.ok - n.no - n.bl;
+
+    CLAVES.forEach(function (k) {
+      var el = document.getElementById("n-" + k);
+      if (el) el.textContent = per[k] + "/" + GRUPOS[k].length;
+    });
+  }
+
+  filas.forEach(function (fila) {
+    var id = fila.getAttribute("data-case");
+    aplicar(fila);
+
+    fila.addEventListener("click", function (ev) {
+      var btn = ev.target.closest(".seg button");
+      if (!btn || !fila.contains(btn)) return;
+      var rec = state[id] || (state[id] = {});
+      var v = btn.getAttribute("data-v");
+      rec.v = rec.v === v ? "" : v;
+      persist();
+      aplicar(fila);
+      marcador();
+    });
+
+    var ta = fila.querySelector("textarea");
+    if (ta) {
+      ta.addEventListener("input", function () {
+        var rec = state[id] || (state[id] = {});
+        rec.txt = ta.value;
+        persist();
+      });
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    state = {};
+    persist();
+    filas.forEach(aplicar);
+    marcador();
+  });
+
+  marcador();
+})();
+</script>
