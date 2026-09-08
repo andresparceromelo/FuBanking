@@ -10,6 +10,12 @@ node_modules/
 # Build
 backend/dist/
 
+# Cobertura de pruebas (c8)
+backend/coverage/
+frontend/coverage/
+.nyc_output/
+.scannerwork/
+
 # Variables de entorno
 .env
 .env.local
