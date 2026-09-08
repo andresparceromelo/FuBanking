@@ -6,6 +6,9 @@ export default defineConfig({
     include: ['src/tests/unit/**/*.test.ts'],
     coverage: {
       provider: 'v8',
+      reporter: ['text', 'lcov'],
+      reportsDirectory: 'coverage',
+      reportOnFailure: true,
       include: [
         'src/domain/entities/LoanApplication.ts',
         'src/application/use-cases/loan/*.ts',

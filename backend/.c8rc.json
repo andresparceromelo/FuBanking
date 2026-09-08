@@ -1,5 +1,5 @@
 {
-  "all": true,
+  "all": false,
   "src": ["src"],
   "include": ["src/**/*.ts"],
   "exclude": [
@@ -9,6 +9,6 @@
     "src/app.ts"
   ],
   "reporter": ["lcov", "text-summary"],
-  "reports-dir": "coverage",
+  "reports-dir": "coverage-bolsillos",
   "clean": true
 }
