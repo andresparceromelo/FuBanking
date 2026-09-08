@@ -36,7 +36,7 @@ describe('RequestPasswordReset — Pruebas de caja blanca (Backend)', () => {
     userRepository = new InMemoryUserRepository();
     tokenService = new FakeTokenService();
     emailService = new FakeEmailService();
-    process.env['CLIENT_URL'] = 'http:
+    process.env['CLIENT_URL'] = 'http://localhost:3000';
     requestReset = new RequestPasswordReset(userRepository, tokenService, emailService);
   });
   test('C1 — email no corresponde a ningún usuario: retorna sin enviar correo', async () => {
