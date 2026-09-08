@@ -1,0 +1,1567 @@
+<title>Protocolo Bolsillos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap">
+
+<style>
+  :root {
+    --ground: #FBFAFC;
+    --surface: #FFFFFF;
+    --surface-2: #F5F2F8;
+    --slab: #211A2B;
+    --slab-ink: #E8E1F0;
+    --ink: #1A1420;
+    --ink-soft: #5C5566;
+    --ink-faint: #8B8496;
+    --rule: #E6E1EC;
+    --rule-strong: #D2C9DC;
+    --accent: #820AD1;
+    --accent-soft: #F4E9FD;
+    --accent-ink: #6A0AAB;
+    --pass: #16714F;
+    --pass-soft: #E3F3EC;
+    --fail: #B32B45;
+    --fail-soft: #FBE8EC;
+    --block: #8F5A0A;
+    --block-soft: #FBF0DC;
+    --shadow: 0 1px 2px rgba(26, 20, 32, .05), 0 8px 24px -12px rgba(26, 20, 32, .18);
+
+    --f-display: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --f-body: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #131019;
+      --surface: #1B1624;
+      --surface-2: #241D30;
+      --slab: #0E0B14;
+      --slab-ink: #DDD4E8;
+      --ink: #ECE7F2;
+      --ink-soft: #ADA4BB;
+      --ink-faint: #7C7389;
+      --rule: #2E2739;
+      --rule-strong: #443A53;
+      --accent: #C079F5;
+      --accent-soft: #2C1B3F;
+      --accent-ink: #D6A5FA;
+      --pass: #56C79C;
+      --pass-soft: #14302A;
+      --fail: #F0839A;
+      --fail-soft: #37161F;
+      --block: #DCA850;
+      --block-soft: #34260F;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .7);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #131019;
+    --surface: #1B1624;
+    --surface-2: #241D30;
+    --slab: #0E0B14;
+    --slab-ink: #DDD4E8;
+    --ink: #ECE7F2;
+    --ink-soft: #ADA4BB;
+    --ink-faint: #7C7389;
+    --rule: #2E2739;
+    --rule-strong: #443A53;
+    --accent: #C079F5;
+    --accent-soft: #2C1B3F;
+    --accent-ink: #D6A5FA;
+    --pass: #56C79C;
+    --pass-soft: #14302A;
+    --fail: #F0839A;
+    --fail-soft: #37161F;
+    --block: #DCA850;
+    --block-soft: #34260F;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .7);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--f-body);
+    font-size: 16px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Barra de estado ─────────────────────────────────────────── */
+
+  .tally {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--ground) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .tally-in {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .tally-name {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    margin-right: auto;
+  }
+  .pips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pip {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    padding: 3px 9px;
+    border-radius: 3px;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink-soft);
+    background: var(--surface);
+  }
+  .pip b { font-weight: 600; }
+  .pip.ok { color: var(--pass); border-color: color-mix(in srgb, var(--pass) 40%, transparent); background: var(--pass-soft); }
+  .pip.no { color: var(--fail); border-color: color-mix(in srgb, var(--fail) 40%, transparent); background: var(--fail-soft); }
+  .pip.bl { color: var(--block); border-color: color-mix(in srgb, var(--block) 40%, transparent); background: var(--block-soft); }
+
+  .btn {
+    font-family: var(--f-display);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    padding: 5px 11px;
+    border-radius: 3px;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    color: var(--ink-soft);
+    cursor: pointer;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent-ink); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ── Estructura ──────────────────────────────────────────────── */
+
+  .shell {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+    display: grid;
+    grid-template-columns: 216px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  nav.rail {
+    position: sticky;
+    top: 64px;
+    padding-top: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+  }
+  .rail-label {
+    font-family: var(--f-display);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding: 0 0 8px;
+  }
+  .rail a {
+    font-family: var(--f-display);
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    border-left: 2px solid transparent;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .rail a:hover { background: var(--surface-2); color: var(--ink); }
+  .rail a:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .rail a .n {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-faint);
+  }
+
+  main { padding-top: 44px; min-width: 0; }
+
+  /* ── Portada ─────────────────────────────────────────────────── */
+
+  header.lede { margin-bottom: 56px; }
+  .eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    margin: 0 0 14px;
+  }
+  h1 {
+    font-family: var(--f-display);
+    font-size: clamp(30px, 4.4vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -.025em;
+    font-weight: 700;
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .standfirst {
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0 0 28px;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .meta div { background: var(--surface); padding: 12px 14px; }
+  .meta dt {
+    font-family: var(--f-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 0 0 4px;
+  }
+  .meta dd {
+    margin: 0;
+    font-family: var(--f-mono);
+    font-size: 13px;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Secciones ───────────────────────────────────────────────── */
+
+  section { margin-bottom: 64px; scroll-margin-top: 68px; }
+
+  h2 {
+    font-family: var(--f-display);
+    font-size: 25px;
+    letter-spacing: -.018em;
+    font-weight: 600;
+    margin: 0 0 6px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--ink);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  h2 .count {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-faint);
+    letter-spacing: 0;
+  }
+  .sec-note {
+    color: var(--ink-soft);
+    font-size: 15px;
+    margin: 14px 0 26px;
+    max-width: 66ch;
+  }
+
+  h3 {
+    font-family: var(--f-display);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin: 34px 0 12px;
+  }
+
+  p { margin: 0 0 14px; max-width: 68ch; }
+  a { color: var(--accent-ink); }
+
+  /* ── Tablas ──────────────────────────────────────────────────── */
+
+  .scroll { overflow-x: auto; margin: 0 0 22px; }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: var(--f-display);
+    font-size: 13.5px;
+    min-width: 460px;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  th {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule-strong);
+    white-space: nowrap;
+  }
+  td.num, th.num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: none; }
+  code {
+    font-family: var(--f-mono);
+    font-size: .87em;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: var(--ink);
+  }
+
+  /* ── Bloque de petición ──────────────────────────────────────── */
+
+  pre.req {
+    font-family: var(--f-mono);
+    font-size: 12.5px;
+    line-height: 1.65;
+    background: var(--slab);
+    color: var(--slab-ink);
+    padding: 14px 16px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 0 0 14px;
+    white-space: pre;
+    tab-size: 2;
+  }
+  pre.req .verb { color: #C079F5; font-weight: 600; }
+  pre.req .hdr { color: #7C7389; }
+  pre.req .str { color: #8FD3B4; }
+  pre.req .key { color: #9FC5F0; }
+
+  /* ── Ficha de caso ───────────────────────────────────────────── */
+
+  .case {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--rule-strong);
+    border-radius: 4px;
+    padding: 18px 20px 16px;
+    margin: 0 0 14px;
+    box-shadow: var(--shadow);
+    scroll-margin-top: 68px;
+  }
+  .case[data-state="ok"] { border-left-color: var(--pass); }
+  .case[data-state="no"] { border-left-color: var(--fail); }
+  .case[data-state="bl"] { border-left-color: var(--block); }
+
+  .case-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .cid {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .04em;
+    color: var(--accent-ink);
+    background: var(--accent-soft);
+    padding: 2px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .ctitle {
+    font-family: var(--f-display);
+    font-size: 16.5px;
+    font-weight: 600;
+    letter-spacing: -.01em;
+    margin: 0;
+    flex: 1 1 260px;
+    min-width: 0;
+  }
+  .flag {
+    font-family: var(--f-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .flag.defect { background: var(--fail-soft); color: var(--fail); }
+  .flag.limit { background: var(--accent-soft); color: var(--accent-ink); }
+  .flag.setup { background: var(--block-soft); color: var(--block); }
+
+  .field { margin: 0 0 10px; font-size: 14.5px; }
+  .field > b {
+    font-family: var(--f-display);
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .field p { margin: 0 0 6px; }
+  .field ol { margin: 4px 0 0; padding-left: 20px; }
+  .field li { margin-bottom: 4px; }
+
+  .note {
+    border-left: 2px solid var(--rule-strong);
+    padding: 2px 0 2px 12px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+  .note.warn { border-left-color: var(--block); }
+
+  .expect {
+    font-family: var(--f-mono);
+    font-size: 13px;
+    background: var(--surface-2);
+    border-radius: 3px;
+    padding: 9px 12px;
+    margin: 0 0 10px;
+    line-height: 1.55;
+  }
+  .st {
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-right: 6px;
+  }
+  .st.s2 { background: var(--pass-soft); color: var(--pass); }
+  .st.s4 { background: var(--fail-soft); color: var(--fail); }
+
+  /* ── Registro de resultado ───────────────────────────────────── */
+
+  .record {
+    border-top: 1px dashed var(--rule-strong);
+    margin-top: 14px;
+    padding-top: 12px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .record textarea {
+    flex: 1 1 300px;
+    min-height: 42px;
+    font-family: var(--f-mono);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--rule-strong);
+    border-radius: 3px;
+    padding: 7px 9px;
+    resize: vertical;
+  }
+  .record textarea::placeholder { color: var(--ink-faint); }
+  .record textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+
+  .seg { display: flex; gap: 0; flex: 0 0 auto; }
+  .seg button {
+    font-family: var(--f-display);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 7px 11px;
+    border: 1px solid var(--rule-strong);
+    background: var(--surface);
+    color: var(--ink-faint);
+    cursor: pointer;
+    margin-left: -1px;
+  }
+  .seg button:first-child { border-radius: 3px 0 0 3px; margin-left: 0; }
+  .seg button:last-child { border-radius: 0 3px 3px 0; }
+  .seg button:hover { color: var(--ink); }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; z-index: 1; }
+  .seg button[aria-pressed="true"] { z-index: 1; }
+  .seg button[data-v="ok"][aria-pressed="true"] { background: var(--pass); border-color: var(--pass); color: var(--surface); }
+  .seg button[data-v="no"][aria-pressed="true"] { background: var(--fail); border-color: var(--fail); color: var(--surface); }
+  .seg button[data-v="bl"][aria-pressed="true"] { background: var(--block); border-color: var(--block); color: var(--surface); }
+
+  /* ── Hallazgos ───────────────────────────────────────────────── */
+
+  .finding {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 18px 20px;
+    margin: 0 0 14px;
+  }
+  .finding-head {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .fid {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-faint);
+  }
+  .finding h4 {
+    font-family: var(--f-display);
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    flex: 1 1 240px;
+  }
+  .sev {
+    font-family: var(--f-display);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 3px;
+  }
+  .sev.alta { background: var(--fail-soft); color: var(--fail); }
+  .sev.media { background: var(--block-soft); color: var(--block); }
+  .sev.baja { background: var(--surface-2); color: var(--ink-soft); }
+  .finding p { font-size: 14.5px; }
+
+  footer.end {
+    border-top: 1px solid var(--rule);
+    padding-top: 20px;
+    color: var(--ink-faint);
+    font-size: 13.5px;
+  }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    nav.rail { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  }
+
+  @media print {
+    .tally, nav.rail, .seg { display: none; }
+    .shell { grid-template-columns: 1fr; padding: 0; }
+    .case, .finding { box-shadow: none; break-inside: avoid; }
+    pre.req { background: #fff; color: #000; border: 1px solid #999; }
+  }
+</style>
+
+<div class="tally">
+  <div class="tally-in">
+    <span class="tally-name">Bolsillos · Backend</span>
+    <div class="pips">
+      <span class="pip ok">Aprobados <b id="p-ok">0</b></span>
+      <span class="pip no">Fallidos <b id="p-no">0</b></span>
+      <span class="pip bl">Bloqueados <b id="p-bl">0</b></span>
+      <span class="pip">Pendientes <b id="p-pe">54</b></span>
+    </div>
+    <button class="btn" id="reset" type="button">Limpiar registro</button>
+  </div>
+</div>
+
+<div class="shell">
+  <nav class="rail" aria-label="Secciones">
+    <span class="rail-label">Protocolo</span>
+    <a href="#entorno">Entorno</a>
+    <a href="#setup">Preparación</a>
+    <a href="#crear">Crear <span class="n" id="n-crear">0/13</span></a>
+    <a href="#actualizar">Actualizar <span class="n" id="n-actualizar">0/14</span></a>
+    <a href="#eliminar">Eliminar <span class="n" id="n-eliminar">0/8</span></a>
+    <a href="#transferir">Transferir <span class="n" id="n-transferir">0/13</span></a>
+    <a href="#consultar">Consultar <span class="n" id="n-consultar">0/6</span></a>
+    <a href="#limpieza">Limpieza</a>
+    <a href="#hallazgos">Hallazgos</a>
+    <a href="#trazabilidad">Trazabilidad</a>
+  </nav>
+
+  <main>
+    <header class="lede">
+      <p class="eyebrow">Validación y Verificación · FuBank</p>
+      <h1>Pruebas manuales del módulo Bolsillos</h1>
+      <p class="standfirst">
+        54 casos ejecutados a mano contra la API HTTP real del backend. Sin mocks, sin dobles
+        de prueba y sin repositorios en memoria: cada petición atraviesa el controlador, el
+        validador, el caso de uso y Supabase.
+      </p>
+      <dl class="meta">
+        <div><dt>Módulo</dt><dd>Bolsillos</dd></div>
+        <div><dt>Operaciones</dt><dd>5</dd></div>
+        <div><dt>Casos</dt><dd>54</dd></div>
+        <div><dt>Técnica</dt><dd>Caja blanca manual</dd></div>
+        <div><dt>Entorno</dt><dd>localhost:3001</dd></div>
+        <div><dt>Persistencia</dt><dd>Supabase real</dd></div>
+      </dl>
+    </header>
+
+    <section id="entorno">
+      <h2>Entorno y convenciones</h2>
+      <p class="sec-note">
+        Cada caso recorre <code>PocketController</code> → validadores Zod → caso de uso →
+        repositorio Supabase. En rigor son pruebas de integración de componente, aunque el
+        diseño de los casos sea de caja blanca: cada uno se derivó de una decisión concreta
+        del código.
+      </p>
+
+      <h3>Antes de empezar</h3>
+      <pre class="req"><span class="hdr"># terminal 1 — levantar el backend</span>
+cd backend &amp;&amp; npm run dev
+
+<span class="hdr"># terminal 2 — comprobar que responde</span>
+curl -s http://localhost:3001/health</pre>
+      <p>
+        Debe devolver <code>{"status":"ok", ...}</code>. Si no responde, ningún caso de este
+        protocolo es ejecutable.
+      </p>
+
+      <div class="note warn">
+        <b>Advertencia.</b> Estas pruebas escriben en la base de datos real: crean usuarios,
+        cuentas, bolsillos y notificaciones que quedan persistidos. Ejecutarlas contra un
+        proyecto de Supabase de desarrollo, nunca contra producción.
+      </div>
+
+      <h3>Formato de respuesta</h3>
+      <pre class="req"><span class="hdr">// éxito</span>
+{ <span class="key">"success"</span>: true, <span class="key">"message"</span>: <span class="str">"&lt;mensaje&gt;"</span>, <span class="key">"data"</span>: &lt;objeto o arreglo&gt; }
+
+<span class="hdr">// error</span>
+{ <span class="key">"success"</span>: false, <span class="key">"error"</span>: { <span class="key">"code"</span>: <span class="str">"&lt;CODIGO&gt;"</span>, <span class="key">"message"</span>: <span class="str">"&lt;mensaje&gt;"</span> } }</pre>
+      <p>Los errores de Zod agregan <code>error.fields</code> con el detalle por campo.</p>
+
+      <h3>Vocabulario de saldos</h3>
+      <p>
+        La invariante del módulo: <b>disponible</b> (<code>accounts.balance</code>) más
+        <b>reservado</b> (suma de los bolsillos) debe ser siempre igual al <b>total</b>
+        depositado. Cada caso declara el estado esperado antes y después en esos términos.
+      </p>
+
+      <h3>Variables</h3>
+      <p>Anotar los valores obtenidos durante la preparación:</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Variable</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>TOKEN_A</code></td><td>JWT del usuario A, dueño de las cuentas bajo prueba</td></tr>
+            <tr><td><code>TOKEN_B</code></td><td>JWT del usuario B, el usuario ajeno de los casos 403</td></tr>
+            <tr><td><code>ACC_A1</code></td><td>Cuenta principal de A — total $1.000.000</td></tr>
+            <tr><td><code>ACC_A2</code></td><td>Cuenta secundaria de A — total $200.000</td></tr>
+            <tr><td><code>ACC_A3</code></td><td>Cuenta de A que se bloquea — total $100.000</td></tr>
+            <tr><td><code>ACC_A4</code></td><td>Cuenta de A sin depósito ni bolsillos</td></tr>
+            <tr><td><code>ACC_B</code></td><td>Cuenta del usuario B — total $100.000</td></tr>
+            <tr><td><code>POC_VAC</code>, <code>POC_EST</code>, <code>POC_CERO</code></td><td>Bolsillos de <code>ACC_A1</code></td></tr>
+            <tr><td><code>POC_OTRA</code>, <code>POC_TMP</code></td><td>Bolsillos de <code>ACC_A2</code></td></tr>
+            <tr><td><code>POC_BLQ1</code>, <code>POC_BLQ2</code></td><td>Bolsillos de <code>ACC_A3</code></td></tr>
+            <tr><td><code>POC_AJE1</code>, <code>POC_AJE2</code></td><td>Bolsillos de <code>ACC_B</code></td></tr>
+            <tr><td><code>UUID_FAKE</code></td><td>UUID válido pero inexistente: <code>00000000-0000-4000-8000-000000000000</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="setup">
+      <h2>Preparación <span class="count">7 pasos · no cuentan en el marcador</span></h2>
+      <p class="sec-note">
+        Estos pasos montan el estado que los casos necesitan. Si alguno falla, la suite
+        completa queda bloqueada.
+      </p>
+      <div id="host-setup"></div>
+
+      <h3>Estado resultante</h3>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Cuenta</th><th class="num">Disponible</th><th class="num">Reservado</th><th class="num">Total</th></tr></thead>
+          <tbody>
+            <tr><td><code>ACC_A1</code></td><td class="num">1.000.000</td><td class="num">0</td><td class="num">1.000.000</td></tr>
+            <tr><td><code>ACC_A2</code></td><td class="num">120.000</td><td class="num">80.000</td><td class="num">200.000</td></tr>
+            <tr><td><code>ACC_A3</code></td><td class="num">60.000</td><td class="num">40.000</td><td class="num">100.000</td></tr>
+            <tr><td><code>ACC_A4</code></td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>
+            <tr><td><code>ACC_B</code></td><td class="num">50.000</td><td class="num">50.000</td><td class="num">100.000</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="crear">
+      <h2>Crear bolsillo <span class="count">POST /api/v1/pockets · 13 casos</span></h2>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Decisión en <code>CreatePocket.execute</code></th><th>Error si se cumple</th></tr></thead>
+          <tbody>
+            <tr><td><code>dto.amount &lt; 0</code></td><td><code>INVALID_POCKET_AMOUNT</code> · 400</td></tr>
+            <tr><td><code>!account</code></td><td><code>ACCOUNT_NOT_FOUND</code> · 404</td></tr>
+            <tr><td><code>assertBelongsTo</code> falla</td><td><code>FORBIDDEN</code> · 403</td></tr>
+            <tr><td><code>!account.isOperational()</code></td><td><code>ACCOUNT_NOT_OPERATIONAL</code> · 400</td></tr>
+            <tr><td><code>currentReserved + amount &gt; account.balance</code></td><td><code>INSUFFICIENT_AVAILABLE_BALANCE</code> · 400</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="host-crear"></div>
+    </section>
+
+    <section id="actualizar">
+      <h2>Actualizar bolsillo <span class="count">PATCH /api/v1/pockets/:id · 14 casos</span></h2>
+      <p class="sec-note">
+        Estado inicial: <code>ACC_A1</code> disponible $500.000, reservado $500.000
+        (<code>POC_VAC</code> $300.000, <code>POC_EST</code> $200.000, <code>POC_CERO</code> $0).
+      </p>
+      <div id="host-actualizar"></div>
+    </section>
+
+    <section id="eliminar">
+      <h2>Eliminar bolsillo <span class="count">DELETE /api/v1/pockets/:id · 8 casos</span></h2>
+      <p class="sec-note">
+        Estado inicial: <code>ACC_A1</code> disponible $450.000, reservado $550.000 ·
+        <code>ACC_A2</code> disponible $120.000, reservado $80.000.
+      </p>
+      <div id="host-eliminar"></div>
+    </section>
+
+    <section id="transferir">
+      <h2>Transferir entre bolsillos <span class="count">POST /api/v1/pockets/transfer · 13 casos</span></h2>
+      <p class="sec-note">
+        La transferencia no altera el saldo disponible de la cuenta: solo mueve dinero entre
+        dos reservas. El disponible debe seguir en $450.000 al terminar la sección.
+      </p>
+      <div id="host-transferir"></div>
+    </section>
+
+    <section id="consultar">
+      <h2>Consultar bolsillos <span class="count">GET /api/v1/pockets/account/:id · 6 casos</span></h2>
+      <div id="host-consultar"></div>
+    </section>
+
+    <section id="limpieza">
+      <h2>Limpieza posterior</h2>
+      <p class="sec-note">
+        Los datos quedan en la base real. Para dejarla como estaba, desde el Table editor de
+        Supabase y en este orden:
+      </p>
+      <ol>
+        <li><code>pockets</code> — borrar las filas cuyo <code>account_id</code> sea una de las cinco cuentas de prueba.</li>
+        <li><code>notifications</code> — borrar las filas de los dos usuarios de prueba.</li>
+        <li><code>transactions</code> — borrar los depósitos del paso SETUP-05.</li>
+        <li><code>account_details</code> y luego <code>accounts</code> — borrar las cinco cuentas.</li>
+        <li><code>users</code> — borrar <code>qa.bolsillos.a@fubank.com</code> y <code>qa.bolsillos.b@fubank.com</code>.</li>
+      </ol>
+      <p>
+        Alternativa: conservar los usuarios de prueba para la siguiente corrida y borrar solo
+        bolsillos y cuentas.
+      </p>
+    </section>
+
+    <section id="hallazgos">
+      <h2>Hallazgos</h2>
+      <p class="sec-note">
+        Detectados al diseñar los casos a partir del código. Ninguno se corrigió en esta
+        entrega: el alcance acordado era corregir las pruebas, no el código de producción.
+      </p>
+
+      <div class="finding">
+        <div class="finding-head">
+          <span class="fid">H-01</span>
+          <h4>El saldo reservado se cuenta dos veces al crear un bolsillo</h4>
+          <span class="sev alta">Alta</span>
+        </div>
+        <p><b>Caso que lo evidencia:</b> BE-CR-13 · <code>CreatePocket.ts</code></p>
+        <p>
+          La decisión es <code>currentReserved + dto.amount &gt; account.balance</code>, pero
+          <code>account.balance</code> ya es el saldo <b>disponible</b>: lo reservado se
+          descontó al crear los bolsillos anteriores. La comparación suma el reservado a un
+          valor que ya lo excluye, así que se rechazan bolsillos que sí caben. En cuanto lo
+          reservado supera lo disponible, no se puede crear ningún bolsillo nuevo, ni
+          siquiera de $1.
+        </p>
+        <p>
+          <code>UpdatePocket</code> resuelve el mismo problema correctamente, comparando
+          contra <code>account.balance + totalReserved</code>. Las dos operaciones aplican
+          reglas distintas al mismo invariante.
+        </p>
+      </div>
+
+      <div class="finding">
+        <div class="finding-head">
+          <span class="fid">H-02</span>
+          <h4>Cuatro ramas de error del dominio son inalcanzables por HTTP</h4>
+          <span class="sev media">Media</span>
+        </div>
+        <p><b>Casos que lo evidencian:</b> BE-CR-03, BE-AC-02, BE-AC-03, BE-TR-02</p>
+        <p>
+          Los schemas Zod validan las mismas condiciones que los casos de uso y siempre
+          disparan primero, así que el cliente recibe <code>VALIDATION_ERROR</code> donde el
+          diseño del dominio anunciaba un código específico.
+        </p>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Rama del caso de uso</th><th>Bloqueada por</th></tr></thead>
+            <tbody>
+              <tr><td><code>CreatePocket → INVALID_POCKET_AMOUNT</code></td><td><code>createPocketSchema.amount.min(0)</code></td></tr>
+              <tr><td><code>UpdatePocket → INVALID_POCKET_AMOUNT</code></td><td><code>updatePocketSchema.amount.min(0)</code></td></tr>
+              <tr><td><code>UpdatePocket → NO_CHANGES_PROVIDED</code></td><td><code>updatePocketSchema.refine(...)</code></td></tr>
+              <tr><td><code>TransferPocketBalance → INVALID_TRANSFER_AMOUNT</code></td><td><code>transferPocketSchema.amount.gt(0)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          La única excepción es <code>UpdatePocket → INVALID_POCKET_NAME</code>, alcanzable
+          con un nombre de solo espacios (BE-AC-04), porque Zod valida longitud pero no
+          contenido.
+        </p>
+      </div>
+
+      <div class="finding">
+        <div class="finding-head">
+          <span class="fid">H-03</span>
+          <h4>Validación de identificadores inconsistente entre endpoints</h4>
+          <span class="sev baja">Baja</span>
+        </div>
+        <p><b>Casos que lo evidencian:</b> BE-AC-06, BE-EL-03, BE-TR-04</p>
+        <p>
+          <code>POST /pockets</code> y <code>POST /pockets/transfer</code> validan los UUID con
+          Zod y responden <code>400 VALIDATION_ERROR</code>. <code>PATCH</code>,
+          <code>DELETE</code> y <code>GET</code> toman el identificador de la ruta, no lo
+          validan, y responden <code>404</code> porque el repositorio convierte el error de
+          Supabase en <code>null</code>. La misma clase de entrada inválida produce dos
+          códigos distintos.
+        </p>
+      </div>
+
+      <div class="finding">
+        <div class="finding-head">
+          <span class="fid">H-04</span>
+          <h4>No hay forma de bloquear una cuenta desde la API</h4>
+          <span class="sev baja">Baja</span>
+        </div>
+        <p><b>Casos afectados:</b> BE-CR-08, BE-AC-08, BE-EL-05, BE-TR-10</p>
+        <p>
+          La entidad <code>Account</code> expone <code>block()</code> y <code>close()</code>, y
+          los cuatro casos de uso comprueban <code>isOperational()</code>, pero ninguna ruta
+          permite cambiar el estado de una cuenta. Los caminos
+          <code>ACCOUNT_NOT_OPERATIONAL</code> solo se pueden probar editando la columna
+          <code>status</code> a mano en Supabase.
+        </p>
+      </div>
+
+      <div class="finding">
+        <div class="finding-head">
+          <span class="fid">H-05</span>
+          <h4>El repositorio de bolsillos tiene un modo de respaldo en memoria</h4>
+          <span class="sev media">Media</span>
+        </div>
+        <p><b>Ubicación:</b> <code>SupabasePocketRepository.ts</code></p>
+        <p>
+          Si la tabla <code>pockets</code> no existe, el repositorio activa un
+          <code>fallbackStore</code> en memoria a nivel de módulo y sigue operando. Con esa
+          bandera activa los datos no se persisten y se pierden al reiniciar el servidor,
+          mientras la API sigue respondiendo <code>201</code> y <code>200</code>.
+        </p>
+        <div class="note warn">
+          Antes de dar por válida una corrida, revisar la consola del backend. Si aparece
+          <code>"Supabase pockets table is not available. Using in-memory fallback for
+          pockets."</code>, toda la corrida queda invalidada: se estaría probando contra
+          memoria, justo lo que este protocolo busca evitar.
+        </div>
+      </div>
+    </section>
+
+    <section id="trazabilidad">
+      <h2>Trazabilidad</h2>
+      <p class="sec-note">Decisión del código ↔ caso que la ejercita.</p>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Caso de uso</th><th>Decisión</th><th>Casos</th><th>Alcanzable por HTTP</th></tr></thead>
+          <tbody id="trace"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="end">
+      <p>
+        Documento de ejecución manual. Lo registrado en esta página se guarda solo en este
+        navegador; para la entrega, trasladar los resultados al informe o imprimir esta
+        página una vez completada.
+      </p>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var KEY = "fubank-bolsillos-manual-v1";
+
+  // ── Datos ────────────────────────────────────────────────────────────────
+
+  var SETUP = [
+    {
+      id: "SETUP-01", t: "Registrar el usuario A",
+      req: "POST /api/v1/auth/register\nContent-Type: application/json\n\n{\n  \"firstName\": \"Ana\",\n  \"lastName\": \"Quintero\",\n  \"birthDate\": \"1998-05-20\",\n  \"email\": \"qa.bolsillos.a@fubank.com\",\n  \"document\": \"9000000001\",\n  \"password\": \"Segura123\",\n  \"confirmPassword\": \"Segura123\"\n}",
+      exp: "201 · \"Usuario registrado exitosamente\". Copiar data.token en TOKEN_A.",
+      note: "Si devuelve EMAIL_ALREADY_EXISTS, el usuario ya existe de una corrida anterior: iniciar sesión con POST /api/v1/auth/login y tomar el token de ahí. Si la respuesta trae requiresTwoFactor: true, desactivar el 2FA de ese usuario antes de continuar."
+    },
+    {
+      id: "SETUP-02", t: "Registrar el usuario B",
+      req: "POST /api/v1/auth/register\nContent-Type: application/json\n\n{\n  \"firstName\": \"Bruno\",\n  \"lastName\": \"Salgado\",\n  \"birthDate\": \"1998-05-20\",\n  \"email\": \"qa.bolsillos.b@fubank.com\",\n  \"document\": \"9000000002\",\n  \"password\": \"Segura123\",\n  \"confirmPassword\": \"Segura123\"\n}",
+      exp: "201. Copiar data.token en TOKEN_B."
+    },
+    {
+      id: "SETUP-03", t: "Crear las cuatro cuentas del usuario A",
+      req: "POST /api/v1/accounts\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"type\": \"AHORROS\" }",
+      exp: "201 en cada una, con data.balance = 0 y data.status = \"ACTIVA\". Repetir cuatro veces y copiar los data.id en ACC_A1, ACC_A2, ACC_A3 y ACC_A4."
+    },
+    {
+      id: "SETUP-04", t: "Crear la cuenta del usuario B",
+      req: "POST /api/v1/accounts\nAuthorization: Bearer {{TOKEN_B}}\nContent-Type: application/json\n\n{ \"type\": \"AHORROS\" }",
+      exp: "201. Copiar data.id en ACC_B."
+    },
+    {
+      id: "SETUP-05", t: "Depositar los fondos",
+      req: "POST /api/v1/accounts/{{ACC_A1}}/deposit\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 1000000, \"description\": \"Fondeo de pruebas\" }",
+      exp: "200 · \"Depósito realizado exitosamente\" con el balance actualizado. Repetir: ACC_A2 → 200000, ACC_A3 → 100000 (con TOKEN_A) y ACC_B → 100000 (con TOKEN_B). ACC_A4 se deja en $0.",
+      tabla: [
+        ["ACC_A1", "TOKEN_A", "1.000.000"],
+        ["ACC_A2", "TOKEN_A", "200.000"],
+        ["ACC_A3", "TOKEN_A", "100.000"],
+        ["ACC_B", "TOKEN_B", "100.000"]
+      ]
+    },
+    {
+      id: "SETUP-06", t: "Crear los bolsillos auxiliares",
+      req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A2}}\", \"name\": \"Otra cuenta\", \"amount\": 50000 }",
+      exp: "201 en los seis. Verificar cada respuesta antes de continuar.",
+      bolsillos: [
+        ["ACC_A2", "TOKEN_A", "Otra cuenta", "50.000", "POC_OTRA"],
+        ["ACC_A2", "TOKEN_A", "Temporal", "30.000", "POC_TMP"],
+        ["ACC_A3", "TOKEN_A", "Bloq origen", "20.000", "POC_BLQ1"],
+        ["ACC_A3", "TOKEN_A", "Bloq destino", "20.000", "POC_BLQ2"],
+        ["ACC_B", "TOKEN_B", "Ajeno 1", "30.000", "POC_AJE1"],
+        ["ACC_B", "TOKEN_B", "Ajeno 2", "20.000", "POC_AJE2"]
+      ]
+    },
+    {
+      id: "SETUP-07", t: "Bloquear la cuenta ACC_A3", flag: "setup", flagText: "Manual en Supabase",
+      pre: "La API no expone ningún endpoint para bloquear una cuenta, así que este paso va después de SETUP-06.",
+      pasos: [
+        "Abrir el proyecto de Supabase → Table editor → tabla accounts.",
+        "Localizar la fila cuyo id es ACC_A3.",
+        "Cambiar la columna status de ACTIVA a BLOQUEADA y guardar."
+      ],
+      exp: "GET /api/v1/accounts/{{ACC_A3}} con TOKEN_A debe devolver data.status = \"BLOQUEADA\".",
+      note: "Esta dependencia manual es en sí un hallazgo: los caminos ACCOUNT_NOT_OPERATIONAL no son alcanzables usando solo la API pública. Registrado como H-04."
+    }
+  ];
+
+  var CASOS = {
+    crear: [
+      { id: "BE-CR-01", t: "Crear sin autenticación",
+        obj: "Verificar que authMiddleware corta la petición antes de llegar al caso de uso.",
+        pre: "ACC_A1 con disponible $1.000.000, reservado $0.",
+        req: "POST /api/v1/pockets\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"Sin token\", \"amount\": 50000 }",
+        exp: ["401", "UNAUTHORIZED", "\"Se requiere autenticación\""],
+        post: "Sin cambios; no se crea ningún bolsillo." },
+
+      { id: "BE-CR-02", t: "accountId que no es UUID",
+        obj: "Comprobar que el validador Zod rechaza el identificador antes del caso de uso.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"no-es-uuid\", \"name\": \"Formato malo\", \"amount\": 50000 }",
+        exp: ["400", "VALIDATION_ERROR", "error.fields.accountId: \"accountId debe ser un UUID válido\""],
+        post: "Sin cambios." },
+
+      { id: "BE-CR-03", t: "Monto negativo",
+        obj: "Determinar qué capa rechaza un monto negativo.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"Monto negativo\", \"amount\": -1 }",
+        exp: ["400", "VALIDATION_ERROR", "error.fields.amount: \"El monto del bolsillo no puede ser negativo\""],
+        note: "El error <b>no</b> es <code>INVALID_POCKET_AMOUNT</code>. El schema (<code>z.coerce.number().min(0)</code>) rechaza el valor antes de que el caso de uso evalúe su primera decisión, dejando esa rama inalcanzable por HTTP. Ver <b>H-02</b>.",
+        post: "Sin cambios." },
+
+      { id: "BE-CR-04", t: "Nombre vacío",
+        obj: "Verificar la validación de longitud mínima del nombre.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"\", \"amount\": 50000 }",
+        exp: ["400", "VALIDATION_ERROR", "error.fields.name: \"El nombre del bolsillo es obligatorio\""],
+        post: "Sin cambios." },
+
+      { id: "BE-CR-05", t: "Nombre de 151 caracteres", flag: "limit", flagText: "Valor límite",
+        obj: "Límite superior de la longitud del nombre; el máximo permitido es 150.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"AAA…(151 caracteres)\", \"amount\": 50000 }",
+        exp: ["400", "VALIDATION_ERROR", "error.fields.name: \"El nombre del bolsillo no puede superar 150 caracteres\""],
+        post: "Sin cambios." },
+
+      { id: "BE-CR-06", t: "Cuenta inexistente",
+        obj: "Recorrer la rama !account.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{UUID_FAKE}}\", \"name\": \"Fantasma\", \"amount\": 50000 }",
+        exp: ["404", "ACCOUNT_NOT_FOUND", "\"Cuenta no encontrada\""],
+        post: "Sin cambios." },
+
+      { id: "BE-CR-07", t: "Cuenta de otro usuario",
+        obj: "Recorrer assertBelongsTo, la barrera de autorización a nivel de dominio.",
+        pre: "ACC_B pertenece al usuario B; se usa el token de A.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_B}}\", \"name\": \"Cuenta ajena\", \"amount\": 10000 }",
+        exp: ["403", "FORBIDDEN", "\"No tienes permiso para acceder a esta cuenta\""],
+        post: "ACC_B sin cambios: disponible $50.000, reservado $50.000." },
+
+      { id: "BE-CR-08", t: "Cuenta bloqueada",
+        obj: "Recorrer la rama !account.isOperational().",
+        pre: "SETUP-07 ejecutado — ACC_A3 en estado BLOQUEADA.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A3}}\", \"name\": \"En cuenta bloqueada\", \"amount\": 10000 }",
+        exp: ["400", "ACCOUNT_NOT_OPERATIONAL", "\"La cuenta no está disponible para generar bolsillos\""],
+        post: "ACC_A3 sin cambios: disponible $60.000, reservado $40.000." },
+
+      { id: "BE-CR-09", t: "Monto que excede el disponible por $1", flag: "limit", flagText: "Valor límite",
+        obj: "Con reservado $0, el monto máximo aceptable es exactamente el disponible; se prueba con uno más.",
+        pre: "ACC_A1 disponible $1.000.000, reservado $0.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"Excede por uno\", \"amount\": 1000001 }",
+        exp: ["400", "INSUFFICIENT_AVAILABLE_BALANCE", "\"No tienes saldo disponible suficiente para crear este bolsillo\""],
+        post: "ACC_A1 sin cambios: disponible $1.000.000, reservado $0." },
+
+      { id: "BE-CR-10", t: "Crear bolsillo con saldo suficiente",
+        obj: "Camino principal completo, hasta la persistencia y la notificación.",
+        pre: "ACC_A1 disponible $1.000.000, reservado $0, sin bolsillos.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"Vacaciones\", \"amount\": 300000 }",
+        exp: ["201", "\"Bolsillo creado\"", "data.name = \"Vacaciones\" · data.amount = 300000 · data.accountId = ACC_A1"],
+        pasos: [
+          "Guardar data.id en POC_VAC.",
+          "GET /api/v1/accounts/{{ACC_A1}} → data.balance debe ser 700000.",
+          "GET /api/v1/notifications con TOKEN_A → debe existir una notificación \"Bolsillo creado\" de tipo BOLSILLO."
+        ],
+        post: "ACC_A1 disponible $700.000, reservado $300.000, total $1.000.000." },
+
+      { id: "BE-CR-11", t: "Crear un segundo bolsillo",
+        obj: "Confirmar que se pueden acumular bolsillos en la misma cuenta.",
+        pre: "ACC_A1 disponible $700.000, reservado $300.000.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"Estudio\", \"amount\": 200000 }",
+        exp: ["201", "\"Bolsillo creado\"", "data.amount = 200000"],
+        pasos: [
+          "Guardar data.id en POC_EST.",
+          "GET /api/v1/accounts/{{ACC_A1}} → balance = 500000."
+        ],
+        post: "ACC_A1 disponible $500.000, reservado $500.000, total $1.000.000." },
+
+      { id: "BE-CR-12", t: "Crear bolsillo con monto $0", flag: "limit", flagText: "Valor límite",
+        obj: "El mínimo aceptado por el schema es 0; verificar que no se rechaza ni altera el saldo.",
+        pre: "ACC_A1 disponible $500.000, reservado $500.000.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"Cero\", \"amount\": 0 }",
+        exp: ["201", "\"Bolsillo creado\"", "data.amount = 0 · el disponible sigue en 500000"],
+        pasos: ["Guardar data.id en POC_CERO."],
+        post: "ACC_A1 disponible $500.000, reservado $500.000, total $1.000.000." },
+
+      { id: "BE-CR-13", t: "Bolsillo que cabe en el disponible pero es rechazado", flag: "defect", flagText: "Defecto H-01",
+        obj: "Verificar la decisión del saldo cuando la cuenta ya tiene reservas previas.",
+        pre: "ACC_A1 disponible $500.000, reservado $500.000, total $1.000.000. El monto solicitado ($400.000) cabe holgadamente en el disponible, así que la regla de negocio exige que el bolsillo se cree.",
+        req: "POST /api/v1/pockets\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"accountId\": \"{{ACC_A1}}\", \"name\": \"Emergencia\", \"amount\": 400000 }",
+        exp: ["201", "\"Bolsillo creado\"", "dejando ACC_A1 con disponible $100.000 y reservado $900.000"],
+        note: "<b>Según el código actual la respuesta será 400 INSUFFICIENT_AVAILABLE_BALANCE</b>, porque la comparación es <code>currentReserved + amount &gt; account.balance</code> → <code>500.000 + 400.000 = 900.000 &gt; 500.000</code>. Como <code>account.balance</code> ya es el saldo disponible, el monto reservado se cuenta dos veces. <b>Este caso debe registrarse como Fallido</b>; es el defecto H-01 y no se corrige en esta entrega.",
+        post: "ACC_A1 sin cambios: disponible $500.000, reservado $500.000." }
+    ],
+
+    actualizar: [
+      { id: "BE-AC-01", t: "Actualizar sin autenticación",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nContent-Type: application/json\n\n{ \"amount\": 400000 }",
+        exp: ["401", "UNAUTHORIZED", "\"Se requiere autenticación\""],
+        post: "Sin cambios." },
+
+      { id: "BE-AC-02", t: "Cuerpo vacío",
+        obj: "Determinar qué capa rechaza una actualización sin campos.",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{}",
+        exp: ["400", "VALIDATION_ERROR", "\"Debes enviar al menos un campo para actualizar\""],
+        note: "El error <b>no</b> es <code>NO_CHANGES_PROVIDED</code>: el <code>refine</code> del schema corta antes, dejando esa rama del caso de uso inalcanzable por HTTP. Ver <b>H-02</b>.",
+        post: "Sin cambios." },
+
+      { id: "BE-AC-03", t: "Monto negativo",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": -100 }",
+        exp: ["400", "VALIDATION_ERROR", "error.fields.amount: \"El monto del bolsillo no puede ser negativo\""],
+        note: "La rama <code>INVALID_POCKET_AMOUNT</code> queda inalcanzable (<b>H-02</b>).",
+        post: "Sin cambios." },
+
+      { id: "BE-AC-04", t: "Nombre compuesto solo por espacios",
+        obj: "Único caso en que Zod deja pasar el valor y la decisión del caso de uso sí se ejecuta: \"   \" tiene longitud 3, pero .trim() lo vacía.",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"name\": \"   \" }",
+        exp: ["400", "INVALID_POCKET_NAME", "\"El nombre del bolsillo no puede estar vacío\""],
+        post: "Sin cambios; POC_VAC conserva el nombre \"Vacaciones\"." },
+
+      { id: "BE-AC-05", t: "Bolsillo inexistente",
+        req: "PATCH /api/v1/pockets/{{UUID_FAKE}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 1000 }",
+        exp: ["404", "POCKET_NOT_FOUND", "\"Bolsillo no encontrado\""],
+        post: "Sin cambios." },
+
+      { id: "BE-AC-06", t: "pocketId malformado en la ruta",
+        obj: "El parámetro de ruta no pasa por Zod; se comprueba cómo reacciona el repositorio ante un identificador que no es UUID.",
+        req: "PATCH /api/v1/pockets/abc123\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 1000 }",
+        exp: ["404", "POCKET_NOT_FOUND", "el repositorio traduce el error de Supabase a null"],
+        note: "Si la respuesta es <code>500 INTERNAL_ERROR</code>, registrar como hallazgo nuevo: el identificador malformado estaría escapando del manejo de errores del repositorio.",
+        post: "Sin cambios." },
+
+      { id: "BE-AC-07", t: "Bolsillo de otro usuario",
+        req: "PATCH /api/v1/pockets/{{POC_AJE1}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 1000 }",
+        exp: ["403", "FORBIDDEN", "\"No tienes permiso para acceder a esta cuenta\""],
+        post: "POC_AJE1 conserva su monto de $30.000." },
+
+      { id: "BE-AC-08", t: "Bolsillo en cuenta bloqueada",
+        req: "PATCH /api/v1/pockets/{{POC_BLQ1}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 25000 }",
+        exp: ["400", "ACCOUNT_NOT_OPERATIONAL", "\"La cuenta no está disponible para modificar bolsillos\""],
+        post: "ACC_A3 sin cambios." },
+
+      { id: "BE-AC-09", t: "Aumentar el monto dentro del disponible",
+        obj: "Camino principal con recálculo de reserva al alza.",
+        pre: "ACC_A1 disponible $500.000, reservado $500.000, POC_VAC $300.000.",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 600000 }",
+        exp: ["200", "\"Bolsillo actualizado\"", "data.amount = 600000 · balance de la cuenta = 200000"],
+        post: "Disponible $200.000, reservado $800.000, total $1.000.000." },
+
+      { id: "BE-AC-10", t: "Reservar exactamente el total de la cuenta", flag: "limit", flagText: "Valor límite",
+        obj: "El total reservado queda igual al total de fondos y el disponible en $0; la condición usa > estricto, así que debe aceptarse.",
+        pre: "Disponible $200.000, reservado $800.000, POC_VAC $600.000.",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 800000 }",
+        exp: ["200", "\"Bolsillo actualizado\"", "data.amount = 800000 · balance de la cuenta = 0"],
+        post: "Disponible $0, reservado $1.000.000, total $1.000.000." },
+
+      { id: "BE-AC-11", t: "Exceder el total por $1", flag: "limit", flagText: "Valor límite",
+        pre: "Disponible $0, reservado $1.000.000, POC_VAC $800.000.",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 800001 }",
+        exp: ["400", "INSUFFICIENT_AVAILABLE_BALANCE", "\"No tienes saldo disponible suficiente para ajustar este bolsillo\""],
+        post: "Sin cambios; POC_VAC sigue en $800.000 y el disponible en $0." },
+
+      { id: "BE-AC-12", t: "Disminuir el monto y liberar saldo",
+        obj: "Verificar que el delta negativo devuelve dinero al disponible.",
+        pre: "Disponible $0, reservado $1.000.000, POC_VAC $800.000.",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"amount\": 300000 }",
+        exp: ["200", "\"Bolsillo actualizado\"", "data.amount = 300000 · balance de la cuenta = 500000"],
+        post: "Disponible $500.000, reservado $500.000, total $1.000.000." },
+
+      { id: "BE-AC-13", t: "Cambiar únicamente el nombre",
+        obj: "Verificar que sin amount no se toca el saldo: la rama de recálculo se salta.",
+        req: "PATCH /api/v1/pockets/{{POC_VAC}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"name\": \"Vacaciones 2026\" }",
+        exp: ["200", "\"Bolsillo actualizado\"", "data.name = \"Vacaciones 2026\" · data.amount = 300000 sin cambios"],
+        pasos: ["GET /api/v1/accounts/{{ACC_A1}} debe seguir devolviendo balance = 500000."],
+        post: "Disponible $500.000, reservado $500.000." },
+
+      { id: "BE-AC-14", t: "Cambiar nombre y monto en la misma petición",
+        obj: "Recorrer las dos ramas de modificación en una sola llamada.",
+        pre: "POC_EST $200.000, disponible $500.000, reservado $500.000.",
+        req: "PATCH /api/v1/pockets/{{POC_EST}}\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"name\": \"Estudio Posgrado\", \"amount\": 250000 }",
+        exp: ["200", "\"Bolsillo actualizado\"", "data.name = \"Estudio Posgrado\" · data.amount = 250000 · balance = 450000"],
+        post: "Disponible $450.000, reservado $550.000, total $1.000.000." }
+    ],
+
+    eliminar: [
+      { id: "BE-EL-01", t: "Eliminar sin autenticación",
+        req: "DELETE /api/v1/pockets/{{POC_TMP}}",
+        exp: ["401", "UNAUTHORIZED", "\"Se requiere autenticación\""],
+        post: "Sin cambios." },
+
+      { id: "BE-EL-02", t: "Bolsillo inexistente",
+        req: "DELETE /api/v1/pockets/{{UUID_FAKE}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["404", "POCKET_NOT_FOUND", "\"Bolsillo no encontrado\""],
+        post: "Sin cambios." },
+
+      { id: "BE-EL-03", t: "pocketId malformado",
+        req: "DELETE /api/v1/pockets/abc123\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["404", "POCKET_NOT_FOUND", "por la misma razón que BE-AC-06"],
+        post: "Sin cambios." },
+
+      { id: "BE-EL-04", t: "Bolsillo de otro usuario",
+        req: "DELETE /api/v1/pockets/{{POC_AJE1}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["403", "FORBIDDEN", "\"No tienes permiso para acceder a esta cuenta\""],
+        pasos: ["Confirmar que POC_AJE1 sigue existiendo con GET /api/v1/pockets/account/{{ACC_B}} usando TOKEN_B."],
+        post: "ACC_B sin cambios." },
+
+      { id: "BE-EL-05", t: "Bolsillo en cuenta bloqueada",
+        req: "DELETE /api/v1/pockets/{{POC_BLQ1}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["400", "ACCOUNT_NOT_OPERATIONAL", "\"La cuenta no está disponible para eliminar bolsillos\""],
+        post: "ACC_A3 sin cambios." },
+
+      { id: "BE-EL-06", t: "Eliminar un bolsillo y recuperar su saldo",
+        obj: "Camino principal: el monto reservado vuelve al disponible.",
+        pre: "ACC_A2 disponible $120.000, reservado $80.000, POC_TMP $30.000.",
+        req: "DELETE /api/v1/pockets/{{POC_TMP}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["200", "\"Bolsillo eliminado\"", "data.id = POC_TMP · data.name = \"Temporal\" · data.amount = 30000"],
+        pasos: [
+          "GET /api/v1/accounts/{{ACC_A2}} → data.balance = 150000.",
+          "GET /api/v1/pockets/account/{{ACC_A2}} → el arreglo ya no contiene POC_TMP."
+        ],
+        post: "ACC_A2 disponible $150.000, reservado $50.000, total $200.000." },
+
+      { id: "BE-EL-07", t: "Eliminar dos veces el mismo bolsillo",
+        obj: "Verificar que la segunda eliminación no vuelve a acreditar dinero.",
+        pre: "BE-EL-06 ejecutado; ACC_A2 disponible $150.000.",
+        req: "DELETE /api/v1/pockets/{{POC_TMP}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["404", "POCKET_NOT_FOUND", "\"Bolsillo no encontrado\""],
+        post: "ACC_A2 sigue en disponible $150.000 — no debe subir a $180.000." },
+
+      { id: "BE-EL-08", t: "Eliminar un bolsillo de monto $0", flag: "limit", flagText: "Valor límite",
+        pre: "ACC_A1 disponible $450.000, POC_CERO $0.",
+        req: "DELETE /api/v1/pockets/{{POC_CERO}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["200", "\"Bolsillo eliminado\"", "data.amount = 0 · el balance sigue en 450000"],
+        post: "ACC_A1 disponible $450.000, reservado $550.000 (POC_VAC $300.000, POC_EST $250.000)." }
+    ],
+
+    transferir: [
+      { id: "BE-TR-01", t: "Transferir sin autenticación",
+        req: "POST /api/v1/pockets/transfer\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": 10000 }",
+        exp: ["401", "UNAUTHORIZED", "\"Se requiere autenticación\""],
+        post: "Sin cambios." },
+
+      { id: "BE-TR-02", t: "Monto $0", flag: "limit", flagText: "Valor límite",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": 0 }",
+        exp: ["400", "VALIDATION_ERROR", "error.fields.amount: \"El monto de transferencia debe ser mayor que cero\""],
+        note: "El error <b>no</b> es <code>INVALID_TRANSFER_AMOUNT</code>: el schema (<code>z.number().gt(0)</code>) corta antes, dejando esa rama inalcanzable por HTTP (<b>H-02</b>).",
+        post: "Sin cambios." },
+
+      { id: "BE-TR-03", t: "Monto negativo",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": -5000 }",
+        exp: ["400", "VALIDATION_ERROR", "mismo mensaje que BE-TR-02"],
+        post: "Sin cambios." },
+
+      { id: "BE-TR-04", t: "fromPocketId que no es UUID",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"abc123\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": 10000 }",
+        exp: ["400", "VALIDATION_ERROR", "error.fields.fromPocketId: \"fromPocketId debe ser un UUID válido\""],
+        note: "A diferencia de <code>PATCH</code> y <code>DELETE</code>, aquí los identificadores viajan en el cuerpo y sí pasan por Zod. La inconsistencia queda registrada como <b>H-03</b>.",
+        post: "Sin cambios." },
+
+      { id: "BE-TR-05", t: "Origen y destino iguales",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_VAC}}\", \"amount\": 10000 }",
+        exp: ["400", "INVALID_TRANSFER_TARGET", "\"Los bolsillos de origen y destino deben ser diferentes\""],
+        post: "POC_VAC sigue en $300.000." },
+
+      { id: "BE-TR-06", t: "Bolsillo de origen inexistente",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{UUID_FAKE}}\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": 10000 }",
+        exp: ["404", "SOURCE_POCKET_NOT_FOUND", "\"Bolsillo de origen no encontrado\""],
+        post: "Sin cambios." },
+
+      { id: "BE-TR-07", t: "Bolsillo de destino inexistente",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{UUID_FAKE}}\", \"amount\": 10000 }",
+        exp: ["404", "TARGET_POCKET_NOT_FOUND", "\"Bolsillo de destino no encontrado\""],
+        post: "POC_VAC sigue en $300.000." },
+
+      { id: "BE-TR-08", t: "Bolsillos de cuentas distintas",
+        obj: "Ambos bolsillos son del mismo usuario, pero de cuentas diferentes.",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_OTRA}}\", \"amount\": 10000 }",
+        exp: ["400", "POCKETS_DIFFERENT_ACCOUNT", "\"Los bolsillos deben pertenecer a la misma cuenta\""],
+        post: "POC_VAC en $300.000 y POC_OTRA en $50.000, sin cambios." },
+
+      { id: "BE-TR-09", t: "Bolsillos de otro usuario",
+        obj: "Ambos bolsillos existen y son de la misma cuenta, pero esa cuenta es del usuario B.",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_AJE1}}\", \"toPocketId\": \"{{POC_AJE2}}\", \"amount\": 10000 }",
+        exp: ["403", "FORBIDDEN", "\"No tienes permiso para acceder a esta cuenta\""],
+        pasos: ["Verificar con GET /api/v1/pockets/account/{{ACC_B}} usando TOKEN_B que los montos siguen en $30.000 y $20.000."],
+        post: "ACC_B sin cambios." },
+
+      { id: "BE-TR-10", t: "Cuenta bloqueada",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_BLQ1}}\", \"toPocketId\": \"{{POC_BLQ2}}\", \"amount\": 5000 }",
+        exp: ["400", "ACCOUNT_NOT_OPERATIONAL", "\"La cuenta no está disponible para transferir entre bolsillos\""],
+        post: "ACC_A3 sin cambios." },
+
+      { id: "BE-TR-11", t: "Monto superior al del bolsillo origen", flag: "limit", flagText: "Valor límite",
+        pre: "POC_VAC $300.000.",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": 300001 }",
+        exp: ["400", "INSUFFICIENT_POCKET_BALANCE", "\"Saldo insuficiente en el bolsillo de origen\""],
+        post: "POC_VAC $300.000 y POC_EST $250.000, sin cambios." },
+
+      { id: "BE-TR-12", t: "Transferencia válida",
+        obj: "Camino principal: mueve dinero entre reservas sin tocar el disponible.",
+        pre: "POC_VAC $300.000, POC_EST $250.000, disponible $450.000.",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": 100000 }",
+        exp: ["200", "\"Transferencia entre bolsillos realizada\"", "data.fromPocket.amount = 200000 · data.toPocket.amount = 350000"],
+        pasos: [
+          "GET /api/v1/accounts/{{ACC_A1}} → balance debe seguir en 450000.",
+          "GET /api/v1/notifications con TOKEN_A → debe existir una notificación \"Movimiento entre bolsillos\"."
+        ],
+        post: "POC_VAC $200.000, POC_EST $350.000, disponible $450.000." },
+
+      { id: "BE-TR-13", t: "Transferir el saldo completo del origen", flag: "limit", flagText: "Valor límite",
+        obj: "La condición es < estricto, así que transferir el total debe aceptarse y dejar el origen en $0.",
+        pre: "POC_VAC $200.000, POC_EST $350.000.",
+        req: "POST /api/v1/pockets/transfer\nAuthorization: Bearer {{TOKEN_A}}\nContent-Type: application/json\n\n{ \"fromPocketId\": \"{{POC_VAC}}\", \"toPocketId\": \"{{POC_EST}}\", \"amount\": 200000 }",
+        exp: ["200", "\"Transferencia entre bolsillos realizada\"", "data.fromPocket.amount = 0 · data.toPocket.amount = 550000"],
+        post: "POC_VAC $0, POC_EST $550.000, disponible $450.000, reservado $550.000, total $1.000.000." }
+    ],
+
+    consultar: [
+      { id: "BE-CO-01", t: "Consultar sin autenticación",
+        req: "GET /api/v1/pockets/account/{{ACC_A1}}",
+        exp: ["401", "UNAUTHORIZED", "\"Se requiere autenticación\""] },
+
+      { id: "BE-CO-02", t: "Cuenta inexistente",
+        req: "GET /api/v1/pockets/account/{{UUID_FAKE}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["404", "ACCOUNT_NOT_FOUND", "\"Cuenta no encontrada\""] },
+
+      { id: "BE-CO-03", t: "Cuenta de otro usuario",
+        obj: "Verificar que no hay fuga de información entre usuarios.",
+        req: "GET /api/v1/pockets/account/{{ACC_B}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["403", "FORBIDDEN", "\"No tienes permiso para acceder a esta cuenta\""],
+        post: "El cuerpo no debe contener ningún bolsillo del usuario B." },
+
+      { id: "BE-CO-04", t: "Cuenta con bolsillos",
+        obj: "Camino principal de la consulta.",
+        pre: "ACC_A1 con POC_VAC $0 y POC_EST $550.000.",
+        req: "GET /api/v1/pockets/account/{{ACC_A1}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["200", "\"Bolsillos obtenidos\"", "data es un arreglo de 2 elementos: \"Vacaciones 2026\" con amount 0 y \"Estudio Posgrado\" con amount 550000"],
+        pasos: ["Cada elemento debe traer id, accountId, name, amount, createdAt y updatedAt — y ningún campo adicional."] },
+
+      { id: "BE-CO-05", t: "Cuenta sin bolsillos",
+        obj: "El arreglo vacío es una respuesta válida, no un 404.",
+        pre: "ACC_A4 sin depósito ni bolsillos.",
+        req: "GET /api/v1/pockets/account/{{ACC_A4}}\nAuthorization: Bearer {{TOKEN_A}}",
+        exp: ["200", "\"Bolsillos obtenidos\"", "data es un arreglo vacío []"] },
+
+      { id: "BE-CO-06", t: "Invariante de saldo tras toda la secuencia",
+        obj: "Comprobar la integridad de los datos después de crear, actualizar, eliminar y transferir: la suma de los bolsillos más el disponible debe seguir siendo exactamente lo depositado.",
+        req: "GET /api/v1/accounts/{{ACC_A1}}\nAuthorization: Bearer {{TOKEN_A}}\n\nGET /api/v1/pockets/account/{{ACC_A1}}\nAuthorization: Bearer {{TOKEN_A}}",
+        pasos: [
+          "Anotar data.balance de la cuenta.",
+          "Sumar los amount de todos los bolsillos.",
+          "Calcular balance + suma y comparar con el depósito de SETUP-05."
+        ],
+        exp: ["200", "invariante", "balance 450000 + bolsillos 550000 = 1000000, igual a lo depositado"],
+        post: "Repetir para ACC_A2: 150.000 + 50.000 = 200.000." }
+    ]
+  };
+
+  var TRACE = [
+    ["CreatePocket", "amount &lt; 0", "BE-CR-03", "No (Zod)"],
+    ["CreatePocket", "!account", "BE-CR-06", "Sí"],
+    ["CreatePocket", "assertBelongsTo", "BE-CR-07", "Sí"],
+    ["CreatePocket", "!isOperational()", "BE-CR-08", "Solo con SETUP-07"],
+    ["CreatePocket", "reserved + amount &gt; balance (V)", "BE-CR-09, BE-CR-13", "Sí"],
+    ["CreatePocket", "reserved + amount &gt; balance (F)", "BE-CR-10, BE-CR-11, BE-CR-12", "Sí"],
+    ["UpdatePocket", "!name.trim()", "BE-AC-04", "Sí"],
+    ["UpdatePocket", "amount &lt; 0", "BE-AC-03", "No (Zod)"],
+    ["UpdatePocket", "!pocket", "BE-AC-05, BE-AC-06", "Sí"],
+    ["UpdatePocket", "assertBelongsTo", "BE-AC-07", "Sí"],
+    ["UpdatePocket", "!isOperational()", "BE-AC-08", "Solo con SETUP-07"],
+    ["UpdatePocket", "límite de reserva (V)", "BE-AC-11", "Sí"],
+    ["UpdatePocket", "límite de reserva (F)", "BE-AC-09, BE-AC-10, BE-AC-12", "Sí"],
+    ["UpdatePocket", "solo name", "BE-AC-13", "Sí"],
+    ["UpdatePocket", "name + amount", "BE-AC-14", "Sí"],
+    ["UpdatePocket", "NO_CHANGES_PROVIDED", "BE-AC-02", "No (Zod)"],
+    ["DeletePocket", "!pocket", "BE-EL-02, BE-EL-03, BE-EL-07", "Sí"],
+    ["DeletePocket", "assertBelongsTo", "BE-EL-04", "Sí"],
+    ["DeletePocket", "!isOperational()", "BE-EL-05", "Solo con SETUP-07"],
+    ["DeletePocket", "camino principal", "BE-EL-06, BE-EL-08", "Sí"],
+    ["TransferPocketBalance", "amount &lt;= 0", "BE-TR-02, BE-TR-03", "No (Zod)"],
+    ["TransferPocketBalance", "from === to", "BE-TR-05", "Sí"],
+    ["TransferPocketBalance", "!fromPocket", "BE-TR-06", "Sí"],
+    ["TransferPocketBalance", "!toPocket", "BE-TR-07", "Sí"],
+    ["TransferPocketBalance", "cuentas distintas", "BE-TR-08", "Sí"],
+    ["TransferPocketBalance", "assertBelongsTo", "BE-TR-09", "Sí"],
+    ["TransferPocketBalance", "!isOperational()", "BE-TR-10", "Solo con SETUP-07"],
+    ["TransferPocketBalance", "fromPocket.amount &lt; amount", "BE-TR-11", "Sí"],
+    ["TransferPocketBalance", "camino principal", "BE-TR-12, BE-TR-13", "Sí"],
+    ["GetAccountPockets", "!account", "BE-CO-02", "Sí"],
+    ["GetAccountPockets", "assertBelongsTo", "BE-CO-03", "Sí"],
+    ["GetAccountPockets", "camino principal", "BE-CO-04, BE-CO-05", "Sí"],
+    ["authMiddleware", "sin token", "BE-CR-01, BE-AC-01, BE-EL-01, BE-TR-01, BE-CO-01", "Sí"],
+    ["Integridad de datos", "invariante de saldo", "BE-CO-06", "Sí"]
+  ];
+
+  // ── Estado ───────────────────────────────────────────────────────────────
+
+  var state = {};
+  try {
+    var raw = localStorage.getItem(KEY);
+    if (raw) state = JSON.parse(raw) || {};
+  } catch (e) { state = {}; }
+
+  function persist() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* modo privado */ }
+  }
+
+  // ── Render ───────────────────────────────────────────────────────────────
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+
+  function highlight(txt) {
+    var out = esc(txt);
+    out = out.replace(/^(GET|POST|PATCH|DELETE|PUT)\b/gm, '<span class="verb">$1</span>');
+    out = out.replace(/^(Authorization|Content-Type):/gm, '<span class="hdr">$1:</span>');
+    out = out.replace(/"([^"]*)":/g, '<span class="key">"$1":</span>');
+    return out;
+  }
+
+  function field(label, html) {
+    return '<div class="field"><b>' + label + "</b>" + html + "</div>";
+  }
+
+  function buildCase(c, isSetup) {
+    var el = document.createElement("article");
+    el.className = "case";
+    el.id = c.id;
+    if (!isSetup) el.setAttribute("data-case", c.id);
+
+    var h = '<div class="case-head"><span class="cid">' + c.id + "</span>" +
+            '<h4 class="ctitle">' + esc(c.t) + "</h4>";
+    if (c.flag) h += '<span class="flag ' + c.flag + '">' + esc(c.flagText) + "</span>";
+    h += "</div>";
+
+    var body = "";
+    if (c.obj) body += field("Objetivo", "<p>" + esc(c.obj) + "</p>");
+    if (c.pre) body += field("Precondición", "<p>" + esc(c.pre) + "</p>");
+    if (c.tabla) {
+      body += field("Depósitos", '<div class="scroll"><table><thead><tr><th>Cuenta</th><th>Token</th><th class="num">Monto</th></tr></thead><tbody>' +
+        c.tabla.map(function (r) {
+          return "<tr><td><code>" + r[0] + "</code></td><td><code>" + r[1] + "</code></td><td class=\"num\">" + r[2] + "</td></tr>";
+        }).join("") + "</tbody></table></div>");
+    }
+    if (c.bolsillos) {
+      body += field("Bolsillos a crear", '<div class="scroll"><table><thead><tr><th>Cuenta</th><th>Token</th><th>Nombre</th><th class="num">Monto</th><th>Guardar en</th></tr></thead><tbody>' +
+        c.bolsillos.map(function (r) {
+          return "<tr><td><code>" + r[0] + "</code></td><td><code>" + r[1] + "</code></td><td>" + esc(r[2]) +
+                 "</td><td class=\"num\">" + r[3] + "</td><td><code>" + r[4] + "</code></td></tr>";
+        }).join("") + "</tbody></table></div>");
+    }
+    if (c.req) body += '<pre class="req">' + highlight(c.req) + "</pre>";
+    if (c.pasos) {
+      body += field("Verificaciones", "<ol>" + c.pasos.map(function (p) {
+        return "<li>" + esc(p) + "</li>";
+      }).join("") + "</ol>");
+    }
+    if (c.exp) {
+      if (Array.isArray(c.exp)) {
+        var cls = c.exp[0].charAt(0) === "2" ? "s2" : "s4";
+        body += '<div class="expect"><span class="st ' + cls + '">' + c.exp[0] + "</span>" +
+                "<b>" + esc(c.exp[1]) + "</b> · " + esc(c.exp[2]) + "</div>";
+      } else {
+        body += '<div class="expect">' + esc(c.exp) + "</div>";
+      }
+    }
+    if (c.note) body += '<div class="note">' + c.note + "</div>";
+    if (c.post) body += field("Estado posterior", "<p>" + esc(c.post) + "</p>");
+
+    var rec = "";
+    if (!isSetup) {
+      rec = '<div class="record">' +
+        '<textarea placeholder="Resultado obtenido: código HTTP y cuerpo relevante de la respuesta" ' +
+        'aria-label="Resultado obtenido de ' + c.id + '"></textarea>' +
+        '<div class="seg" role="group" aria-label="Estado de ' + c.id + '">' +
+        '<button type="button" data-v="ok" aria-pressed="false">Aprobado</button>' +
+        '<button type="button" data-v="no" aria-pressed="false">Fallido</button>' +
+        '<button type="button" data-v="bl" aria-pressed="false">Bloqueado</button>' +
+        "</div></div>";
+    }
+
+    el.innerHTML = h + body + rec;
+    return el;
+  }
+
+  var SECCIONES = ["crear", "actualizar", "eliminar", "transferir", "consultar"];
+
+  var setupHost = document.getElementById("host-setup");
+  SETUP.forEach(function (s) { setupHost.appendChild(buildCase(s, true)); });
+
+  SECCIONES.forEach(function (k) {
+    var host = document.getElementById("host-" + k);
+    CASOS[k].forEach(function (c) { host.appendChild(buildCase(c, false)); });
+  });
+
+  document.getElementById("trace").innerHTML = TRACE.map(function (r) {
+    return "<tr><td><code>" + r[0] + "</code></td><td><code>" + r[1] + "</code></td><td>" +
+           r[2] + "</td><td>" + r[3] + "</td></tr>";
+  }).join("");
+
+  // ── Interacción ──────────────────────────────────────────────────────────
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll("[data-case]"));
+
+  function applyCard(card) {
+    var id = card.getAttribute("data-case");
+    var rec = state[id] || {};
+    var ta = card.querySelector("textarea");
+    if (ta && typeof rec.txt === "string") ta.value = rec.txt;
+    card.setAttribute("data-state", rec.v || "");
+    Array.prototype.forEach.call(card.querySelectorAll(".seg button"), function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-v") === rec.v ? "true" : "false");
+    });
+  }
+
+  function tally() {
+    var n = { ok: 0, no: 0, bl: 0 };
+    var per = {};
+    SECCIONES.forEach(function (k) { per[k] = 0; });
+
+    cards.forEach(function (card) {
+      var id = card.getAttribute("data-case");
+      var v = (state[id] || {}).v;
+      if (!v) return;
+      n[v]++;
+      var sec = card.closest("section");
+      if (sec && per.hasOwnProperty(sec.id)) per[sec.id]++;
+    });
+
+    document.getElementById("p-ok").textContent = n.ok;
+    document.getElementById("p-no").textContent = n.no;
+    document.getElementById("p-bl").textContent = n.bl;
+    document.getElementById("p-pe").textContent = cards.length - n.ok - n.no - n.bl;
+
+    SECCIONES.forEach(function (k) {
+      var el = document.getElementById("n-" + k);
+      if (el) el.textContent = per[k] + "/" + CASOS[k].length;
+    });
+  }
+
+  cards.forEach(function (card) {
+    var id = card.getAttribute("data-case");
+    applyCard(card);
+
+    card.addEventListener("click", function (ev) {
+      var btn = ev.target.closest(".seg button");
+      if (!btn || !card.contains(btn)) return;
+      var v = btn.getAttribute("data-v");
+      var rec = state[id] || (state[id] = {});
+      rec.v = rec.v === v ? "" : v;
+      persist();
+      applyCard(card);
+      tally();
+    });
+
+    var ta = card.querySelector("textarea");
+    if (ta) {
+      ta.addEventListener("input", function () {
+        var rec = state[id] || (state[id] = {});
+        rec.txt = ta.value;
+        persist();
+      });
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    state = {};
+    persist();
+    cards.forEach(applyCard);
+    tally();
+  });
+
+  tally();
+})();
+</script>
