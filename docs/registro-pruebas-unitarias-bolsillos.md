@@ -6,8 +6,8 @@ de cada caso proviene de la ejecución real de la unidad bajo prueba.
 La suite **no usa mocks, dobles ni stubs**. Las unidades sin dependencias se
 instancian directamente; los casos de uso reciben los repositorios Supabase reales.
 
-- **Fecha de ejecución:** 2026-08-31
-- **Versión probada:** main-04800eb
+- **Fecha de ejecución:** 2026-09-08
+- **Versión probada:** tests/bolsillos-coverage-d023836
 - **Entorno:** Backend (Node + tsx). Parte A en memoria; Parte B contra Supabase real.
 - **Usuario de la Parte B:** tomashmetaute@gmail.com
 - **Cómo reproducir:** `npm run test:unit` desde `backend/`
@@ -114,7 +114,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | El bolsillo queda con name = "Vacaciones", sin espacios en los extremos |
 | **Resultado obtenido** | name = "Vacaciones" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 0 ms |
+| **Duración** | 1 ms |
 
 ### PU-02 — Valor límite inferior del monto: se acepta el cero
 
@@ -167,7 +167,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Unidad bajo prueba** | `Pocket (constructor)` |
 | **Entrada** | name = "" |
 | **Resultado esperado** | Lanza AppError INVALID_POCKET_NAME (HTTP 400), la misma regla que aplica updateName("") |
-| **Resultado obtenido** | FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {"_id":"p1","_accountId":"a1","_name":"","_amount":100,"_createdAt":"2026-09-01T03:09:21.838Z","_updatedAt":"2026-09-01T03:09:21.838Z"} |
+| **Resultado obtenido** | FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {"_id":"p1","_accountId":"a1","_name":"","_amount":100,"_createdAt":"2026-09-08T14:11:36.157Z","_updatedAt":"2026-09-08T14:11:36.157Z"} |
 | **Estado** | ❌ **Fallido** |
 | **Defecto asociado** | D-01 |
 | **Duración** | 1 ms |
@@ -179,7 +179,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Unidad bajo prueba** | `Pocket.toPublic` |
 | **Entrada** | Bolsillo válido recién construido |
 | **Resultado esperado** | toPublic() devuelve exactamente id, accountId, name, amount, createdAt y updatedAt, con las fechas como cadena ISO |
-| **Resultado obtenido** | claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-01T03:09:21.839Z |
+| **Resultado obtenido** | claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-08T14:11:36.158Z |
 | **Estado** | ✅ **Aprobado** |
 | **Duración** | 0 ms |
 
@@ -247,7 +247,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Unidad bajo prueba** | `Pocket.updateAmount` |
 | **Entrada** | Bolsillo recién creado, updateAmount(20) |
 | **Resultado esperado** | updatedAt queda igual o posterior al valor previo a la mutación |
-| **Resultado obtenido** | updatedAt 1788232161840 → 1788232161840 (delta 0 ms) |
+| **Resultado obtenido** | updatedAt 1788876696159 → 1788876696159 (delta 0 ms) |
 | **Estado** | ✅ **Aprobado** |
 | **Duración** | 0 ms |
 
@@ -364,7 +364,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con "El nombre del bolsillo es obligatorio" |
 | **Resultado obtenido** | Rechazó con name: El nombre del bolsillo es obligatorio |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 0 ms |
+| **Duración** | 1 ms |
 
 ### VU-07 — Un nombre de solo espacios está vacío en la práctica y debe rechazarse
 
@@ -478,7 +478,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con INVALID_POCKET_AMOUNT (HTTP 400). Rama inalcanzable por HTTP |
 | **Resultado obtenido** | Rechazó con INVALID_POCKET_AMOUNT · HTTP 400 · "El monto del bolsillo no puede ser negativo" · saldo intacto en $1.000.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 398 ms |
+| **Duración** | 322 ms |
 
 ### CU-CR-02 — Una cuenta inexistente se rechaza tras consultar el repositorio
 
@@ -489,7 +489,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con ACCOUNT_NOT_FOUND (HTTP 404) |
 | **Resultado obtenido** | Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · "Cuenta no encontrada" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 183 ms |
+| **Duración** | 166 ms |
 
 ### CU-CR-03 — Un usuario que no es el dueño no puede crear bolsillos en la cuenta
 
@@ -500,7 +500,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con FORBIDDEN (HTTP 403), por assertBelongsTo |
 | **Resultado obtenido** | Rechazó con FORBIDDEN · HTTP 403 · "No tienes permiso para acceder a esta cuenta" · saldo intacto en $1.000.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 569 ms |
+| **Duración** | 509 ms |
 
 ### CU-CR-04 — Valor límite: un peso por encima del disponible se rechaza
 
@@ -511,7 +511,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400) |
 | **Resultado obtenido** | Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · "No tienes saldo disponible suficiente para crear este bolsillo" · se pidió $1.000.001 contra un disponible de $1.000.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 762 ms |
+| **Duración** | 875 ms |
 
 ### CU-CR-05 — Camino principal: el bolsillo se crea y el monto se reserva
 
@@ -522,7 +522,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Devuelve el bolsillo con amount 300.000 y deja el disponible en 700.000 y lo reservado en 300.000 |
 | **Resultado obtenido** | Bolsillo "Vacaciones" por $300.000 · disponible $700.000 · reservado $300.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1307 ms |
+| **Duración** | 1497 ms |
 
 ### CU-CR-06 — El bolsillo creado queda realmente persistido y es recuperable por id
 
@@ -533,7 +533,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | El repositorio devuelve el bolsillo con los mismos nombre y monto |
 | **Resultado obtenido** | Recuperado de la base: "Vacaciones" por $300.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 197 ms |
+| **Duración** | 213 ms |
 
 ### CU-CR-07 — Se pueden acumular varios bolsillos en la misma cuenta
 
@@ -544,7 +544,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Se crea el segundo bolsillo y el disponible baja a 500.000 |
 | **Resultado obtenido** | Segundo bolsillo por $200.000 · disponible $500.000 · reservado $500.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1328 ms |
+| **Duración** | 1598 ms |
 
 ### CU-CR-08 — Una cuenta no operativa no admite bolsillos nuevos
 
@@ -555,7 +555,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con ACCOUNT_NOT_OPERATIONAL (HTTP 400) |
 | **Resultado obtenido** | Rechazó con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · "La cuenta no está disponible para generar bolsillos" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 560 ms |
+| **Duración** | 585 ms |
 
 ### CU-CR-09 — Un bolsillo que cabe en el saldo disponible debe crearse aunque la cuenta ya tenga reservas
 
@@ -567,7 +567,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado obtenido** | FALLO: No tienes saldo disponible suficiente para crear este bolsillo |
 | **Estado** | ❌ **Fallido** |
 | **Defecto asociado** | D-05 |
-| **Duración** | 752 ms |
+| **Duración** | 736 ms |
 
 ## Actualizar bolsillo
 
@@ -602,7 +602,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con NO_CHANGES_PROVIDED (HTTP 400). Rama inalcanzable por HTTP |
 | **Resultado obtenido** | Rechazó con NO_CHANGES_PROVIDED · HTTP 400 · "No se proporcionaron cambios para el bolsillo" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 371 ms |
+| **Duración** | 334 ms |
 
 ### CU-AC-04 — Un bolsillo inexistente se rechaza
 
@@ -613,7 +613,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con POCKET_NOT_FOUND (HTTP 404) |
 | **Resultado obtenido** | Rechazó con POCKET_NOT_FOUND · HTTP 404 · "Bolsillo no encontrado" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 185 ms |
+| **Duración** | 209 ms |
 
 ### CU-AC-05 — Un usuario ajeno no puede modificar el bolsillo
 
@@ -624,7 +624,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con FORBIDDEN (HTTP 403) |
 | **Resultado obtenido** | Rechazó con FORBIDDEN · HTTP 403 · "No tienes permiso para acceder a esta cuenta" · monto intacto en $300.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 770 ms |
+| **Duración** | 642 ms |
 
 ### CU-AC-06 — Aumentar el monto reserva más saldo de la cuenta
 
@@ -635,7 +635,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | El bolsillo queda en 600.000 y el disponible baja a 200.000 |
 | **Resultado obtenido** | Monto $300.000 → $600.000 · disponible $200.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1328 ms |
+| **Duración** | 1177 ms |
 
 ### CU-AC-07 — Valor límite: se puede reservar exactamente el total de fondos de la cuenta
 
@@ -646,7 +646,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Acepta y deja el disponible en 0, porque la condición usa > estricto |
 | **Resultado obtenido** | disponible $0 · reservado $1.000.000 · total $1.000.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1515 ms |
+| **Duración** | 1322 ms |
 
 ### CU-AC-08 — Valor límite: un peso por encima del total de fondos se rechaza
 
@@ -657,7 +657,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400) |
 | **Resultado obtenido** | Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · "No tienes saldo disponible suficiente para ajustar este bolsillo" · el bolsillo sigue en $800.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 766 ms |
+| **Duración** | 689 ms |
 
 ### CU-AC-09 — Disminuir el monto libera saldo y lo devuelve al disponible
 
@@ -668,7 +668,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | El bolsillo queda en 300.000 y el disponible vuelve a 500.000 |
 | **Resultado obtenido** | Monto $800.000 → $300.000 · disponible $0 → $500.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1310 ms |
+| **Duración** | 1147 ms |
 
 ### CU-AC-10 — Cambiar solo el nombre no toca el saldo de la cuenta
 
@@ -679,7 +679,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Cambia el nombre, conserva el monto y deja el disponible en 500.000 |
 | **Resultado obtenido** | name = "Vacaciones 2026" · monto $300.000 · disponible intacto en $500.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1135 ms |
+| **Duración** | 970 ms |
 
 ## Eliminar bolsillo
 
@@ -692,7 +692,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con POCKET_NOT_FOUND (HTTP 404) |
 | **Resultado obtenido** | Rechazó con POCKET_NOT_FOUND · HTTP 404 · "Bolsillo no encontrado" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 184 ms |
+| **Duración** | 164 ms |
 
 ### CU-EL-02 — Un usuario ajeno no puede eliminar el bolsillo
 
@@ -703,7 +703,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con FORBIDDEN (HTTP 403) y el bolsillo sigue existiendo |
 | **Resultado obtenido** | Rechazó con FORBIDDEN · HTTP 403 · "No tienes permiso para acceder a esta cuenta" · el bolsillo sigue en la base |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 564 ms |
+| **Duración** | 500 ms |
 
 ### CU-EL-03 — Eliminar un bolsillo devuelve su monto al saldo disponible
 
@@ -714,7 +714,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Devuelve el bolsillo borrado, el disponible sube a 700.000 y lo reservado baja a 300.000 |
 | **Resultado obtenido** | Eliminado "Estudio" por $200.000 · disponible $500.000 → $700.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1549 ms |
+| **Duración** | 1743 ms |
 
 ### CU-EL-04 — Eliminar dos veces no vuelve a acreditar el monto
 
@@ -725,7 +725,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con POCKET_NOT_FOUND (HTTP 404) y el disponible sigue en 700.000 |
 | **Resultado obtenido** | Rechazó con POCKET_NOT_FOUND · HTTP 404 · "Bolsillo no encontrado" · disponible sin cambios en $700.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 560 ms |
+| **Duración** | 654 ms |
 
 ## Transferir entre bolsillos
 
@@ -760,7 +760,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con SOURCE_POCKET_NOT_FOUND (HTTP 404) |
 | **Resultado obtenido** | Rechazó con SOURCE_POCKET_NOT_FOUND · HTTP 404 · "Bolsillo de origen no encontrado" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 201 ms |
+| **Duración** | 164 ms |
 
 ### CU-TR-04 — Un bolsillo de destino inexistente se rechaza
 
@@ -782,7 +782,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con POCKETS_DIFFERENT_ACCOUNT (HTTP 400) |
 | **Resultado obtenido** | Rechazó con POCKETS_DIFFERENT_ACCOUNT · HTTP 400 · "Los bolsillos deben pertenecer a la misma cuenta" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 382 ms |
+| **Duración** | 320 ms |
 
 ### CU-TR-06 — Un usuario ajeno no puede mover dinero entre bolsillos de la cuenta
 
@@ -793,7 +793,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con FORBIDDEN (HTTP 403) |
 | **Resultado obtenido** | Rechazó con FORBIDDEN · HTTP 403 · "No tienes permiso para acceder a esta cuenta" · origen intacto en $300.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 943 ms |
+| **Duración** | 812 ms |
 
 ### CU-TR-07 — Valor límite: un peso más de lo que tiene el origen se rechaza
 
@@ -804,7 +804,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con INSUFFICIENT_POCKET_BALANCE (HTTP 400) |
 | **Resultado obtenido** | Rechazó con INSUFFICIENT_POCKET_BALANCE · HTTP 400 · "Saldo insuficiente en el bolsillo de origen" · se pidió $300.001 de un bolsillo con $300.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 750 ms |
+| **Duración** | 644 ms |
 
 ### CU-TR-08 — Camino principal: mueve dinero entre reservas sin tocar el disponible
 
@@ -815,7 +815,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | El origen queda en 200.000, el destino en 300.000 y el disponible de la cuenta no cambia |
 | **Resultado obtenido** | origen $300.000 → $200.000 · destino $200.000 → $300.000 · disponible intacto en $500.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1534 ms |
+| **Duración** | 1312 ms |
 
 ### CU-TR-09 — Valor límite: transferir el saldo completo del origen se acepta
 
@@ -826,7 +826,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | El origen queda en 0 y el destino en 500.000, porque la condición usa < estricto |
 | **Resultado obtenido** | origen $0 · destino $500.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 1121 ms |
+| **Duración** | 963 ms |
 
 ## Consultar bolsillos
 
@@ -839,7 +839,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con ACCOUNT_NOT_FOUND (HTTP 404) |
 | **Resultado obtenido** | Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · "Cuenta no encontrada" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 199 ms |
+| **Duración** | 158 ms |
 
 ### CU-CO-02 — Un usuario ajeno no puede listar los bolsillos de la cuenta
 
@@ -850,7 +850,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Rechaza con FORBIDDEN (HTTP 403), sin devolver ningún bolsillo |
 | **Resultado obtenido** | Rechazó con FORBIDDEN · HTTP 403 · "No tienes permiso para acceder a esta cuenta" |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 182 ms |
+| **Duración** | 165 ms |
 
 ### CU-CO-03 — Devuelve los bolsillos de la cuenta en su representación pública
 
@@ -861,7 +861,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Arreglo de 2 elementos, cada uno con exactamente id, accountId, name, amount, createdAt y updatedAt |
 | **Resultado obtenido** | 2 bolsillos: Estudio=$500.000, Vacaciones 2026=$0 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 384 ms |
+| **Duración** | 331 ms |
 
 ### CU-CO-04 — Una cuenta sin bolsillos devuelve un arreglo vacío, no un error
 
@@ -872,7 +872,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | Devuelve [] con longitud 0 |
 | **Resultado obtenido** | Arreglo vacío (longitud 0) |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 363 ms |
+| **Duración** | 322 ms |
 
 ### CU-CO-05 — Tras crear, actualizar, eliminar y transferir, lo reservado más lo disponible sigue siendo lo depositado
 
@@ -883,7 +883,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 | **Resultado esperado** | disponible + reservado = 1.000.000, el depósito inicial |
 | **Resultado obtenido** | disponible $500.000 + reservado $500.000 = $1.000.000 |
 | **Estado** | ✅ **Aprobado** |
-| **Duración** | 462 ms |
+| **Duración** | 475 ms |
 
 ## Casos fallidos
 
@@ -895,7 +895,7 @@ De los 5 fallidos, 5 corresponden a defectos ya identificados del código de pro
 
 **Esperado:** Lanza AppError INVALID_POCKET_NAME (HTTP 400), la misma regla que aplica updateName("")
 
-**Obtenido:** FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {"_id":"p1","_accountId":"a1","_name":"","_amount":100,"_createdAt":"2026-09-01T03:09:21.838Z","_updatedAt":"2026-09-01T03:09:21.838Z"}
+**Obtenido:** FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {"_id":"p1","_accountId":"a1","_name":"","_amount":100,"_createdAt":"2026-09-08T14:11:36.157Z","_updatedAt":"2026-09-08T14:11:36.157Z"}
 
 ### ❌ VU-03 — Schemas de validación · defecto D-02
 
