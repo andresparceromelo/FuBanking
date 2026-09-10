@@ -32,10 +32,10 @@ export class RequestPasswordReset {
 
     console.log('[RequestPasswordReset] Usuario encontrado, ID:', user.id);
 
-    // Generar token JWT válido por 30 segundos (TEMPORAL - solo para pruebas, cambiar a '15m' en producción)
+    // Generar token JWT válido por 5 minutos para el enlace de recuperación de contraseña
     const token = this.tokenService.generate(
       { userId: user.id, email: user.email.toString(), type: 'reset' },
-      { expiresIn: '15m' }
+      { expiresIn: '5m' }
     );
 
     // Construir enlace de recuperacisón
