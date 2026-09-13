@@ -13,7 +13,8 @@ describe('RegisterUser Integration', () => {
         document: 'DOC123456',
         password: 'Password123!',
         confirmPassword: 'Password123!',
-        birthDate: '1990-01-01'
+        birthDate: '1990-01-01',
+        monthlyIncome: 1800000
       });
     expect(response.status).toBe(201);
   });

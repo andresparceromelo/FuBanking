@@ -44,7 +44,7 @@ export class InMemoryUserRepository implements IUserRepository {
   async updateTwoFactor(id: string, enabled: boolean): Promise<User> {
     const existing = this.store.get(id);
     if (!existing) throw new Error(`InMemoryUserRepository: usuario ${id} no encontrado`);
-    (existing as any).twoFactorEnabled = enabled;
+    (existing as any)._twoFactorEnabled = enabled;
     return existing;
   }
   async delete(id: string): Promise<void> {

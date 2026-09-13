@@ -1,4 +1,4 @@
-import { Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { AppError } from '../../shared/errors/AppError';
 import { sendError } from '../../shared/utils/response';
@@ -14,6 +14,7 @@ import { sendError } from '../../shared/utils/response';
  */
 export function errorHandler(
   error: unknown,
+  _req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction,

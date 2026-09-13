@@ -91,7 +91,7 @@ describe('UpdateProfile', () => {
 
     const dto = {
       firstName: 'Maria',
-      birthDate: new Date('1995-03-20'),
+      birthDate: new Date(1995, 2, 20),
     };
 
     const result = await updateProfile.execute('user-perfil-01', dto);

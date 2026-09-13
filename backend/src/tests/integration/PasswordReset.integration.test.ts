@@ -28,7 +28,7 @@ describe('Integración Password Reset — Pruebas de caja blanca (Frontend↔Bac
   let app: Application;
   let deps: TestDeps;
   beforeEach(() => {
-    process.env['CLIENT_URL'] = 'http:
+    process.env['CLIENT_URL'] = 'http://localhost:3000';
     ({ app, deps } = createTestApp());
   });
   test('C1 — backend rechaza POST /forgot-password por DTO inválido (email malformado): responde 4xx', async () => {
@@ -54,7 +54,7 @@ describe('Integración Password Reset — Pruebas de caja blanca (Frontend↔Bac
         confirmPassword: 'NuevaPass1!',
       });
     expect(res2.status).toBe(401);
-    expect(res2.body).toMatchObject({ code: 'TOKEN_INVALID' });
+    expect(res2.body.error).toMatchObject({ code: 'TOKEN_INVALID' });
   });
   test('C3 — ambas peticiones aceptadas: contraseña restablecida, ambas responden 200', async () => {
     const user = buildUser();

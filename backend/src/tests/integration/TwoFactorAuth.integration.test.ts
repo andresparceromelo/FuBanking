@@ -52,7 +52,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/login')
       .send({ email: 'noexiste@example.com', password: 'Segura123!' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'INVALID_CREDENTIALS' });
+    expect(res.body.error).toMatchObject({ code: 'INVALID_CREDENTIALS' });
   });
   test('C2 - password incorrecta: POST /login → 401 INVALID_CREDENTIALS', async () => {
     deps.userRepository.seed(buildUser(false));
@@ -60,7 +60,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/login')
       .send({ email: 'ana@example.com', password: 'Incorrecta999!' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'INVALID_CREDENTIALS' });
+    expect(res.body.error).toMatchObject({ code: 'INVALID_CREDENTIALS' });
   });
   test('C3 - login exitoso sin 2FA: POST /login → 200 { token }', async () => {
     deps.userRepository.seed(buildUser(false));
@@ -82,7 +82,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: 'invalid.token.not.fake', code: '999999' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'TOKEN_INVALID' });
+    expect(res.body.error).toMatchObject({ code: 'TOKEN_INVALID' });
   });
   test('C5 - código no encontrado: POST /2fa/verify → 401 INVALID_OTP', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });
@@ -90,7 +90,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: validToken, code: '000000' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'INVALID_OTP' });
+    expect(res.body.error).toMatchObject({ code: 'INVALID_OTP' });
   });
   test('C6 - código ya usado: POST /2fa/verify → 401 OTP_ALREADY_USED', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });
@@ -99,7 +99,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: validToken, code: '111111' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'OTP_ALREADY_USED' });
+    expect(res.body.error).toMatchObject({ code: 'OTP_ALREADY_USED' });
   });
   test('C7 - código expirado: POST /2fa/verify → 401 OTP_EXPIRED', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });
@@ -109,7 +109,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: validToken, code: '222222' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'OTP_EXPIRED' });
+    expect(res.body.error).toMatchObject({ code: 'OTP_EXPIRED' });
   });
   test('C8 - intentos máximos alcanzados: POST /2fa/verify → 401 MAX_ATTEMPTS_REACHED', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });
@@ -118,7 +118,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: validToken, code: '333333' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'MAX_ATTEMPTS_REACHED' });
+    expect(res.body.error).toMatchObject({ code: 'MAX_ATTEMPTS_REACHED' });
   });
   test('C9 - código incorrecto (intentos < max): POST /2fa/verify → 401 INVALID_OTP, incrementa intentos', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });
@@ -127,7 +127,7 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: validToken, code: '444444' });
     expect(res.status).toBe(401);
-    expect(res.body).toMatchObject({ code: 'INVALID_OTP' });
+    expect(res.body.error).toMatchObject({ code: 'INVALID_OTP' });
     const updatedCode = await deps.verificationCodeRepository.findLatestByUserId('user-456');
     expect(updatedCode!.attempts).toBe(2);
   });

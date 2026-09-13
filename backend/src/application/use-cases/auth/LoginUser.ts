@@ -37,6 +37,7 @@ export class LoginUser {
       verificationCodeRepository,
       emailService,
       tokenService,
+      passwordService,
     );
   }
 
