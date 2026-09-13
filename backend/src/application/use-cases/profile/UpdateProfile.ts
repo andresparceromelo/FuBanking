@@ -28,7 +28,8 @@ export class UpdateProfile {
       || dto.secondLastName !== undefined
       || dto.birthDate !== undefined
       || dto.phone !== undefined
-      || dto.avatarUrl !== undefined;
+      || dto.avatarUrl !== undefined
+      || dto.monthlyIncome !== undefined;
 
     if (!hasChanges) {
       throw new AppError('No se proporcionó ningún campo para actualizar', 400, 'NO_CHANGES');
@@ -43,6 +44,7 @@ export class UpdateProfile {
       birthDate: dto.birthDate ?? undefined,
       phone: dto.phone,
       avatarUrl: dto.avatarUrl,
+      monthlyIncome: dto.monthlyIncome ?? undefined,
     });
 
     return updatedUser.toPublic();

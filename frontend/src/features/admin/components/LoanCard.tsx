@@ -78,6 +78,25 @@ export function LoanCard({ loan, onApprove, onReject, isLoading }: LoanCardProps
         <span>Ingreso: {formatCurrency(loan.monthlyIncome)}/mes</span>
       </div>
 
+      <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
+        {[
+          { label: 'Documento', done: loan.documentVerified },
+          { label: 'Mayor de edad', done: loan.ageVerified },
+          { label: 'Ingreso validado', done: loan.incomeVerified },
+          { label: 'Historial crediticio', done: loan.creditHistoryVerified },
+        ].map((req) => (
+          <span
+            key={req.label}
+            className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-full font-medium ${
+              req.done ? 'text-green-700 bg-green-50' : 'text-red-700 bg-red-50'
+            }`}
+          >
+            {req.done ? <CheckCircle size={12} /> : <XCircle size={12} />}
+            {req.label}
+          </span>
+        ))}
+      </div>
+
       {loan.status === 'PENDING' && (
         <div className="flex gap-3 pt-4 border-t border-border">
           <button

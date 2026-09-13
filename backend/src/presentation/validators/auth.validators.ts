@@ -57,6 +57,7 @@ export const registerSchema = z
       .min(5, 'El documento debe tener al menos 5 caracteres')
       .max(20, 'El documento no puede superar los 20 caracteres')
       .regex(/^[a-zA-Z0-9]+$/, 'El documento solo puede contener letras y números'),
+    monthlyIncome: z.number().positive('El ingreso mensual debe ser mayor a cero'),
     phone: z
       .string()
       .regex(/^\+?[0-9\s\-()]{7,20}$/, 'Número de teléfono inválido')

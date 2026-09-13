@@ -184,6 +184,21 @@ export class SupabaseAccountRepository implements IAccountRepository {
     return this.mapRowToAccount(data as AccountRow);
   }
 
+  async updateStatus(accountId: string, status: AccountStatus): Promise<Account> {
+    const { data, error } = await this.client
+      .from(this.TABLE)
+      .update({ status })
+      .eq('id', accountId)
+      .select(`*, account_details(*)`)
+      .single();
+
+    if (error || !data) {
+      throw new AppError(`Error al actualizar estado de la cuenta: ${error?.message ?? 'Desconocido'}`, 500, 'DB_ERROR');
+    }
+
+    return this.mapRowToAccount(data as AccountRow);
+  }
+
   /**
    * Verifica si algún campo de los detalles tiene un valor real.
    */

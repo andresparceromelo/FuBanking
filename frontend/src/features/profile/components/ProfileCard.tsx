@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { PublicUser } from '@/features/auth/types/auth.types';
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui/Card';
 import { Button } from '@/shared/components/ui/Button';
-import { User, Mail, CreditCard, Phone, Calendar, ShieldCheck, ShieldAlert, Loader2 } from 'lucide-react';
+import { User, Mail, CreditCard, Phone, Calendar, ShieldCheck, ShieldAlert, Loader2, FileText, CheckCircle2, XCircle } from 'lucide-react';
 import { authService } from '@/features/auth/services/auth.service';
+import { profileService } from '@/features/profile/services/profile.service';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { useToast } from '@/shared/components/feedback/ToastProvider';
+import { formatCurrency } from '@/shared/utils/format';
 
 interface ProfileCardProps {
   user: PublicUser;
@@ -19,13 +21,44 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
   const { updateUser } = useAuth();
   const toast = useToast();
   const [isUpdating2FA, setIsUpdating2FA] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('es-CO', {
+    // birthDate llega como YYYY-MM-DD; parsearlo como medianoche local
+    // evita que la fecha "se atrase" un día por la zona horaria.
+    const date = dateString.includes('T') ? new Date(dateString) : new Date(`${dateString}T00:00:00`);
+    return date.toLocaleDateString('es-CO', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     });
+  };
+
+  const handleUploadDocument = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      toast.error('Archivo inválido', 'Solo se permiten archivos PDF.');
+      e.target.value = '';
+      return;
+    }
+    setIsUploading(true);
+    try {
+      const updated = await profileService.uploadDocument(file);
+      updateUser(updated);
+      toast.success('Documento verificado', 'Tu documento fue subido y verificado correctamente.');
+      if (onToggleSuccess) onToggleSuccess();
+    } catch (error: unknown) {
+      const message =
+        error && typeof error === 'object' && 'message' in error
+          ? String((error as { message?: string }).message)
+          : 'No pudimos subir tu documento. Intenta de nuevo.';
+      toast.error('No pudimos verificar el documento', message);
+    } finally {
+      setIsUploading(false);
+      e.target.value = '';
+    }
   };
 
   const handleToggle2FA = async () => {
@@ -118,6 +151,53 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
             <p className="font-medium text-lg">{formatDate(user.createdAt)}</p>
           </div>
 
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground flex items-center gap-2">
+              <CreditCard size={16} /> Ingreso mensual
+            </p>
+            <p className="font-medium text-lg">
+              {user.monthlyIncome ? formatCurrency(user.monthlyIncome) : 'No registrado'}
+            </p>
+          </div>
+
+        </div>
+
+        {/* Sección de Verificación de Documento */}
+        <div className="pt-8 mt-8 border-t border-border">
+          <h3 className="text-lg font-semibold mb-4">Verificación de identidad</h3>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl border border-border bg-muted/20">
+            <div className="flex items-start gap-3">
+              <div className={`mt-1 flex-shrink-0 ${user.documentVerified ? 'text-green-500' : 'text-amber-500'}`}>
+                {user.documentVerified ? <CheckCircle2 size={24} /> : <XCircle size={24} />}
+              </div>
+              <div>
+                <p className="font-medium text-foreground">Documento de identidad</p>
+                <p className="text-sm text-muted-foreground mt-1 max-w-md">
+                  {user.documentVerified
+                    ? 'Tu documento fue verificado. Ya puedes solicitar un crédito.'
+                    : 'Sube tu documento en formato PDF para poder solicitar un préstamo.'}
+                </p>
+              </div>
+            </div>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/pdf"
+              className="hidden"
+              onChange={handleUploadDocument}
+              disabled={isUploading}
+            />
+            <Button
+              variant={user.documentVerified ? "outline" : "default"}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isUploading}
+              className="w-full sm:w-auto flex-shrink-0"
+            >
+              {isUploading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+              <FileText size={16} className="mr-2" />
+              {user.documentVerified ? 'Reemplazar PDF' : 'Subir PDF'}
+            </Button>
+          </div>
         </div>
 
         {/* Sección de Seguridad */}

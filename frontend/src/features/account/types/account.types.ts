@@ -9,6 +9,7 @@ export enum AccountType {
   AHORROS = 'AHORROS',
   CORRIENTE = 'CORRIENTE',
   NOMINA = 'NOMINA',
+  CREDITO = 'CREDITO',
 }
 
 export enum AccountStatus {
@@ -47,6 +48,7 @@ export const ACCOUNT_TYPE_LABELS: Record<AccountType, string> = {
   [AccountType.AHORROS]: 'Cuenta de Ahorros',
   [AccountType.CORRIENTE]: 'Cuenta Corriente',
   [AccountType.NOMINA]: 'Cuenta Nómina',
+  [AccountType.CREDITO]: 'Cuenta de Crédito',
 };
 
 export const ACCOUNT_STATUS_LABELS: Record<AccountStatus, string> = {

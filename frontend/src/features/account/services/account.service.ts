@@ -52,6 +52,15 @@ class AccountService {
     const response = await apiClient.post<Account>(`/accounts/${accountId}/withdraw`, { amount, description });
     return response.data;
   }
+
+  /**
+   * Eliminar (cerrar) una cuenta del usuario.
+   * DELETE /accounts/:id
+   */
+  async deleteAccount(accountId: string): Promise<Account> {
+    const response = await apiClient.delete<Account>(`/accounts/${accountId}`);
+    return response.data;
+  }
 }
 
 export const accountService = new AccountService();

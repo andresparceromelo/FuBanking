@@ -3,12 +3,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { useMemo, useState, useEffect, useCallback } from 'react';
-import { Landmark, Calculator, BadgeCheck, Clock, CheckCircle, XCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Landmark, Calculator, BadgeCheck, Clock, CheckCircle, XCircle, CheckCircle2, FileText, CalendarCheck, Wallet, History } from 'lucide-react';
 import { Button } from '@/shared/components/ui/Button';
 import { Input } from '@/shared/components/ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/Card';
 import { loanService } from '@/features/loans/services/loan.service';
+import { profileService } from '@/features/profile/services/profile.service';
 import { formatCurrency } from '@/shared/utils/format';
+import { PublicUser } from '@/features/auth/types/auth.types';
 
 interface MyLoan {
   id: string;
@@ -28,22 +31,49 @@ const statusMap: Record<string, { color: string; icon: any; label: string }> = {
   REJECTED: { color: 'text-red-600 bg-red-50 border-red-200', icon: XCircle, label: 'Rechazado' },
 };
 
+function isOfLegalAge(birthDate: string): boolean {
+  if (!birthDate) return false;
+  const birth = new Date(`${birthDate}T00:00:00`);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age >= 18;
+}
+
 export function LoansClient() {
   const [amount, setAmount] = useState('5000');
   const [installments, setInstallments] = useState('12');
   const [annualRate, setAnnualRate] = useState('18');
-  const [monthlyIncome, setMonthlyIncome] = useState('2500');
-  const [documentVerified, setDocumentVerified] = useState(true);
-  const [ageVerified, setAgeVerified] = useState(true);
-  const [incomeVerified, setIncomeVerified] = useState(true);
-  const [creditHistoryVerified, setCreditHistoryVerified] = useState(true);
+  const [profile, setProfile] = useState<PublicUser | null>(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [simulation, setSimulation] = useState<any>(null);
   const [application, setApplication] = useState<any>(null);
   const [myLoans, setMyLoans] = useState<MyLoan[]>([]);
 
-  const canSubmit = useMemo(() => Number(amount) > 0 && Number(installments) > 0, [amount, installments]);
+  const baseEligible = useMemo(() => Number(amount) > 0 && Number(installments) > 0, [amount, installments]);
+
+  // Requisitos de solicitud — NO son editables; se derivan del perfil del usuario.
+  const requirements = useMemo(() => {
+    const documentVerified = profile?.documentVerified ?? false;
+    const ageVerified = profile ? isOfLegalAge(profile.birthDate) : false;
+    const incomeVerified = (profile?.monthlyIncome ?? 0) > 0;
+    const creditHistoryVerified = true; // Sin validación rigurosa por ahora
+    return [
+      { key: 'document', label: 'Documento verificado', done: documentVerified, icon: FileText },
+      { key: 'age', label: 'Mayor de edad', done: ageVerified, icon: CalendarCheck },
+      { key: 'income', label: 'Ingreso validado', done: incomeVerified, icon: Wallet },
+      { key: 'creditHistory', label: 'Historial crediticio validado', done: creditHistoryVerified, icon: History },
+    ];
+  }, [profile]);
+
+  const allRequirementsMet = useMemo(
+    () => requirements.every((r) => r.done) && baseEligible,
+    [requirements, baseEligible],
+  );
 
   const fetchMyLoans = useCallback(async () => {
     try {
@@ -56,6 +86,12 @@ export function LoansClient() {
 
   useEffect(() => {
     void fetchMyLoans();
+    profileService
+      .getProfile()
+      .then(setProfile)
+      .catch(() => {
+        // silently fail
+      });
   }, [fetchMyLoans]);
 
   const hasPending = useMemo(() => myLoans.some(l => l.status === 'PENDING'), [myLoans]);
@@ -79,8 +115,12 @@ export function LoansClient() {
   };
 
   const handleCreate = async () => {
-    if (!canSubmit) {
+    if (!baseEligible) {
       setMessage('Ingresa un monto y número de cuotas válidos.');
+      return;
+    }
+    if (!allRequirementsMet) {
+      setMessage('Completa todos los requisitos desde tu perfil para solicitar un préstamo.');
       return;
     }
     if (hasPending) {
@@ -95,11 +135,7 @@ export function LoansClient() {
         amount: Number(amount),
         installments: Number(installments),
         annualRate: Number(annualRate),
-        monthlyIncome: Number(monthlyIncome),
-        documentVerified,
-        ageVerified,
-        incomeVerified,
-        creditHistoryVerified,
+        monthlyIncome: profile?.monthlyIncome ?? 0,
       });
       setApplication(result);
       setMessage(result.eligibility.isEligible ? 'Solicitud enviada correctamente.' : 'Solicitud registrada, pero no cumple con todos los requisitos.');
@@ -124,37 +160,53 @@ export function LoansClient() {
             <CardTitle>Simulador de préstamo</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="grid gap-4 md:grid-cols-3">
               <Input label="Monto" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
               <Input label="Cuotas" type="number" value={installments} onChange={(e) => setInstallments(e.target.value)} />
               <Input label="Tasa anual (%)" type="number" value={annualRate} onChange={(e) => setAnnualRate(e.target.value)} />
-              <Input label="Ingreso mensual" type="number" value={monthlyIncome} onChange={(e) => setMonthlyIncome(e.target.value)} />
             </div>
 
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="flex items-center gap-2 text-sm text-foreground">
-                <input type="checkbox" checked={documentVerified} onChange={() => setDocumentVerified((v) => !v)} />
-                Documento verificado
-              </label>
-              <label className="flex items-center gap-2 text-sm text-foreground">
-                <input type="checkbox" checked={ageVerified} onChange={() => setAgeVerified((v) => !v)} />
-                Edad verificada
-              </label>
-              <label className="flex items-center gap-2 text-sm text-foreground">
-                <input type="checkbox" checked={incomeVerified} onChange={() => setIncomeVerified((v) => !v)} />
-                Ingreso validado
-              </label>
-              <label className="flex items-center gap-2 text-sm text-foreground">
-                <input type="checkbox" checked={creditHistoryVerified} onChange={() => setCreditHistoryVerified((v) => !v)} />
-                Historial crediticio validado
-              </label>
+            {/* Requisitos de solicitud — solo lectura, se activan al cumplirse */}
+            <div className="rounded-2xl border border-border p-4 space-y-2">
+              <p className="text-sm font-semibold text-foreground">Requisitos para solicitar</p>
+              <div className="grid gap-2 sm:grid-cols-2">
+                {requirements.map((req) => {
+                  const ReqIcon = req.icon;
+                  return (
+                    <div
+                      key={req.key}
+                      className={`flex items-center gap-2 text-sm rounded-lg px-3 py-2 border ${
+                        req.done
+                          ? 'text-green-700 border-green-200 bg-green-50'
+                          : 'text-muted-foreground border-border bg-background'
+                      }`}
+                    >
+                      {req.done ? (
+                        <CheckCircle2 size={16} className="text-green-600 flex-shrink-0" />
+                      ) : (
+                        <ReqIcon size={16} className="flex-shrink-0" />
+                      )}
+                      <span>{req.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              {!allRequirementsMet && (
+                <p className="text-xs text-muted-foreground">
+                  Faltan requisitos por completar. Puedes resolverlos desde tu{' '}
+                  <Link href="/profile" className="text-primary font-semibold hover:underline">
+                    perfil
+                  </Link>
+                  .
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button onClick={handleSimulate} isLoading={loading} className="w-full sm:w-auto">
                 <span className="flex items-center gap-2"><Calculator size={16} /> Simular</span>
               </Button>
-              <Button variant="outline" onClick={handleCreate} isLoading={loading} disabled={hasPending} className="w-full sm:w-auto">
+              <Button variant="outline" onClick={handleCreate} isLoading={loading} disabled={!allRequirementsMet || hasPending} className="w-full sm:w-auto">
                 <span className="flex items-center gap-2"><BadgeCheck size={16} /> Solicitar</span>
               </Button>
             </div>

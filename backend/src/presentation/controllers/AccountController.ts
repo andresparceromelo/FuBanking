@@ -4,6 +4,7 @@ import { GetUserAccounts } from '../../application/use-cases/account/GetUserAcco
 import { GetAccountDetails } from '../../application/use-cases/account/GetAccountDetails';
 import { DepositMoney } from '../../application/use-cases/account/DepositMoney';
 import { WithdrawMoney } from '../../application/use-cases/account/WithdrawMoney';
+import { CloseAccount } from '../../application/use-cases/account/CloseAccount';
 import { createAccountSchema } from '../validators/account.validators';
 import { sendSuccess } from '../../shared/utils/response';
 
@@ -25,6 +26,7 @@ export class AccountController {
     private readonly getAccountDetailsUseCase: GetAccountDetails,
     private readonly depositMoneyUseCase: DepositMoney,
     private readonly withdrawMoneyUseCase: WithdrawMoney,
+    private readonly closeAccountUseCase: CloseAccount,
   ) {}
 
   /**
@@ -112,6 +114,23 @@ export class AccountController {
         description,
       });
       sendSuccess(res, updatedAccount.toPublic(), 'Retiro realizado exitosamente');
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * DELETE /accounts/:id
+   * Elimina (cierra) una cuenta del usuario autenticado.
+   */
+  close = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const accountId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const result = await this.closeAccountUseCase.execute({
+        accountId,
+        userId: req.user!.id,
+      });
+      sendSuccess(res, result, 'Cuenta eliminada exitosamente');
     } catch (error) {
       next(error);
     }

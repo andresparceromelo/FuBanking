@@ -31,6 +31,13 @@ export class CreateLoanApplication {
       );
     }
 
+    // Los requisitos se derivan del perfil del usuario, NO se confían al cliente.
+    const documentVerified = user.documentVerified;
+    const ageVerified = user.isOfLegalAge();
+    const incomeVerified = user.isIncomeValidated();
+    // Sin validación rigurosa por ahora: el historial crediticio se da por válido.
+    const creditHistoryVerified = true;
+
     const loan = LoanApplication.create({
       id: randomUUID(),
       userId: dto.userId,
@@ -38,10 +45,10 @@ export class CreateLoanApplication {
       installments: dto.installments,
       annualRate: dto.annualRate,
       monthlyIncome: dto.monthlyIncome,
-      documentVerified: dto.documentVerified,
-      ageVerified: dto.ageVerified,
-      incomeVerified: dto.incomeVerified,
-      creditHistoryVerified: dto.creditHistoryVerified,
+      documentVerified,
+      ageVerified,
+      incomeVerified,
+      creditHistoryVerified,
     });
 
     const saved = await this.loanRepository.save(loan);

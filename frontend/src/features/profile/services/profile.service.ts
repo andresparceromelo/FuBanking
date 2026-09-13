@@ -12,6 +12,15 @@ class ProfileService {
     const response = await apiClient.patch<PublicUser>('/profile', data);
     return response.data;
   }
+
+  async uploadDocument(file: File): Promise<PublicUser> {
+    const formData = new FormData();
+    formData.append('document', file);
+    const response = await apiClient.post<PublicUser>('/profile/document', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  }
 }
 
 export const profileService = new ProfileService();

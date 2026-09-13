@@ -16,10 +16,6 @@ export interface LoanSimulationResponse {
 
 export interface CreateLoanPayload extends LoanSimulationPayload {
   monthlyIncome: number;
-  documentVerified: boolean;
-  ageVerified: boolean;
-  incomeVerified: boolean;
-  creditHistoryVerified: boolean;
 }
 
 export interface LoanApplication {

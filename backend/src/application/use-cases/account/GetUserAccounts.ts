@@ -1,4 +1,5 @@
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
+import { AccountStatus } from '../../../domain/entities/Account';
 import { AccountSummaryDto } from '../../dtos/account/account.dtos';
 
 /**
@@ -6,6 +7,7 @@ import { AccountSummaryDto } from '../../dtos/account/account.dtos';
  *
  * Solo devuelve las cuentas que pertenecen al userId proporcionado.
  * La seguridad garantiza que un usuario jamás vea cuentas ajenas.
+ * Las cuentas CERRADA (eliminadas) no se incluyen en el listado.
  */
 export class GetUserAccounts {
   constructor(
@@ -14,6 +16,8 @@ export class GetUserAccounts {
 
   async execute(userId: string): Promise<AccountSummaryDto[]> {
     const accounts = await this.accountRepository.findByUserId(userId);
-    return accounts.map((account) => account.toPublic());
+    return accounts
+      .filter((account) => account.status !== AccountStatus.CERRADA)
+      .map((account) => account.toPublic());
   }
 }

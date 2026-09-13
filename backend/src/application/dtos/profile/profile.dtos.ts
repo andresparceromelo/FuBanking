@@ -16,6 +16,9 @@ export interface GetProfileResponseDto {
   document: string;
   phone: string | null;
   avatarUrl: string | null;
+  monthlyIncome: number | null;
+  documentVerified: boolean;
+  documentVerifiedAt: string | null;
   isActive: boolean;
   createdAt: string;
 }
@@ -30,6 +33,7 @@ export interface UpdateProfileDto {
   birthDate?: Date | null;
   phone?: string | null;
   avatarUrl?: string | null;
+  monthlyIncome?: number | null;
 }
 
 export interface UpdateProfileResponseDto extends GetProfileResponseDto {}

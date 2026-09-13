@@ -60,8 +60,9 @@ export class RegisterUser {
       middleName: dto.middleName?.trim() || null,
       lastName: dto.lastName.trim(),
       secondLastName: dto.secondLastName?.trim() || null,
-      birthDate: new Date(dto.birthDate),
+      birthDate: new Date(`${dto.birthDate}T00:00:00`),
       phone: dto.phone ?? null,
+      monthlyIncome: dto.monthlyIncome,
       passwordHash,
     });
 

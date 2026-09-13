@@ -11,10 +11,6 @@ export const createLoanSchema = z.object({
   installments: z.number().int().min(1, 'Las cuotas deben ser al menos 1'),
   annualRate: z.number().min(0, 'La tasa debe ser mayor o igual a cero'),
   monthlyIncome: z.number().positive('El ingreso mensual debe ser mayor a cero'),
-  documentVerified: z.boolean(),
-  ageVerified: z.boolean(),
-  incomeVerified: z.boolean(),
-  creditHistoryVerified: z.boolean(),
 });
 
 export const loanIdParamSchema = z.object({

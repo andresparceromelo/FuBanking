@@ -199,7 +199,7 @@ export default function RequestsPage() {
                             >
                               {accounts.map(acc => (
                                 <option key={acc.id} value={acc.id}>
-                                  {acc.type === 'CORRIENTE' ? 'Corriente' : 'Ahorros'} - ****{acc.accountNumber.slice(-4)} ({formatCurrency(acc.balance)})
+                                  {acc.accountType === 'CORRIENTE' ? 'Corriente' : 'Ahorros'} - ****{acc.accountNumber.slice(-4)} ({formatCurrency(acc.balance)})
                                 </option>
                               ))}
                             </select>

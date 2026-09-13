@@ -7,6 +7,7 @@ import { GetAccountDetails } from '../../application/use-cases/account/GetAccoun
 import { DepositMoney } from '../../application/use-cases/account/DepositMoney';
 import { WithdrawMoney } from '../../application/use-cases/account/WithdrawMoney';
 import { SearchAccountByNumber } from '../../application/use-cases/account/SearchAccountByNumber';
+import { CloseAccount } from '../../application/use-cases/account/CloseAccount';
 import { SearchUserByEmail } from '../../application/use-cases/user/SearchUserByEmail';
 import { CreateTransfer } from '../../application/use-cases/transfer/CreateTransfer';
 import { GetTransfer } from '../../application/use-cases/transfer/GetTransfer';
@@ -41,6 +42,7 @@ const getAccountDetails    = new GetAccountDetails(accountRepository);
 const depositMoney         = new DepositMoney(accountRepository, transactionRepository, notificationRepository);
 const withdrawMoney        = new WithdrawMoney(accountRepository, notificationRepository);
 const searchAccountByNumber = new SearchAccountByNumber(accountRepository, userRepository);
+const closeAccount          = new CloseAccount(accountRepository);
 const searchUserByEmail    = new SearchUserByEmail(userRepository, accountRepository);
 const createTransfer       = new CreateTransfer(accountRepository, transactionRepository, userRepository, notificationRepository);
 const getTransfer          = new GetTransfer(transactionRepository, accountRepository, userRepository);
@@ -53,6 +55,7 @@ const controller = new AccountController(
   getAccountDetails,
   depositMoney,
   withdrawMoney,
+  closeAccount,
 );
 const transferController = new TransferController(
   createTransfer,
@@ -69,6 +72,7 @@ router.get('/me', authMiddleware, controller.getMyAccounts);
 router.get('/:id', authMiddleware, controller.getDetails);
 router.post('/:id/deposit', authMiddleware, controller.deposit);
 router.post('/:id/withdraw', authMiddleware, controller.withdraw);
+router.delete('/:id', authMiddleware, controller.close);
 
 export default router;
 

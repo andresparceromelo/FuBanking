@@ -1,4 +1,4 @@
-import { Account, AccountDetails } from '../entities/Account';
+import { Account, AccountDetails, AccountStatus } from '../entities/Account';
 
 /**
  * Interfaz del repositorio de cuentas — capa de Dominio.
@@ -39,4 +39,8 @@ export interface IAccountRepository {
    * Actualiza el saldo de la cuenta y retorna la cuenta actualizada.
    */
   updateBalance(accountId: string, newBalance: number): Promise<Account>;
+  /**
+   * Actualiza el estado de la cuenta y retorna la cuenta actualizada.
+   */
+  updateStatus(accountId: string, status: AccountStatus): Promise<Account>;
 }

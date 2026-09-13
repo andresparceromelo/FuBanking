@@ -53,6 +53,13 @@ export interface GetAccountDetailsDto {
   userId: string;
 }
 
+// ── Eliminar Cuenta ───────────────────────────────────────────────────────
+
+export interface CloseAccountDto {
+  accountId: string;
+  userId: string;
+}
+
 export interface AccountDetailResponseDto {
   id: string;
   userId: string;

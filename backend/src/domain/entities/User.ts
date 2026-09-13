@@ -15,6 +15,9 @@ export interface UserProps {
   birthDate: Date;
   phone: string | null;
   avatarUrl: string | null;
+  monthlyIncome: number | null;
+  documentVerified: boolean;
+  documentVerifiedAt: Date | null;
   passwordHash: string;
   isActive: boolean;
   twoFactorEnabled: boolean;
@@ -37,6 +40,9 @@ export interface CreateUserProps {
   birthDate: Date;
   phone?: string | null;
   avatarUrl?: string | null;
+  monthlyIncome?: number | null;
+  documentVerified?: boolean;
+  documentVerifiedAt?: Date | null;
   passwordHash: string;
   twoFactorEnabled?: boolean;
 }
@@ -57,6 +63,9 @@ export interface PublicUser {
   birthDate: string;
   phone: string | null;
   avatarUrl: string | null;
+  monthlyIncome: number | null;
+  documentVerified: boolean;
+  documentVerifiedAt: string | null;
   isActive: boolean;
   twoFactorEnabled: boolean;
   role: string;
@@ -80,6 +89,9 @@ export class User {
   private _birthDate: Date;
   private _phone: string | null;
   private _avatarUrl: string | null;
+  private _monthlyIncome: number | null;
+  private _documentVerified: boolean;
+  private _documentVerifiedAt: Date | null;
   private _passwordHash: string;
   private _isActive: boolean;
   private _twoFactorEnabled: boolean;
@@ -98,6 +110,9 @@ export class User {
     this._birthDate = props.birthDate;
     this._phone = props.phone;
     this._avatarUrl = props.avatarUrl;
+    this._monthlyIncome = props.monthlyIncome ?? null;
+    this._documentVerified = props.documentVerified ?? false;
+    this._documentVerifiedAt = props.documentVerifiedAt ?? null;
     this._passwordHash = props.passwordHash;
     this._isActive = props.isActive;
     this._twoFactorEnabled = props.twoFactorEnabled;
@@ -124,6 +139,9 @@ export class User {
   }
   get phone(): string | null { return this._phone; }
   get avatarUrl(): string | null { return this._avatarUrl; }
+  get monthlyIncome(): number | null { return this._monthlyIncome; }
+  get documentVerified(): boolean { return this._documentVerified; }
+  get documentVerifiedAt(): Date | null { return this._documentVerifiedAt; }
   get isActive(): boolean { return this._isActive; }
   get twoFactorEnabled(): boolean { return this._twoFactorEnabled; }
   get role(): string { return this._role; }
@@ -161,6 +179,7 @@ export class User {
     birthDate?: Date;
     phone?: string | null;
     avatarUrl?: string | null;
+    monthlyIncome?: number | null;
   }): void {
     if (data.firstName !== undefined) this._firstName = data.firstName;
     if (data.middleName !== undefined) this._middleName = data.middleName;
@@ -169,7 +188,38 @@ export class User {
     if (data.birthDate !== undefined) this._birthDate = data.birthDate;
     if (data.phone !== undefined) this._phone = data.phone;
     if (data.avatarUrl !== undefined) this._avatarUrl = data.avatarUrl;
+    if (data.monthlyIncome !== undefined) this._monthlyIncome = data.monthlyIncome;
     this._updatedAt = new Date();
+  }
+
+  /**
+   * Marca el documento del usuario como verificado.
+   */
+  markDocumentVerified(): void {
+    this._documentVerified = true;
+    this._documentVerifiedAt = new Date();
+    this._updatedAt = new Date();
+  }
+
+  /**
+   * El ingreso mensual debe ser mayor a cero si está definido.
+   */
+  isIncomeValidated(): boolean {
+    return this._monthlyIncome !== null && this._monthlyIncome > 0;
+  }
+
+  /**
+   * El usuario es mayor de edad si tiene 18 años o más.
+   */
+  isOfLegalAge(): boolean {
+    if (!this._birthDate) return false;
+    const now = new Date();
+    let age = now.getFullYear() - this._birthDate.getFullYear();
+    const m = now.getMonth() - this._birthDate.getMonth();
+    if (m < 0 || (m === 0 && now.getDate() < this._birthDate.getDate())) {
+      age--;
+    }
+    return age >= 18;
   }
 
   deactivate(): void {
@@ -205,9 +255,12 @@ export class User {
       lastName: this._lastName,
       secondLastName: this._secondLastName,
       fullName: this.fullName,
-      birthDate: this._birthDate.toISOString(),
+      birthDate: this._birthDate ? this.formatDateOnly(this._birthDate) : '',
       phone: this._phone,
       avatarUrl: this._avatarUrl,
+      monthlyIncome: this._monthlyIncome,
+      documentVerified: this._documentVerified,
+      documentVerifiedAt: this._documentVerifiedAt ? this._documentVerifiedAt.toISOString() : null,
       isActive: this._isActive,
       twoFactorEnabled: this._twoFactorEnabled,
       role: this._role,
@@ -216,6 +269,17 @@ export class User {
   }
 
   // ── Factory ──────────────────────────────────────────────────────────────
+
+  /**
+   * Formatea una fecha como YYYY-MM-DD usando las partes locales.
+   * Evita corrimientos por zona horaria al serializar.
+   */
+  private formatDateOnly(date: Date): string {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
 
   /**
    * Crea una nueva instancia de User para un usuario recién registrado.
@@ -232,6 +296,9 @@ export class User {
       birthDate: props.birthDate,
       phone: props.phone ?? null,
       avatarUrl: props.avatarUrl ?? null,
+      monthlyIncome: props.monthlyIncome ?? null,
+      documentVerified: props.documentVerified ?? false,
+      documentVerifiedAt: props.documentVerifiedAt ?? null,
       passwordHash: props.passwordHash,
       isActive: true,
       twoFactorEnabled: props.twoFactorEnabled ?? false,

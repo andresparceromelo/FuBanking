@@ -13,6 +13,7 @@ export const updateProfileSchema = z.object({
     .nullable()
     .optional(),
   avatarUrl: z.string().url('URL de avatar inválida').or(z.literal('')).nullable().optional(),
+  monthlyIncome: z.number().positive('El ingreso mensual debe ser mayor a cero').nullable().optional(),
 }).refine(
   (data) =>
     data.firstName !== undefined ||
@@ -21,7 +22,8 @@ export const updateProfileSchema = z.object({
     data.secondLastName !== undefined ||
     data.birthDate !== undefined ||
     data.phone !== undefined ||
-    data.avatarUrl !== undefined,
+    data.avatarUrl !== undefined ||
+    data.monthlyIncome !== undefined,
   { message: 'Debe proporcionar al menos un campo para actualizar' }
 );
 

@@ -1,13 +1,16 @@
 'use client';
 
-import React from 'react';
-import { X, CreditCard, Building2, Percent, AlertCircle, CheckCircle2, XCircle } from 'lucide-react';
-import { Account, AccountStatus, ACCOUNT_TYPE_LABELS, ACCOUNT_STATUS_LABELS } from '../types/account.types';
+import React, { useState } from 'react';
+import { X, CreditCard, Building2, Percent, AlertCircle, CheckCircle2, XCircle, Trash2, Loader2, TriangleAlert } from 'lucide-react';
+import { Account, AccountStatus, AccountType, ACCOUNT_TYPE_LABELS, ACCOUNT_STATUS_LABELS } from '../types/account.types';
+import { accountService } from '../services/account.service';
+import { useToast } from '@/shared/components/feedback/ToastProvider';
 
 interface AccountDetailModalProps {
   account: Account | null;
   isOpen: boolean;
   onClose: () => void;
+  onAccountDeleted?: (account: Account) => void;
 }
 
 /**
@@ -15,9 +18,16 @@ interface AccountDetailModalProps {
  *
  * Muestra toda la información incluyendo los detalles específicos
  * del tipo de cuenta (tasa de interés, sobregiro, empresa, etc.).
+ * También permite eliminar la cuenta (cierre suave) con confirmación.
  */
-export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailModalProps) {
+export function AccountDetailModal({ account, isOpen, onClose, onAccountDeleted }: AccountDetailModalProps) {
+  const toast = useToast();
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   if (!isOpen || !account) return null;
+
+  const isCreditAccount = account.accountType === AccountType.CREDITO;
 
   const statusIcon: Record<AccountStatus, React.ReactNode> = {
     [AccountStatus.ACTIVA]: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
@@ -36,6 +46,22 @@ export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailMo
   }).format(new Date(account.createdAt));
 
   const details = account.details;
+
+  const handleDelete = async () => {
+    if (!account) return;
+    try {
+      setIsDeleting(true);
+      await accountService.deleteAccount(account.id);
+      toast.success('Cuenta eliminada', `La cuenta ****${account.accountNumber.slice(-4)} fue cerrada.`);
+      onAccountDeleted?.(account);
+    } catch (err: unknown) {
+      const apiError = err as { message?: string };
+      toast.error('No pudimos eliminar la cuenta', apiError?.message ?? 'Intenta nuevamente.');
+      setConfirmingDelete(false);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <div
@@ -137,6 +163,48 @@ export function AccountDetailModal({ account, isOpen, onClose }: AccountDetailMo
                   {details.companyName}
                 </span>
               </InfoRow>
+            )}
+          </div>
+        )}
+
+        {/* Eliminar cuenta (no disponible para cuentas de crédito) */}
+        {!isCreditAccount && (
+          <div className="border-t border-white/10 pt-4 mt-4">
+            {!confirmingDelete ? (
+              <button
+                onClick={() => setConfirmingDelete(true)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-semibold border border-red-500/20 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+                Eliminar cuenta
+              </button>
+            ) : (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 space-y-3">
+                <p className="text-sm text-red-300 flex items-start gap-2">
+                  <TriangleAlert className="w-4 h-4 mt-0.5 shrink-0" />
+                  <span>
+                    ¿Seguro que quieres eliminar esta cuenta? Esta acción no se puede deshacer.
+                    La cuenta debe tener saldo en $0.
+                  </span>
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm font-semibold transition-colors disabled:opacity-50"
+                  >
+                    {isDeleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                    Confirmar eliminación
+                  </button>
+                  <button
+                    onClick={() => setConfirmingDelete(false)}
+                    disabled={isDeleting}
+                    className="px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/70 text-sm font-medium transition-colors disabled:opacity-50"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         )}

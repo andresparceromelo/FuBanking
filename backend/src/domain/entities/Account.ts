@@ -144,9 +144,23 @@ export class Account {
   }
 
   /**
-   * Cierra la cuenta permanentemente.
+   * Cierra la cuenta permanentemente (eliminación suave).
+   *
+   * Reglas:
+   * - No se puede cerrar una cuenta que ya está CERRADA.
+   * - No se puede cerrar una cuenta de tipo CREDITO (ligada a un préstamo).
+   * - No se puede cerrar una cuenta con saldo mayor a cero.
    */
   close(): void {
+    if (this._status === AccountStatus.CERRADA) {
+      throw new AppError('La cuenta ya está cerrada', 400, 'ACCOUNT_ALREADY_CLOSED');
+    }
+    if (this._accountType === AccountType.CREDITO) {
+      throw new AppError('No se puede eliminar una cuenta de crédito', 400, 'CREDIT_ACCOUNT_NOT_CLOSABLE');
+    }
+    if (this._balance > 0) {
+      throw new AppError('No se puede eliminar una cuenta con saldo. Retira primero tu dinero', 400, 'ACCOUNT_HAS_BALANCE');
+    }
     this._status = AccountStatus.CERRADA;
   }
 

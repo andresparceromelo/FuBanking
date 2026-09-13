@@ -19,6 +19,9 @@ interface UserRow {
   document: string;
   phone: string | null;
   avatar_url: string | null;
+  monthly_income: number | null;
+  document_verified: boolean;
+  document_verified_at: string | null;
   password: string;
   is_active: boolean;
   two_factor_enabled: boolean;
@@ -42,6 +45,18 @@ export class SupabaseUserRepository implements IUserRepository {
 
   // ── Mapeo BD → Dominio ────────────────────────────────────────────────
 
+  /**
+   * Formatea una fecha como YYYY-MM-DD usando las partes locales.
+   * La columna birth_date es DATE (sin zona horaria), por lo que no se debe
+   * usar toISOString() (causaba que la fecha "se atrasara" un día).
+   */
+  private formatDateOnly(date: Date): string {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
   private mapRowToUser(row: UserRow): User {
     const props: UserProps = {
       id: row.id,
@@ -51,9 +66,12 @@ export class SupabaseUserRepository implements IUserRepository {
       middleName: row.middle_name,
       lastName: row.last_name,
       secondLastName: row.second_last_name,
-      birthDate: new Date(row.birth_date),
+      birthDate: new Date(`${row.birth_date}T00:00:00`),
       phone: row.phone,
       avatarUrl: row.avatar_url,
+      monthlyIncome: row.monthly_income !== null ? Number(row.monthly_income) : null,
+      documentVerified: row.document_verified ?? false,
+      documentVerifiedAt: row.document_verified_at ? new Date(row.document_verified_at) : null,
       passwordHash: row.password,
       isActive: row.is_active,
       twoFactorEnabled: row.two_factor_enabled ?? false,
@@ -108,11 +126,14 @@ export class SupabaseUserRepository implements IUserRepository {
       middle_name: user.middleName,
       last_name: user.lastName,
       second_last_name: user.secondLastName,
-      birth_date: user.birthDate.toISOString(),
+      birth_date: this.formatDateOnly(user.birthDate),
       email: user.email.toString(),
       document: user.document.toString(),
       phone: user.phone,
       avatar_url: user.avatarUrl,
+      monthly_income: user.monthlyIncome,
+      document_verified: user.documentVerified,
+      document_verified_at: user.documentVerifiedAt ? user.documentVerifiedAt.toISOString() : null,
       password: user.getPasswordHash(),
       is_active: user.isActive,
     };
@@ -141,9 +162,16 @@ export class SupabaseUserRepository implements IUserRepository {
     if (updateData.middleName !== undefined) changes['middle_name'] = updateData.middleName;
     if (updateData.lastName !== undefined) changes['last_name'] = updateData.lastName;
     if (updateData.secondLastName !== undefined) changes['second_last_name'] = updateData.secondLastName;
-    if (updateData.birthDate !== undefined) changes['birth_date'] = updateData.birthDate.toISOString();
+    if (updateData.birthDate !== undefined) changes['birth_date'] = this.formatDateOnly(updateData.birthDate);
     if (updateData.phone !== undefined) changes['phone'] = updateData.phone;
     if (updateData.avatarUrl !== undefined) changes['avatar_url'] = updateData.avatarUrl;
+    if (updateData.monthlyIncome !== undefined) changes['monthly_income'] = updateData.monthlyIncome;
+    if (updateData.documentVerified !== undefined) {
+      changes['document_verified'] = updateData.documentVerified;
+      changes['document_verified_at'] = updateData.documentVerified
+        ? new Date().toISOString()
+        : null;
+    }
 
     const { data, error } = await this.client
       .from(this.TABLE)

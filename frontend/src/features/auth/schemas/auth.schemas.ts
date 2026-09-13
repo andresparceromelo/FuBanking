@@ -21,6 +21,7 @@ export const registerSchema = z.object({
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Formato inválido (YYYY-MM-DD)').refine((date) => new Date(date) <= new Date(), 'La fecha no puede ser en el futuro'),
   email: z.string().email('Correo electrónico inválido').toLowerCase().trim(),
   document: z.string().min(5, 'Documento inválido').regex(/^[a-zA-Z0-9]+$/, 'Solo letras y números'),
+  monthlyIncome: z.number().positive('El ingreso mensual debe ser mayor a cero'),
   phone: z.string().optional(),
   password: passwordSchema,
   confirmPassword: z.string()

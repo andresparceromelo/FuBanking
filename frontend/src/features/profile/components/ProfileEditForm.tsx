@@ -34,6 +34,7 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
       birthDate: user.birthDate ? user.birthDate.split('T')[0] : '', // birthDate from API usually has time
       phone: user.phone || '',
       avatarUrl: user.avatarUrl || '',
+      monthlyIncome: user.monthlyIncome ?? undefined,
     },
   });
 
@@ -51,6 +52,9 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
 
     if (data.phone !== (user.phone || '')) payload.phone = data.phone || null;
     if (data.avatarUrl !== (user.avatarUrl || '')) payload.avatarUrl = data.avatarUrl || null;
+    if (data.monthlyIncome !== undefined && data.monthlyIncome !== (user.monthlyIncome ?? undefined)) {
+      payload.monthlyIncome = data.monthlyIncome;
+    }
 
     if (Object.keys(payload).length > 0) {
       handleUpdate(payload);
@@ -134,6 +138,17 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
                 placeholder="+57 300 000 0000"
                 error={errors.phone?.message}
                 {...register('phone')}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="monthlyIncome">Ingreso mensual</Label>
+              <Input
+                id="monthlyIncome"
+                type="number"
+                placeholder="2500000"
+                error={errors.monthlyIncome?.message}
+                {...register('monthlyIncome', { valueAsNumber: true })}
               />
             </div>
 

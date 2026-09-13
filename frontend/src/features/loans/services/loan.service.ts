@@ -11,10 +11,6 @@ export interface CreateLoanPayload {
   installments: number;
   annualRate: number;
   monthlyIncome: number;
-  documentVerified: boolean;
-  ageVerified: boolean;
-  incomeVerified: boolean;
-  creditHistoryVerified: boolean;
 }
 
 export interface LoanSimulation {

@@ -16,6 +16,7 @@ export interface RegisterUserDto {
   birthDate: string;
   email: string;
   document: string;
+  monthlyIncome: number;
   phone?: string;
   password: string;
   confirmPassword: string;

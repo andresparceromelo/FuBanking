@@ -11,6 +11,8 @@ export interface UpdateUserData {
   birthDate?: Date;
   phone?: string | null;
   avatarUrl?: string | null;
+  monthlyIncome?: number | null;
+  documentVerified?: boolean;
 }
 
 /**

@@ -30,6 +30,7 @@ export function RegisterForm() {
       birthDate: '',
       email: '',
       document: '',
+      monthlyIncome: undefined,
       phone: '',
       password: '',
       confirmPassword: '',
@@ -120,6 +121,17 @@ export function RegisterForm() {
             placeholder="123456789"
             error={errors.document?.message}
             {...register('document')}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="monthlyIncome">Ingreso mensual</Label>
+          <Input
+            id="monthlyIncome"
+            type="number"
+            placeholder="2500000"
+            error={errors.monthlyIncome?.message}
+            {...register('monthlyIncome', { valueAsNumber: true })}
           />
         </div>
 

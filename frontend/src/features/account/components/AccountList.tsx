@@ -56,6 +56,12 @@ export function AccountList() {
     setIsDetailOpen(true);
   };
 
+  const handleAccountDeleted = () => {
+    setIsDetailOpen(false);
+    setSelectedAccount(null);
+    refetch();
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -154,6 +160,7 @@ export function AccountList() {
         account={selectedAccount}
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}
+        onAccountDeleted={handleAccountDeleted}
       />
       <CreateAccountModal
         isOpen={isCreateOpen}
