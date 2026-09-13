@@ -14,7 +14,6 @@ import { errorHandler } from './presentation/middlewares/errorHandler';
 function createApp(): Application {
   const app = express();
 
-  // ── Seguridad ───────────────────────────────────────────────────────────
   app.use(helmet());
   app.use(
     cors({
@@ -25,11 +24,9 @@ function createApp(): Application {
     }),
   );
 
-  // ── Parsing ─────────────────────────────────────────────────────────────
   app.use(express.json({ limit: '10kb' }));
   app.use(express.urlencoded({ extended: true }));
 
-  // ── Health check ────────────────────────────────────────────────────────
   app.get('/health', (_req: Request, res: Response) => {
     res.json({
       status: 'ok',
@@ -38,10 +35,8 @@ function createApp(): Application {
     });
   });
 
-  // ── API Routes ──────────────────────────────────────────────────────────
   app.use('/api/v1', apiRoutes);
 
-  // ── 404 handler ─────────────────────────────────────────────────────────
   app.use((_req: Request, res: Response) => {
     res.status(404).json({
       success: false,
@@ -52,7 +47,6 @@ function createApp(): Application {
     });
   });
 
-  // ── Error handler (debe ser el último middleware) ────────────────────────
   app.use(errorHandler);
 
   return app;

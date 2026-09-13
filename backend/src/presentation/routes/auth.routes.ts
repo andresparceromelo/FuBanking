@@ -26,14 +26,12 @@ import { authMiddleware } from '../middlewares/authMiddleware';
  */
 const router = Router();
 
-// ── Instanciar dependencias (Dependency Injection manual) ─────────────────
 const userRepository = new SupabaseUserRepository(supabaseClient);
 const verificationCodeRepository = new SupabaseVerificationCodeRepository(supabaseClient);
 const passwordService = new BcryptPasswordService();
 const tokenService = new JwtTokenService();
 const emailService = new NodemailerEmailService();
 
-// ── Casos de uso: Auth ────────────────────────────────────────────────────
 const registerUser = new RegisterUser(userRepository, passwordService, tokenService);
 const loginUser = new LoginUser(
   userRepository,
@@ -46,7 +44,6 @@ const logoutUser = new LogoutUser();
 const requestPasswordReset = new RequestPasswordReset(userRepository, tokenService, emailService);
 const resetPassword = new ResetPassword(userRepository, passwordService, tokenService);
 
-// ── Casos de uso: 2FA ─────────────────────────────────────────────────────
 const verifyTwoFactor = new VerifyTwoFactorCode(
   verificationCodeRepository,
   userRepository,
@@ -63,7 +60,6 @@ const resendTwoFactor = new ResendTwoFactorCode(
   passwordService,
 );
 
-// ── Controladores ─────────────────────────────────────────────────────────
 const controller = new AuthController(
   registerUser,
   loginUser,
@@ -79,17 +75,14 @@ const twoFactorController = new TwoFactorController(
   resendTwoFactor,
 );
 
-// ── Rutas públicas ────────────────────────────────────────────────────────
 router.post('/register', controller.register);
 router.post('/login', controller.login);
 router.post('/forgot-password', controller.forgotPassword);
 router.post('/reset-password', controller.resetPassword);
 
-// ── Rutas 2FA públicas (se autentican con temporaryToken en el body) ───────
 router.post('/2fa/verify', twoFactorController.verify);
 router.post('/2fa/resend', twoFactorController.resend);
 
-// ── Rutas protegidas ──────────────────────────────────────────────────────
 router.post('/logout', authMiddleware, controller.logout);
 router.post('/2fa/enable', authMiddleware, twoFactorController.enable);
 router.post('/2fa/disable', authMiddleware, twoFactorController.disable);

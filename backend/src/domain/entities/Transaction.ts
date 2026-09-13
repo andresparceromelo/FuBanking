@@ -83,7 +83,6 @@ export class Transaction {
     this._createdAt         = props.createdAt;
   }
 
-  // -- Getters --
 
   get id(): string                 { return this._id; }
   get senderAccountId(): string    { return this._senderAccountId; }
@@ -95,7 +94,6 @@ export class Transaction {
   get description(): string | null { return this._description; }
   get createdAt(): Date            { return this._createdAt; }
 
-  // -- Reglas de negocio --
 
   /**
    * Valida que el monto sea un número positivo mayor que cero.

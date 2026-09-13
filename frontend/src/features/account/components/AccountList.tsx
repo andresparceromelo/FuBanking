@@ -25,7 +25,6 @@ export function AccountList() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [showBalance, setShowBalance] = useState(true);
 
-  // Deposit / Withdraw modal state
   const [actionModal, setActionModal] = useState<{
     isOpen: boolean;
     type: 'deposit' | 'withdraw';
@@ -51,7 +50,6 @@ export function AccountList() {
 
   const handleCreateSuccess = (newAccount: Account) => {
     refetch();
-    // Opcional: abrir el detalle de la cuenta recién creada
     setSelectedAccount(newAccount);
     setIsDetailOpen(true);
   };

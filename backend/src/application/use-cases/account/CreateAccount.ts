@@ -19,7 +19,6 @@ export class CreateAccount {
   ) {}
 
   async execute(dto: CreateAccountDto): Promise<CreateAccountResponseDto> {
-    // 1. Validar que el tipo de cuenta sea válido
     if (!Object.values(AccountType).includes(dto.type)) {
       throw new AppError(
         `Tipo de cuenta inválido. Debe ser: ${Object.values(AccountType).join(', ')}`,
@@ -28,13 +27,10 @@ export class CreateAccount {
       );
     }
 
-    // 2. Generar número de cuenta único
     const accountNumber = await this.generateUniqueAccountNumber();
 
-    // 3. Construir detalles opcionales según el tipo de cuenta
     const details: AccountDetails | null = this.buildDetails(dto);
 
-    // 4. Crear la entidad Account usando el factory method
     const account = Account.create({
       id: randomUUID(),
       userId: dto.userId,
@@ -43,7 +39,6 @@ export class CreateAccount {
       details,
     });
 
-    // 5. Persistir la cuenta y sus detalles
     const savedAccount = await this.accountRepository.save(account, details);
 
     return savedAccount.toPublic();
@@ -76,7 +71,6 @@ export class CreateAccount {
   private buildDetails(dto: CreateAccountDto): AccountDetails | null {
     switch (dto.type) {
       case AccountType.AHORROS:
-        // El banco asigna las condiciones financieras, no el usuario
         return {
           interestRate: 0.03, // 3% E.A.
           managementFee: 0,   // Sin cuota de manejo

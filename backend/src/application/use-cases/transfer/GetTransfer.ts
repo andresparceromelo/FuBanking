@@ -17,13 +17,11 @@ export class GetTransfer {
   ) {}
 
   async execute(dto: GetTransferDto): Promise<TransferReceiptDto> {
-    // 1. Buscar la transacción
     const transaction = await this.transactionRepository.findById(dto.transactionId);
     if (!transaction) {
       throw new AppError('Transacción no encontrada', 404, 'TRANSACTION_NOT_FOUND');
     }
 
-    // 2. Verificar que el usuario está involucrado (seguridad)
     const userAccounts = await this.accountRepository.findByUserId(dto.userId);
     const userAccountIds = userAccounts.map((a) => a.id);
     const isInvolved =
@@ -34,13 +32,11 @@ export class GetTransfer {
       throw new AppError('No tienes acceso a esta transacción', 403, 'FORBIDDEN');
     }
 
-    // 3. Obtener cuentas para los números
     const [senderAccount, receiverAccount] = await Promise.all([
       this.accountRepository.findById(transaction.senderAccountId),
       this.accountRepository.findById(transaction.receiverAccountId),
     ]);
 
-    // 4. Obtener nombre del destinatario
     const receiverUser = receiverAccount
       ? await this.userRepository.findById(receiverAccount.userId)
       : null;

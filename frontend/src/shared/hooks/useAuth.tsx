@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { PublicUser } from '@/features/auth/types/auth.types';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { authService } from '@/features/auth/services/auth.service';
 
 interface AuthContextType {
@@ -22,10 +22,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
-    // Load auth state from localStorage on mount
     const storedToken = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
 
@@ -45,7 +43,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(newToken);
     localStorage.setItem('token', newToken);
     localStorage.setItem('user', JSON.stringify(newUser));
-    // Set cookie for Next.js middleware to read
     document.cookie = `token=${newToken}; path=/; max-age=604800; SameSite=Strict`;
     router.push('/profile');
   };
@@ -56,7 +53,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    // Remove cookie
     document.cookie = `token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     router.push('/login');
   };

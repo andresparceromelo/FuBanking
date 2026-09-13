@@ -25,7 +25,6 @@ export class VerifyTwoFactorCode {
   ) {}
 
   async execute(dto: VerifyTwoFactorDto): Promise<VerifyTwoFactorResponseDto> {
-    // 1. Verificar y decodificar el token temporal
     let payload: { userId: string; email: string };
     try {
       payload = this.tokenService.verify(dto.temporaryToken) as { userId: string; email: string };
@@ -33,7 +32,6 @@ export class VerifyTwoFactorCode {
       throw new AuthError('Token temporal inválido o expirado', 'TOKEN_INVALID');
     }
 
-    // 2. Buscar el código de verificación más reciente
     const verificationCode = await this.verificationCodeRepository.findLatestByUserId(
       payload.userId,
     );
@@ -45,7 +43,6 @@ export class VerifyTwoFactorCode {
       );
     }
 
-    // 3a. Verificar que no esté ya utilizado
     if (verificationCode.isUsed()) {
       throw new AuthError(
         'Este código ya fue utilizado. Solicita un nuevo código.',
@@ -53,7 +50,6 @@ export class VerifyTwoFactorCode {
       );
     }
 
-    // 3b. Verificar que no haya expirado
     if (verificationCode.isExpired()) {
       throw new AuthError(
         'El código ha expirado. Solicita un nuevo código.',
@@ -61,7 +57,6 @@ export class VerifyTwoFactorCode {
       );
     }
 
-    // 3c. Verificar límite de intentos
     if (verificationCode.hasExceededAttempts()) {
       throw new AuthError(
         'Has superado el límite de intentos. Solicita un nuevo código.',
@@ -69,14 +64,12 @@ export class VerifyTwoFactorCode {
       );
     }
 
-    // 4. Comparar código ingresado con el hash almacenado
     const isCodeValid = await this.passwordService.compare(
       dto.code,
       verificationCode.codeHash,
     );
 
     if (!isCodeValid) {
-      // Incrementar intentos y persistir
       verificationCode.incrementAttempts();
       await this.verificationCodeRepository.update(verificationCode);
 
@@ -87,17 +80,14 @@ export class VerifyTwoFactorCode {
       );
     }
 
-    // 5. Código correcto: marcar como usado
     verificationCode.markAsUsed();
     await this.verificationCodeRepository.update(verificationCode);
 
-    // 6. Obtener datos completos del usuario
     const user = await this.userRepository.findById(payload.userId);
     if (!user) {
       throw new AuthError('Usuario no encontrado', 'USER_NOT_FOUND');
     }
 
-    // 7. Generar JWT definitivo
     const tokenOptions: TokenOptions = { expiresIn: '7d' };
     const token = this.tokenService.generate(
       { userId: user.id, email: user.email.toString() },

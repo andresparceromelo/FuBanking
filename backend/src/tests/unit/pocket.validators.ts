@@ -44,7 +44,6 @@ function rechazar(schema: Schema, datos: unknown, mensaje: string): string {
 }
 
 export async function ejecutarPocketValidators(): Promise<void> {
-  // ── createPocketSchema ────────────────────────────────────────────────────
 
   await caso(
     {
@@ -213,7 +212,6 @@ export async function ejecutarPocketValidators(): Promise<void> {
       ),
   );
 
-  // ── updatePocketSchema ────────────────────────────────────────────────────
 
   await caso(
     {
@@ -268,7 +266,6 @@ export async function ejecutarPocketValidators(): Promise<void> {
     },
   );
 
-  // ── transferPocketSchema ──────────────────────────────────────────────────
 
   await caso(
     {

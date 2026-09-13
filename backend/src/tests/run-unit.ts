@@ -58,20 +58,15 @@ function versionDelSistema(): string {
 }
 
 async function main(): Promise<void> {
-  console.log('');
-  console.log('PARTE A — unidades sin dependencias');
   await ejecutarPocketEntity();
   await ejecutarAccountEntity();
   await ejecutarPocketValidators();
-
-  console.log('PARTE B — casos de uso con repositorios Supabase reales');
   let escenario: Escenario | null = null;
   let limpieza: ResultadoLimpieza | null = null;
   let notaParteB: string | null = null;
 
   try {
     escenario = await montarEscenario();
-    console.log(`  escenario montado sobre el usuario ${escenario.correoUsuario}`);
     await ejecutarCasosDeUso(escenario);
   } catch (error: any) {
     const motivo = String(error?.message ?? error).replace(/\.\s*$/, '');
@@ -82,17 +77,12 @@ async function main(): Promise<void> {
   } finally {
     if (escenario) {
       limpieza = await desmontarEscenario(escenario);
-      console.log(
-        `  limpieza: ${limpieza.bolsillos} bolsillos, ${limpieza.notificaciones} notificaciones, ` +
-          `${limpieza.detalles} detalles, ${limpieza.cuentas} cuentas`,
-      );
       if (limpieza.errores.length > 0) {
         console.error(`  ERRORES de limpieza: ${limpieza.errores.join(' | ')}`);
       }
     }
   }
 
-  // ── Reporte ───────────────────────────────────────────────────────────────
   const casos = obtenerResultados();
   const resumen = resumir(casos);
   const meta = {
@@ -113,35 +103,16 @@ async function main(): Promise<void> {
     'utf8',
   );
 
-  // ── Salida por consola ────────────────────────────────────────────────────
-  console.log('');
   let grupoActual = '';
   for (const c of casos) {
     if (c.grupo !== grupoActual) {
       grupoActual = c.grupo;
-      console.log('');
-      console.log(`── ${grupoActual} ${'─'.repeat(Math.max(0, 50 - grupoActual.length))}`);
     }
-    const marca = c.estado === 'Aprobado' ? 'OK   ' : 'FALLA';
-    console.log(`${marca} ${c.id.padEnd(10)} ${c.descripcion}`);
     if (c.estado === 'Fallido') {
-      console.log(`      ↳ ${c.obtenido}${c.defecto ? `  [defecto ${c.defecto}]` : ''}`);
     }
   }
-
-  console.log('');
-  console.log(`Versión probada: ${meta.version}`);
-  for (const [nombre, d] of Object.entries(resumen.porGrupo)) {
-    console.log(
-      `${nombre.padEnd(34)} ${d.aprobados}/${d.total} aprobados` +
-        (d.fallidos ? `, ${d.fallidos} fallidos` : ''),
-    );
+  for (const [] of Object.entries(resumen.porGrupo)) {
   }
-  console.log('');
-  console.log(`TOTAL: ${resumen.aprobados}/${resumen.total} aprobados, ${resumen.fallidos} fallidos`);
-  console.log(`Documento: ${ARCHIVO_MD}`);
-  console.log(`Informe:   ${ARCHIVO_HTML}`);
-  console.log(`Datos:     ${ARCHIVO_JSON}`);
 }
 
 main().catch((error) => {

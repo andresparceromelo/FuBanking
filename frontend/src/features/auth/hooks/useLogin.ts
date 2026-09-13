@@ -20,12 +20,10 @@ export function useLogin() {
       const response = await authService.login(data);
 
       if (response.requiresTwoFactor) {
-        // Redirigir a la pantalla 2FA pasando el temporaryToken y maskedEmail via sessionStorage
         sessionStorage.setItem('2fa_temp_token', response.temporaryToken);
         sessionStorage.setItem('2fa_masked_email', response.maskedEmail);
         router.push('/verify-two-factor');
       } else {
-        // Login directo: guardar sesión y redirigir
         login(response.user, response.token);
       }
     } catch (err: any) {

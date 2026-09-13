@@ -14,8 +14,6 @@ export function useUpdateProfile(onSuccessCallback?: (user: PublicUser) => void)
     setError(null);
     try {
       const updatedUser = await profileService.updateProfile(data);
-      // Actualizar el estado global con el usuario modificado
-      // Nota: Reusamos el token existente que está en localStorage
       const token = localStorage.getItem('token') || '';
       login(updatedUser, token);
       

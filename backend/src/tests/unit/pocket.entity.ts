@@ -23,7 +23,6 @@ function props(sobrescribir: Partial<{ id: string; accountId: string; name: stri
 }
 
 export async function ejecutarPocketEntity(): Promise<void> {
-  // ── Construcción ──────────────────────────────────────────────────────────
 
   await caso(
     {
@@ -154,7 +153,6 @@ export async function ejecutarPocketEntity(): Promise<void> {
     },
   );
 
-  // ── Mutadores ─────────────────────────────────────────────────────────────
 
   await caso(
     {

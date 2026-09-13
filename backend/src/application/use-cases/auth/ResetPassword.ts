@@ -23,12 +23,10 @@ export class ResetPassword {
   ) {}
 
   async execute(dto: ResetPasswordDto): Promise<void> {
-    // 1. Validar contraseñas
     if (dto.newPassword !== dto.confirmPassword) {
       throw new AppError('Las contraseñas no coinciden', 400, 'PASSWORDS_DONT_MATCH');
     }
 
-    // 2. Verificar el token JWT
     let payload;
     try {
       payload = this.tokenService.verify(dto.token);
@@ -42,16 +40,13 @@ export class ResetPassword {
 
     const email = payload.email;
 
-    // 3. Buscar el usuario en nuestra BD por email
     const user = await this.userRepository.findByEmail(email);
     if (!user) {
       throw new AuthError('Usuario no encontrado', 'USER_NOT_FOUND');
     }
 
-    // 4. Hashear nueva contraseña
     const newPasswordHash = await this.passwordService.hash(dto.newPassword);
 
-    // 5. Actualizar hash en nuestra tabla de usuarios usando el repositorio
     await this.userRepository.updatePassword(user.id, newPasswordHash);
   }
 }

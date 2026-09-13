@@ -31,10 +31,8 @@ export class CreateTransfer {
   ) {}
 
   async execute(dto: CreateTransferDto): Promise<TransferReceiptDto> {
-    // 1. Validar monto a nivel de dominio
     Transaction.validateAmount(dto.amount);
 
-    // 2. Obtener cuenta origen elegida por el usuario
     const senderAccount = await this.accountRepository.findById(dto.senderAccountId);
 
     if (!senderAccount) {
@@ -45,7 +43,6 @@ export class CreateTransfer {
       );
     }
 
-    // Verificar seguridad de dominio
     senderAccount.assertBelongsTo(dto.userId);
 
     if (!senderAccount.isOperational()) {
@@ -56,7 +53,6 @@ export class CreateTransfer {
       );
     }
 
-    // 3. Buscar cuenta destino por número de cuenta
     const receiverAccount = await this.accountRepository.findByAccountNumber(
       dto.receiverAccountNumber.trim(),
     );
@@ -69,10 +65,8 @@ export class CreateTransfer {
       );
     }
 
-    // 4. Validar que no sea la misma cuenta
     Transaction.validateDifferentAccounts(senderAccount.id, receiverAccount.id);
 
-    // 5. Validar que la cuenta destino está activa
     if (!receiverAccount.isOperational()) {
       throw new AppError(
         'La cuenta de destino no está activa',
@@ -81,7 +75,6 @@ export class CreateTransfer {
       );
     }
 
-    // 6. Validar saldo suficiente
     if (senderAccount.balance < dto.amount) {
       throw new AppError(
         'Saldo insuficiente para realizar la transferencia',
@@ -90,10 +83,8 @@ export class CreateTransfer {
       );
     }
 
-    // 7. Generar referencia única
     const referenceNumber = Transaction.generateReferenceNumber();
 
-    // 8. Ejecutar la transferencia atómica via RPC
     const transaction = await this.transactionRepository.executeTransfer(
       senderAccount.id,
       receiverAccount.id,
@@ -102,13 +93,11 @@ export class CreateTransfer {
       referenceNumber,
     );
 
-    // 9. Obtener nombre del destinatario
     const receiverUser = await this.userRepository.findById(receiverAccount.userId);
     const receiverName = receiverUser
       ? `${receiverUser.firstName} ${receiverUser.lastName}`
       : 'Usuario';
 
-    // 10. Crear notificaciones para emisor y receptor
     const senderUser = await this.userRepository.findById(dto.userId);
     const senderName = senderUser
       ? `${senderUser.firstName} ${senderUser.lastName}`
@@ -134,7 +123,6 @@ export class CreateTransfer {
       createdAt: new Date(),
     }));
 
-    // 11. Retornar comprobante con números enmascarados
     return {
       id:              transaction.id,
       referenceNumber: transaction.referenceNumber,

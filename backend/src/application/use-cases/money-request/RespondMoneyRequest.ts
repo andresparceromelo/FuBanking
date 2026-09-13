@@ -40,7 +40,6 @@ export class RespondMoneyRequest {
         throw new AppError('Se requiere una cuenta para realizar el pago', 400, 'ACCOUNT_REQUIRED');
       }
 
-      // Validar cuenta de origen (quien paga)
       const senderAccount = await this.accountRepository.findById(dto.accountId);
       if (!senderAccount) {
         throw new AppError('La cuenta de origen no existe', 404, 'SENDER_ACCOUNT_NOT_FOUND');
@@ -53,7 +52,6 @@ export class RespondMoneyRequest {
         throw new AppError('Saldo insuficiente para pagar el cobro', 400, 'INSUFFICIENT_FUNDS');
       }
 
-      // Buscar una cuenta destino (de quien solicitó el dinero)
       const receiverAccounts = await this.accountRepository.findByUserId(request.requesterUserId);
       const receiverAccount = receiverAccounts.find(a => a.isOperational());
       if (!receiverAccount) {

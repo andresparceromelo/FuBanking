@@ -9,8 +9,6 @@
  */
 export class LogoutUser {
   async execute(_userId: string): Promise<void> {
-    // El frontend elimina el token de localStorage / cookies.
-    // Aquí se puede agregar lógica de blacklist de tokens en el futuro.
     return;
   }
 }

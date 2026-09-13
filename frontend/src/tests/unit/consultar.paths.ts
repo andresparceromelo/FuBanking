@@ -46,7 +46,6 @@ function contexto() {
 }
 
 export async function ejecutarCaminosConsultar(e: Escenario): Promise<void> {
-  // ── Camino 1 — el servicio falla ──────────────────────────────────────────
 
   await camino(
     {
@@ -86,7 +85,6 @@ export async function ejecutarCaminosConsultar(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 2 — el servicio responde bien ──────────────────────────────────
 
   await camino(
     {
@@ -132,7 +130,6 @@ export async function ejecutarCaminosConsultar(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 1b — mensaje de respaldo ───────────────────────────────────────
 
   await camino(
     {

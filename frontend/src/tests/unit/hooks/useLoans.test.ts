@@ -1,61 +1,137 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useLoans } from '@/features/loans/hooks/useLoans';
+import { loanService } from '@/features/loans/services/loan.service';
+
+vi.mock('@/features/loans/services/loan.service', () => ({
+  loanService: { simulateLoan: vi.fn(), createLoan: vi.fn() },
+}));
+
+const simulateLoan = loanService.simulateLoan as unknown as ReturnType<typeof vi.fn>;
+const createLoan = loanService.createLoan as unknown as ReturnType<typeof vi.fn>;
 
 describe('useLoans', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('should expose initial state', () => {
+    const { result } = renderHook(() => useLoans());
+
+    expect(result.current.simulation).toBeNull();
+    expect(result.current.application).toBeNull();
+    expect(result.current.isLoading).toBe(false);
+    expect(result.current.error).toBeNull();
+  });
+
   describe('simulateLoan', () => {
-    it('should set simulation data on success', async () => {
+    it('should set simulation data on success and clear error', async () => {
+      const simulation = { amount: 5_000_000, monthlyPayment: 470_000 };
+      simulateLoan.mockResolvedValue(simulation);
       const { result } = renderHook(() => useLoans());
 
+      let returned: unknown;
       await act(async () => {
-        try {
-          await result.current.simulateLoan({ amount: 5_000_000, installments: 12, annualRate: 24 });
-        } catch (e) {
-          // ignore
-        }
+        returned = await result.current.simulateLoan({ amount: 5_000_000, installments: 12, annualRate: 24 });
       });
 
-      // The real API call might fail or succeed depending on the environment,
-      // just verify it doesn't crash the hook
+      expect(returned).toEqual(simulation);
+      expect(result.current.simulation).toEqual(simulation);
+      expect(result.current.error).toBeNull();
       expect(result.current.isLoading).toBe(false);
     });
 
-    it('should set error message on failure', async () => {
+    it('should set the server message on failure', async () => {
+      simulateLoan.mockRejectedValue({ message: 'Monto inválido' });
+      const { result } = renderHook(() => useLoans());
+
+      let returned: unknown = 'pending';
+      await act(async () => {
+        returned = await result.current.simulateLoan({ amount: -1, installments: 12, annualRate: 24 });
+      });
+
+      expect(returned).toBeNull();
+      expect(result.current.error).toBe('Monto inválido');
+      expect(result.current.simulation).toBeNull();
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it('should fall back when the error is a plain string', async () => {
+      simulateLoan.mockRejectedValue('boom');
       const { result } = renderHook(() => useLoans());
 
       await act(async () => {
-        // We use invalid values to intentionally cause an error
-        try {
-          await result.current.simulateLoan({ amount: -100, installments: 0, annualRate: -1 });
-        } catch (e) {
-          // ignore
-        }
+        await result.current.simulateLoan({ amount: 1, installments: 1, annualRate: 0 });
       });
 
-      expect(result.current.error).toBeDefined();
-      expect(result.current.isLoading).toBe(false);
+      expect(result.current.error).toBe('No fue posible simular el credito.');
+    });
+
+    it('should fall back when the message is empty', async () => {
+      simulateLoan.mockRejectedValue({ message: '' });
+      const { result } = renderHook(() => useLoans());
+
+      await act(async () => {
+        await result.current.simulateLoan({ amount: 1, installments: 1, annualRate: 0 });
+      });
+
+      expect(result.current.error).toBe('No fue posible simular el credito.');
+    });
+
+    it('should fall back when the error has no message', async () => {
+      simulateLoan.mockRejectedValue(null);
+      const { result } = renderHook(() => useLoans());
+
+      await act(async () => {
+        await result.current.simulateLoan({ amount: 1, installments: 1, annualRate: 0 });
+      });
+
+      expect(result.current.error).toBe('No fue posible simular el credito.');
     });
   });
 
   describe('createLoan', () => {
-    it('should attempt to create loan', async () => {
+    it('should set application data on success', async () => {
+      const application = { id: 'loan-1', status: 'PENDING' };
+      createLoan.mockResolvedValue(application);
+      const { result } = renderHook(() => useLoans());
+
+      let returned: unknown;
+      await act(async () => {
+        returned = await result.current.createLoan({
+          amount: 5_000_000, installments: 12, annualRate: 24, monthlyIncome: 1_800_000,
+        });
+      });
+
+      expect(returned).toEqual(application);
+      expect(result.current.application).toEqual(application);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('should fall back when creation fails without message', async () => {
+      createLoan.mockRejectedValue({});
+      const { result } = renderHook(() => useLoans());
+
+      let returned: unknown = 'pending';
+      await act(async () => {
+        returned = await result.current.createLoan({
+          amount: 5_000_000, installments: 12, annualRate: 24, monthlyIncome: 1_800_000,
+        });
+      });
+
+      expect(returned).toBeNull();
+      expect(result.current.error).toBe('No fue posible crear la solicitud.');
+      expect(result.current.application).toBeNull();
+    });
+
+    it('should expose setError', async () => {
       const { result } = renderHook(() => useLoans());
 
       await act(async () => {
-        try {
-          await result.current.createLoan({
-            amount: 5_000_000,
-            installments: 12,
-            annualRate: 24,
-            monthlyIncome: 1_800_000,
-          });
-        } catch (e) {
-          // ignore error since it might need real authentication
-        }
+        result.current.setError('custom');
       });
 
-      // Based on real backend, it could either succeed or fail due to auth
-      expect(result.current.isLoading).toBe(false);
+      expect(result.current.error).toBe('custom');
     });
   });
 });

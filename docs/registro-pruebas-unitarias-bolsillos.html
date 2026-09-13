@@ -76,8 +76,8 @@ font-size:13.5px}
 <h1>Registro de pruebas unitarias del módulo Bolsillos</h1>
 <p class="standfirst">Corrida generada automáticamente por <code>npm run test:unit</code>. El resultado obtenido de cada caso proviene de la ejecución real de la unidad bajo prueba. La suite no usa mocks, dobles ni stubs.</p>
 <dl class="meta">
-<div><dt>Fecha</dt><dd>2026-09-08</dd></div>
-<div><dt>Versión</dt><dd>tests/bolsillos-coverage-d023836</dd></div>
+<div><dt>Fecha</dt><dd>2026-09-13</dd></div>
+<div><dt>Versión</dt><dd>main-a884ded</dd></div>
 <div><dt>Casos</dt><dd>69</dd></div>
 <div><dt>Aprobados</dt><dd>64</dd></div>
 <div><dt>Fallidos</dt><dd>5</dd></div>
@@ -163,7 +163,7 @@ font-size:13.5px}
 <div class="campo"><b>Unidad</b><span>Pocket (constructor)</span></div>
 <div class="campo"><b>Entrada</b><span>name = &quot;&quot;</span></div>
 <div class="campo"><b>Esperado</b><span>Lanza AppError INVALID_POCKET_NAME (HTTP 400), la misma regla que aplica updateName(&quot;&quot;)</span></div>
-<div class="campo"><b>Obtenido</b><span>FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {&quot;_id&quot;:&quot;p1&quot;,&quot;_accountId&quot;:&quot;a1&quot;,&quot;_name&quot;:&quot;&quot;,&quot;_amount&quot;:100,&quot;_createdAt&quot;:&quot;2026-09-08T14:11:36.157Z&quot;,&quot;_updatedAt&quot;:&quot;2026-09-08T14:11:36.157Z&quot;}</span></div>
+<div class="campo"><b>Obtenido</b><span>FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {&quot;_id&quot;:&quot;p1&quot;,&quot;_accountId&quot;:&quot;a1&quot;,&quot;_name&quot;:&quot;&quot;,&quot;_amount&quot;:100,&quot;_createdAt&quot;:&quot;2026-09-13T05:46:58.798Z&quot;,&quot;_updatedAt&quot;:&quot;2026-09-13T05:46:58.798Z&quot;}</span></div>
 </div>
 <div class="caso">
 <div class="caso-head">
@@ -174,7 +174,7 @@ font-size:13.5px}
 <div class="campo"><b>Unidad</b><span>Pocket.toPublic</span></div>
 <div class="campo"><b>Entrada</b><span>Bolsillo válido recién construido</span></div>
 <div class="campo"><b>Esperado</b><span>toPublic() devuelve exactamente id, accountId, name, amount, createdAt y updatedAt, con las fechas como cadena ISO</span></div>
-<div class="campo"><b>Obtenido</b><span>claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-08T14:11:36.158Z</span></div>
+<div class="campo"><b>Obtenido</b><span>claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-13T05:46:58.799Z</span></div>
 </div>
 <h2>Entidad Pocket · mutadores</h2>
 <div class="caso">
@@ -241,7 +241,7 @@ font-size:13.5px}
 <div class="campo"><b>Unidad</b><span>Pocket.updateAmount</span></div>
 <div class="campo"><b>Entrada</b><span>Bolsillo recién creado, updateAmount(20)</span></div>
 <div class="campo"><b>Esperado</b><span>updatedAt queda igual o posterior al valor previo a la mutación</span></div>
-<div class="campo"><b>Obtenido</b><span>updatedAt 1788876696159 → 1788876696159 (delta 0 ms)</span></div>
+<div class="campo"><b>Obtenido</b><span>updatedAt 1789278418799 → 1789278418799 (delta 0 ms)</span></div>
 </div>
 <h2>Entidad Account</h2>
 <div class="caso">

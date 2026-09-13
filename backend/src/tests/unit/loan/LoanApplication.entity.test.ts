@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { LoanApplication, LoanApplicationStatus } from '../../../domain/entities/LoanApplication';
 
-// ── Datos de referencia para la fórmula French ────────────────────────────
 
 function expectedFrenchPayment(amount: number, annualRate: number, installments: number): number {
   const monthlyRate = annualRate / 100 / 12;
@@ -72,6 +71,7 @@ describe('LoanApplication — Entity', () => {
     });
 
     it('should set eligibility reasons for each failed requirement', () => {
+      expect.assertions(2);
       try {
         LoanApplication.create({
           id: 'loan-4',
@@ -87,7 +87,31 @@ describe('LoanApplication — Entity', () => {
         });
       } catch (err: any) {
         expect(err.code).toBe('LOAN_ELIGIBILITY_FAILED');
+        expect(err.statusCode).toBe(400);
       }
+    });
+
+    it.each([
+      [{ documentVerified: false }],
+      [{ ageVerified: false }],
+      [{ incomeVerified: false }],
+      [{ creditHistoryVerified: false }],
+    ])('should throw LOAN_ELIGIBILITY_FAILED when a single requirement fails: %o', (flags) => {
+      expect(() =>
+        LoanApplication.create({
+          id: 'loan-r',
+          userId: 'user-1',
+          amount: 5_000_000,
+          installments: 12,
+          annualRate: 24,
+          monthlyIncome: 500_000,
+          documentVerified: true,
+          ageVerified: true,
+          incomeVerified: true,
+          creditHistoryVerified: true,
+          ...flags,
+        }),
+      ).toThrow(/requisitos/i);
     });
 
     it('should handle zero annual rate correctly', () => {
@@ -202,6 +226,24 @@ describe('LoanApplication — Entity', () => {
       loan.approve();
       expect(() => loan.reject()).toThrow(/PENDING/);
     });
+
+    it('should throw when rejecting an already REJECTED loan', () => {
+      const loan = LoanApplication.create({
+        id: 'loan-10b',
+        userId: 'user-1',
+        amount: 5_000_000,
+        installments: 12,
+        annualRate: 24,
+        monthlyIncome: 2_000_000,
+        documentVerified: true,
+        ageVerified: true,
+        incomeVerified: true,
+        creditHistoryVerified: true,
+      });
+
+      loan.reject();
+      expect(() => loan.reject()).toThrow(/PENDING/);
+    });
   });
 
   describe('toPublic()', () => {
@@ -224,6 +266,16 @@ describe('LoanApplication — Entity', () => {
       expect(dto.id).toBe('loan-11');
       expect(dto.userId).toBe('user-1');
       expect(dto.amount).toBe(5_000_000);
+      expect(dto.installments).toBe(12);
+      expect(dto.annualRate).toBe(24);
+      expect(dto.monthlyIncome).toBe(2_000_000);
+      expect(dto.monthlyPayment).toBeCloseTo(expectedFrenchPayment(5_000_000, 24, 12), 2);
+      expect(dto.documentVerified).toBe(true);
+      expect(dto.ageVerified).toBe(true);
+      expect(dto.incomeVerified).toBe(true);
+      expect(dto.creditHistoryVerified).toBe(true);
+      expect(dto.eligibility).toEqual({ isEligible: true, reasons: [] });
+      expect(dto.status).toBe(LoanApplicationStatus.PENDING);
       expect(typeof dto.createdAt).toBe('string');
       expect(new Date(dto.createdAt)).toBeInstanceOf(Date);
     });

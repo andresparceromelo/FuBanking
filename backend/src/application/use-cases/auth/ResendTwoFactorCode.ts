@@ -24,10 +24,10 @@ export class ResendTwoFactorCode {
 
   constructor(
     private readonly userRepository: IUserRepository,
-    private readonly verificationCodeRepository: IVerificationCodeRepository,
-    private readonly emailService: IEmailService,
+    verificationCodeRepository: IVerificationCodeRepository,
+    emailService: IEmailService,
     private readonly tokenService: ITokenService,
-    private readonly passwordService: IPasswordService,
+    passwordService: IPasswordService,
   ) {
     this.generateTwoFactorCode = new GenerateTwoFactorCode(
       verificationCodeRepository,
@@ -40,7 +40,6 @@ export class ResendTwoFactorCode {
   async execute(
     dto: ResendTwoFactorDto,
   ): Promise<{ temporaryToken: string; maskedEmail: string }> {
-    // 1. Verificar y decodificar token temporal
     let payload: { userId: string; email: string };
     try {
       payload = this.tokenService.verify(dto.temporaryToken) as { userId: string; email: string };
@@ -48,13 +47,11 @@ export class ResendTwoFactorCode {
       throw new AuthError('Token temporal inválido o expirado', 'TOKEN_INVALID');
     }
 
-    // 2. Verificar que el usuario existe
     const user = await this.userRepository.findById(payload.userId);
     if (!user) {
       throw new AuthError('Usuario no encontrado', 'USER_NOT_FOUND');
     }
 
-    // 3. Generar y enviar nuevo código (invalida automáticamente el anterior)
     const result = await this.generateTwoFactorCode.execute(
       user.id,
       user.email.toString(),

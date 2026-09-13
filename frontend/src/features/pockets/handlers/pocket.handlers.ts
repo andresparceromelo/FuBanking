@@ -17,7 +17,6 @@ import type {
   UpdatePocketPayload,
 } from '../services/pocket.service';
 
-// ── Contratos de las dependencias ───────────────────────────────────────────
 
 /** Subconjunto del servicio de bolsillos que consumen los handlers. */
 export interface PocketApi {
@@ -52,7 +51,6 @@ export function backendMessage(error: any, fallback: string): string {
   return error?.message || error?.error?.message || fallback;
 }
 
-// ── Consultar — loadPockets ─────────────────────────────────────────────────
 
 export interface LoadPocketsDeps {
   service: Pick<PocketApi, 'getByAccount'>;
@@ -74,7 +72,6 @@ export async function loadPockets(deps: LoadPocketsDeps, accountId: string): Pro
   }
 }
 
-// ── Crear — handleCreate ────────────────────────────────────────────────────
 
 export interface CreateDeps {
   service: Pick<PocketApi, 'create'>;
@@ -116,7 +113,6 @@ export async function handleCreate(deps: CreateDeps, input: CreateInput): Promis
   }
 }
 
-// ── Transferir — handleTransfer ─────────────────────────────────────────────
 
 export interface TransferDeps {
   service: Pick<PocketApi, 'transfer'>;
@@ -154,7 +150,6 @@ export async function handleTransfer(deps: TransferDeps, input: TransferInput): 
   }
 }
 
-// ── Actualizar — handleSaveEdit ─────────────────────────────────────────────
 
 export interface SaveEditDeps {
   service: Pick<PocketApi, 'update'>;
@@ -193,7 +188,6 @@ export async function handleSaveEdit(deps: SaveEditDeps, input: SaveEditInput): 
   }
 }
 
-// ── Eliminar — confirmDelete ────────────────────────────────────────────────
 
 export interface ConfirmDeleteDeps {
   service: Pick<PocketApi, 'remove'>;

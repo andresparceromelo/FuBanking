@@ -29,13 +29,11 @@ import { authMiddleware } from '../middlewares/authMiddleware';
  */
 const router = Router();
 
-// ── Instanciar dependencias (Dependency Injection manual) ─────────────────
 const accountRepository       = new SupabaseAccountRepository(supabaseClient);
 const userRepository          = new SupabaseUserRepository(supabaseClient);
 const transactionRepository   = new SupabaseTransactionRepository(supabaseClient);
 const notificationRepository  = new SupabaseNotificationRepository(supabaseClient);
 
-// ── Casos de uso ──────────────────────────────────────────────────────────
 const createAccount        = new CreateAccount(accountRepository);
 const getUserAccounts      = new GetUserAccounts(accountRepository);
 const getAccountDetails    = new GetAccountDetails(accountRepository);
@@ -48,7 +46,6 @@ const createTransfer       = new CreateTransfer(accountRepository, transactionRe
 const getTransfer          = new GetTransfer(transactionRepository, accountRepository, userRepository);
 const getTransferHistory   = new GetTransferHistory(transactionRepository, accountRepository, userRepository);
 
-// ── Controladores ─────────────────────────────────────────────────────────
 const controller = new AccountController(
   createAccount,
   getUserAccounts,
@@ -65,7 +62,6 @@ const transferController = new TransferController(
   searchUserByEmail,
 );
 
-// ── Rutas (todas protegidas con JWT) ─────────────────────────────────────
 router.get('/search', authMiddleware, transferController.searchByAccountNumber);
 router.post('/', authMiddleware, controller.create);
 router.get('/me', authMiddleware, controller.getMyAccounts);

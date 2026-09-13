@@ -69,7 +69,6 @@ export function obtenerCaminos(): ResultadoCamino[] {
   return resultados;
 }
 
-// ── Aserciones ──────────────────────────────────────────────────────────────
 
 export function verificar(condicion: boolean, mensaje: string): void {
   if (!condicion) throw new Error(mensaje);
@@ -83,7 +82,6 @@ export function verificarIgual(actual: unknown, esperado: unknown, mensaje: stri
   }
 }
 
-// ── Resumen ─────────────────────────────────────────────────────────────────
 
 export interface ResumenCaminos {
   total: number;

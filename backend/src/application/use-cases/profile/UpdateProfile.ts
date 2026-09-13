@@ -15,13 +15,11 @@ export class UpdateProfile {
   ) {}
 
   async execute(userId: string, dto: UpdateProfileDto): Promise<UpdateProfileResponseDto> {
-    // Verificar que el usuario existe
     const user = await this.userRepository.findById(userId);
     if (!user) {
       throw new AuthError('Usuario no encontrado', 'USER_NOT_FOUND');
     }
 
-    // Verificar que se envió al menos un campo a actualizar
     const hasChanges = dto.firstName !== undefined
       || dto.middleName !== undefined
       || dto.lastName !== undefined
@@ -35,7 +33,6 @@ export class UpdateProfile {
       throw new AppError('No se proporcionó ningún campo para actualizar', 400, 'NO_CHANGES');
     }
 
-    // Actualizar via repositorio
     const updatedUser = await this.userRepository.update(userId, {
       firstName: dto.firstName,
       middleName: dto.middleName,

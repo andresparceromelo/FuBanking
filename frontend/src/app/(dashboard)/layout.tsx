@@ -9,7 +9,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
-  // Route protection fallback (since middleware might not catch client-side routing properly without cookies)
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       router.push('/login');

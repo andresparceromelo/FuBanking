@@ -53,7 +53,6 @@ function contexto(listaInicial: PocketItem[] = []) {
 }
 
 export async function ejecutarCaminosActualizar(e: Escenario): Promise<void> {
-  // ── Camino 1 — 1 → 3 → Fin ────────────────────────────────────────────────
 
   await camino(
     {
@@ -85,7 +84,6 @@ export async function ejecutarCaminosActualizar(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 2 — el servicio falla ──────────────────────────────────────────
 
   await camino(
     {
@@ -138,7 +136,6 @@ export async function ejecutarCaminosActualizar(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 3 — el servicio responde bien ──────────────────────────────────
 
   await camino(
     {

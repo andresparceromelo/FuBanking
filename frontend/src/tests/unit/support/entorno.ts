@@ -39,7 +39,6 @@ export interface Escenario {
   correo: string;
 }
 
-// ── Autenticación ───────────────────────────────────────────────────────────
 
 /**
  * Obtiene un token real del backend y lo fija en la instancia de axios.
@@ -63,7 +62,6 @@ async function autenticar(): Promise<void> {
     }
     token = r?.data?.token;
   } catch (error: any) {
-    // Si aún no existe, se registra. Cualquier otro error se propaga.
     if (error?.code !== 'INVALID_CREDENTIALS') throw error;
     const r: any = await apiClient.post('/auth/register', USUARIO_PRUEBA);
     token = r?.data?.token;
@@ -73,7 +71,6 @@ async function autenticar(): Promise<void> {
   apiClient.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 }
 
-// ── Escenario ───────────────────────────────────────────────────────────────
 
 /**
  * Deja lista una cuenta con saldo suficiente.
@@ -136,7 +133,6 @@ export async function listarBolsillosReales(accountId: string): Promise<PocketIt
   return (r.data ?? []) as PocketItem[];
 }
 
-// ── Registradores ───────────────────────────────────────────────────────────
 
 export interface ToastEmitido {
   tipo: 'success' | 'error' | 'warning';

@@ -35,7 +35,6 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-// ── Mocks de Next.js ──────────────────────────────────────────────────────────
 
 jest.mock('next/link', () => {
   const Link = ({ children, href }: { children: React.ReactNode; href: string }) => (
@@ -50,10 +49,6 @@ jest.mock('next/navigation', () => ({
   usePathname: () => '/login',
 }));
 
-// ── Mock de authService (capa de red) ─────────────────────────────────────────
-// NOTA: jest.mock() es hoisted antes de las declaraciones const, por lo que
-// NO se puede referenciar `mockAuthServiceLogin` en el factory — causaría TDZ.
-// Usamos jest.fn() directamente y accedemos al mock via jest.requireMock().
 
 jest.mock('../../features/auth/services/auth.service', () => ({
   authService: {
@@ -69,9 +64,6 @@ jest.mock('../../features/auth/services/auth.service', () => ({
   },
 }));
 
-// ── Mock de useAuth para capturar la función login() ─────────────────────────
-// Se mockea para verificar que login(user, token) se invoca en el path feliz,
-// sin necesidad de un AuthProvider real con localStorage/cookies.
 
 jest.mock('../../shared/hooks/useAuth', () => ({
   useAuth: () => ({
@@ -85,27 +77,16 @@ jest.mock('../../shared/hooks/useAuth', () => ({
   }),
 }));
 
-// ── Import del componente (DESPUÉS de todos los mocks) ────────────────────────
 
 import { LoginForm } from '../../features/auth/components/LoginForm';
 import { PublicUser } from '../../features/auth/types/auth.types';
 
-// ── Acceso a los mocks via jest.requireMock() ─────────────────────────────────
-// Se obtiene la referencia al spy DESPUÉS de que jest.mock() fue procesado.
 
 function getAuthServiceMock() {
   return jest.requireMock('../../features/auth/services/auth.service').authService;
 }
 
-function getUseAuthLoginMock() {
-  // useAuth retorna un nuevo objeto en cada llamada del mock, por lo que no podemos
-  // comparar la misma referencia de jest.fn(). Para verificar que login() fue llamado,
-  // necesitamos espiarlo de forma diferente.
-  // Solución: re-declaramos el mock con estado mutable via beforeEach (ver abajo).
-  return jest.requireMock('../../shared/hooks/useAuth').useAuth;
-}
 
-// ── Helper: PublicUser mínimo válido para el path de login exitoso ─────────────
 
 function buildPublicUser(): PublicUser {
   return {
@@ -127,7 +108,6 @@ function buildPublicUser(): PublicUser {
   };
 }
 
-// ── Helper: llena y envía el formulario ───────────────────────────────────────
 
 async function fillAndSubmit(email: string, password: string) {
   await userEvent.type(screen.getByLabelText(/correo electrónico/i), email);
@@ -135,37 +115,28 @@ async function fillAndSubmit(email: string, password: string) {
   await userEvent.click(screen.getByRole('button', { name: /continuar/i }));
 }
 
-// ── Suite principal ────────────────────────────────────────────────────────────
 
 describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend↔Backend)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  // ── Camino 1,2,3,17,F ────────────────────────────────────────────────────────
   describe('Camino 1,2,3,17,F — datos inválidos en el formulario del cliente', () => {
     it('no realiza ninguna petición de red y muestra errores inline de validación', async () => {
-      // Arrange: montar el formulario sin completar ningún campo
       render(<LoginForm />);
 
-      // Act: enviar formulario vacío (email inválido, password vacía)
       fireEvent.click(screen.getByRole('button', { name: /continuar/i }));
 
-      // Assert: errores de validación inline visibles (react-hook-form + zod)
       await waitFor(() => {
         expect(screen.queryByText(/correo electrónico inválido/i)).toBeInTheDocument();
       });
 
-      // authService.login NO debe haberse llamado (validación cliente rechaza antes de enviar)
       expect(getAuthServiceMock().login).not.toHaveBeenCalled();
     });
   });
 
-  // ── Camino 1,2,4,5,6,15,17,F ─────────────────────────────────────────────────
   describe('Camino 1,2,4,5,6,15,17,F — datos válidos en cliente, servidor responde 400 VALIDATION_ERROR', () => {
     it('muestra el mensaje de error devuelto por el servidor (VALIDATION_ERROR)', async () => {
-      // Arrange: authService.login simula error de validación del servidor (400)
-      // El interceptor de apiClient transforma la respuesta 4xx en: { code, message }
       getAuthServiceMock().login.mockRejectedValue({
         code: 'VALIDATION_ERROR',
         message: 'El correo no tiene un formato válido',
@@ -174,7 +145,6 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
       render(<LoginForm />);
       await fillAndSubmit('ana@mail.com', 'abc123');
 
-      // Assert: el hook captura el error y lo expone; el componente lo muestra en el banner
       await waitFor(() => {
         expect(screen.getByText('El correo no tiene un formato válido')).toBeInTheDocument();
       });
@@ -183,10 +153,8 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
     });
   });
 
-  // ── Camino 1,2,4,5,7,8,9,15,17,F ─────────────────────────────────────────────
   describe('Camino 1,2,4,5,7,8,9,15,17,F — servidor responde 401 INVALID_CREDENTIALS (correo no registrado)', () => {
     it("muestra 'Correo o contraseña incorrectos' cuando el correo no está registrado", async () => {
-      // Arrange: backend no encuentra el email → 401 INVALID_CREDENTIALS
       getAuthServiceMock().login.mockRejectedValue({
         code: 'INVALID_CREDENTIALS',
         message: 'Correo o contraseña incorrectos',
@@ -195,7 +163,6 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
       render(<LoginForm />);
       await fillAndSubmit('noexiste@mail.com', 'abc123');
 
-      // Assert
       await waitFor(() => {
         expect(screen.getByText('Correo o contraseña incorrectos')).toBeInTheDocument();
       });
@@ -207,10 +174,8 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
     });
   });
 
-  // ── Camino 1,2,4,5,7,8,10,11,15,17,F ─────────────────────────────────────────
   describe('Camino 1,2,4,5,7,8,10,11,15,17,F — servidor responde 401 ACCOUNT_INACTIVE', () => {
     it("muestra 'Esta cuenta ha sido desactivada' cuando la cuenta está inactiva", async () => {
-      // Arrange: backend encuentra el usuario pero está inactivo → 401 ACCOUNT_INACTIVE
       getAuthServiceMock().login.mockRejectedValue({
         code: 'ACCOUNT_INACTIVE',
         message: 'Esta cuenta ha sido desactivada',
@@ -219,7 +184,6 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
       render(<LoginForm />);
       await fillAndSubmit('ana@mail.com', 'abc123');
 
-      // Assert
       await waitFor(() => {
         expect(screen.getByText('Esta cuenta ha sido desactivada')).toBeInTheDocument();
       });
@@ -228,10 +192,8 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
     });
   });
 
-  // ── Camino 1,2,4,5,7,8,10,12,13,15,17,F ──────────────────────────────────────
   describe('Camino 1,2,4,5,7,8,10,12,13,15,17,F — servidor responde 401 INVALID_CREDENTIALS (password incorrecta)', () => {
     it("muestra 'Correo o contraseña incorrectos' cuando la contraseña es incorrecta", async () => {
-      // Arrange: backend encuentra el usuario, pero la contraseña no coincide → 401 INVALID_CREDENTIALS
       getAuthServiceMock().login.mockRejectedValue({
         code: 'INVALID_CREDENTIALS',
         message: 'Correo o contraseña incorrectos',
@@ -240,7 +202,6 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
       render(<LoginForm />);
       await fillAndSubmit('ana@mail.com', 'wrongpassword');
 
-      // Assert
       await waitFor(() => {
         expect(screen.getByText('Correo o contraseña incorrectos')).toBeInTheDocument();
       });
@@ -252,10 +213,8 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
     });
   });
 
-  // ── Camino 1,2,4,5,7,8,10,12,14,16,17,F ──────────────────────────────────────
   describe('Camino 1,2,4,5,7,8,10,12,14,16,17,F — servidor responde 200 login exitoso sin 2FA', () => {
     it('invoca authService.login con las credenciales correctas y no muestra ningún error', async () => {
-      // Arrange: backend responde 200 con { requiresTwoFactor:false, token, user }
       const publicUser = buildPublicUser();
       getAuthServiceMock().login.mockResolvedValue({
         requiresTwoFactor: false,
@@ -266,7 +225,6 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
       render(<LoginForm />);
       await fillAndSubmit('ana@mail.com', 'correcta123');
 
-      // Assert: authService.login fue llamado con las credenciales del formulario
       await waitFor(() => {
         expect(getAuthServiceMock().login).toHaveBeenCalledTimes(1);
         expect(getAuthServiceMock().login).toHaveBeenCalledWith(
@@ -277,7 +235,6 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
         );
       });
 
-      // No debe haber ningún banner de error en pantalla
       expect(screen.queryByText(/correo o contraseña incorrectos/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/cuenta ha sido desactivada/i)).not.toBeInTheDocument();
     });

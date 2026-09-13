@@ -103,7 +103,6 @@ export class Account {
     this._createdAt = props.createdAt;
   }
 
-  // ── Getters ──────────────────────────────────────────────────────────────
 
   get id(): string { return this._id; }
   get userId(): string { return this._userId; }
@@ -114,7 +113,6 @@ export class Account {
   get details(): AccountDetails | null { return this._details; }
   get createdAt(): Date { return this._createdAt; }
 
-  // ── Reglas de negocio ────────────────────────────────────────────────────
 
   /**
    * Verifica si la cuenta está operativa (activa).
@@ -180,7 +178,6 @@ export class Account {
     };
   }
 
-  // ── Factory ──────────────────────────────────────────────────────────────
 
   /**
    * Crea una nueva instancia de Account para una cuenta recién creada.

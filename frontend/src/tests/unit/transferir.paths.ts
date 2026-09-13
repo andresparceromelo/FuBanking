@@ -51,7 +51,6 @@ function contexto() {
 }
 
 export async function ejecutarCaminosTransferir(e: Escenario): Promise<void> {
-  // ── Camino 1 — 1 → 3 → Fin ────────────────────────────────────────────────
 
   await camino(
     {
@@ -85,7 +84,6 @@ export async function ejecutarCaminosTransferir(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 1b — tercera cláusula de la condición ──────────────────────────
 
   await camino(
     {
@@ -115,7 +113,6 @@ export async function ejecutarCaminosTransferir(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 2 — el servicio falla ──────────────────────────────────────────
 
   await camino(
     {
@@ -160,7 +157,6 @@ export async function ejecutarCaminosTransferir(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 3 — el servicio responde bien ──────────────────────────────────
 
   await camino(
     {

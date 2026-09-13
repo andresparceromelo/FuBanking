@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CreateLoanApplication } from '../../../application/use-cases/loan/CreateLoanApplication';
 import { LoanApplicationStatus } from '../../../domain/entities/LoanApplication';
-import { InMemoryLoanRepo, InMemoryUserRepo, InMemoryNotificationRepo, createTestUser } from './in-memory-repos';
+import { InMemoryLoanRepo, InMemoryUserRepo, InMemoryNotificationRepo, createTestUser, buildPendingLoan } from './in-memory-repos';
 
 describe('CreateLoanApplication', () => {
   let loanRepo: InMemoryLoanRepo;
@@ -11,6 +11,7 @@ describe('CreateLoanApplication', () => {
 
   beforeEach(() => {
     loanRepo = new InMemoryLoanRepo();
+    userRepo = new InMemoryUserRepo();
     notifRepo = new InMemoryNotificationRepo();
     useCase = new CreateLoanApplication(loanRepo, userRepo, notifRepo);
   });
@@ -54,11 +55,7 @@ describe('CreateLoanApplication', () => {
 
     it('should notify all admins about the new request', async () => {
       const user = createTestUser();
-      const admin = createTestUser({ email: 'admin@example.com', document: '9999999999' });
-      admin.updateProfile({} as any);
-      // Force admin role via constructor hack for testing
-      const adminAsAny = admin as any;
-      adminAsAny._role = 'admin';
+      const admin = createTestUser({ email: 'admin@example.com', document: '9999999999', role: 'admin' });
 
       userRepo = new InMemoryUserRepo([user, admin]);
       useCase = new CreateLoanApplication(loanRepo, userRepo, notifRepo);
@@ -148,6 +145,80 @@ describe('CreateLoanApplication', () => {
           monthlyIncome: 1_800_000,
         }),
       ).rejects.toThrow(/requisitos/i);
+    });
+  });
+
+  describe('Matriz de requisitos', () => {
+    it('should reject when user is underage', async () => {
+      const minorBirth = new Date();
+      minorBirth.setFullYear(minorBirth.getFullYear() - 10);
+      const user = createTestUser({ birthDate: minorBirth });
+      userRepo = new InMemoryUserRepo([user]);
+      useCase = new CreateLoanApplication(loanRepo, userRepo, notifRepo);
+
+      await expect(
+        useCase.execute({
+          userId: user.id,
+          amount: 5_000_000,
+          installments: 12,
+          annualRate: 24,
+          monthlyIncome: 1_800_000,
+        }),
+      ).rejects.toThrow(/requisitos/i);
+    });
+
+    it('should reject when user income is zero', async () => {
+      const user = createTestUser({ monthlyIncome: 0 });
+      userRepo = new InMemoryUserRepo([user]);
+      useCase = new CreateLoanApplication(loanRepo, userRepo, notifRepo);
+
+      await expect(
+        useCase.execute({
+          userId: user.id,
+          amount: 5_000_000,
+          installments: 12,
+          annualRate: 24,
+          monthlyIncome: 1_800_000,
+        }),
+      ).rejects.toThrow(/requisitos/i);
+    });
+
+    it('should allow creating when history has only non-pending loans', async () => {
+      const user = createTestUser();
+      userRepo = new InMemoryUserRepo([user]);
+      useCase = new CreateLoanApplication(loanRepo, userRepo, notifRepo);
+
+      const old = buildPendingLoan(user.id);
+      old.approve();
+      await loanRepo.save(old);
+
+      const result = await useCase.execute({
+        userId: user.id,
+        amount: 5_000_000,
+        installments: 12,
+        annualRate: 24,
+        monthlyIncome: 1_800_000,
+      });
+
+      expect(result.status).toBe(LoanApplicationStatus.PENDING);
+    });
+
+    it('should not notify admins when there are none', async () => {
+      const user = createTestUser();
+      userRepo = new InMemoryUserRepo([user]);
+      useCase = new CreateLoanApplication(loanRepo, userRepo, notifRepo);
+
+      await useCase.execute({
+        userId: user.id,
+        amount: 5_000_000,
+        installments: 12,
+        annualRate: 24,
+        monthlyIncome: 1_800_000,
+      });
+
+      const all = notifRepo.getAll();
+      expect(all).toHaveLength(1);
+      expect(all[0].userId).toBe(user.id);
     });
   });
 

@@ -49,7 +49,6 @@ export async function ejecutarCasosDeUso(e: Escenario): Promise<void> {
   await consultarBolsillos(e);
 }
 
-// ── Crear ───────────────────────────────────────────────────────────────────
 
 async function crearBolsillo(e: Escenario): Promise<void> {
   const GRUPO = 'Crear bolsillo';
@@ -243,7 +242,6 @@ async function crearBolsillo(e: Escenario): Promise<void> {
           'CU-CR-08: una cuenta bloqueada debe rechazarse',
         );
       } finally {
-        // Se devuelve a ACTIVA pase lo que pase: CU-CO-04 la necesita operativa.
         await cambiarEstadoCuenta(e.acc3, 'ACTIVA');
       }
     },
@@ -272,8 +270,6 @@ async function crearBolsillo(e: Escenario): Promise<void> {
         amount: 400_000,
       });
 
-      // Si llegamos aquí el defecto D-05 está corregido. Se deshace la creación
-      // para que los grupos siguientes encuentren el estado que declaran.
       e.bolsillosCreados.push(bolsillo.id);
       await eliminar.execute({ userId: e.userId, pocketId: bolsillo.id });
 
@@ -285,7 +281,6 @@ async function crearBolsillo(e: Escenario): Promise<void> {
   );
 }
 
-// ── Actualizar ──────────────────────────────────────────────────────────────
 
 async function actualizarBolsillo(e: Escenario): Promise<void> {
   const GRUPO = 'Actualizar bolsillo';
@@ -493,7 +488,6 @@ async function actualizarBolsillo(e: Escenario): Promise<void> {
   );
 }
 
-// ── Eliminar ────────────────────────────────────────────────────────────────
 
 async function eliminarBolsillo(e: Escenario): Promise<void> {
   const GRUPO = 'Eliminar bolsillo';
@@ -583,7 +577,6 @@ async function eliminarBolsillo(e: Escenario): Promise<void> {
     },
   );
 
-  // Restauración: transferir necesita dos bolsillos en la cuenta principal.
   const recreado = await crear.execute({
     userId: e.userId,
     accountId: e.acc1,
@@ -594,7 +587,6 @@ async function eliminarBolsillo(e: Escenario): Promise<void> {
   e.bolsillosCreados.push(EST);
 }
 
-// ── Transferir ──────────────────────────────────────────────────────────────
 
 async function transferirEntreBolsillos(e: Escenario): Promise<void> {
   const GRUPO = 'Transferir entre bolsillos';
@@ -811,7 +803,6 @@ async function transferirEntreBolsillos(e: Escenario): Promise<void> {
   );
 }
 
-// ── Consultar ───────────────────────────────────────────────────────────────
 
 async function consultarBolsillos(e: Escenario): Promise<void> {
   const GRUPO = 'Consultar bolsillos';

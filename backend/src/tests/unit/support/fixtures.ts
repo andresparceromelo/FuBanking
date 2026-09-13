@@ -45,7 +45,6 @@ export interface Escenario {
   bolsillosCreados: string[];
 }
 
-// ── Repositorios y casos de uso reales ──────────────────────────────────────
 
 export const accRepo = new SupabaseAccountRepository(supabase);
 export const pocRepo = new SupabasePocketRepository(supabase);
@@ -62,7 +61,6 @@ const crearCuenta = new CreateAccount(accRepo);
  *  depósito es solo andamiaje del escenario, no la unidad bajo prueba. */
 const depositar = new DepositMoney(accRepo);
 
-// ── Montaje ─────────────────────────────────────────────────────────────────
 
 /** Busca un usuario ya existente en la base para colgar de él las cuentas. */
 async function buscarUsuario(): Promise<{ id: string; email: string }> {
@@ -117,7 +115,6 @@ export async function montarEscenario(): Promise<Escenario> {
 
   await depositar.execute({ userId: usuario.id, accountId: cuenta1.id, amount: 1_000_000 });
   await depositar.execute({ userId: usuario.id, accountId: cuenta2.id, amount: 200_000 });
-  // cuenta3 se deja en $0 y sin bolsillos a propósito.
 
   const auxiliar = await crear.execute({
     userId: usuario.id,
@@ -148,7 +145,6 @@ export async function cambiarEstadoCuenta(accountId: string, estado: string): Pr
   if (error) throw new Error(`No se pudo cambiar el estado de la cuenta: ${error.message}`);
 }
 
-// ── Desmontaje ──────────────────────────────────────────────────────────────
 
 export interface ResultadoLimpieza {
   bolsillos: number;
@@ -173,7 +169,6 @@ export async function desmontarEscenario(escenario: Escenario): Promise<Resultad
     errores: [],
   };
 
-  // 1. Bolsillos de las cuentas de prueba.
   const borradoBolsillos = await supabase
     .from('pockets')
     .delete()
@@ -182,7 +177,6 @@ export async function desmontarEscenario(escenario: Escenario): Promise<Resultad
   if (borradoBolsillos.error) resultado.errores.push(`pockets: ${borradoBolsillos.error.message}`);
   else resultado.bolsillos = borradoBolsillos.data?.length ?? 0;
 
-  // 2. Notificaciones de bolsillos emitidas durante la corrida.
   const borradoNotis = await supabase
     .from('notifications')
     .delete()
@@ -193,7 +187,6 @@ export async function desmontarEscenario(escenario: Escenario): Promise<Resultad
   if (borradoNotis.error) resultado.errores.push(`notifications: ${borradoNotis.error.message}`);
   else resultado.notificaciones = borradoNotis.data?.length ?? 0;
 
-  // 3. Detalles de cuenta (dependen de accounts por clave foránea).
   const borradoDetalles = await supabase
     .from('account_details')
     .delete()
@@ -202,7 +195,6 @@ export async function desmontarEscenario(escenario: Escenario): Promise<Resultad
   if (borradoDetalles.error) resultado.errores.push(`account_details: ${borradoDetalles.error.message}`);
   else resultado.detalles = borradoDetalles.data?.length ?? 0;
 
-  // 4. Las cuentas de prueba.
   const borradoCuentas = await supabase.from('accounts').delete().in('id', cuentas).select('id');
   if (borradoCuentas.error) resultado.errores.push(`accounts: ${borradoCuentas.error.message}`);
   else resultado.cuentas = borradoCuentas.data?.length ?? 0;

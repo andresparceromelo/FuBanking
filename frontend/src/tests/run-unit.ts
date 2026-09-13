@@ -23,11 +23,6 @@ import { montarEscenario } from './unit/support/entorno';
 import { obtenerCaminos, resumirCaminos } from './unit/support/runner';
 
 async function main(): Promise<void> {
-  console.log('');
-  console.log('Pruebas unitarias de caja blanca — Bolsillos (frontend)');
-  console.log('Servicio HTTP real contra http://localhost:3001/api/v1');
-  console.log('');
-
   let escenario;
   try {
     escenario = await montarEscenario();
@@ -42,16 +37,12 @@ async function main(): Promise<void> {
     process.exit(1);
     return;
   }
-
-  console.log(`Escenario montado · usuario ${escenario.correo} · cuenta ${escenario.accountId}`);
-
   await ejecutarCaminosCrear(escenario);
   await ejecutarCaminosActualizar(escenario);
   await ejecutarCaminosEliminar(escenario);
   await ejecutarCaminosTransferir(escenario);
   await ejecutarCaminosConsultar(escenario);
 
-  // ── Salida ────────────────────────────────────────────────────────────────
   const casos = obtenerCaminos();
   const resumen = resumirCaminos(casos);
 
@@ -59,28 +50,11 @@ async function main(): Promise<void> {
   for (const c of casos) {
     if (c.funcionalidad !== funcionalidadActual) {
       funcionalidadActual = c.funcionalidad;
-      console.log('');
-      console.log(`── ${funcionalidadActual} ${'─'.repeat(Math.max(0, 46 - funcionalidadActual.length))}`);
     }
-    const marca = c.estado === 'Aprobado' ? 'OK   ' : c.estado === 'Fallido' ? 'FALLA' : 'N/E  ';
-    console.log(`${marca} ${c.id.padEnd(11)} ${c.camino.padEnd(44)} ${c.secuencia}`);
     if (c.estado !== 'Aprobado') console.log(`      ↳ ${c.obtenido}`);
   }
-
-  console.log('');
-  for (const [nombre, d] of Object.entries(resumen.porFuncionalidad)) {
-    console.log(
-      `${nombre.padEnd(30)} ${d.aprobados}/${d.total} aprobados` +
-        (d.fallidos ? `, ${d.fallidos} fallidos` : '') +
-        (d.noEjecutables ? `, ${d.noEjecutables} no ejecutables` : ''),
-    );
+  for (const [] of Object.entries(resumen.porFuncionalidad)) {
   }
-  console.log('');
-  console.log(
-    `TOTAL: ${resumen.aprobados}/${resumen.total} aprobados, ${resumen.fallidos} fallidos` +
-      (resumen.noEjecutables ? `, ${resumen.noEjecutables} no ejecutables` : ''),
-  );
-
   if (resumen.fallidos > 0) process.exitCode = 1;
 }
 

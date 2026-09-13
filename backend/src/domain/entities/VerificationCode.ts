@@ -35,7 +35,6 @@ export class VerificationCode {
     this._createdAt = props.createdAt;
   }
 
-  // ── Getters ──────────────────────────────────────────────────────────────
 
   get id(): string { return this._id; }
   get userId(): string { return this._userId; }
@@ -45,7 +44,6 @@ export class VerificationCode {
   get used(): boolean { return this._used; }
   get createdAt(): Date { return this._createdAt; }
 
-  // ── Reglas de dominio ────────────────────────────────────────────────────
 
   /** El código expira si la fecha actual superó expiresAt. */
   isExpired(): boolean {
@@ -72,7 +70,6 @@ export class VerificationCode {
     this._used = true;
   }
 
-  // ── Factory ──────────────────────────────────────────────────────────────
 
   /**
    * Crea un nuevo VerificationCode con expiración de 5 minutos.

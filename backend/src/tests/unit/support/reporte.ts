@@ -52,7 +52,6 @@ export function generarMarkdown(casos: ResultadoCaso[], meta: MetadatosCorrida):
     L.push('');
   }
 
-  // ── Resumen ───────────────────────────────────────────────────────────────
   L.push('## Resumen');
   L.push('');
   L.push('| Grupo | Casos | Aprobados | Fallidos |');
@@ -73,7 +72,6 @@ export function generarMarkdown(casos: ResultadoCaso[], meta: MetadatosCorrida):
     L.push('');
   }
 
-  // ── Índice ────────────────────────────────────────────────────────────────
   L.push('## Índice de casos');
   L.push('');
   L.push('| ID | Grupo | Unidad | Estado | Defecto |');
@@ -85,7 +83,6 @@ export function generarMarkdown(casos: ResultadoCaso[], meta: MetadatosCorrida):
   }
   L.push('');
 
-  // ── Detalle ───────────────────────────────────────────────────────────────
   const grupos = [...new Set(casos.map((c) => c.grupo))];
   for (const grupo of grupos) {
     const delGrupo = casos.filter((c) => c.grupo === grupo);
@@ -108,7 +105,6 @@ export function generarMarkdown(casos: ResultadoCaso[], meta: MetadatosCorrida):
     }
   }
 
-  // ── Fallidos ──────────────────────────────────────────────────────────────
   const fallidos = casos.filter((c) => c.estado === 'Fallido');
   L.push('## Casos fallidos');
   L.push('');
@@ -130,7 +126,6 @@ export function generarMarkdown(casos: ResultadoCaso[], meta: MetadatosCorrida):
   }
   L.push('');
 
-  // ── Limpieza ──────────────────────────────────────────────────────────────
   L.push('## Limpieza de la base de datos');
   L.push('');
   if (!meta.limpieza) {
@@ -162,7 +157,6 @@ export function generarMarkdown(casos: ResultadoCaso[], meta: MetadatosCorrida):
   return L.join('\n');
 }
 
-// ── Versión HTML ────────────────────────────────────────────────────────────
 
 function esc(texto: unknown): string {
   return String(texto)
@@ -278,7 +272,6 @@ export function generarHtml(casos: ResultadoCaso[], meta: MetadatosCorrida): str
     H.push('<div class="aviso"><b>La Parte B no se ejecutó</b><p>' + esc(meta.notaParteB) + '</p></div>');
   }
 
-  // Resumen por grupo
   H.push('<h2>Resumen por grupo</h2>');
   H.push('<div class="scroll"><table><thead><tr><th>Grupo</th><th class="num">Casos</th>');
   H.push('<th class="num">Aprobados</th><th class="num">Fallidos</th></tr></thead><tbody>');
@@ -294,7 +287,6 @@ export function generarHtml(casos: ResultadoCaso[], meta: MetadatosCorrida): str
   );
   H.push('</tbody></table></div>');
 
-  // Detalle por grupo
   const grupos = [...new Set(casos.map((c) => c.grupo))];
   for (const grupo of grupos) {
     H.push(`<h2>${esc(grupo)}</h2>`);
@@ -315,7 +307,6 @@ export function generarHtml(casos: ResultadoCaso[], meta: MetadatosCorrida): str
     }
   }
 
-  // Limpieza
   H.push('<h2>Limpieza de la base de datos</h2>');
   if (!meta.limpieza) {
     H.push('<p>No se ejecutó: la Parte B no llegó a montar su escenario, así que no creó nada.</p>');

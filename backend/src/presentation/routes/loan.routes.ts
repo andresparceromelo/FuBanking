@@ -25,7 +25,7 @@ const simulateLoan = new SimulateLoan();
 const createLoanApplication = new CreateLoanApplication(loanRepo, userRepo, notificationRepo);
 const getAllLoans = new GetAllLoans(loanRepo);
 const getUserLoans = new GetUserLoans(loanRepo);
-const approveLoan = new ApproveLoan(loanRepo, accountRepo, userRepo, notificationRepo);
+const approveLoan = new ApproveLoan(loanRepo, accountRepo, notificationRepo);
 const rejectLoan = new RejectLoan(loanRepo, notificationRepo);
 
 const controller = new LoanController(

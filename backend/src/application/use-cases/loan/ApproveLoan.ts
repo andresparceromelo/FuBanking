@@ -4,7 +4,6 @@ import { LoanApplication, LoanApplicationStatus } from '../../../domain/entities
 import { Account, AccountType } from '../../../domain/entities/Account';
 import { ILoanApplicationRepository } from '../../../domain/repositories/ILoanApplicationRepository';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
-import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { Notification, NotificationType } from '../../../domain/entities/Notification';
 
@@ -31,7 +30,6 @@ export class ApproveLoan {
   constructor(
     private readonly loanRepository: ILoanApplicationRepository,
     private readonly accountRepository: IAccountRepository,
-    private readonly userRepository: IUserRepository,
     private readonly notificationRepository?: INotificationRepository,
   ) {}
 

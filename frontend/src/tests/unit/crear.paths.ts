@@ -57,7 +57,6 @@ function contexto(listaInicial: any[] = []) {
 }
 
 export async function ejecutarCaminosCrear(e: Escenario): Promise<void> {
-  // ── Camino 1 — 1 → 3 → Fin ────────────────────────────────────────────────
 
   await camino(
     {
@@ -85,7 +84,6 @@ export async function ejecutarCaminosCrear(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 1b — segunda cláusula de la condición ──────────────────────────
 
   await camino(
     {
@@ -111,7 +109,6 @@ export async function ejecutarCaminosCrear(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 2 — 1 → 2 → 4 → 6 → 8 → 9 → Fin (el servicio falla) ────────────
 
   await camino(
     {
@@ -154,7 +151,6 @@ export async function ejecutarCaminosCrear(e: Escenario): Promise<void> {
     },
   );
 
-  // ── Camino 3 — 1 → 2 → 4 → 5 → 7 → 9 → Fin (el servicio responde bien) ────
 
   await camino(
     {

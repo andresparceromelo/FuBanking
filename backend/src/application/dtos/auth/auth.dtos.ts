@@ -6,7 +6,6 @@
  * los datos que entran y salen de los casos de uso tienen la forma correcta.
  */
 
-// ── Registro ──────────────────────────────────────────────────────────────
 
 export interface RegisterUserDto {
   firstName: string;
@@ -40,7 +39,6 @@ export interface RegisterUserResponseDto {
   token: string;
 }
 
-// ── Login ─────────────────────────────────────────────────────────────────
 
 export interface LoginUserDto {
   email: string;
@@ -79,7 +77,6 @@ export interface LoginUserTwoFactorResponseDto {
 
 export type LoginUserResponseDto = LoginUserDirectResponseDto | LoginUserTwoFactorResponseDto;
 
-// ── 2FA ───────────────────────────────────────────────────────────────────
 
 export interface VerifyTwoFactorDto {
   temporaryToken: string;
@@ -110,7 +107,6 @@ export interface ResendTwoFactorDto {
   temporaryToken: string;
 }
 
-// ── Recuperación de contraseña ────────────────────────────────────────────
 
 export interface RequestPasswordResetDto {
   email: string;

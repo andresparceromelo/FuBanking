@@ -34,7 +34,6 @@ export class SearchAccountByNumber {
       throw new AppError('La cuenta de destino no está activa', 400, 'ACCOUNT_INACTIVE');
     }
 
-    // No revelar información de la propia cuenta del usuario
     if (account.userId === requestingUserId) {
       throw new AppError(
         'No puedes transferirte dinero a ti mismo por esta vía',

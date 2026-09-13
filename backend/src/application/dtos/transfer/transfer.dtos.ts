@@ -7,7 +7,6 @@ import { TransactionType, TransactionStatus } from '../../../domain/entities/Tra
  * El backend determina el resto (senderAccount, referenceNumber, status).
  */
 
-// -- Crear Transferencia --
 
 export interface CreateTransferDto {
   /** ID del usuario autenticado */
@@ -35,14 +34,12 @@ export interface TransferReceiptDto {
   createdAt: string;
 }
 
-// -- Obtener Comprobante --
 
 export interface GetTransferDto {
   transactionId: string;
   userId: string;
 }
 
-// -- Buscar Destinatario --
 
 export interface SearchRecipientResponseDto {
   name: string;
@@ -50,7 +47,6 @@ export interface SearchRecipientResponseDto {
   accountNumberFull: string;   // Número completo (solo para uso interno del flujo)
 }
 
-// -- Historial de Transacciones --
 
 export interface GetTransferHistoryDto {
   accountId: string;

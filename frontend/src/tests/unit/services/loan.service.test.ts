@@ -1,56 +1,79 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { apiClient } from '@/shared/services/api.client';
 import { loanService } from '@/features/loans/services/loan.service';
 
-describe('loanService', () => {
-  describe('simulate', () => {
-    it('should call POST /loans/simulate and return the result', async () => {
-      const payload = { amount: 5_000_000, installments: 12, annualRate: 24 };
-      
-      try {
-        const result = await loanService.simulate(payload);
+vi.mock('@/shared/services/api.client', () => ({
+  apiClient: { post: vi.fn(), get: vi.fn(), patch: vi.fn() },
+}));
 
-        expect(result.amount).toBe(5_000_000);
-        expect(result.installments).toBe(12);
-        expect(result.annualRate).toBe(24);
-        expect(result).toHaveProperty('monthlyRate');
-        expect(result).toHaveProperty('monthlyPayment');
-        expect(result).toHaveProperty('totalToPay');
-        expect(result).toHaveProperty('totalInterest');
-      } catch (error) {
-        // Without authentication, this will throw an error from the real API
-        expect(error).toBeDefined();
-      }
+const post = apiClient.post as unknown as ReturnType<typeof vi.fn>;
+const get = apiClient.get as unknown as ReturnType<typeof vi.fn>;
+
+describe('loanService', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('simulate / simulateLoan', () => {
+    it('should POST /loans/simulate and return data', async () => {
+      const payload = { amount: 5_000_000, installments: 12, annualRate: 24 };
+      const simulation = { ...payload, monthlyRate: 0.02, monthlyPayment: 470_000, totalToPay: 5_640_000, totalInterest: 640_000 };
+      post.mockResolvedValue({ data: simulation });
+
+      const result = await loanService.simulate(payload);
+
+      expect(post).toHaveBeenCalledWith('/loans/simulate', payload);
+      expect(result).toEqual(simulation);
+    });
+
+    it('should delegate simulateLoan to simulate', async () => {
+      const payload = { amount: 1_000_000, installments: 6, annualRate: 12 };
+      const simulation = { ...payload, monthlyRate: 0.01, monthlyPayment: 172_000, totalToPay: 1_032_000, totalInterest: 32_000 };
+      post.mockResolvedValue({ data: simulation });
+
+      await expect(loanService.simulateLoan(payload)).resolves.toEqual(simulation);
+      expect(post).toHaveBeenCalledWith('/loans/simulate', payload);
+    });
+
+    it('should propagate errors', async () => {
+      post.mockRejectedValue({ code: 'VALIDATION_ERROR', message: 'Monto inválido' });
+
+      await expect(
+        loanService.simulate({ amount: -1, installments: 12, annualRate: 24 }),
+      ).rejects.toEqual({ code: 'VALIDATION_ERROR', message: 'Monto inválido' });
     });
   });
 
-  describe('create', () => {
-    it('should call POST /loans and return the created application', async () => {
-      const payload = {
-        amount: 5_000_000,
-        installments: 12,
-        annualRate: 24,
-        monthlyIncome: 1_800_000,
-      };
+  describe('create / createLoan', () => {
+    it('should POST /loans and return the application', async () => {
+      const payload = { amount: 5_000_000, installments: 12, annualRate: 24, monthlyIncome: 1_800_000 };
+      const application = { ...payload, id: 'loan-1', userId: 'user-1', status: 'PENDING' };
+      post.mockResolvedValue({ data: application });
 
-      try {
-        const result = await loanService.create(payload);
-        expect(result).toHaveProperty('id');
-        expect(result).toHaveProperty('status');
-      } catch (error) {
-        // Might fail if user is not authenticated or other real validation fails
-        expect(error).toBeDefined();
-      }
+      const result = await loanService.create(payload);
+
+      expect(post).toHaveBeenCalledWith('/loans', payload);
+      expect(result).toEqual(application);
+    });
+
+    it('should delegate createLoan to create', async () => {
+      const payload = { amount: 2_000_000, installments: 12, annualRate: 18, monthlyIncome: 2_000_000 };
+      const application = { ...payload, id: 'loan-2', userId: 'user-1', status: 'PENDING' };
+      post.mockResolvedValue({ data: application });
+
+      await expect(loanService.createLoan(payload)).resolves.toEqual(application);
     });
   });
 
   describe('getMyLoans', () => {
-    it('should call GET /loans/me and return the list', async () => {
-      try {
-        const result = await loanService.getMyLoans();
-        expect(Array.isArray(result)).toBe(true);
-      } catch (error) {
-        expect(error).toBeDefined();
-      }
+    it('should GET /loans/me and return the list', async () => {
+      const loans = [{ id: 'loan-1' }, { id: 'loan-2' }];
+      get.mockResolvedValue({ data: loans });
+
+      const result = await loanService.getMyLoans();
+
+      expect(get).toHaveBeenCalledWith('/loans/me');
+      expect(result).toEqual(loans);
     });
   });
 });

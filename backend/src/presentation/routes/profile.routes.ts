@@ -15,7 +15,6 @@ import { uploadDocumentMiddleware } from '../middlewares/uploadMiddleware';
  */
 const router = Router();
 
-// ── Instanciar dependencias ───────────────────────────────────────────────
 const userRepository = new SupabaseUserRepository(supabaseClient);
 
 const controller = new ProfileController(
@@ -24,7 +23,6 @@ const controller = new ProfileController(
   new UploadDocument(userRepository, supabaseClient),
 );
 
-// ── Todas las rutas de perfil requieren JWT ───────────────────────────────
 router.use(authMiddleware);
 
 router.get('/', controller.getMyProfile);

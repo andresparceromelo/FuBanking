@@ -11,7 +11,6 @@ export const createAccountSchema = z.object({
   type: z.nativeEnum(AccountType).refine((value) => Object.values(AccountType).includes(value), {
     message: `El tipo de cuenta debe ser: ${Object.values(AccountType).join(', ')}`,
   }),
-  // Campos opcionales — solo aplican según el tipo
   requestCheckbook: z.boolean().optional(),
   companyName: z
     .string()

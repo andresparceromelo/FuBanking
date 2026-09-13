@@ -27,7 +27,6 @@ function buildUser(overrides: { isActive?: boolean; twoFactorEnabled?: boolean }
     birthDate: new Date('1995-03-10'),
     phone: null,
     avatarUrl: null,
-    // FakePasswordService: compare('abc123', 'hashed_abc123') → true
     passwordHash: 'hashed_abc123',
     isActive: overrides.isActive ?? true,
     twoFactorEnabled: overrides.twoFactorEnabled ?? false,

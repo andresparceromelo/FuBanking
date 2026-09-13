@@ -121,7 +121,6 @@ export class User {
     this._updatedAt = props.updatedAt;
   }
 
-  // ── Getters ──────────────────────────────────────────────────────────────
 
   get id(): string { return this._id; }
   get email(): Email { return this._email; }
@@ -157,7 +156,6 @@ export class User {
     return this._passwordHash;
   }
 
-  // ── Métodos de dominio ───────────────────────────────────────────────────
 
   /**
    * Actualiza el hash de la contraseña.
@@ -268,7 +266,6 @@ export class User {
     };
   }
 
-  // ── Factory ──────────────────────────────────────────────────────────────
 
   /**
    * Formatea una fecha como YYYY-MM-DD usando las partes locales.

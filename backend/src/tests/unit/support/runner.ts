@@ -68,7 +68,6 @@ export function obtenerResultados(): ResultadoCaso[] {
   return resultados;
 }
 
-// ── Aserciones ──────────────────────────────────────────────────────────────
 
 export function verificar(condicion: boolean, mensaje: string): void {
   if (!condicion) throw new Error(mensaje);
@@ -140,7 +139,6 @@ export function pesos(valor: number): string {
   return `$${valor.toLocaleString('es-CO')}`;
 }
 
-// ── Resumen ─────────────────────────────────────────────────────────────────
 
 export interface ResumenCorrida {
   total: number;

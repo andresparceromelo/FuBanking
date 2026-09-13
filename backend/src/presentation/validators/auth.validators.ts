@@ -92,7 +92,6 @@ export const resetPasswordSchema = z
     path: ['confirmPassword'],
   });
 
-// ── 2FA ───────────────────────────────────────────────────────────────────
 
 export const verifyTwoFactorSchema = z.object({
   temporaryToken: z.string().min(1, 'El token temporal es requerido'),

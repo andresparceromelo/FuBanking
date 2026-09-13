@@ -43,7 +43,6 @@ export class SupabaseUserRepository implements IUserRepository {
 
   constructor(private readonly client: SupabaseClient) {}
 
-  // ── Mapeo BD → Dominio ────────────────────────────────────────────────
 
   /**
    * Formatea una fecha como YYYY-MM-DD usando las partes locales.
@@ -82,7 +81,6 @@ export class SupabaseUserRepository implements IUserRepository {
     return new User(props);
   }
 
-  // ── Consultas ─────────────────────────────────────────────────────────
 
   async findById(id: string): Promise<User | null> {
     const { data, error } = await this.client
@@ -117,7 +115,6 @@ export class SupabaseUserRepository implements IUserRepository {
     return this.mapRowToUser(data as UserRow);
   }
 
-  // ── Mutaciones ────────────────────────────────────────────────────────
 
   async save(user: User): Promise<User> {
     const row = {
@@ -156,7 +153,6 @@ export class SupabaseUserRepository implements IUserRepository {
   }
 
   async update(id: string, updateData: UpdateUserData): Promise<User> {
-    // Construir solo los campos que se van a actualizar
     const changes: Partial<Record<string, unknown>> = {};
     if (updateData.firstName !== undefined) changes['first_name'] = updateData.firstName;
     if (updateData.middleName !== undefined) changes['middle_name'] = updateData.middleName;

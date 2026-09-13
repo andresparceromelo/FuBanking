@@ -1,10 +1,8 @@
 import { randomUUID } from 'crypto';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
-import { ITransactionRepository } from '../../../domain/repositories/ITransactionRepository';
 import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { AppError } from '../../../shared/errors/AppError';
 import { Account } from '../../../domain/entities/Account';
-import { Transaction, TransactionType, TransactionStatus } from '../../../domain/entities/Transaction';
 import { Notification, NotificationType } from '../../../domain/entities/Notification';
 
 export interface DepositMoneyDto {
@@ -17,7 +15,6 @@ export interface DepositMoneyDto {
 export class DepositMoney {
   constructor(
     private readonly accountRepository: IAccountRepository,
-    private readonly transactionRepository?: ITransactionRepository,
     private readonly notificationRepository?: INotificationRepository,
   ) {}
 

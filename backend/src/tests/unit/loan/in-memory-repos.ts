@@ -3,17 +3,17 @@ import { LoanApplication } from '../../../domain/entities/LoanApplication';
 import { ILoanApplicationRepository } from '../../../domain/repositories/ILoanApplicationRepository';
 import { User } from '../../../domain/entities/User';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
-import { Account, AccountType, AccountStatus, AccountDetails } from '../../../domain/entities/Account';
+import { Account, AccountStatus, AccountDetails } from '../../../domain/entities/Account';
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { Notification } from '../../../domain/entities/Notification';
 import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { Email } from '../../../domain/value-objects/Email';
 import { Document } from '../../../domain/value-objects/Document';
 
-// ── Repositorios In-Memory ────────────────────────────────────────────────
 
 export class InMemoryLoanRepo implements ILoanApplicationRepository {
   private readonly store = new Map<string, LoanApplication>();
+  readonly statusUpdates: Array<{ id: string; status: string }> = [];
 
   async save(loan: LoanApplication): Promise<LoanApplication> {
     this.store.set(loan.id, loan);
@@ -32,9 +32,13 @@ export class InMemoryLoanRepo implements ILoanApplicationRepository {
     return Array.from(this.store.values());
   }
 
-  async updateStatus(id: string, _status: string): Promise<LoanApplication> {
+  async updateStatus(id: string, status: string): Promise<LoanApplication> {
     const loan = this.store.get(id);
     if (!loan) throw new Error('Loan not found');
+    // El use-case ya muto la entidad via approve()/reject(); aqui se persiste
+    // la referencia y se registra la llamada para poder asertarla en tests.
+    this.store.set(id, loan);
+    this.statusUpdates.push({ id, status });
     return loan;
   }
 }
@@ -122,16 +126,38 @@ export class InMemoryAccountRepo implements IAccountRepository {
     return account;
   }
 
-  async updateBalance(_accountId: string, newBalance: number): Promise<Account> {
-    const account = this.store.get(_accountId);
+  async updateBalance(accountId: string, newBalance: number): Promise<Account> {
+    const account = this.store.get(accountId);
     if (!account) throw new Error('Account not found');
-    return account;
+    const updated = new Account({
+      id: account.id,
+      userId: account.userId,
+      accountNumber: account.accountNumber,
+      accountType: account.accountType,
+      balance: newBalance,
+      status: account.status,
+      details: account.details,
+      createdAt: account.createdAt,
+    });
+    this.store.set(accountId, updated);
+    return updated;
   }
 
-  async updateStatus(_accountId: string, status: AccountStatus): Promise<Account> {
-    const account = this.store.get(_accountId);
+  async updateStatus(accountId: string, status: AccountStatus): Promise<Account> {
+    const account = this.store.get(accountId);
     if (!account) throw new Error('Account not found');
-    return account;
+    const updated = new Account({
+      id: account.id,
+      userId: account.userId,
+      accountNumber: account.accountNumber,
+      accountType: account.accountType,
+      balance: account.balance,
+      status,
+      details: account.details,
+      createdAt: account.createdAt,
+    });
+    this.store.set(accountId, updated);
+    return updated;
   }
 }
 
@@ -159,7 +185,6 @@ export class InMemoryNotificationRepo implements INotificationRepository {
   }
 }
 
-// ── Builder de Usuario de prueba ──────────────────────────────────────────
 
 export function createTestUser(overrides?: {
   id?: string;
@@ -168,6 +193,7 @@ export function createTestUser(overrides?: {
   monthlyIncome?: number | null;
   documentVerified?: boolean;
   birthDate?: Date;
+  role?: string;
 }): User {
   const d = {
     id: randomUUID(),
@@ -176,8 +202,33 @@ export function createTestUser(overrides?: {
     monthlyIncome: 1_800_000,
     documentVerified: true,
     birthDate: new Date('1995-01-01'),
+    role: 'user',
     ...overrides,
   };
+
+  if (d.role !== 'user') {
+    return new User({
+      id: d.id,
+      email: new Email(d.email),
+      document: new Document(d.document),
+      firstName: 'Test',
+      middleName: null,
+      lastName: 'User',
+      secondLastName: null,
+      birthDate: d.birthDate,
+      phone: null,
+      avatarUrl: null,
+      passwordHash: 'hash',
+      monthlyIncome: d.monthlyIncome,
+      documentVerified: d.documentVerified,
+      documentVerifiedAt: null,
+      isActive: true,
+      twoFactorEnabled: false,
+      role: d.role,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+  }
 
   return User.create({
     id: d.id,
@@ -192,7 +243,6 @@ export function createTestUser(overrides?: {
   });
 }
 
-// ── Builder de Préstamo de prueba ─────────────────────────────────────────
 
 export function buildPendingLoan(
   userId: string,

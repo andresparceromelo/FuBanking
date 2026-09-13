@@ -1,6 +1,6 @@
 {
-  "fecha": "2026-09-08",
-  "version": "tests/bolsillos-coverage-d023836",
+  "fecha": "2026-09-13",
+  "version": "main-a884ded",
   "entorno": "Backend (Node + tsx). Parte A en memoria; Parte B contra Supabase real.",
   "usuario": "tomashmetaute@gmail.com",
   "limpieza": {
@@ -127,9 +127,9 @@
       "entrada": "name = \"\"",
       "esperado": "Lanza AppError INVALID_POCKET_NAME (HTTP 400), la misma regla que aplica updateName(\"\")",
       "defecto": "D-01",
-      "obtenido": "FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {\"_id\":\"p1\",\"_accountId\":\"a1\",\"_name\":\"\",\"_amount\":100,\"_createdAt\":\"2026-09-08T14:11:36.157Z\",\"_updatedAt\":\"2026-09-08T14:11:36.157Z\"}",
+      "obtenido": "FALLO: PU-06: un nombre vacío debe rechazarse al construir — no lanzó ninguna excepción; devolvió {\"_id\":\"p1\",\"_accountId\":\"a1\",\"_name\":\"\",\"_amount\":100,\"_createdAt\":\"2026-09-13T05:46:58.798Z\",\"_updatedAt\":\"2026-09-13T05:46:58.798Z\"}",
       "estado": "Fallido",
-      "duracionMs": 1
+      "duracionMs": 0
     },
     {
       "id": "PU-07",
@@ -138,9 +138,9 @@
       "descripcion": "La representación pública expone seis campos y ningún dato interno",
       "entrada": "Bolsillo válido recién construido",
       "esperado": "toPublic() devuelve exactamente id, accountId, name, amount, createdAt y updatedAt, con las fechas como cadena ISO",
-      "obtenido": "claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-08T14:11:36.158Z",
+      "obtenido": "claves = id,accountId,name,amount,createdAt,updatedAt · createdAt = 2026-09-13T05:46:58.799Z",
       "estado": "Aprobado",
-      "duracionMs": 0
+      "duracionMs": 1
     },
     {
       "id": "PU-08",
@@ -195,7 +195,7 @@
       "esperado": "Lanza AppError INVALID_POCKET_NAME (HTTP 400)",
       "obtenido": "Lanzó INVALID_POCKET_NAME · HTTP 400 · \"El nombre del bolsillo no puede estar vacío\"",
       "estado": "Aprobado",
-      "duracionMs": 1
+      "duracionMs": 0
     },
     {
       "id": "PU-13",
@@ -204,9 +204,9 @@
       "descripcion": "Mutar refresca la marca de tiempo de modificación",
       "entrada": "Bolsillo recién creado, updateAmount(20)",
       "esperado": "updatedAt queda igual o posterior al valor previo a la mutación",
-      "obtenido": "updatedAt 1788876696159 → 1788876696159 (delta 0 ms)",
+      "obtenido": "updatedAt 1789278418799 → 1789278418799 (delta 0 ms)",
       "estado": "Aprobado",
-      "duracionMs": 0
+      "duracionMs": 1
     },
     {
       "id": "AU-01",
@@ -261,7 +261,7 @@
       "esperado": "Acepta y devuelve amount = 300000 sin alterarlo",
       "obtenido": "Aceptó y parseó a {\"accountId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"name\":\"Vacaciones\",\"amount\":300000}",
       "estado": "Aprobado",
-      "duracionMs": 1
+      "duracionMs": 0
     },
     {
       "id": "VU-02",
@@ -272,7 +272,7 @@
       "esperado": "Acepta y coacciona a amount = 300000 (número), por z.coerce.number()",
       "obtenido": "Aceptó y parseó a {\"accountId\":\"3f2504e0-4f89-41d3-9a0c-0305e82c3301\",\"name\":\"V\",\"amount\":300000}",
       "estado": "Aprobado",
-      "duracionMs": 0
+      "duracionMs": 1
     },
     {
       "id": "VU-03",
@@ -295,7 +295,7 @@
       "esperado": "Rechaza con \"El monto del bolsillo no puede ser negativo\"",
       "obtenido": "Rechazó con amount: El monto del bolsillo no puede ser negativo",
       "estado": "Aprobado",
-      "duracionMs": 1
+      "duracionMs": 0
     },
     {
       "id": "VU-05",
@@ -317,7 +317,7 @@
       "esperado": "Rechaza con \"El nombre del bolsillo es obligatorio\"",
       "obtenido": "Rechazó con name: El nombre del bolsillo es obligatorio",
       "estado": "Aprobado",
-      "duracionMs": 1
+      "duracionMs": 0
     },
     {
       "id": "VU-07",
@@ -351,7 +351,7 @@
       "esperado": "Rechaza con \"El nombre del bolsillo no puede superar 150 caracteres\"",
       "obtenido": "Rechazó con name: El nombre del bolsillo no puede superar 150 caracteres",
       "estado": "Aprobado",
-      "duracionMs": 0
+      "duracionMs": 1
     },
     {
       "id": "VU-10",
@@ -362,7 +362,7 @@
       "esperado": "Rechaza con \"Debes enviar al menos un campo para actualizar\"",
       "obtenido": "Rechazó con (raíz): Debes enviar al menos un campo para actualizar",
       "estado": "Aprobado",
-      "duracionMs": 1
+      "duracionMs": 0
     },
     {
       "id": "VU-11",
@@ -429,7 +429,7 @@
       "esperado": "Rechaza con INVALID_POCKET_AMOUNT (HTTP 400). Rama inalcanzable por HTTP",
       "obtenido": "Rechazó con INVALID_POCKET_AMOUNT · HTTP 400 · \"El monto del bolsillo no puede ser negativo\" · saldo intacto en $1.000.000",
       "estado": "Aprobado",
-      "duracionMs": 322
+      "duracionMs": 352
     },
     {
       "id": "CU-CR-02",
@@ -440,7 +440,7 @@
       "esperado": "Rechaza con ACCOUNT_NOT_FOUND (HTTP 404)",
       "obtenido": "Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · \"Cuenta no encontrada\"",
       "estado": "Aprobado",
-      "duracionMs": 166
+      "duracionMs": 183
     },
     {
       "id": "CU-CR-03",
@@ -451,7 +451,7 @@
       "esperado": "Rechaza con FORBIDDEN (HTTP 403), por assertBelongsTo",
       "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · saldo intacto en $1.000.000",
       "estado": "Aprobado",
-      "duracionMs": 509
+      "duracionMs": 687
     },
     {
       "id": "CU-CR-04",
@@ -462,7 +462,7 @@
       "esperado": "Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400)",
       "obtenido": "Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · \"No tienes saldo disponible suficiente para crear este bolsillo\" · se pidió $1.000.001 contra un disponible de $1.000.000",
       "estado": "Aprobado",
-      "duracionMs": 875
+      "duracionMs": 800
     },
     {
       "id": "CU-CR-05",
@@ -473,7 +473,7 @@
       "esperado": "Devuelve el bolsillo con amount 300.000 y deja el disponible en 700.000 y lo reservado en 300.000",
       "obtenido": "Bolsillo \"Vacaciones\" por $300.000 · disponible $700.000 · reservado $300.000",
       "estado": "Aprobado",
-      "duracionMs": 1497
+      "duracionMs": 1271
     },
     {
       "id": "CU-CR-06",
@@ -484,7 +484,7 @@
       "esperado": "El repositorio devuelve el bolsillo con los mismos nombre y monto",
       "obtenido": "Recuperado de la base: \"Vacaciones\" por $300.000",
       "estado": "Aprobado",
-      "duracionMs": 213
+      "duracionMs": 163
     },
     {
       "id": "CU-CR-07",
@@ -495,7 +495,7 @@
       "esperado": "Se crea el segundo bolsillo y el disponible baja a 500.000",
       "obtenido": "Segundo bolsillo por $200.000 · disponible $500.000 · reservado $500.000",
       "estado": "Aprobado",
-      "duracionMs": 1598
+      "duracionMs": 1338
     },
     {
       "id": "CU-CR-08",
@@ -506,7 +506,7 @@
       "esperado": "Rechaza con ACCOUNT_NOT_OPERATIONAL (HTTP 400)",
       "obtenido": "Rechazó con ACCOUNT_NOT_OPERATIONAL · HTTP 400 · \"La cuenta no está disponible para generar bolsillos\"",
       "estado": "Aprobado",
-      "duracionMs": 585
+      "duracionMs": 511
     },
     {
       "id": "CU-CR-09",
@@ -518,7 +518,7 @@
       "defecto": "D-05",
       "obtenido": "FALLO: No tienes saldo disponible suficiente para crear este bolsillo",
       "estado": "Fallido",
-      "duracionMs": 736
+      "duracionMs": 764
     },
     {
       "id": "CU-AC-01",
@@ -529,7 +529,7 @@
       "esperado": "Rechaza con INVALID_POCKET_NAME (HTTP 400)",
       "obtenido": "Rechazó con INVALID_POCKET_NAME · HTTP 400 · \"El nombre del bolsillo no puede estar vacío\"",
       "estado": "Aprobado",
-      "duracionMs": 0
+      "duracionMs": 1
     },
     {
       "id": "CU-AC-02",
@@ -551,7 +551,7 @@
       "esperado": "Rechaza con NO_CHANGES_PROVIDED (HTTP 400). Rama inalcanzable por HTTP",
       "obtenido": "Rechazó con NO_CHANGES_PROVIDED · HTTP 400 · \"No se proporcionaron cambios para el bolsillo\"",
       "estado": "Aprobado",
-      "duracionMs": 334
+      "duracionMs": 397
     },
     {
       "id": "CU-AC-04",
@@ -562,7 +562,7 @@
       "esperado": "Rechaza con POCKET_NOT_FOUND (HTTP 404)",
       "obtenido": "Rechazó con POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo no encontrado\"",
       "estado": "Aprobado",
-      "duracionMs": 209
+      "duracionMs": 188
     },
     {
       "id": "CU-AC-05",
@@ -573,7 +573,7 @@
       "esperado": "Rechaza con FORBIDDEN (HTTP 403)",
       "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · monto intacto en $300.000",
       "estado": "Aprobado",
-      "duracionMs": 642
+      "duracionMs": 734
     },
     {
       "id": "CU-AC-06",
@@ -584,7 +584,7 @@
       "esperado": "El bolsillo queda en 600.000 y el disponible baja a 200.000",
       "obtenido": "Monto $300.000 → $600.000 · disponible $200.000",
       "estado": "Aprobado",
-      "duracionMs": 1177
+      "duracionMs": 1372
     },
     {
       "id": "CU-AC-07",
@@ -595,7 +595,7 @@
       "esperado": "Acepta y deja el disponible en 0, porque la condición usa > estricto",
       "obtenido": "disponible $0 · reservado $1.000.000 · total $1.000.000",
       "estado": "Aprobado",
-      "duracionMs": 1322
+      "duracionMs": 1480
     },
     {
       "id": "CU-AC-08",
@@ -606,7 +606,7 @@
       "esperado": "Rechaza con INSUFFICIENT_AVAILABLE_BALANCE (HTTP 400)",
       "obtenido": "Rechazó con INSUFFICIENT_AVAILABLE_BALANCE · HTTP 400 · \"No tienes saldo disponible suficiente para ajustar este bolsillo\" · el bolsillo sigue en $800.000",
       "estado": "Aprobado",
-      "duracionMs": 689
+      "duracionMs": 731
     },
     {
       "id": "CU-AC-09",
@@ -617,7 +617,7 @@
       "esperado": "El bolsillo queda en 300.000 y el disponible vuelve a 500.000",
       "obtenido": "Monto $800.000 → $300.000 · disponible $0 → $500.000",
       "estado": "Aprobado",
-      "duracionMs": 1147
+      "duracionMs": 1226
     },
     {
       "id": "CU-AC-10",
@@ -628,7 +628,7 @@
       "esperado": "Cambia el nombre, conserva el monto y deja el disponible en 500.000",
       "obtenido": "name = \"Vacaciones 2026\" · monto $300.000 · disponible intacto en $500.000",
       "estado": "Aprobado",
-      "duracionMs": 970
+      "duracionMs": 1155
     },
     {
       "id": "CU-EL-01",
@@ -639,7 +639,7 @@
       "esperado": "Rechaza con POCKET_NOT_FOUND (HTTP 404)",
       "obtenido": "Rechazó con POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo no encontrado\"",
       "estado": "Aprobado",
-      "duracionMs": 164
+      "duracionMs": 159
     },
     {
       "id": "CU-EL-02",
@@ -650,7 +650,7 @@
       "esperado": "Rechaza con FORBIDDEN (HTTP 403) y el bolsillo sigue existiendo",
       "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · el bolsillo sigue en la base",
       "estado": "Aprobado",
-      "duracionMs": 500
+      "duracionMs": 542
     },
     {
       "id": "CU-EL-03",
@@ -661,7 +661,7 @@
       "esperado": "Devuelve el bolsillo borrado, el disponible sube a 700.000 y lo reservado baja a 300.000",
       "obtenido": "Eliminado \"Estudio\" por $200.000 · disponible $500.000 → $700.000",
       "estado": "Aprobado",
-      "duracionMs": 1743
+      "duracionMs": 1477
     },
     {
       "id": "CU-EL-04",
@@ -672,7 +672,7 @@
       "esperado": "Rechaza con POCKET_NOT_FOUND (HTTP 404) y el disponible sigue en 700.000",
       "obtenido": "Rechazó con POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo no encontrado\" · disponible sin cambios en $700.000",
       "estado": "Aprobado",
-      "duracionMs": 654
+      "duracionMs": 525
     },
     {
       "id": "CU-TR-01",
@@ -683,7 +683,7 @@
       "esperado": "Rechaza con INVALID_TRANSFER_AMOUNT (HTTP 400). Rama inalcanzable por HTTP",
       "obtenido": "Rechazó con INVALID_TRANSFER_AMOUNT · HTTP 400 · \"El monto de transferencia debe ser mayor que cero\"",
       "estado": "Aprobado",
-      "duracionMs": 0
+      "duracionMs": 1
     },
     {
       "id": "CU-TR-02",
@@ -705,7 +705,7 @@
       "esperado": "Rechaza con SOURCE_POCKET_NOT_FOUND (HTTP 404)",
       "obtenido": "Rechazó con SOURCE_POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo de origen no encontrado\"",
       "estado": "Aprobado",
-      "duracionMs": 164
+      "duracionMs": 183
     },
     {
       "id": "CU-TR-04",
@@ -716,7 +716,7 @@
       "esperado": "Rechaza con TARGET_POCKET_NOT_FOUND (HTTP 404)",
       "obtenido": "Rechazó con TARGET_POCKET_NOT_FOUND · HTTP 404 · \"Bolsillo de destino no encontrado\"",
       "estado": "Aprobado",
-      "duracionMs": 367
+      "duracionMs": 392
     },
     {
       "id": "CU-TR-05",
@@ -727,7 +727,7 @@
       "esperado": "Rechaza con POCKETS_DIFFERENT_ACCOUNT (HTTP 400)",
       "obtenido": "Rechazó con POCKETS_DIFFERENT_ACCOUNT · HTTP 400 · \"Los bolsillos deben pertenecer a la misma cuenta\"",
       "estado": "Aprobado",
-      "duracionMs": 320
+      "duracionMs": 344
     },
     {
       "id": "CU-TR-06",
@@ -738,7 +738,7 @@
       "esperado": "Rechaza con FORBIDDEN (HTTP 403)",
       "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\" · origen intacto en $300.000",
       "estado": "Aprobado",
-      "duracionMs": 812
+      "duracionMs": 865
     },
     {
       "id": "CU-TR-07",
@@ -749,7 +749,7 @@
       "esperado": "Rechaza con INSUFFICIENT_POCKET_BALANCE (HTTP 400)",
       "obtenido": "Rechazó con INSUFFICIENT_POCKET_BALANCE · HTTP 400 · \"Saldo insuficiente en el bolsillo de origen\" · se pidió $300.001 de un bolsillo con $300.000",
       "estado": "Aprobado",
-      "duracionMs": 644
+      "duracionMs": 684
     },
     {
       "id": "CU-TR-08",
@@ -760,7 +760,7 @@
       "esperado": "El origen queda en 200.000, el destino en 300.000 y el disponible de la cuenta no cambia",
       "obtenido": "origen $300.000 → $200.000 · destino $200.000 → $300.000 · disponible intacto en $500.000",
       "estado": "Aprobado",
-      "duracionMs": 1312
+      "duracionMs": 1363
     },
     {
       "id": "CU-TR-09",
@@ -771,7 +771,7 @@
       "esperado": "El origen queda en 0 y el destino en 500.000, porque la condición usa < estricto",
       "obtenido": "origen $0 · destino $500.000",
       "estado": "Aprobado",
-      "duracionMs": 963
+      "duracionMs": 1056
     },
     {
       "id": "CU-CO-01",
@@ -782,7 +782,7 @@
       "esperado": "Rechaza con ACCOUNT_NOT_FOUND (HTTP 404)",
       "obtenido": "Rechazó con ACCOUNT_NOT_FOUND · HTTP 404 · \"Cuenta no encontrada\"",
       "estado": "Aprobado",
-      "duracionMs": 158
+      "duracionMs": 178
     },
     {
       "id": "CU-CO-02",
@@ -793,7 +793,7 @@
       "esperado": "Rechaza con FORBIDDEN (HTTP 403), sin devolver ningún bolsillo",
       "obtenido": "Rechazó con FORBIDDEN · HTTP 403 · \"No tienes permiso para acceder a esta cuenta\"",
       "estado": "Aprobado",
-      "duracionMs": 165
+      "duracionMs": 179
     },
     {
       "id": "CU-CO-03",
@@ -804,7 +804,7 @@
       "esperado": "Arreglo de 2 elementos, cada uno con exactamente id, accountId, name, amount, createdAt y updatedAt",
       "obtenido": "2 bolsillos: Estudio=$500.000, Vacaciones 2026=$0",
       "estado": "Aprobado",
-      "duracionMs": 331
+      "duracionMs": 498
     },
     {
       "id": "CU-CO-04",
@@ -815,7 +815,7 @@
       "esperado": "Devuelve [] con longitud 0",
       "obtenido": "Arreglo vacío (longitud 0)",
       "estado": "Aprobado",
-      "duracionMs": 322
+      "duracionMs": 347
     },
     {
       "id": "CU-CO-05",
@@ -826,7 +826,7 @@
       "esperado": "disponible + reservado = 1.000.000, el depósito inicial",
       "obtenido": "disponible $500.000 + reservado $500.000 = $1.000.000",
       "estado": "Aprobado",
-      "duracionMs": 475
+      "duracionMs": 406
     }
   ]
 }

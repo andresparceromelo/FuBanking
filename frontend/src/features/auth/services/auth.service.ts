@@ -31,7 +31,6 @@ class AuthService {
   }
 
   async logout(): Promise<void> {
-    // We attempt to call the backend logout. Even if it fails (e.g. token expired), we still log out locally.
     try {
       await apiClient.post('/auth/logout');
     } catch (error) {
@@ -39,7 +38,6 @@ class AuthService {
     }
   }
 
-  // ── 2FA ──────────────────────────────────────────────────────────────────
 
   /**
    * Verifica el código OTP y obtiene el JWT definitivo.

@@ -8,7 +8,6 @@ import { AccountType, AccountStatus, AccountDetails } from '../../../domain/enti
  * los datos que entran y salen de los casos de uso tienen la forma correcta.
  */
 
-// ── Crear Cuenta ──────────────────────────────────────────────────────────
 
 export interface CreateAccountDto {
   userId: string;
@@ -29,7 +28,6 @@ export interface CreateAccountResponseDto {
   createdAt: string;
 }
 
-// ── Consultar Cuentas ─────────────────────────────────────────────────────
 
 export interface GetUserAccountsDto {
   userId: string;
@@ -46,14 +44,12 @@ export interface AccountSummaryDto {
   createdAt: string;
 }
 
-// ── Detalle de Cuenta ─────────────────────────────────────────────────────
 
 export interface GetAccountDetailsDto {
   accountId: string;
   userId: string;
 }
 
-// ── Eliminar Cuenta ───────────────────────────────────────────────────────
 
 export interface CloseAccountDto {
   accountId: string;

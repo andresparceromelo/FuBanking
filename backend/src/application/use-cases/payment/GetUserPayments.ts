@@ -1,5 +1,5 @@
 import { IServicePaymentRepository } from '../../../domain/repositories/IServicePaymentRepository';
-import { PaymentSummaryDto, GetUserPaymentsDto } from '../../dtos/payment/payment.dtos';
+import { PaymentSummaryDto } from '../../dtos/payment/payment.dtos';
 
 export class GetUserPayments {
   constructor(private readonly paymentRepository: IServicePaymentRepository) {}

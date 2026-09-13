@@ -23,7 +23,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
-// ── Mocks de next ─────────────────────────────────────────────────────────────
 
 jest.mock('next/link', () => {
   const Link = ({ children, href }: { children: React.ReactNode; href: string }) => (
@@ -38,12 +37,10 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => ({ get: jest.fn().mockReturnValue('valid-token') }),
 }));
 
-// ── Mocks de usePasswordReset ─────────────────────────────────────────────────
 
 const mockRequestReset = jest.fn();
 const mockResetPassword = jest.fn();
 
-// Estado mutable del hook para poder variar entre tests
 let mockHookState = {
   requestReset: mockRequestReset,
   resetPassword: mockResetPassword,
@@ -56,17 +53,14 @@ jest.mock('../../features/auth/hooks/usePasswordReset', () => ({
   usePasswordReset: () => mockHookState,
 }));
 
-// ── Import de componentes (después de mocks) ──────────────────────────────────
 
 import { ForgotPasswordForm } from '../../features/auth/components/ForgotPasswordForm';
 import { ResetPasswordForm } from '../../features/auth/components/ResetPasswordForm';
 
-// ── Suite: ForgotPasswordForm ─────────────────────────────────────────────────
 
 describe('ForgotPasswordForm — Pruebas de caja blanca (Frontend)', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Resetear estado del hook a valores por defecto
     mockHookState = {
       requestReset: mockRequestReset,
       resetPassword: mockResetPassword,
@@ -76,28 +70,21 @@ describe('ForgotPasswordForm — Pruebas de caja blanca (Frontend)', () => {
     };
   });
 
-  // ── C1 ───────────────────────────────────────────────────────────────────────
   test('C1 — email inválido: muestra error de validación y no llama al backend', async () => {
-    // Arrange: renderizar formulario
     render(<ForgotPasswordForm />);
 
-    // Act: ingresar un email inválido y hacer submit
     fireEvent.change(screen.getByLabelText(/correo electrónico/i), {
       target: { value: 'no-es-un-email' },
     });
     fireEvent.click(screen.getByRole('button', { name: /enviar enlace/i }));
 
-    // Assert: mensaje de validación visible, requestReset nunca fue llamado
     await waitFor(() => {
-      // Zod devuelve 'Correo electrónico inválido' según requestPasswordResetSchema
       expect(screen.getByText(/correo electrónico inválido/i)).toBeInTheDocument();
     });
     expect(mockRequestReset).not.toHaveBeenCalled();
   });
 
-  // ── C2 ───────────────────────────────────────────────────────────────────────
   test('C2 — email válido pero falla la petición: muestra mensaje de error', async () => {
-    // Arrange: hook configurado con error de red
     mockHookState = {
       ...mockHookState,
       error: { code: 'NETWORK_ERROR', message: 'Error al enviar el enlace de recuperación' },
@@ -105,29 +92,23 @@ describe('ForgotPasswordForm — Pruebas de caja blanca (Frontend)', () => {
 
     render(<ForgotPasswordForm />);
 
-    // Assert: el error del hook se muestra en el formulario
     await waitFor(() => {
       expect(screen.getByText(/error al enviar el enlace de recuperación/i)).toBeInTheDocument();
     });
   });
 
-  // ── C5 (parte ForgotPassword) ─────────────────────────────────────────────────
   test('C5-parte1 — forgotPassword exitoso: muestra pantalla de confirmación "revisa tu correo"', async () => {
-    // Arrange: hook con isSuccess=true (petición completada con éxito)
     mockHookState = { ...mockHookState, isSuccess: true };
 
     render(<ForgotPasswordForm />);
 
-    // Assert: se muestra el panel de confirmación (nodo 9 del diagrama)
     await waitFor(() => {
       expect(screen.getByText(/revisa tu correo/i)).toBeInTheDocument();
     });
-    // El formulario ya no debe estar visible
     expect(screen.queryByRole('button', { name: /enviar enlace/i })).not.toBeInTheDocument();
   });
 });
 
-// ── Suite: ResetPasswordForm ─────────────────────────────────────────────────
 
 describe('ResetPasswordForm — Pruebas de caja blanca (Frontend)', () => {
   const TOKEN = 'valid-reset-token-abc';
@@ -143,12 +124,9 @@ describe('ResetPasswordForm — Pruebas de caja blanca (Frontend)', () => {
     };
   });
 
-  // ── C3 ───────────────────────────────────────────────────────────────────────
   test('C3 — contraseñas no pasan validación (no coinciden): muestra error de formulario, no llama al backend', async () => {
-    // Arrange
     render(<ResetPasswordForm token={TOKEN} />);
 
-    // Act: ingresar contraseñas que no coinciden y hacer submit
     fireEvent.change(screen.getByLabelText(/nueva contraseña/i), {
       target: { value: 'NuevaPass1!' },
     });
@@ -157,17 +135,13 @@ describe('ResetPasswordForm — Pruebas de caja blanca (Frontend)', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /guardar contraseña/i }));
 
-    // Assert: error de validación de Zod/react-hook-form visible
-    // El schema resetPasswordSchema usa .refine() con mensaje 'Las contraseñas no coinciden'
     await waitFor(() => {
       expect(screen.getByText(/las contraseñas no coinciden/i)).toBeInTheDocument();
     });
     expect(mockResetPassword).not.toHaveBeenCalled();
   });
 
-  // ── C4 ───────────────────────────────────────────────────────────────────────
   test('C4 — contraseñas válidas pero backend rechaza el token: muestra error del servidor', async () => {
-    // Arrange: hook configurado con error del backend
     mockHookState = {
       ...mockHookState,
       error: { code: 'TOKEN_INVALID', message: 'El enlace de recuperación es inválido o ha expirado' },
@@ -175,7 +149,6 @@ describe('ResetPasswordForm — Pruebas de caja blanca (Frontend)', () => {
 
     render(<ResetPasswordForm token={TOKEN} />);
 
-    // Assert: el error del hook se muestra en el formulario (nodo 18 del diagrama)
     await waitFor(() => {
       expect(
         screen.getByText(/el enlace de recuperación es inválido o ha expirado/i),
@@ -183,23 +156,18 @@ describe('ResetPasswordForm — Pruebas de caja blanca (Frontend)', () => {
     });
   });
 
-  // ── C5 (parte ResetPassword) ──────────────────────────────────────────────────
   test('C5 — todo válido: muestra confirmación "Contraseña actualizada" con enlace a login', async () => {
-    // Arrange: hook con isSuccess=true (contraseña restablecida exitosamente)
     mockHookState = { ...mockHookState, isSuccess: true };
 
     render(<ResetPasswordForm token={TOKEN} />);
 
-    // Assert: se muestra el panel de éxito (nodo 19 del diagrama)
     await waitFor(() => {
       expect(screen.getByText(/¡contraseña actualizada!/i)).toBeInTheDocument();
     });
-    // Enlace a login visible
     expect(screen.getByRole('link', { name: /ir a iniciar sesión/i })).toHaveAttribute(
       'href',
       '/login',
     );
-    // El formulario ya no está visible
     expect(screen.queryByRole('button', { name: /guardar contraseña/i })).not.toBeInTheDocument();
   });
 });

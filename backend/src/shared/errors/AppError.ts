@@ -16,7 +16,6 @@ export class AppError extends Error {
     this.code = code;
     this.isOperational = true; // Errores operacionales son esperados y manejables
 
-    // Necesario para que instanceof funcione correctamente con clases que extienden Error
     Object.setPrototypeOf(this, new.target.prototype);
     Error.captureStackTrace(this, this.constructor);
   }

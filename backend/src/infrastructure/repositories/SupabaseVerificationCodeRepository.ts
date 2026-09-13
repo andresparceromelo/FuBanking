@@ -27,7 +27,6 @@ export class SupabaseVerificationCodeRepository implements IVerificationCodeRepo
 
   constructor(private readonly client: SupabaseClient) {}
 
-  // ── Mapeo BD → Dominio ────────────────────────────────────────────────
 
   private mapRowToEntity(row: VerificationCodeRow): VerificationCode {
     const props: VerificationCodeProps = {
@@ -42,7 +41,6 @@ export class SupabaseVerificationCodeRepository implements IVerificationCodeRepo
     return new VerificationCode(props);
   }
 
-  // ── Consultas ─────────────────────────────────────────────────────────
 
   async findLatestByUserId(userId: string): Promise<VerificationCode | null> {
     const { data, error } = await this.client
@@ -58,7 +56,6 @@ export class SupabaseVerificationCodeRepository implements IVerificationCodeRepo
     return this.mapRowToEntity(data as VerificationCodeRow);
   }
 
-  // ── Mutaciones ────────────────────────────────────────────────────────
 
   async save(code: VerificationCode): Promise<VerificationCode> {
     const row = {
@@ -106,7 +103,6 @@ export class SupabaseVerificationCodeRepository implements IVerificationCodeRepo
   }
 
   async invalidateAllByUserId(userId: string): Promise<void> {
-    // Marca todos los códigos no usados del usuario como usados
     const { error } = await this.client
       .from(this.TABLE)
       .update({ used: true })

@@ -20,20 +20,17 @@ import { authMiddleware } from '../middlewares/authMiddleware';
  */
 const router = Router();
 
-// -- Instanciar repositorios --
 const transactionRepository    = new SupabaseTransactionRepository(supabaseClient);
 const accountRepository        = new SupabaseAccountRepository(supabaseClient);
 const userRepository           = new SupabaseUserRepository(supabaseClient);
 const notificationRepository   = new SupabaseNotificationRepository(supabaseClient);
 
-// -- Instanciar casos de uso --
 const createTransfer         = new CreateTransfer(accountRepository, transactionRepository, userRepository, notificationRepository);
 const getTransfer            = new GetTransfer(transactionRepository, accountRepository, userRepository);
 const getTransferHistory     = new GetTransferHistory(transactionRepository, accountRepository, userRepository);
 const searchAccountByNumber  = new SearchAccountByNumber(accountRepository, userRepository);
 const searchUserByEmail      = new SearchUserByEmail(userRepository, accountRepository);
 
-// -- Controlador --
 const controller = new TransferController(
   createTransfer,
   getTransfer,
@@ -42,7 +39,6 @@ const controller = new TransferController(
   searchUserByEmail,
 );
 
-// -- Rutas (todas protegidas) --
 router.post('/', authMiddleware, controller.create);
 router.get('/account/:accountId', authMiddleware, controller.getHistory);
 router.get('/search/email', authMiddleware, controller.searchByEmail);

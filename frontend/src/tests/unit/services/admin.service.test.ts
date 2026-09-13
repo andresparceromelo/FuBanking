@@ -1,39 +1,61 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { apiClient } from '@/shared/services/api.client';
 import { adminService } from '@/features/admin/services/admin.service';
 
+vi.mock('@/shared/services/api.client', () => ({
+  apiClient: { post: vi.fn(), get: vi.fn(), patch: vi.fn() },
+}));
+
+const get = apiClient.get as unknown as ReturnType<typeof vi.fn>;
+const patch = apiClient.patch as unknown as ReturnType<typeof vi.fn>;
+
 describe('adminService', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('getAllLoans', () => {
-    it('should call GET /loans/admin and return all loans', async () => {
-      try {
-        const result = await adminService.getAllLoans();
-        expect(Array.isArray(result)).toBe(true);
-      } catch (error) {
-        expect(error).toBeDefined();
-      }
+    it('should GET /loans/admin and return the list', async () => {
+      const loans = [{ id: 'loan-1', status: 'PENDING' }];
+      get.mockResolvedValue({ data: loans });
+
+      const result = await adminService.getAllLoans();
+
+      expect(get).toHaveBeenCalledWith('/loans/admin');
+      expect(result).toEqual(loans);
+    });
+
+    it('should propagate errors', async () => {
+      get.mockRejectedValue({ code: 'FORBIDDEN', message: 'Sin permiso' });
+
+      await expect(adminService.getAllLoans()).rejects.toEqual({
+        code: 'FORBIDDEN',
+        message: 'Sin permiso',
+      });
     });
   });
 
   describe('approveLoan', () => {
-    it('should call PATCH /loans/admin/:id/approve', async () => {
-      try {
-        // Just testing that the call can be made, it will likely fail with 404 or auth error
-        // without a real token and valid loan ID, which is fine since we can't use simulations.
-        const result = await adminService.approveLoan('non-existent-loan-id');
-        expect(result).toBeDefined();
-      } catch (error) {
-        expect(error).toBeDefined();
-      }
+    it('should PATCH /loans/admin/:id/approve and return the loan', async () => {
+      const loan = { id: 'loan-1', status: 'APPROVED' };
+      patch.mockResolvedValue({ data: loan });
+
+      const result = await adminService.approveLoan('loan-1');
+
+      expect(patch).toHaveBeenCalledWith('/loans/admin/loan-1/approve');
+      expect(result).toEqual(loan);
     });
   });
 
   describe('rejectLoan', () => {
-    it('should call PATCH /loans/admin/:id/reject', async () => {
-      try {
-        const result = await adminService.rejectLoan('non-existent-loan-id');
-        expect(result).toBeDefined();
-      } catch (error) {
-        expect(error).toBeDefined();
-      }
+    it('should PATCH /loans/admin/:id/reject and return the loan', async () => {
+      const loan = { id: 'loan-1', status: 'REJECTED' };
+      patch.mockResolvedValue({ data: loan });
+
+      const result = await adminService.rejectLoan('loan-1');
+
+      expect(patch).toHaveBeenCalledWith('/loans/admin/loan-1/reject');
+      expect(result).toEqual(loan);
     });
   });
 });

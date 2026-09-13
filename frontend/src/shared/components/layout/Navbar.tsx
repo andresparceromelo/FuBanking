@@ -12,7 +12,6 @@ import {
   Send, 
   History, 
   PiggyBank, 
-  Receipt, 
   Landmark, 
   CreditCard, 
   HandCoins, 

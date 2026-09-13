@@ -39,7 +39,6 @@ export class SearchUserByEmail {
       );
     }
 
-    // Obtener la primera cuenta activa del usuario encontrado
     const accounts = await this.accountRepository.findByUserId(user.id);
     const activeAccount = accounts.find((a) => a.isOperational());
 

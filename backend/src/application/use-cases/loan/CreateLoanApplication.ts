@@ -18,7 +18,6 @@ export class CreateLoanApplication {
     const user = await this.userRepository.findById(dto.userId);
     if (!user) throw new AppError('Usuario no encontrado', 404, 'USER_NOT_FOUND');
 
-    // Verificar que no tenga un préstamo pendiente
     const existingLoans = await this.loanRepository.findByUserId(dto.userId);
     const hasPending = existingLoans.some(
       (loan) => loan.status === LoanApplicationStatus.PENDING
@@ -31,11 +30,9 @@ export class CreateLoanApplication {
       );
     }
 
-    // Los requisitos se derivan del perfil del usuario, NO se confían al cliente.
     const documentVerified = user.documentVerified;
     const ageVerified = user.isOfLegalAge();
     const incomeVerified = user.isIncomeValidated();
-    // Sin validación rigurosa por ahora: el historial crediticio se da por válido.
     const creditHistoryVerified = true;
 
     const loan = LoanApplication.create({
@@ -54,7 +51,6 @@ export class CreateLoanApplication {
     const saved = await this.loanRepository.save(loan);
 
     if (this.notificationRepository) {
-      // Notificar al usuario
       await this.notificationRepository.save(new Notification({
         id: randomUUID(),
         userId: dto.userId,
@@ -65,7 +61,6 @@ export class CreateLoanApplication {
         createdAt: new Date(),
       }));
 
-      // Notificar a todos los admins
       const admins = await this.userRepository.findByRole('admin');
       for (const admin of admins) {
         await this.notificationRepository.save(new Notification({

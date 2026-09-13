@@ -9,10 +9,8 @@ export const apiClient = axios.create({
   },
 });
 
-// Request interceptor: attach token from localStorage
 apiClient.interceptors.request.use(
   (config) => {
-    // In Next.js, localStorage is only available on the client
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
       if (token) {
@@ -26,14 +24,11 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Response interceptor: extract inner data from { success, data, message } wrapper
 apiClient.interceptors.response.use(
   (response) => {
-    // Return the response data (which is our standard API response object)
     return response.data;
   },
   (error) => {
-    // Format error response so the frontend always gets a consistent error format
     if (error.response && error.response.data && error.response.data.error) {
       return Promise.reject(error.response.data.error);
     }

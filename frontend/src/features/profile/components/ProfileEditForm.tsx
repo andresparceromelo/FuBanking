@@ -39,14 +39,12 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
   });
 
   const onSubmit = (data: UpdateProfileInput) => {
-    // Solo enviamos los datos si realmente cambiaron
     const payload: UpdateProfileInput = {};
     if (data.firstName !== user.firstName) payload.firstName = data.firstName;
     if (data.middleName !== (user.middleName || '')) payload.middleName = data.middleName || null;
     if (data.lastName !== user.lastName) payload.lastName = data.lastName;
     if (data.secondLastName !== (user.secondLastName || '')) payload.secondLastName = data.secondLastName || null;
     
-    // Compare dates ignoring time
     const currentBirthDateStr = user.birthDate ? user.birthDate.split('T')[0] : '';
     if (data.birthDate !== currentBirthDateStr) payload.birthDate = data.birthDate || null;
 

@@ -19,21 +19,16 @@ export class GetTransferHistory {
   ) {}
 
   async execute(dto: GetTransferHistoryDto): Promise<TransferHistoryItemDto[]> {
-    // 1. Verificar que la cuenta exista y pertenezca al usuario
     const account = await this.accountRepository.findById(dto.accountId);
     
     if (!account) {
       throw new AppError('Cuenta no encontrada', 404, 'ACCOUNT_NOT_FOUND');
     }
 
-    // Seguridad de dominio:
     account.assertBelongsTo(dto.userId);
 
-    // 2. Obtener el historial de la BD
     const transactions = await this.transactionRepository.findByAccountId(account.id);
 
-    // 3. Mapear cada transaccion a su representacion visual
-    // Usamos Promise.all para resolver los nombres de las contrapartes concurrentemente
     const historyPromises = transactions.map(async (tx) => {
       const isOutgoing = tx.senderAccountId === account.id;
       const relatedAccountId = isOutgoing ? tx.receiverAccountId : tx.senderAccountId;
@@ -68,12 +63,10 @@ export class GetTransferHistory {
 
     const resolvedHistory = await Promise.all(historyPromises);
 
-    // Compute approximate resulting balances working backwards from current balance
     let currentBalance = account.balance;
     for (let i = 0; i < resolvedHistory.length; i++) {
       const item = resolvedHistory[i];
       item.resultingBalance = currentBalance;
-      // Revert the transaction to find the balance before this transaction
       if (item.direction === 'INCOMING') {
         currentBalance -= item.amount;
       } else {

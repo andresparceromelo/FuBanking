@@ -25,8 +25,6 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const formatDate = (dateString: string) => {
-    // birthDate llega como YYYY-MM-DD; parsearlo como medianoche local
-    // evita que la fecha "se atrase" un día por la zona horaria.
     const date = dateString.includes('T') ? new Date(dateString) : new Date(`${dateString}T00:00:00`);
     return date.toLocaleDateString('es-CO', {
       year: 'numeric',
@@ -73,7 +71,6 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
         updateUser({ ...user, twoFactorEnabled: true });
         toast.success('2FA activado', 'Agregamos una capa extra de seguridad a tu cuenta.');
       }
-      // Notificamos al padre para que actualice la vista (useProfile)
       if (onToggleSuccess) {
         onToggleSuccess();
       }

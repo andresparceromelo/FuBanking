@@ -27,31 +27,25 @@ export class RegisterUser {
   ) {}
 
   async execute(dto: RegisterUserDto): Promise<RegisterUserResponseDto> {
-    // 1. Validar que las contraseñas coincidan
     if (dto.password !== dto.confirmPassword) {
       throw new AppError('Las contraseñas no coinciden', 400, 'PASSWORDS_DONT_MATCH');
     }
 
-    // 2. Crear y validar Value Objects
     const email = new Email(dto.email);
     const document = new Document(dto.document);
 
-    // 3. Verificar unicidad del email
     const existingByEmail = await this.userRepository.findByEmail(email.toString());
     if (existingByEmail) {
       throw new AuthError('Ya existe una cuenta con este correo electrónico', 'EMAIL_ALREADY_EXISTS');
     }
 
-    // 4. Verificar unicidad del documento
     const existingByDoc = await this.userRepository.findByDocument(document.toString());
     if (existingByDoc) {
       throw new AuthError('Ya existe una cuenta con este documento', 'DOCUMENT_ALREADY_EXISTS');
     }
 
-    // 5. Hashear contraseña
     const passwordHash = await this.passwordService.hash(dto.password);
 
-    // 6. Crear entidad User
     const user = User.create({
       id: randomUUID(),
       email,
@@ -66,10 +60,8 @@ export class RegisterUser {
       passwordHash,
     });
 
-    // 7. Persistir
     const savedUser = await this.userRepository.save(user);
 
-    // 8. Generar JWT
     const token = this.tokenService.generate({
       userId: savedUser.id,
       email: savedUser.email.toString(),

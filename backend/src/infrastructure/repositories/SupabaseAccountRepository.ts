@@ -44,7 +44,6 @@ export class SupabaseAccountRepository implements IAccountRepository {
 
   constructor(private readonly client: SupabaseClient) {}
 
-  // ── Mapeo BD → Dominio ────────────────────────────────────────────────
 
   private mapRowToAccount(row: AccountRow): Account {
     let details: AccountDetails | null = null;
@@ -74,7 +73,6 @@ export class SupabaseAccountRepository implements IAccountRepository {
     return new Account(props);
   }
 
-  // ── Consultas ─────────────────────────────────────────────────────────
 
   async findById(id: string): Promise<Account | null> {
     const { data, error } = await this.client
@@ -109,10 +107,8 @@ export class SupabaseAccountRepository implements IAccountRepository {
     return (data as AccountRow[]).map((row) => this.mapRowToAccount(row));
   }
 
-  // ── Mutaciones ────────────────────────────────────────────────────────
 
   async save(account: Account, details?: AccountDetails | null): Promise<Account> {
-    // 1. Insertar en la tabla principal accounts
     const accountRow = {
       id: account.id,
       user_id: account.userId,
@@ -136,7 +132,6 @@ export class SupabaseAccountRepository implements IAccountRepository {
       );
     }
 
-    // 2. Si hay detalles, insertarlos en account_details
     if (details && this.hasAnyDetail(details)) {
       const detailsRow = {
         account_id: account.id,
@@ -160,7 +155,6 @@ export class SupabaseAccountRepository implements IAccountRepository {
       }
     }
 
-    // 3. Recuperar la cuenta completa con sus detalles para retornar
     const fullAccount = await this.findById(account.id);
     if (!fullAccount) {
       throw new AppError('Error al recuperar la cuenta creada', 500, 'DB_ERROR');

@@ -15,7 +15,6 @@ import { TransferPocketBalance } from '../application/use-cases/pocket/TransferP
 import { randomUUID } from 'crypto';
 import { runLoanTests } from './loan-tests';
 
-// --- Mocks en memoria --------------------------------------------------
 class InMemoryPaymentRepo implements IServicePaymentRepository {
   private store = new Map<string, ServicePayment>();
   async save(payment: ServicePayment) {
@@ -89,14 +88,12 @@ async function run() {
   const accountRepo = new InMemoryAccountRepo();
   const gateway = new MockPaymentGateway();
 
-  // Crear cuenta con saldo
   const acc = Account.create({ id: randomUUID(), userId: 'user1', accountNumber: 'BA123456789', accountType: AccountType.AHORROS });
   await accountRepo.save(acc);
   await accountRepo.updateBalance(acc.id, 1000);
 
   const createPayment = new CreateServicePayment(paymentRepo as any, accountRepo as any, gateway);
 
-  // Caso: pago exitoso
   const dto = { userId: 'user1', accountId: acc.id, serviceType: ServiceType.ENERGIA, providerReference: 'REF123', amount: 200 };
   const res = await createPayment.execute(dto as any);
   assert(res.amount === 200, 'Monto debe ser 200');
@@ -104,7 +101,6 @@ async function run() {
   if (!updatedAcc) throw new Error('Cuenta no encontrada');
   assert((updatedAcc as any).balance === 800, 'Saldo debe descontarse a 800');
 
-  // Caso: saldo insuficiente
   try {
     await createPayment.execute({ userId: 'user1', accountId: acc.id, serviceType: ServiceType.AGUA, providerReference: 'REF2', amount: 2000 } as any);
     throw new Error('Debería haber fallado por saldo insuficiente');
@@ -112,7 +108,6 @@ async function run() {
     if (!/Saldo insuficiente/.test(err.message)) throw err;
   }
 
-  // Caso: pasarela falla
   try {
     await createPayment.execute({ userId: 'user1', accountId: acc.id, serviceType: ServiceType.INTERNET, providerReference: 'FAIL_ME', amount: 50 } as any);
     throw new Error('Debería haber fallado por rechazo de pasarela');
@@ -120,7 +115,6 @@ async function run() {
     if (!/Pago rechazado/.test(err.message)) throw err;
   }
 
-  // --- Tests de bolsillos ------------------------------------------------
   const pocketRepo = new InMemoryPocketRepo();
   const pocketAccount = Account.create({ id: randomUUID(), userId: 'user1', accountNumber: 'BA987654321', accountType: AccountType.AHORROS });
   await accountRepo.save(pocketAccount);
@@ -163,10 +157,6 @@ async function run() {
   assert(deletedPocket.id === pocketB.id, 'Debe devolver el bolsillo eliminado');
   const accountAfterDelete = await accountRepo.findById(pocketAccount.id);
   assert(accountAfterDelete?.balance === 900, 'La cuenta debe recibir el saldo al eliminar el bolsillo');
-
-  console.log('All pocket tests passed');
-  console.log('All payment tests passed');
-
   await runLoanTests();
 }
 

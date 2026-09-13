@@ -2,7 +2,6 @@
  * DTOs del módulo de Perfil.
  */
 
-// ── Ver Perfil ────────────────────────────────────────────────────────────
 
 export interface GetProfileResponseDto {
   id: string;
@@ -23,7 +22,6 @@ export interface GetProfileResponseDto {
   createdAt: string;
 }
 
-// ── Actualizar Perfil ─────────────────────────────────────────────────────
 
 export interface UpdateProfileDto {
   firstName?: string;

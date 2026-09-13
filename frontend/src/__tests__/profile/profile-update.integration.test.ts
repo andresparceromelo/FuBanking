@@ -198,7 +198,6 @@ describe('Editar perfil', () => {
   });
 
   test('Camino 2', async () => {
-    const user = buildPublicUser({ phone: null });
 
     fakeService.error = {
       code: 'VALIDATION_ERROR',
@@ -221,7 +220,6 @@ describe('Editar perfil', () => {
   });
 
   test('Camino 3', async () => {
-    const user = buildPublicUser({ phone: '+57 300 000 0000' });
 
     fakeService.error = {
       code: 'NO_CHANGES',

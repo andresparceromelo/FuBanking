@@ -152,6 +152,4 @@ export async function runLoanTests() {
   } catch (err: any) {
     assert(/requisitos/i.test(err.message), 'Debe lanzar un error de requisitos incompletos');
   }
-
-  console.log('All loan tests passed');
 }

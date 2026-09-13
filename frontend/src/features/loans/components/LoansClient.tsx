@@ -56,7 +56,6 @@ export function LoansClient() {
 
   const baseEligible = useMemo(() => Number(amount) > 0 && Number(installments) > 0, [amount, installments]);
 
-  // Requisitos de solicitud — NO son editables; se derivan del perfil del usuario.
   const requirements = useMemo(() => {
     const documentVerified = profile?.documentVerified ?? false;
     const ageVerified = profile ? isOfLegalAge(profile.birthDate) : false;
@@ -80,7 +79,6 @@ export function LoansClient() {
       const loans = await loanService.getMyLoans();
       setMyLoans(loans);
     } catch {
-      // silently fail
     }
   }, []);
 
@@ -90,7 +88,6 @@ export function LoansClient() {
       .getProfile()
       .then(setProfile)
       .catch(() => {
-        // silently fail
       });
   }, [fetchMyLoans]);
 

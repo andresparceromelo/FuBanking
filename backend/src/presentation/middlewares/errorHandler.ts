@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { AppError } from '../../shared/errors/AppError';
 import { sendError } from '../../shared/utils/response';
@@ -14,12 +14,10 @@ import { sendError } from '../../shared/utils/response';
  */
 export function errorHandler(
   error: unknown,
-  req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _next: NextFunction,
 ): void {
-  // Error de validación de Zod
   if (error instanceof ZodError) {
     const fields: Record<string, string[]> = {};
     error.issues.forEach((issue) => {
@@ -31,13 +29,11 @@ export function errorHandler(
     return;
   }
 
-  // Error operacional de la aplicación (AppError y subclases)
   if (error instanceof AppError && error.isOperational) {
     sendError(res, error.message, error.code, error.statusCode);
     return;
   }
 
-  // Error inesperado (bug, error de programación)
   console.error('💥 Unexpected error:', error);
   sendError(res, 'Ha ocurrido un error interno', 'INTERNAL_ERROR', 500);
 }

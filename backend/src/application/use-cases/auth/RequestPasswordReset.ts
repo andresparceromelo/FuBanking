@@ -19,32 +19,17 @@ export class RequestPasswordReset {
 
   async execute(dto: RequestPasswordResetDto): Promise<void> {
     const email = dto.email.toLowerCase().trim();
-
-    console.log('[RequestPasswordReset] Buscando usuario con email:', email);
-
-    // Verificar si el usuario existe
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
-      console.log('[RequestPasswordReset] Usuario NO encontrado en la BD. Abortando.');
       return;
     }
-
-    console.log('[RequestPasswordReset] Usuario encontrado, ID:', user.id);
-
-    // Generar token JWT válido por 5 minutos para el enlace de recuperación de contraseña
     const token = this.tokenService.generate(
       { userId: user.id, email: user.email.toString(), type: 'reset' },
       { expiresIn: '5m' }
     );
 
-    // Construir enlace de recuperacisón
     const resetLink = `${process.env['CLIENT_URL']}/reset-password?token=${token}`;
-    console.log('[RequestPasswordReset] Enlace generado:', resetLink);
-
-    // Enviar el email usando Nodemailer
-    console.log('[RequestPasswordReset] Enviando correo a:', user.email.toString());
     await this.emailService.sendPasswordResetEmail(user.email.toString(), resetLink);
-    console.log('[RequestPasswordReset] Correo enviado exitosamente.');
   }
 }

@@ -4,7 +4,6 @@ import { VirtualCard as CardType } from '../types/card.types';
 import { cn } from '@/shared/utils/cn';
 import { cardService } from '../services/card.service';
 
-// Re-export for backwards compatibility
 export type Card = CardType;
 
 interface VirtualCardProps {

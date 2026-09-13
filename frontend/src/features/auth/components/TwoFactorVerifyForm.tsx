@@ -14,10 +14,8 @@ export function TwoFactorVerifyForm() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
-    // Read masked email from session storage
     const email = sessionStorage.getItem('2fa_masked_email');
     if (!email) {
-      // If we don't have it, they shouldn't be on this page directly
       router.push('/login');
     } else {
       setMaskedEmail(email);
@@ -31,12 +29,10 @@ export function TwoFactorVerifyForm() {
     newCode[index] = value;
     setCode(newCode);
 
-    // Auto-advance
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
 
-    // Auto-submit if all filled
     if (value && index === 5 && newCode.every(v => v !== '')) {
       handleVerify(newCode.join(''));
     }
@@ -45,13 +41,11 @@ export function TwoFactorVerifyForm() {
   const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace') {
       if (!code[index] && index > 0) {
-        // Move back and clear if current is empty
         const newCode = [...code];
         newCode[index - 1] = '';
         setCode(newCode);
         inputRefs.current[index - 1]?.focus();
       } else {
-        // Just clear current
         const newCode = [...code];
         newCode[index] = '';
         setCode(newCode);

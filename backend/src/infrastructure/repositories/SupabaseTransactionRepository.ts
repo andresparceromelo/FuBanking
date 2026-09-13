@@ -29,7 +29,6 @@ export class SupabaseTransactionRepository implements ITransactionRepository {
 
   constructor(private readonly client: SupabaseClient) {}
 
-  // -- Mapeo BD → Dominio --
 
   private mapRowToTransaction(row: TransactionRow): Transaction {
     const props: TransactionProps = {
@@ -46,7 +45,6 @@ export class SupabaseTransactionRepository implements ITransactionRepository {
     return Transaction.fromPersistence(props);
   }
 
-  // -- Operaciones --
 
   async executeTransfer(
     senderAccountId: string,
@@ -64,7 +62,6 @@ export class SupabaseTransactionRepository implements ITransactionRepository {
     });
 
     if (error) {
-      // Mapear errores de la función RPC a errores del dominio
       const msg = error.message ?? '';
       if (msg.includes('INSUFFICIENT_FUNDS')) {
         throw new AppError('Saldo insuficiente para realizar la transferencia', 400, 'INSUFFICIENT_FUNDS');

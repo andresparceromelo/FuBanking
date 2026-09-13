@@ -30,8 +30,8 @@ export class LoginUser {
     private readonly userRepository: IUserRepository,
     private readonly passwordService: IPasswordService,
     private readonly tokenService: ITokenService,
-    private readonly verificationCodeRepository: IVerificationCodeRepository,
-    private readonly emailService: IEmailService,
+    verificationCodeRepository: IVerificationCodeRepository,
+    emailService: IEmailService,
   ) {
     this.generateTwoFactorCode = new GenerateTwoFactorCode(
       verificationCodeRepository,
@@ -46,23 +46,19 @@ export class LoginUser {
       'INVALID_CREDENTIALS',
     );
 
-    // 1. Buscar usuario por email
     const user = await this.userRepository.findByEmail(dto.email.toLowerCase().trim());
     if (!user) throw genericError;
 
-    // 2. Verificar que la cuenta esté activa
     if (!user.isActive) {
       throw new AuthError('Esta cuenta ha sido desactivada', 'ACCOUNT_INACTIVE');
     }
 
-    // 3. Comparar contraseña
     const isPasswordValid = await this.passwordService.compare(
       dto.password,
       user.getPasswordHash(),
     );
     if (!isPasswordValid) throw genericError;
 
-    // 4a. Sin 2FA: generar JWT directamente
     if (!user.twoFactorEnabled) {
       const tokenOptions: TokenOptions = {
         expiresIn: dto.rememberMe ? '30d' : '7d',
@@ -78,7 +74,6 @@ export class LoginUser {
       };
     }
 
-    // 4b. Con 2FA: generar OTP y enviar al correo
     const { temporaryToken, maskedEmail } = await this.generateTwoFactorCode.execute(
       user.id,
       user.email.toString(),

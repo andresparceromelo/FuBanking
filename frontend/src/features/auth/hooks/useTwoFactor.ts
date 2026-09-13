@@ -27,10 +27,8 @@ export function useTwoFactor() {
     setError(null);
     try {
       const response = await authService.verifyTwoFactor(temporaryToken, code);
-      // Limpiar datos temporales del sessionStorage
       sessionStorage.removeItem('2fa_temp_token');
       sessionStorage.removeItem('2fa_masked_email');
-      // Completar login
       login(response.user, response.token);
     } catch (err: any) {
       setError(err as AuthError);
@@ -55,11 +53,9 @@ export function useTwoFactor() {
     setResendSuccess(false);
     try {
       const response = await authService.resendTwoFactorCode(temporaryToken);
-      // Actualizar el nuevo token temporal
       sessionStorage.setItem('2fa_temp_token', response.temporaryToken);
       sessionStorage.setItem('2fa_masked_email', response.maskedEmail);
       setResendSuccess(true);
-      // Limpiar mensaje de éxito después de 4 segundos
       setTimeout(() => setResendSuccess(false), 4000);
     } catch (err: any) {
       setError(err as AuthError);

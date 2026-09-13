@@ -16,17 +16,13 @@ export class GetAccountDetails {
   ) {}
 
   async execute(dto: GetAccountDetailsDto): Promise<AccountDetailResponseDto> {
-    // 1. Buscar la cuenta
     const account = await this.accountRepository.findById(dto.accountId);
     if (!account) {
       throw new AppError('Cuenta no encontrada', 404, 'ACCOUNT_NOT_FOUND');
     }
 
-    // 2. Verificar que la cuenta pertenece al usuario autenticado
-    // Este método lanza AppError 403 si no coincide
     account.assertBelongsTo(dto.userId);
 
-    // 3. Retornar el detalle público
     return account.toPublic();
   }
 }
