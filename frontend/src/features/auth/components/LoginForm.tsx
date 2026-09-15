@@ -33,7 +33,7 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full max-w-sm">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full max-w-sm" noValidate>
       
       {error && (
         <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
@@ -49,6 +49,7 @@ export function LoginForm() {
             type="email"
             placeholder="Ingresa tu correo"
             autoComplete="email"
+            maxLength={100}
             error={errors.email?.message}
             {...register('email')}
           />
@@ -62,6 +63,7 @@ export function LoginForm() {
               type={showPassword ? 'text' : 'password'}
               placeholder="Ingresa tu contraseña"
               autoComplete="current-password"
+              maxLength={64}
               error={errors.password?.message}
               {...register('password')}
             />

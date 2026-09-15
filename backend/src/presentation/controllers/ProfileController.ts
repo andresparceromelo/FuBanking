@@ -31,11 +31,7 @@ export class ProfileController {
   updateMyProfile = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const dto = updateProfileSchema.parse(req.body);
-      const updateDto = {
-        ...dto,
-        birthDate: dto.birthDate ? new Date(`${dto.birthDate}T00:00:00`) : (dto.birthDate === null || dto.birthDate === '' ? null : undefined),
-      };
-      const result = await this.updateProfile.execute(req.user!.id, updateDto);
+      const result = await this.updateProfile.execute(req.user!.id, dto);
       sendSuccess(res, result, 'Perfil actualizado exitosamente');
     } catch (error) {
       next(error);

@@ -15,6 +15,15 @@ const envSchema = z.object({
   JWT_SECRET: z.string().min(16, 'JWT_SECRET must be at least 16 characters'),
   JWT_EXPIRES_IN: z.string().default('7d'),
 
+  /** Expiración del token temporal generado en el primer paso del flujo 2FA. */
+  TWO_FACTOR_TOKEN_EXPIRES_IN: z.string().default('10m'),
+
+  /** Rate limiting del endpoint POST /auth/2fa/resend. */
+  /** Número máximo de reenvíos por ventana de tiempo. */
+  RESEND_RATE_LIMIT_MAX: z.coerce.number().int().positive().default(3),
+  /** Duración de la ventana de rate limiting en milisegundos. */
+  RESEND_RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(600_000),
+
   SUPABASE_URL: z.string().url('SUPABASE_URL must be a valid URL'),
   SUPABASE_ANON_KEY: z.string().min(1, 'SUPABASE_ANON_KEY is required'),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1, 'SUPABASE_SERVICE_ROLE_KEY is required'),

@@ -73,7 +73,6 @@ describe('ProfileEditForm', () => {
     fireEvent.change(screen.getByLabelText('Segundo nombre'), { target: { value: 'Luis' } });
     fireEvent.change(screen.getByLabelText('Primer apellido'), { target: { value: 'Perez' } });
     fireEvent.change(screen.getByLabelText('Segundo apellido'), { target: { value: 'Gomez' } });
-    fireEvent.change(screen.getByLabelText('Fecha de nacimiento'), { target: { value: '1990-01-02' } });
     fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: '+573009998877' } });
     fireEvent.submit(screen.getByText('Guardar cambios').closest('form')!);
 
@@ -83,7 +82,6 @@ describe('ProfileEditForm', () => {
         middleName: 'Luis',
         lastName: 'Perez',
         secondLastName: 'Gomez',
-        birthDate: '1990-01-02',
         phone: '+573009998877',
       }),
     );
@@ -99,36 +97,29 @@ describe('ProfileEditForm', () => {
     expect(mockHandleUpdateTyped.mock.calls[0][0]).toEqual({ monthlyIncome: 2500000 });
   });
 
-  it('should submit a changed birthDate', async () => {
+  it('should not show birthDate input', async () => {
     render(<ProfileEditForm user={user()} onCancel={() => {}} onSuccess={() => {}} />);
-
-    fireEvent.change(screen.getByLabelText('Fecha de nacimiento'), { target: { value: '1990-01-02' } });
-    fireEvent.submit(screen.getByText('Guardar cambios').closest('form')!);
-
-    await waitFor(() => expect(mockHandleUpdateTyped).toHaveBeenCalled());
-    expect(mockHandleUpdateTyped.mock.calls[0][0]).toEqual(
-      expect.objectContaining({ birthDate: '1990-01-02' }),
-    );
+    // Check it's disabled instead of changing it
+    expect(screen.getByDisplayValue('1995-06-15')).toBeDisabled();
   });
 
-  it('should render defaults for a user without birthDate or income', () => {
+  it('should render defaults for a user without income', () => {
     render(
       <ProfileEditForm
-        user={user({ birthDate: '', monthlyIncome: null })}
+        user={user({ monthlyIncome: null })}
         onCancel={() => {}}
         onSuccess={() => {}}
       />,
     );
 
-    expect(screen.getByLabelText('Fecha de nacimiento')).toHaveDisplayValue('');
     fireEvent.submit(screen.getByText('Guardar cambios').closest('form')!);
   });
 
-  it('should cancel when a birthless user submits unchanged', async () => {
+  it('should cancel when a user submits unchanged', async () => {
     const onCancel = vi.fn();
     render(
       <ProfileEditForm
-        user={user({ birthDate: '' })}
+        user={user()}
         onCancel={onCancel}
         onSuccess={() => {}}
       />,
@@ -179,7 +170,6 @@ describe('ProfileEditForm', () => {
 
     fireEvent.change(screen.getByLabelText('Segundo nombre'), { target: { value: '' } });
     fireEvent.change(screen.getByLabelText('Segundo apellido'), { target: { value: '' } });
-    fireEvent.change(screen.getByLabelText('Fecha de nacimiento'), { target: { value: '' } });
     fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: '' } });
     fireEvent.submit(screen.getByText('Guardar cambios').closest('form')!);
 
@@ -188,7 +178,6 @@ describe('ProfileEditForm', () => {
       expect.objectContaining({
         middleName: null,
         secondLastName: null,
-        birthDate: null,
         phone: null,
       }),
     );

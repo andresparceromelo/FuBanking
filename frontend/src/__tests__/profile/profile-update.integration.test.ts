@@ -1,3 +1,11 @@
+/**
+ * Tests de integración — useUpdateProfile (lógica de hook).
+ *
+ * Defectos cubiertos:
+ *  #6  — Formulario con datos sin cambios llama a onCancel.
+ *  #9  — birthDate no está en el tipo editable.
+ */
+
 interface PublicUser {
   id: string;
   email: string;
@@ -21,14 +29,19 @@ interface AuthError {
   message: string;
 }
 
+/**
+ * UpdateProfileInput refleja el schema actualizado (sin birthDate).
+ * Defecto #9: birthDate es inmutable — no se incluye en el payload de edición.
+ */
 type UpdateProfileInput = {
   firstName?: string;
   middleName?: string | null;
   lastName?: string;
   secondLastName?: string | null;
-  birthDate?: string | null;
   phone?: string | null;
   avatarUrl?: string | null;
+  monthlyIncome?: number | null;
+  newPassword?: string | null;
 };
 
 interface FakeProfileService {
@@ -111,6 +124,11 @@ async function runHandleUpdate(opts: {
   return { error };
 }
 
+/**
+ * buildOnSubmit refleja el onSubmit actualizado del ProfileEditForm:
+ * - birthDate eliminado (defecto #9).
+ * - newPassword incluido si no está vacío (defecto #5).
+ */
 function buildOnSubmit(
   user: PublicUser,
   handleUpdate: (payload: UpdateProfileInput) => void,
@@ -123,12 +141,9 @@ function buildOnSubmit(
     if (data.middleName !== (user.middleName || '')) payload.middleName = data.middleName || null;
     if (data.lastName !== user.lastName) payload.lastName = data.lastName;
     if (data.secondLastName !== (user.secondLastName || '')) payload.secondLastName = data.secondLastName || null;
-
-    const currentBirthDateStr = user.birthDate ? user.birthDate.split('T')[0] : '';
-    if (data.birthDate !== currentBirthDateStr) payload.birthDate = data.birthDate || null;
-
     if (data.phone !== (user.phone || '')) payload.phone = data.phone || null;
     if (data.avatarUrl !== (user.avatarUrl || '')) payload.avatarUrl = data.avatarUrl || null;
+    if (data.newPassword && data.newPassword.trim() !== '') payload.newPassword = data.newPassword;
 
     if (Object.keys(payload).length > 0) {
       handleUpdate(payload);
@@ -148,7 +163,7 @@ function buildPublicUser(overrides: Partial<PublicUser> = {}): PublicUser {
     lastName: 'Garcia',
     secondLastName: null,
     fullName: 'Ana Garcia',
-    birthDate: '1995-01-01T00:00:00.000Z',
+    birthDate: '1995-01-01',
     phone: null,
     avatarUrl: null,
     isActive: true,
@@ -159,7 +174,7 @@ function buildPublicUser(overrides: Partial<PublicUser> = {}): PublicUser {
   };
 }
 
-describe('Editar perfil', () => {
+describe('Editar perfil — integración', () => {
   let fakeService: FakeProfileService;
   let loginCaptor: ReturnType<typeof makeLoginCaptor>;
   let cancelCaptor: ReturnType<typeof makeCancelCaptor>;
@@ -170,8 +185,13 @@ describe('Editar perfil', () => {
     cancelCaptor = makeCancelCaptor();
   });
 
-  test('Camino 1', () => {
-    const user = buildPublicUser({ phone: null, birthDate: '1995-01-01T00:00:00.000Z' });
+  /**
+   * Camino 1: Sin cambios → llama onCancel, no llama al servicio.
+   * Cubre defecto #6: formulario igual al estado actual.
+   * birthDate NO está en el formulario editable (defecto #9).
+   */
+  test('Camino 1 — sin cambios, llama onCancel sin llamar al servicio', () => {
+    const user = buildPublicUser({ phone: null, birthDate: '1995-01-01' });
 
     let handleUpdateCalled = false;
     const onSubmit = buildOnSubmit(
@@ -185,7 +205,6 @@ describe('Editar perfil', () => {
       middleName: '',
       lastName: 'Garcia',
       secondLastName: '',
-      birthDate: '1995-01-01',
       phone: '',
       avatarUrl: '',
     };
@@ -197,8 +216,10 @@ describe('Editar perfil', () => {
     expect(cancelCaptor.called).toBe(true);
   });
 
-  test('Camino 2', async () => {
-
+  /**
+   * Camino 2: Error de validación en el servicio → error propagado.
+   */
+  test('Camino 2 — error de validación del servicio', async () => {
     fakeService.error = {
       code: 'VALIDATION_ERROR',
       message: 'Numero de telefono invalido',
@@ -219,8 +240,10 @@ describe('Editar perfil', () => {
     expect(loginCaptor.called).toBe(false);
   });
 
-  test('Camino 3', async () => {
-
+  /**
+   * Camino 3: Error NO_CHANGES del servicio → error propagado.
+   */
+  test('Camino 3 — error NO_CHANGES del servicio', async () => {
     fakeService.error = {
       code: 'NO_CHANGES',
       message: 'No se proporciono ningun campo para actualizar',
@@ -240,7 +263,10 @@ describe('Editar perfil', () => {
     expect(loginCaptor.called).toBe(false);
   });
 
-  test('Camino 4', async () => {
+  /**
+   * Camino 4: Actualización exitosa → loginFn y onSuccessCallback llamados.
+   */
+  test('Camino 4 — actualización exitosa con callback', async () => {
     const user = buildPublicUser();
     const updatedUser: PublicUser = { ...user, firstName: 'Maria', fullName: 'Maria Garcia' };
 

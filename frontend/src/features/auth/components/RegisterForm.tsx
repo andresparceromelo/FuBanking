@@ -3,13 +3,23 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { registerSchema, RegisterInput } from '../schemas/auth.schemas';
+import { registerSchema, RegisterInput, PASSWORD_MAX_LENGTH } from '../schemas/auth.schemas';
 import { useRegister } from '../hooks/useRegister';
 import { Input } from '@/shared/components/ui/Input';
 import { Button } from '@/shared/components/ui/Button';
 import { Label } from '@/shared/components/ui/Label';
 import { Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
+import { PasswordStrengthMeter, calculateStrength, evaluatePasswordCriteria } from './PasswordStrengthMeter';
+
+// ─── Límites de longitud para inputs del formulario ───────────────────────────
+const FIELD_MAX = {
+  name: 100,
+  email: 254,
+  document: 20,
+  phone: 20,
+  password: PASSWORD_MAX_LENGTH,
+} as const;
 
 export function RegisterForm() {
   const { handleRegister, isLoading, error } = useRegister();
@@ -19,6 +29,7 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -37,15 +48,23 @@ export function RegisterForm() {
     },
   });
 
+  const passwordValue = watch('password') ?? '';
+  const passwordCriteria = evaluatePasswordCriteria(passwordValue);
+  const passwordStrength = calculateStrength(passwordCriteria);
+  const isPasswordWeak = passwordValue.length > 0 && passwordStrength === 'weak';
+
   const onSubmit = (data: RegisterInput) => {
     handleRegister(data);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full max-w-sm">
-      
+
       {error && (
-        <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
+        <div
+          role="alert"
+          className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20"
+        >
           {error.message}
         </div>
       )}
@@ -57,6 +76,7 @@ export function RegisterForm() {
             <Input
               id="firstName"
               placeholder="Ej. Juan"
+              maxLength={FIELD_MAX.name}
               error={errors.firstName?.message}
               {...register('firstName')}
             />
@@ -67,6 +87,7 @@ export function RegisterForm() {
             <Input
               id="middleName"
               placeholder="Ej. Carlos"
+              maxLength={FIELD_MAX.name}
               error={errors.middleName?.message}
               {...register('middleName')}
             />
@@ -77,6 +98,7 @@ export function RegisterForm() {
             <Input
               id="lastName"
               placeholder="Ej. Pérez"
+              maxLength={FIELD_MAX.name}
               error={errors.lastName?.message}
               {...register('lastName')}
             />
@@ -87,6 +109,7 @@ export function RegisterForm() {
             <Input
               id="secondLastName"
               placeholder="Ej. Gómez"
+              maxLength={FIELD_MAX.name}
               error={errors.secondLastName?.message}
               {...register('secondLastName')}
             />
@@ -109,6 +132,7 @@ export function RegisterForm() {
             id="email"
             type="email"
             placeholder="correo@ejemplo.com"
+            maxLength={FIELD_MAX.email}
             error={errors.email?.message}
             {...register('email')}
           />
@@ -119,6 +143,7 @@ export function RegisterForm() {
           <Input
             id="document"
             placeholder="123456789"
+            maxLength={FIELD_MAX.document}
             error={errors.document?.message}
             {...register('document')}
           />
@@ -140,6 +165,7 @@ export function RegisterForm() {
           <Input
             id="phone"
             placeholder="+57 300 000 0000"
+            maxLength={FIELD_MAX.phone}
             error={errors.phone?.message}
             {...register('phone')}
           />
@@ -152,17 +178,25 @@ export function RegisterForm() {
               id="password"
               type={showPassword ? 'text' : 'password'}
               placeholder="Crea una contraseña segura"
+              maxLength={FIELD_MAX.password}
               error={errors.password?.message}
               {...register('password')}
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               className="absolute right-4 top-3.5 text-muted-foreground hover:text-foreground transition-colors"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
+          <PasswordStrengthMeter password={passwordValue} />
+          {isPasswordWeak && (
+            <p role="alert" className="text-xs text-destructive mt-1">
+              La contraseña es demasiado débil. Por favor refuérzala antes de continuar.
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -172,12 +206,14 @@ export function RegisterForm() {
               id="confirmPassword"
               type={showConfirmPassword ? 'text' : 'password'}
               placeholder="Repite tu contraseña"
+              maxLength={FIELD_MAX.password}
               error={errors.confirmPassword?.message}
               {...register('confirmPassword')}
             />
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              aria-label={showConfirmPassword ? 'Ocultar confirmación' : 'Mostrar confirmación'}
               className="absolute right-4 top-3.5 text-muted-foreground hover:text-foreground transition-colors"
             >
               {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -186,7 +222,12 @@ export function RegisterForm() {
         </div>
       </div>
 
-      <Button type="submit" isLoading={isLoading} className="w-full mt-8">
+      <Button
+        type="submit"
+        isLoading={isLoading}
+        disabled={isPasswordWeak || isLoading}
+        className="w-full mt-8"
+      >
         Abrir cuenta
       </Button>
 

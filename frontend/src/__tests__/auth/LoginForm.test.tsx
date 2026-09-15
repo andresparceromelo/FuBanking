@@ -13,18 +13,21 @@
  * Ejecutar: jest src/__tests__/auth/LoginForm.test.tsx
  */
 
+import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { LoginForm } from '../../features/auth/components/LoginForm';
 
 
 const mockHandleLogin = jest.fn();
+let mockUseLoginState = {
+  handleLogin: mockHandleLogin,
+  isLoading: false,
+  error: null as any,
+};
+
 jest.mock('../../features/auth/hooks/useLogin', () => ({
-  useLogin: () => ({
-    handleLogin: mockHandleLogin,
-    isLoading: false,
-    error: null,
-  }),
+  useLogin: () => mockUseLoginState,
 }));
 
 jest.mock('next/link', () => {
@@ -86,22 +89,14 @@ describe('LoginForm — Pruebas de caja blanca (tabla de caminos Frontend)', () 
   });
 
   test('C3 - credenciales incorrectas: muestra mensaje de error devuelto por el hook', async () => {
-    jest.resetModules();
-    const { useLogin: useLoginMock } = jest.requireMock('../../features/auth/hooks/useLogin') as any;
-
-    jest.mock('../../features/auth/hooks/useLogin', () => ({
-      useLogin: () => ({
-        handleLogin: jest.fn(),
-        isLoading: false,
-        error: { code: 'INVALID_CREDENTIALS', message: 'Correo o contraseña incorrectos' },
-      }),
-    }));
-
-    const { LoginForm: LoginFormWithError } = await import('../../features/auth/components/LoginForm');
-    render(<LoginFormWithError />);
+    mockUseLoginState.error = { code: 'INVALID_CREDENTIALS', message: 'Correo o contraseña incorrectos' };
+    render(<LoginForm />);
 
     await waitFor(() => {
       expect(screen.getByText(/correo o contraseña incorrectos/i)).toBeInTheDocument();
     });
+    
+    // cleanup
+    mockUseLoginState.error = null;
   });
 });

@@ -51,7 +51,7 @@ describe('ProfileController', () => {
     );
   });
 
-  it('should update with parsed birthDate', async () => {
+  it('should update firstName and strip birthDate from body (defecto #9: birthDate inmutable)', async () => {
     const profile = { id: 'u1', firstName: 'Maria' };
     useCases.update.execute.mockResolvedValue(profile);
     const { res, status } = mockRes();
@@ -62,46 +62,47 @@ describe('ProfileController', () => {
       next,
     );
 
+    // birthDate es descartado por el schema (Zod strip mode) — defecto #9
+    // El use-case recibe solo firstName, sin birthDate
     expect(useCases.update.execute).toHaveBeenCalledWith(
       'u1',
-      expect.objectContaining({ firstName: 'Maria', birthDate: new Date('1995-03-20T00:00:00') }),
+      expect.objectContaining({ firstName: 'Maria' }),
     );
+    const callArg = (useCases.update.execute as ReturnType<typeof vi.fn>).mock.calls[0]?.[1];
+    expect(callArg).not.toHaveProperty('birthDate');
     expect(status).toHaveBeenCalledWith(200);
   });
 
-  it('should map null, empty and missing birthDate', async () => {
+  it('should strip birthDate regardless of value (null, empty, missing) — defecto #9', async () => {
     useCases.update.execute.mockResolvedValue({ id: 'u1' });
     const { res } = mockRes();
 
+    // birthDate: null en el body → Zod lo descarta (campo no en el schema)
     await controller.updateMyProfile(
       mockReq({ body: { firstName: 'Ana', birthDate: null }, user: { id: 'u1' } }),
       res,
       next,
     );
-    expect(useCases.update.execute).toHaveBeenCalledWith(
-      'u1',
-      expect.objectContaining({ birthDate: null }),
-    );
+    const call1Arg = (useCases.update.execute as ReturnType<typeof vi.fn>).mock.calls[0]?.[1];
+    expect(call1Arg).not.toHaveProperty('birthDate');
 
+    // birthDate: '' en el body → Zod lo descarta
     await controller.updateMyProfile(
       mockReq({ body: { firstName: 'Ana', birthDate: '' }, user: { id: 'u1' } }),
       res,
       next,
     );
-    expect(useCases.update.execute).toHaveBeenCalledWith(
-      'u1',
-      expect.objectContaining({ birthDate: null }),
-    );
+    const call2Arg = (useCases.update.execute as ReturnType<typeof vi.fn>).mock.calls[1]?.[1];
+    expect(call2Arg).not.toHaveProperty('birthDate');
 
+    // birthDate ausente → tampoco está en el resultado
     await controller.updateMyProfile(
       mockReq({ body: { firstName: 'Ana' }, user: { id: 'u1' } }),
       res,
       next,
     );
-    expect(useCases.update.execute).toHaveBeenCalledWith(
-      'u1',
-      expect.objectContaining({ birthDate: undefined }),
-    );
+    const call3Arg = (useCases.update.execute as ReturnType<typeof vi.fn>).mock.calls[2]?.[1];
+    expect(call3Arg).not.toHaveProperty('birthDate');
   });
 
   it('should call next when getMyProfile throws', async () => {

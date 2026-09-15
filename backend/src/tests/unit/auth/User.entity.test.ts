@@ -158,4 +158,25 @@ describe('User — Entity (auth scope)', () => {
       expect(dto.role).toBe('user');
     });
   });
+
+  // ─── Defecto 4: serialización de fecha sin desfase por zona horaria ─────────
+  describe('formatDateOnly — sin desfase UTC (Defecto 4)', () => {
+    it('should serialize a date constructed with local parts without UTC offset', () => {
+      // Al construir con new Date(year, month-1, day), JS usa la hora local → sin desfase.
+      const user = buildUser({ birthDate: new Date(1990, 0, 15) }); // 15 enero 1990
+      expect(user.toPublic().birthDate).toBe('1990-01-15');
+    });
+
+    it('should serialize Dec 31 correctly regardless of UTC next-day rollover', () => {
+      // En zonas UTC- el 31/12 medianoche UTC puede caer el 30/12.
+      // new Date(2000, 11, 31) = 31 Dic 2000 hora local — nunca se desplaza.
+      const user = buildUser({ birthDate: new Date(2000, 11, 31) });
+      expect(user.toPublic().birthDate).toBe('2000-12-31');
+    });
+
+    it('should serialize Jan 1 correctly (new year boundary)', () => {
+      const user = buildUser({ birthDate: new Date(1985, 0, 1) });
+      expect(user.toPublic().birthDate).toBe('1985-01-01');
+    });
+  });
 });

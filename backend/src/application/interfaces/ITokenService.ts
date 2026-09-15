@@ -5,6 +5,8 @@ export interface TokenPayload {
   userId: string;
   email: string;
   type?: 'reset' | 'auth' | '2fa';
+  /** Indica si el usuario eligió "Recuérdame" en el login. Se propaga a través del temporaryToken 2FA. */
+  rememberMe?: boolean;
 }
 
 /**

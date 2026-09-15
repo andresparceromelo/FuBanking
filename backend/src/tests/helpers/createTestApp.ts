@@ -10,6 +10,7 @@ import { LoginUser } from '../../application/use-cases/auth/LoginUser';
 import { LogoutUser } from '../../application/use-cases/auth/LogoutUser';
 import { RequestPasswordReset } from '../../application/use-cases/auth/RequestPasswordReset';
 import { ResetPassword } from '../../application/use-cases/auth/ResetPassword';
+import { VerifyResetToken } from '../../application/use-cases/auth/VerifyResetToken';
 import { VerifyTwoFactorCode } from '../../application/use-cases/auth/VerifyTwoFactorCode';
 import { EnableTwoFactor } from '../../application/use-cases/auth/EnableTwoFactor';
 import { DisableTwoFactor } from '../../application/use-cases/auth/DisableTwoFactor';
@@ -22,12 +23,15 @@ import { InMemoryVerificationCodeRepository } from '../fakes/InMemoryVerificatio
 import { FakePasswordService } from '../fakes/FakePasswordService';
 import { FakeTokenService } from '../fakes/FakeTokenService';
 import { FakeEmailService } from '../fakes/FakeEmailService';
+import { InMemoryResetTokenRepository } from '../fakes/InMemoryResetTokenRepository';
+
 export interface TestDeps {
   userRepository: InMemoryUserRepository;
   verificationCodeRepository: InMemoryVerificationCodeRepository;
   passwordService: FakePasswordService;
   tokenService: FakeTokenService;
   emailService: FakeEmailService;
+  resetTokenRepository: InMemoryResetTokenRepository;
 }
 export interface TestApp {
   app: Application;
@@ -45,17 +49,19 @@ export function createTestApp(overrides: Partial<{
   const passwordService = (overrides.passwordService ?? new FakePasswordService()) as FakePasswordService;
   const tokenService = (overrides.tokenService ?? new FakeTokenService()) as FakeTokenService;
   const emailService = (overrides.emailService ?? new FakeEmailService()) as FakeEmailService;
-  const deps: TestDeps = { userRepository, verificationCodeRepository, passwordService, tokenService, emailService };
+  const resetTokenRepository = new InMemoryResetTokenRepository();
+  const deps: TestDeps = { userRepository, verificationCodeRepository, passwordService, tokenService, emailService, resetTokenRepository };
   const registerUser = new RegisterUser(userRepository, passwordService, tokenService);
   const loginUser = new LoginUser(userRepository, passwordService, tokenService, verificationCodeRepository, emailService);
   const logoutUser = new LogoutUser();
-  const requestPasswordReset = new RequestPasswordReset(userRepository, tokenService, emailService);
-  const resetPassword = new ResetPassword(userRepository, passwordService, tokenService);
+  const requestPasswordReset = new RequestPasswordReset(userRepository, tokenService, emailService, resetTokenRepository);
+  const resetPassword = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
+  const verifyResetToken = new VerifyResetToken(tokenService, resetTokenRepository);
   const verifyTwoFactor = new VerifyTwoFactorCode(verificationCodeRepository, userRepository, passwordService, tokenService);
   const enableTwoFactor = new EnableTwoFactor(userRepository);
   const disableTwoFactor = new DisableTwoFactor(userRepository);
   const resendTwoFactor = new ResendTwoFactorCode(userRepository, verificationCodeRepository, emailService, tokenService, passwordService);
-  const controller = new AuthController(registerUser, loginUser, logoutUser, requestPasswordReset, resetPassword);
+  const controller = new AuthController(registerUser, loginUser, logoutUser, requestPasswordReset, resetPassword, verifyResetToken);
   const twoFactorController = new TwoFactorController(verifyTwoFactor, enableTwoFactor, disableTwoFactor, resendTwoFactor);
   const authRouter = Router();
   authRouter.post('/register', controller.register);

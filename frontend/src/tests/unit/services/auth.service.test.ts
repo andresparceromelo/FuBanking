@@ -35,14 +35,19 @@ describe('authService', () => {
     expect(result).toEqual(response);
   });
 
-  it('should POST forgot/reset password without returning data', async () => {
+  it('should POST forgot/reset password and verify reset token without returning data', async () => {
     post.mockResolvedValue({ data: null });
+    const get = apiClient.get as unknown as ReturnType<typeof vi.fn>;
+    get.mockResolvedValue({ data: null });
 
     await authService.forgotPassword({ email: 'a@b.co' });
     expect(post).toHaveBeenCalledWith('/auth/forgot-password', { email: 'a@b.co' });
 
     await authService.resetPassword({ token: 't', newPassword: 'Segura123', confirmPassword: 'Segura123' } as never);
     expect(post).toHaveBeenCalledWith('/auth/reset-password', expect.objectContaining({ token: 't' }));
+    
+    await authService.verifyResetToken('t+t');
+    expect(get).toHaveBeenCalledWith('/auth/verify-reset-token?token=t%2Bt');
   });
 
   it('should logout silently on server failure', async () => {

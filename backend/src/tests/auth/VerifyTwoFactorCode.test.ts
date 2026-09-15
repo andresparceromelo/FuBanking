@@ -7,6 +7,7 @@ import { InMemoryUserRepository } from '../fakes/InMemoryUserRepository';
 import { InMemoryVerificationCodeRepository } from '../fakes/InMemoryVerificationCodeRepository';
 import { FakePasswordService } from '../fakes/FakePasswordService';
 import { FakeTokenService } from '../fakes/FakeTokenService';
+
 function buildUser(): User {
   return new User({
     id: 'user-123',
@@ -125,5 +126,64 @@ describe('VerifyTwoFactorCode — Pruebas de caja blanca (tabla de caminos Backe
     expect(payload.email).toBe('juan@example.com');
     expect(result.user).toBeDefined();
     expect(result.user.id).toBe('user-123');
+  });
+
+  // ─── C11/C12: rememberMe propagado a través del flujo 2FA ────────────────────
+  test('C11 - rememberMe=true en el temporaryToken: el JWT definitivo usa expiración 30d', async () => {
+    const tokenWithRemember = tokenService.generate({
+      userId: 'user-123',
+      email: 'juan@example.com',
+      rememberMe: true,
+    });
+    const validCode = buildVerificationCode({ used: false, attempts: 0 });
+    verificationCodeRepository.seed(validCode);
+    userRepository.seed(buildUser());
+
+    const dto = { temporaryToken: tokenWithRemember, code: '123456' };
+    const result = await verifyTwoFactor.execute(dto);
+
+    expect(result.token).toBeDefined();
+    // El FakeTokenService refleja las options en el payload bajo _options
+    // Verificamos que el payload del token final es correcto
+    const payload = tokenService.verify(result.token);
+    expect(payload.userId).toBe('user-123');
+    // El FakeTokenService registra las opciones en el último generate
+    expect(tokenService.lastOptions?.expiresIn).toBe('30d');
+  });
+
+  test('C12 - rememberMe=false en el temporaryToken: el JWT definitivo usa expiración 7d', async () => {
+    const tokenNoRemember = tokenService.generate({
+      userId: 'user-123',
+      email: 'juan@example.com',
+      rememberMe: false,
+    });
+    const validCode = buildVerificationCode({ used: false, attempts: 0 });
+    verificationCodeRepository.seed(validCode);
+    userRepository.seed(buildUser());
+
+    const dto = { temporaryToken: tokenNoRemember, code: '123456' };
+    const result = await verifyTwoFactor.execute(dto);
+
+    expect(result.token).toBeDefined();
+    const payload = tokenService.verify(result.token);
+    expect(payload.userId).toBe('user-123');
+    expect(tokenService.lastOptions?.expiresIn).toBe('7d');
+  });
+
+  test('C13 - rememberMe ausente en el temporaryToken: el JWT definitivo usa expiración 7d', async () => {
+    // El token generado sin rememberMe (caso legado / sin seleccionar checkbox)
+    const tokenNoField = tokenService.generate({
+      userId: 'user-123',
+      email: 'juan@example.com',
+    });
+    const validCode = buildVerificationCode({ used: false, attempts: 0 });
+    verificationCodeRepository.seed(validCode);
+    userRepository.seed(buildUser());
+
+    const dto = { temporaryToken: tokenNoField, code: '123456' };
+    const result = await verifyTwoFactor.execute(dto);
+
+    expect(result.token).toBeDefined();
+    expect(tokenService.lastOptions?.expiresIn).toBe('7d');
   });
 });
