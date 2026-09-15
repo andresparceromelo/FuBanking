@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 import { AppError } from '../../shared/errors/AppError';
+import { RateLimitError } from '../../shared/errors/RateLimitError';
 import { sendError } from '../../shared/utils/response';
 
 /**
@@ -27,6 +28,12 @@ export function errorHandler(
       fields[field].push(issue.message);
     });
     sendError(res, 'Error de validación', 'VALIDATION_ERROR', 400, fields);
+    return;
+  }
+
+  if (error instanceof RateLimitError) {
+    res.setHeader('Retry-After', String(error.retryAfterSeconds));
+    sendError(res, error.message, error.code, error.statusCode);
     return;
   }
 

@@ -3,6 +3,14 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   test: {
     globals: true,
+    env: {
+      JWT_SECRET: 'supersecretjwtkeythatis16chars',
+      SUPABASE_URL: 'https://test.supabase.co',
+      SUPABASE_ANON_KEY: 'test-anon-key',
+      SUPABASE_SERVICE_ROLE_KEY: 'test-service-key',
+      GMAIL_USSER: 'test@example.com',
+      GMAIL_PASS: 'testpass'
+    },
     include: ['src/tests/**/*.test.ts'],
     coverage: {
       provider: 'v8',

@@ -30,6 +30,15 @@ class AuthService {
     await apiClient.post('/auth/reset-password', data);
   }
 
+  /**
+   * Verifica el estado del token de restablecimiento sin consumirlo.
+   * Lanza un error con `code` igual a 'TOKEN_EXPIRED', 'TOKEN_ALREADY_USED'
+   * o 'TOKEN_INVALID' según corresponda.
+   */
+  async verifyResetToken(token: string): Promise<void> {
+    await apiClient.get(`/auth/verify-reset-token?token=${encodeURIComponent(token)}`);
+  }
+
   async logout(): Promise<void> {
     try {
       await apiClient.post('/auth/logout');

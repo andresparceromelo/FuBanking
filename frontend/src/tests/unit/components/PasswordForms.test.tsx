@@ -2,20 +2,24 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ForgotPasswordForm } from '@/features/auth/components/ForgotPasswordForm';
 import { ResetPasswordForm } from '@/features/auth/components/ResetPasswordForm';
+import { TokenStatus } from '@/features/auth/hooks/usePasswordReset';
 
 const state = vi.hoisted(() => ({
   requestReset: vi.fn(),
   resetPassword: vi.fn(),
-  hook: { isLoading: false, error: null, isSuccess: false },
+  verifyToken: vi.fn(),
+  hook: { isLoading: false, error: null, isSuccess: false, tokenStatus: 'valid' as TokenStatus },
 }));
 
 vi.mock('@/features/auth/hooks/usePasswordReset', () => ({
   usePasswordReset: () => ({
     requestReset: state.requestReset,
     resetPassword: state.resetPassword,
+    verifyToken: state.verifyToken,
     isLoading: state.hook.isLoading,
     error: state.hook.error,
     isSuccess: state.hook.isSuccess,
+    tokenStatus: state.hook.tokenStatus,
   }),
 }));
 
@@ -66,19 +70,65 @@ describe('ResetPasswordForm', () => {
     state.hook.isLoading = false;
     state.hook.error = null;
     state.hook.isSuccess = false;
+    state.hook.tokenStatus = 'valid';
   });
 
-  it('should submit new passwords with the token', async () => {
+  it('should verify token on mount', () => {
+    render(<ResetPasswordForm token="tok-1" />);
+    expect(state.verifyToken).toHaveBeenCalledWith('tok-1');
+  });
+
+  it('should show loading spinner while verifying token', () => {
+    state.hook.tokenStatus = 'loading';
+    render(<ResetPasswordForm token="tok-1" />);
+    
+    expect(screen.getByText('Verificando enlace de recuperación...')).toBeInTheDocument();
+  });
+
+  it('should show expired link message', () => {
+    state.hook.tokenStatus = 'expired';
+    render(<ResetPasswordForm token="tok-1" />);
+    
+    expect(screen.getByText('Enlace expirado')).toBeInTheDocument();
+    expect(screen.getByText(/solicita un nuevo enlace/i)).toBeInTheDocument();
+  });
+
+  it('should show already used link message', () => {
+    state.hook.tokenStatus = 'used';
+    render(<ResetPasswordForm token="tok-1" />);
+    
+    expect(screen.getByText('Enlace ya utilizado')).toBeInTheDocument();
+  });
+
+  it('should show invalid link message', () => {
+    state.hook.tokenStatus = 'invalid';
+    render(<ResetPasswordForm token="tok-1" />);
+    
+    expect(screen.getByText('Enlace inválido')).toBeInTheDocument();
+  });
+
+  it('should submit new passwords with the token if token is valid and password strong', async () => {
     const { container } = render(<ResetPasswordForm token="tok-1" />);
 
-    fireEvent.change(screen.getByLabelText('Nueva contraseña'), { target: { value: 'Segura123' } });
-    fireEvent.change(screen.getByLabelText('Confirmar nueva contraseña'), { target: { value: 'Segura123' } });
+    // Llenamos con una contraseña fuerte para habilitar el botón
+    fireEvent.change(screen.getByLabelText('Nueva contraseña'), { target: { value: 'Segura123!' } });
+    fireEvent.change(screen.getByLabelText('Confirmar nueva contraseña'), { target: { value: 'Segura123!' } });
     fireEvent.submit(container.querySelector('form')!);
 
     await waitFor(() => expect(state.resetPassword).toHaveBeenCalled());
     expect(state.resetPassword.mock.calls[0][0]).toEqual(
-      expect.objectContaining({ token: 'tok-1', newPassword: 'Segura123' }),
+      expect.objectContaining({ token: 'tok-1', newPassword: 'Segura123!' }),
     );
+  });
+  
+  it('should disable submit if password is weak', () => {
+    render(<ResetPasswordForm token="tok-1" />);
+
+    fireEvent.change(screen.getByLabelText('Nueva contraseña'), { target: { value: 'debil' } });
+    
+    expect(screen.getByText(/demasiado débil/i)).toBeInTheDocument();
+    const button = screen.getByRole('button', { name: /Guardar contraseña/i });
+    expect(button).toBeDisabled();
   });
 
   it('should show the success screen', () => {

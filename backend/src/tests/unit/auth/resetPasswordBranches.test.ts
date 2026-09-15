@@ -7,8 +7,10 @@ import { Email } from '../../../domain/value-objects/Email';
 import { Document } from '../../../domain/value-objects/Document';
 import { InMemoryUserRepository } from '../../fakes/InMemoryUserRepository';
 import { InMemoryVerificationCodeRepository } from '../../fakes/InMemoryVerificationCodeRepository';
+import { InMemoryResetTokenRepository } from '../../fakes/InMemoryResetTokenRepository';
 import { FakeTokenService } from '../../fakes/FakeTokenService';
 import { FakePasswordService } from '../../fakes/FakePasswordService';
+import { hashToken } from '../../../infrastructure/repositories/SupabaseResetTokenRepository';
 
 function buildUser(): User {
   return new User({
@@ -36,15 +38,17 @@ function buildUser(): User {
 
 describe('ResetPassword branches', () => {
   let userRepository: InMemoryUserRepository;
+  let resetTokenRepository: InMemoryResetTokenRepository;
   const passwordService = new FakePasswordService();
   const tokenService = new FakeTokenService();
 
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
+    resetTokenRepository = new InMemoryResetTokenRepository();
   });
 
   it('should reject a token without reset type', async () => {
-    const useCase = new ResetPassword(userRepository, passwordService, tokenService);
+    const useCase = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
     const badToken = tokenService.generate({ userId: 'user-rp-01', email: 'rp@example.com' });
 
     await expect(
@@ -52,24 +56,86 @@ describe('ResetPassword branches', () => {
     ).rejects.toThrow(/inválido/i);
   });
 
+  it('should throw TOKEN_INVALID if token not in DB', async () => {
+    userRepository.seed(buildUser());
+    const useCase = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
+    const token = tokenService.generate({ userId: 'user-rp-01', email: 'rp@example.com', type: 'reset' } as never);
+
+    await expect(
+      useCase.execute({ token, newPassword: 'Nueva123', confirmPassword: 'Nueva123' }),
+    ).rejects.toThrow(/inválido/i);
+  });
+
+  it('should throw TOKEN_ALREADY_USED if token is marked as used', async () => {
+    userRepository.seed(buildUser());
+    const useCase = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
+    const token = tokenService.generate({ userId: 'user-rp-01', email: 'rp@example.com', type: 'reset' } as never);
+    
+    await resetTokenRepository.save({
+      tokenHash: hashToken(token),
+      userId: 'user-rp-01',
+      used: true,
+      expiresAt: new Date(Date.now() + 500000)
+    });
+
+    await expect(
+      useCase.execute({ token, newPassword: 'Nueva123', confirmPassword: 'Nueva123' }),
+    ).rejects.toThrow(/ya fue utilizado/i);
+  });
+
+  it('should throw TOKEN_EXPIRED if token has expired', async () => {
+    userRepository.seed(buildUser());
+    const useCase = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
+    const token = tokenService.generate({ userId: 'user-rp-01', email: 'rp@example.com', type: 'reset' } as never);
+    
+    await resetTokenRepository.save({
+      tokenHash: hashToken(token),
+      userId: 'user-rp-01',
+      used: false,
+      expiresAt: new Date(Date.now() - 1000) // Past date
+    });
+
+    await expect(
+      useCase.execute({ token, newPassword: 'Nueva123', confirmPassword: 'Nueva123' }),
+    ).rejects.toThrow(/ha expirado/i);
+  });
+
   it('should throw USER_NOT_FOUND for an unknown email', async () => {
-    const useCase = new ResetPassword(userRepository, passwordService, tokenService);
+    const useCase = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
     const token = tokenService.generate({ userId: 'ghost', email: 'ghost@x.co', type: 'reset' } as never);
+    
+    await resetTokenRepository.save({
+      tokenHash: hashToken(token),
+      userId: 'ghost',
+      used: false,
+      expiresAt: new Date(Date.now() + 500000)
+    });
 
     await expect(
       useCase.execute({ token, newPassword: 'Nueva123', confirmPassword: 'Nueva123' }),
     ).rejects.toThrow(/no encontrado/i);
   });
 
-  it('should reset with a typed token', async () => {
+  it('should reset with a typed token and mark it as used', async () => {
     userRepository.seed(buildUser());
-    const useCase = new ResetPassword(userRepository, passwordService, tokenService);
+    const useCase = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
     const token = tokenService.generate({ userId: 'user-rp-01', email: 'rp@example.com', type: 'reset' } as never);
+
+    await resetTokenRepository.save({
+      tokenHash: hashToken(token),
+      userId: 'user-rp-01',
+      used: false,
+      expiresAt: new Date(Date.now() + 500000)
+    });
 
     await expect(
       useCase.execute({ token, newPassword: 'Nueva123', confirmPassword: 'Nueva123' }),
     ).resolves.toBeUndefined();
+    
     expect(userRepository.getStoredPasswordHash('user-rp-01')).toBe('hashed_Nueva123');
+    
+    const storedToken = await resetTokenRepository.findByTokenHash(hashToken(token));
+    expect(storedToken?.used).toBe(true);
   });
 });
 

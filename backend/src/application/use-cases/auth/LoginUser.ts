@@ -78,6 +78,7 @@ export class LoginUser {
     const { temporaryToken, maskedEmail } = await this.generateTwoFactorCode.execute(
       user.id,
       user.email.toString(),
+      dto.rememberMe,
     );
 
     return {

@@ -11,13 +11,13 @@ import { GenerateTwoFactorCode } from './GenerateTwoFactorCode';
  * Caso de Uso: Reenviar código OTP de 2FA.
  *
  * Flujo:
- * 1. Verificar y decodificar el temporaryToken → obtener userId.
+ * 1. Verificar y decodificar el temporaryToken → obtener userId y rememberMe.
  * 2. Verificar que el usuario existe.
  * 3. Generar y enviar un nuevo código (invalida el anterior automáticamente).
- * 4. Retornar un nuevo temporaryToken y el email enmascarado.
+ * 4. Retornar un nuevo temporaryToken (conservando rememberMe) y el email enmascarado.
  *
- * Anti-spam: el propio mecanismo de invalidación del código anterior
- * previene el abuso masivo. En producción se puede agregar un rate-limiter externo.
+ * Seguridad:
+ * - rememberMe se preserva del token anterior, no se acepta del cliente.
  */
 export class ResendTwoFactorCode {
   private readonly generateTwoFactorCode: GenerateTwoFactorCode;
@@ -40,9 +40,13 @@ export class ResendTwoFactorCode {
   async execute(
     dto: ResendTwoFactorDto,
   ): Promise<{ temporaryToken: string; maskedEmail: string }> {
-    let payload: { userId: string; email: string };
+    let payload: { userId: string; email: string; rememberMe?: boolean };
     try {
-      payload = this.tokenService.verify(dto.temporaryToken) as { userId: string; email: string };
+      payload = this.tokenService.verify(dto.temporaryToken) as {
+        userId: string;
+        email: string;
+        rememberMe?: boolean;
+      };
     } catch {
       throw new AuthError('Token temporal inválido o expirado', 'TOKEN_INVALID');
     }
@@ -52,9 +56,11 @@ export class ResendTwoFactorCode {
       throw new AuthError('Usuario no encontrado', 'USER_NOT_FOUND');
     }
 
+    // Preservar rememberMe del token anterior para no perder la preferencia del usuario.
     const result = await this.generateTwoFactorCode.execute(
       user.id,
       user.email.toString(),
+      payload.rememberMe,
     );
 
     return result;

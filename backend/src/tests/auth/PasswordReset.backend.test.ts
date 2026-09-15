@@ -7,6 +7,8 @@ import { InMemoryUserRepository } from '../fakes/InMemoryUserRepository';
 import { FakePasswordService } from '../fakes/FakePasswordService';
 import { FakeTokenService } from '../fakes/FakeTokenService';
 import { FakeEmailService } from '../fakes/FakeEmailService';
+import { InMemoryResetTokenRepository } from '../fakes/InMemoryResetTokenRepository';
+import { hashToken } from '../../infrastructure/repositories/SupabaseResetTokenRepository';
 function buildUser(): User {
   return new User({
     id: 'user-reset-01',
@@ -31,13 +33,15 @@ describe('RequestPasswordReset — Pruebas de caja blanca (Backend)', () => {
   let userRepository: InMemoryUserRepository;
   let tokenService: FakeTokenService;
   let emailService: FakeEmailService;
+  let resetTokenRepository: InMemoryResetTokenRepository;
   let requestReset: RequestPasswordReset;
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
     tokenService = new FakeTokenService();
     emailService = new FakeEmailService();
+    resetTokenRepository = new InMemoryResetTokenRepository();
     process.env['CLIENT_URL'] = 'http://localhost:3000';
-    requestReset = new RequestPasswordReset(userRepository, tokenService, emailService);
+    requestReset = new RequestPasswordReset(userRepository, tokenService, emailService, resetTokenRepository);
   });
   test('C1 — email no corresponde a ningún usuario: retorna sin enviar correo', async () => {
     await requestReset.execute({ email: 'noexiste@example.com' });
@@ -63,12 +67,14 @@ describe('ResetPassword — Pruebas de caja blanca (Backend)', () => {
   let userRepository: InMemoryUserRepository;
   let passwordService: FakePasswordService;
   let tokenService: FakeTokenService;
+  let resetTokenRepository: InMemoryResetTokenRepository;
   let resetPassword: ResetPassword;
   beforeEach(() => {
     userRepository = new InMemoryUserRepository();
     passwordService = new FakePasswordService();
     tokenService = new FakeTokenService();
-    resetPassword = new ResetPassword(userRepository, passwordService, tokenService);
+    resetTokenRepository = new InMemoryResetTokenRepository();
+    resetPassword = new ResetPassword(userRepository, passwordService, tokenService, resetTokenRepository);
   });
   test('C2 — contraseñas no coinciden: lanza PASSWORDS_DONT_MATCH (400)', async () => {
     const dto = {
@@ -113,6 +119,12 @@ describe('ResetPassword — Pruebas de caja blanca (Backend)', () => {
       userId: 'user-reset-01',
       email: 'ana@example.com',
       type: 'reset',
+    });
+    await resetTokenRepository.save({
+      tokenHash: hashToken(validToken),
+      userId: 'user-reset-01',
+      used: false,
+      expiresAt: new Date(Date.now() + 500000)
     });
     const dto = {
       token: validToken,

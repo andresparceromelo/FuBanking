@@ -112,4 +112,35 @@ describe('loginSchema — Pruebas de caja blanca (tabla de caminos Zod)', () => 
       }
     });
   });
+  
+  describe("Nuevos casos: Longitud y formato (Defectos corregidos)", () => {
+    it('rechaza email mayor a 100 caracteres', () => {
+      const longEmail = 'a'.repeat(91) + '@gmail.com';
+      const input = { email: longEmail, password: 'abc' };
+      const result = loginSchema.safeParse(input);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some(i => i.message.includes('100 caracteres'))).toBe(true);
+      }
+    });
+
+    it('rechaza password mayor a 64 caracteres', () => {
+      const longPassword = 'a'.repeat(65);
+      const input = { email: 'test@mail.com', password: longPassword };
+      const result = loginSchema.safeParse(input);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some(i => i.message.includes('64 caracteres'))).toBe(true);
+      }
+    });
+
+    it('rechaza email con múltiples @', () => {
+      const input = { email: 'test@gmail.com@gmail.com', password: 'abc' };
+      const result = loginSchema.safeParse(input);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        expect(result.error.issues.some(i => i.message.includes('inválido'))).toBe(true);
+      }
+    });
+  });
 });

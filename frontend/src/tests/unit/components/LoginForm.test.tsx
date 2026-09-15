@@ -51,7 +51,7 @@ describe('LoginForm', () => {
 
     fireEvent.submit(container.querySelector('form')!);
 
-    await screen.findByText('Correo electrónico inválido');
+    await screen.findByText('El correo electrónico es requerido');
     expect(mockHandleLogin).not.toHaveBeenCalled();
   });
 

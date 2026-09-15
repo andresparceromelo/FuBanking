@@ -37,7 +37,7 @@ describe('useLogin', () => {
       await result.current.handleLogin({ email: 'a@b.co', password: 'x' });
     });
 
-    expect(mockLogin).toHaveBeenCalledWith(user, 'jwt');
+    expect(mockLogin).toHaveBeenCalledWith(user, 'jwt', undefined);
     expect(result.current.error).toBeNull();
     expect(result.current.isLoading).toBe(false);
   });

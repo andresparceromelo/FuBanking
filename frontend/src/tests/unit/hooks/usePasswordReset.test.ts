@@ -4,11 +4,12 @@ import { usePasswordReset } from '@/features/auth/hooks/usePasswordReset';
 import { authService } from '@/features/auth/services/auth.service';
 
 vi.mock('@/features/auth/services/auth.service', () => ({
-  authService: { forgotPassword: vi.fn(), resetPassword: vi.fn() },
+  authService: { forgotPassword: vi.fn(), resetPassword: vi.fn(), verifyResetToken: vi.fn() },
 }));
 
 const forgotPassword = authService.forgotPassword as unknown as ReturnType<typeof vi.fn>;
 const resetPassword = authService.resetPassword as unknown as ReturnType<typeof vi.fn>;
+const verifyResetToken = authService.verifyResetToken as unknown as ReturnType<typeof vi.fn>;
 
 describe('usePasswordReset', () => {
   beforeEach(() => {
@@ -64,5 +65,49 @@ describe('usePasswordReset', () => {
     expect(result.current.isSuccess).toBe(false);
     expect(result.current.error).toEqual({ code: 'TOKEN_INVALID', message: 'Expirado' });
     expect(result.current.isLoading).toBe(false);
+  });
+
+  it('verifyToken should set status to valid', async () => {
+    verifyResetToken.mockResolvedValue(undefined);
+    const { result } = renderHook(() => usePasswordReset());
+
+    await act(async () => {
+      await result.current.verifyToken('valid-token');
+    });
+
+    expect(result.current.tokenStatus).toBe('valid');
+  });
+
+  it('verifyToken should set status to used if TOKEN_ALREADY_USED', async () => {
+    verifyResetToken.mockRejectedValue({ code: 'TOKEN_ALREADY_USED' });
+    const { result } = renderHook(() => usePasswordReset());
+
+    await act(async () => {
+      await result.current.verifyToken('used-token');
+    });
+
+    expect(result.current.tokenStatus).toBe('used');
+  });
+
+  it('verifyToken should set status to expired if TOKEN_EXPIRED', async () => {
+    verifyResetToken.mockRejectedValue({ code: 'TOKEN_EXPIRED' });
+    const { result } = renderHook(() => usePasswordReset());
+
+    await act(async () => {
+      await result.current.verifyToken('expired-token');
+    });
+
+    expect(result.current.tokenStatus).toBe('expired');
+  });
+
+  it('verifyToken should set status to invalid otherwise', async () => {
+    verifyResetToken.mockRejectedValue({ code: 'TOKEN_INVALID' });
+    const { result } = renderHook(() => usePasswordReset());
+
+    await act(async () => {
+      await result.current.verifyToken('bad-token');
+    });
+
+    expect(result.current.tokenStatus).toBe('invalid');
   });
 });

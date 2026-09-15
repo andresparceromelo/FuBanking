@@ -4,11 +4,13 @@ import { LoginUser } from '../../application/use-cases/auth/LoginUser';
 import { LogoutUser } from '../../application/use-cases/auth/LogoutUser';
 import { RequestPasswordReset } from '../../application/use-cases/auth/RequestPasswordReset';
 import { ResetPassword } from '../../application/use-cases/auth/ResetPassword';
+import { VerifyResetToken } from '../../application/use-cases/auth/VerifyResetToken';
 import {
   registerSchema,
   loginSchema,
   requestPasswordResetSchema,
   resetPasswordSchema,
+  verifyResetTokenSchema,
 } from '../validators/auth.validators';
 import { sendSuccess } from '../../shared/utils/response';
 
@@ -18,7 +20,7 @@ import { sendSuccess } from '../../shared/utils/response';
  * Responsabilidad única: traducir HTTP → Use Case → HTTP.
  *
  * NO contiene lógica de negocio. Solo:
- * 1. Parsea y valida el body con Zod.
+ * 1. Parsea y valida el body/query con Zod.
  * 2. Llama al caso de uso correspondiente.
  * 3. Envía la respuesta HTTP.
  */
@@ -29,6 +31,7 @@ export class AuthController {
     private readonly logoutUserUseCase: LogoutUser,
     private readonly requestPasswordResetUseCase: RequestPasswordReset,
     private readonly resetPasswordUseCase: ResetPassword,
+    private readonly verifyResetTokenUseCase: VerifyResetToken,
   ) {}
 
   register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -75,6 +78,21 @@ export class AuthController {
       const dto = resetPasswordSchema.parse(req.body);
       await this.resetPasswordUseCase.execute(dto);
       sendSuccess(res, null, 'Contraseña actualizada exitosamente');
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  /**
+   * Verifica el estado del token de reset sin consumirlo.
+   * Permite al frontend mostrar el estado correcto al cargar la vista.
+   * GET /auth/verify-reset-token?token=...
+   */
+  verifyResetToken = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const dto = verifyResetTokenSchema.parse(req.query);
+      await this.verifyResetTokenUseCase.execute(dto);
+      sendSuccess(res, null, 'El enlace de recuperación es válido');
     } catch (error) {
       next(error);
     }

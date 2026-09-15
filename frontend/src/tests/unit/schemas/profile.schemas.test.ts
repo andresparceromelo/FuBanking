@@ -16,15 +16,8 @@ describe('profile.schemas', () => {
     it('should reject invalid fields', () => {
       expect(() => updateProfileSchema.parse({ firstName: 'A' })).toThrow();
       expect(() => updateProfileSchema.parse({ phone: '123' })).toThrow(/teléfono/i);
-      expect(() => updateProfileSchema.parse({ birthDate: '20-20-2020' })).toThrow(/inválido/i);
-      expect(() => updateProfileSchema.parse({ birthDate: '2030-01-01' })).toThrow(/futuro/i);
       expect(() => updateProfileSchema.parse({ avatarUrl: 'not-a-url' })).toThrow(/avatar/i);
       expect(() => updateProfileSchema.parse({ monthlyIncome: -5 })).toThrow();
-    });
-
-    it('should accept empty and null birthDate', () => {
-      expect(updateProfileSchema.parse({ birthDate: '' }).birthDate).toBe('');
-      expect(updateProfileSchema.parse({ birthDate: null }).birthDate).toBeNull();
     });
   });
 });

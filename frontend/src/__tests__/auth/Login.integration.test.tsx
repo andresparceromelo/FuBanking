@@ -128,7 +128,7 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
       fireEvent.click(screen.getByRole('button', { name: /continuar/i }));
 
       await waitFor(() => {
-        expect(screen.queryByText(/correo electrónico inválido/i)).toBeInTheDocument();
+        expect(screen.queryByText(/el correo electrónico es requerido/i)).toBeInTheDocument();
       });
 
       expect(getAuthServiceMock().login).not.toHaveBeenCalled();
@@ -237,6 +237,74 @@ describe('Login (sin 2FA) — Pruebas de integración (tabla de caminos Frontend
 
       expect(screen.queryByText(/correo o contraseña incorrectos/i)).not.toBeInTheDocument();
       expect(screen.queryByText(/cuenta ha sido desactivada/i)).not.toBeInTheDocument();
+    });
+
+    it('pasa rememberMe=true a login si el checkbox está marcado', async () => {
+      const publicUser = buildPublicUser();
+      getAuthServiceMock().login.mockResolvedValue({
+        requiresTwoFactor: false,
+        token: 'jwt-token-definitivo',
+        user: publicUser,
+      });
+
+      render(<LoginForm />);
+      await userEvent.type(screen.getByLabelText(/correo electrónico/i), 'ana@mail.com');
+      await userEvent.type(screen.getByLabelText(/contraseña/i), 'correcta123');
+      
+      const checkbox = screen.getByRole('checkbox', { name: /recordarme/i });
+      await userEvent.click(checkbox);
+      
+      await userEvent.click(screen.getByRole('button', { name: /continuar/i }));
+
+      await waitFor(() => {
+        expect(getAuthServiceMock().login).toHaveBeenCalledTimes(1);
+        expect(getAuthServiceMock().login).toHaveBeenCalledWith(
+          expect.objectContaining({
+            email: 'ana@mail.com',
+            password: 'correcta123',
+            rememberMe: true,
+          }),
+        );
+      });
+    });
+
+    it('pasa rememberMe=false a login si el checkbox NO está marcado', async () => {
+      const publicUser = buildPublicUser();
+      getAuthServiceMock().login.mockResolvedValue({
+        requiresTwoFactor: false,
+        token: 'jwt-token-definitivo',
+        user: publicUser,
+      });
+
+      render(<LoginForm />);
+      await userEvent.type(screen.getByLabelText(/correo electrónico/i), 'ana@mail.com');
+      await userEvent.type(screen.getByLabelText(/contraseña/i), 'correcta123');
+      
+      await userEvent.click(screen.getByRole('button', { name: /continuar/i }));
+
+      await waitFor(() => {
+        expect(getAuthServiceMock().login).toHaveBeenCalledTimes(1);
+        expect(getAuthServiceMock().login).toHaveBeenCalledWith(
+          expect.objectContaining({
+            email: 'ana@mail.com',
+            password: 'correcta123',
+            rememberMe: false,
+          }),
+        );
+      });
+    });
+  });
+
+  describe('Nuevas validaciones: Formato de email', () => {
+    it('no llama a login y muestra error si el email tiene múltiples arrobas', async () => {
+      render(<LoginForm />);
+      await fillAndSubmit('test@gmail.com@gmail.com', 'abc12345');
+
+      await waitFor(() => {
+        expect(screen.queryByText(/correo electrónico inválido/i)).toBeInTheDocument();
+      });
+
+      expect(getAuthServiceMock().login).not.toHaveBeenCalled();
     });
   });
 });

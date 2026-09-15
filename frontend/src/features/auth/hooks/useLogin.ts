@@ -24,7 +24,7 @@ export function useLogin() {
         sessionStorage.setItem('2fa_masked_email', response.maskedEmail);
         router.push('/verify-two-factor');
       } else {
-        login(response.user, response.token);
+        login(response.user, response.token, data.rememberMe);
       }
     } catch (err: any) {
       setError(err as AuthError);

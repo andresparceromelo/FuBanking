@@ -10,7 +10,7 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (user: PublicUser, token: string) => void;
+  login: (user: PublicUser, token: string, rememberMe?: boolean) => void;
   logout: () => void;
   updateUser: (user: PublicUser) => void;
 }
@@ -24,26 +24,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
+    const storedToken = localStorage.getItem('token') || sessionStorage.getItem('token');
+    const storedUser = localStorage.getItem('user') || sessionStorage.getItem('user');
 
     if (storedToken && storedUser) {
       setToken(storedToken);
       try {
         setUser(JSON.parse(storedUser));
       } catch (e) {
-        console.error('Failed to parse user from localStorage', e);
+        console.error('Failed to parse user from storage', e);
       }
     }
     setIsLoading(false);
   }, []);
 
-  const login = (newUser: PublicUser, newToken: string) => {
+  const login = (newUser: PublicUser, newToken: string, rememberMe: boolean = false) => {
     setUser(newUser);
     setToken(newToken);
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('user', JSON.stringify(newUser));
-    document.cookie = `token=${newToken}; path=/; max-age=604800; SameSite=Strict`;
+    
+    if (rememberMe) {
+      localStorage.setItem('token', newToken);
+      localStorage.setItem('user', JSON.stringify(newUser));
+      document.cookie = `token=${newToken}; path=/; max-age=2592000; SameSite=Strict`; // 30 days
+    } else {
+      sessionStorage.setItem('token', newToken);
+      sessionStorage.setItem('user', JSON.stringify(newUser));
+      document.cookie = `token=${newToken}; path=/; SameSite=Strict`; // Session cookie
+    }
+    
     router.push('/profile');
   };
 
@@ -53,6 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setToken(null);
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
     document.cookie = `token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     router.push('/login');
   };

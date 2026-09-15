@@ -9,12 +9,16 @@ import { AuthError } from '../../../shared/errors/AuthError';
  * Caso de Uso: Verificar el código OTP de 2FA.
  *
  * Flujo:
- * 1. Verificar y decodificar el temporaryToken → obtener userId.
+ * 1. Verificar y decodificar el temporaryToken → obtener userId y rememberMe.
  * 2. Buscar el código de verificación más reciente del usuario.
  * 3. Validar: no expirado, no usado, no superó intentos.
  * 4. Comparar el código ingresado con el hash almacenado (bcrypt).
  * 5. Si es correcto: marcar como usado → generar JWT definitivo.
  * 6. Si es incorrecto: incrementar intentos y lanzar error.
+ *
+ * Seguridad:
+ * - rememberMe se recupera del payload del temporaryToken (generado en el primer paso).
+ *   No se acepta rememberMe directamente del cliente en este paso para evitar manipulación.
  */
 export class VerifyTwoFactorCode {
   constructor(
@@ -25,10 +29,22 @@ export class VerifyTwoFactorCode {
   ) {}
 
   async execute(dto: VerifyTwoFactorDto): Promise<VerifyTwoFactorResponseDto> {
-    let payload: { userId: string; email: string };
+    let payload: { userId: string; email: string; rememberMe?: boolean };
     try {
-      payload = this.tokenService.verify(dto.temporaryToken) as { userId: string; email: string };
-    } catch {
+      payload = this.tokenService.verify(dto.temporaryToken) as {
+        userId: string;
+        email: string;
+        rememberMe?: boolean;
+      };
+    } catch (err: unknown) {
+      const isExpired =
+        err instanceof Error && err.message.toLowerCase().includes('expired');
+      if (isExpired) {
+        throw new AuthError(
+          'El código ha expirado, por favor solicita uno nuevo.',
+          'TOKEN_EXPIRED',
+        );
+      }
       throw new AuthError('Token temporal inválido o expirado', 'TOKEN_INVALID');
     }
 
@@ -88,7 +104,10 @@ export class VerifyTwoFactorCode {
       throw new AuthError('Usuario no encontrado', 'USER_NOT_FOUND');
     }
 
-    const tokenOptions: TokenOptions = { expiresIn: '7d' };
+    // rememberMe proviene del temporaryToken (primer paso del login), no del cliente.
+    const tokenOptions: TokenOptions = {
+      expiresIn: payload.rememberMe ? '30d' : '7d',
+    };
     const token = this.tokenService.generate(
       { userId: user.id, email: user.email.toString() },
       tokenOptions,

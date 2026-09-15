@@ -11,6 +11,11 @@ import { Button } from '@/shared/components/ui/Button';
 import { Label } from '@/shared/components/ui/Label';
 import { Card, CardHeader, CardTitle, CardContent } from '@/shared/components/ui/Card';
 
+// ─── Constantes de longitud ───────────────────────────────────────────────────
+const NAME_MAX_LENGTH = 100;
+const PHONE_MAX_LENGTH = 20;
+const PASSWORD_MAX_LENGTH = 128;
+
 interface ProfileEditFormProps {
   user: PublicUser;
   onCancel: () => void;
@@ -31,10 +36,10 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
       middleName: user.middleName || '',
       lastName: user.lastName,
       secondLastName: user.secondLastName || '',
-      birthDate: user.birthDate ? user.birthDate.split('T')[0] : '', // birthDate from API usually has time
       phone: user.phone || '',
       avatarUrl: user.avatarUrl || '',
       monthlyIncome: user.monthlyIncome ?? undefined,
+      newPassword: '',
     },
   });
 
@@ -44,14 +49,13 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
     if (data.middleName !== (user.middleName || '')) payload.middleName = data.middleName || null;
     if (data.lastName !== user.lastName) payload.lastName = data.lastName;
     if (data.secondLastName !== (user.secondLastName || '')) payload.secondLastName = data.secondLastName || null;
-    
-    const currentBirthDateStr = user.birthDate ? user.birthDate.split('T')[0] : '';
-    if (data.birthDate !== currentBirthDateStr) payload.birthDate = data.birthDate || null;
-
     if (data.phone !== (user.phone || '')) payload.phone = data.phone || null;
     if (data.avatarUrl !== (user.avatarUrl || '')) payload.avatarUrl = data.avatarUrl || null;
     if (data.monthlyIncome !== undefined && data.monthlyIncome !== (user.monthlyIncome ?? undefined)) {
       payload.monthlyIncome = data.monthlyIncome;
+    }
+    if (data.newPassword && data.newPassword.trim() !== '') {
+      payload.newPassword = data.newPassword;
     }
 
     if (Object.keys(payload).length > 0) {
@@ -66,10 +70,10 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
       <CardHeader className="pb-6 border-b border-border">
         <CardTitle className="text-2xl">Editar mis datos</CardTitle>
       </CardHeader>
-      
+
       <CardContent className="pt-6">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          
+
           {error && (
             <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
               {error.message}
@@ -83,6 +87,7 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
                 <Input
                   id="firstName"
                   placeholder="Ej. Juan"
+                  maxLength={NAME_MAX_LENGTH}
                   error={errors.firstName?.message}
                   {...register('firstName')}
                 />
@@ -93,6 +98,7 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
                 <Input
                   id="middleName"
                   placeholder="Ej. Carlos"
+                  maxLength={NAME_MAX_LENGTH}
                   error={errors.middleName?.message}
                   {...register('middleName')}
                 />
@@ -103,6 +109,7 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
                 <Input
                   id="lastName"
                   placeholder="Ej. Pérez"
+                  maxLength={NAME_MAX_LENGTH}
                   error={errors.lastName?.message}
                   {...register('lastName')}
                 />
@@ -113,6 +120,7 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
                 <Input
                   id="secondLastName"
                   placeholder="Ej. Gómez"
+                  maxLength={NAME_MAX_LENGTH}
                   error={errors.secondLastName?.message}
                   {...register('secondLastName')}
                 />
@@ -120,20 +128,11 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="birthDate">Fecha de nacimiento</Label>
-              <Input
-                id="birthDate"
-                type="date"
-                error={errors.birthDate?.message}
-                {...register('birthDate')}
-              />
-            </div>
-
-            <div className="space-y-2">
               <Label htmlFor="phone">Teléfono</Label>
               <Input
                 id="phone"
                 placeholder="+57 300 000 0000"
+                maxLength={PHONE_MAX_LENGTH}
                 error={errors.phone?.message}
                 {...register('phone')}
               />
@@ -150,6 +149,21 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
               />
             </div>
 
+            {/* ── Contraseña (opcional — defecto #5) ─────────────────────── */}
+            <div className="space-y-2">
+              <Label htmlFor="newPassword">Nueva contraseña (opcional)</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                placeholder="Dejar en blanco para no cambiar"
+                maxLength={PASSWORD_MAX_LENGTH}
+                autoComplete="new-password"
+                error={errors.newPassword?.message}
+                {...register('newPassword')}
+              />
+            </div>
+
+            {/* ── Campos de solo lectura ──────────────────────────────────── */}
             <div className="space-y-2 opacity-60">
               <Label>Correo electrónico (No modificable)</Label>
               <Input disabled value={user.email} />
@@ -158,6 +172,12 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: ProfileEditFormPr
             <div className="space-y-2 opacity-60">
               <Label>Documento (No modificable)</Label>
               <Input disabled value={user.document} />
+            </div>
+
+            {/* ── birthDate: INMUTABLE (defecto #9) ──────────────────────── */}
+            <div className="space-y-2 opacity-60">
+              <Label>Fecha de nacimiento (No modificable)</Label>
+              <Input disabled value={user.birthDate || 'No registrada'} />
             </div>
           </div>
 

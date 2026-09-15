@@ -14,7 +14,7 @@ function mockReq(data: Omit<Partial<Request>, 'user'> & { body?: unknown; user?:
 
 describe('AuthController', () => {
   const next: NextFunction = vi.fn() as unknown as NextFunction;
-  let useCases: Record<'register' | 'login' | 'logout' | 'forgot' | 'reset', { execute: ReturnType<typeof vi.fn> }>;
+  let useCases: Record<'register' | 'login' | 'logout' | 'forgot' | 'reset' | 'verifyResetToken', { execute: ReturnType<typeof vi.fn> }>;
   let controller: AuthController;
 
   beforeEach(() => {
@@ -25,6 +25,7 @@ describe('AuthController', () => {
       logout: { execute: vi.fn() },
       forgot: { execute: vi.fn() },
       reset: { execute: vi.fn() },
+      verifyResetToken: { execute: vi.fn() },
     };
     controller = new AuthController(
       useCases.register as never,
@@ -32,6 +33,7 @@ describe('AuthController', () => {
       useCases.logout as never,
       useCases.forgot as never,
       useCases.reset as never,
+      useCases.verifyResetToken as never,
     );
   });
 
@@ -139,6 +141,33 @@ describe('AuthController', () => {
 
     await controller.login(
       mockReq({ body: { email: 'ana@example.com', password: 'Segura123' } }),
+      res,
+      next,
+    );
+
+    expect(next).toHaveBeenCalled();
+  });
+
+  it('should verify reset token with 200', async () => {
+    useCases.verifyResetToken.execute.mockResolvedValue(undefined);
+    const { res, status } = mockRes();
+
+    await controller.verifyResetToken(
+      { query: { token: 'tok' } } as unknown as Request,
+      res,
+      next,
+    );
+
+    expect(status).toHaveBeenCalledWith(200);
+    expect(useCases.verifyResetToken.execute).toHaveBeenCalled();
+  });
+
+  it('should call next if verifyResetToken throws', async () => {
+    useCases.verifyResetToken.execute.mockRejectedValue(new Error('TOKEN_EXPIRED'));
+    const { res } = mockRes();
+
+    await controller.verifyResetToken(
+      { query: { token: 'tok' } } as unknown as Request,
       res,
       next,
     );
