@@ -1,0 +1,12 @@
+{
+  "name": "fubanking-sonar-tooling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tooling para ejecutar el analisis de SonarQube del proyecto FuBank. Lee la configuracion de sonar-project.properties.",
+  "scripts": {
+    "sonar": "sonar-scanner"
+  },
+  "devDependencies": {
+    "sonarqube-scanner": "^4.2.9"
+  }
+}
