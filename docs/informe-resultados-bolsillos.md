@@ -106,22 +106,62 @@ Convención: **V(G) = Decisiones + 1** a nivel de predicado (Clase 09, diap. 20)
 
 ---
 
-## 5. Refactorización (criterio 5)
+## 5. Refactorización del módulo Bolsillos (criterio 5)
 
-**Unidad refactorizada:** `UpdatePocket.execute` — la de mayor complejidad según ambos análisis.
+Se aplicaron **dos refactorizaciones** sobre Bolsillos, ambas verificadas con las 58 pruebas unitarias (comportamiento idéntico) y con la cobertura en 100%. Trazabilidad en la rama `tests/bolsillos-unitarias-aaa`:
 
-**Técnica:** *Extract Method* — se dividió el método monolítico en cuatro métodos privados con responsabilidad única: `validateInput`, `loadAuthorized`, `adjustAmount` y `notify`; además se adelantó la validación de "sin cambios" (falla rápido antes de tocar la base de datos).
+| Commit | Refactorización |
+|--------|-----------------|
+| `6775c44` | Reducción de complejidad de `UpdatePocket` (Extract Method) |
+| `a1e74cc` | Uso de `node:crypto` en los casos de uso |
+
+### 5.1 Reducción de complejidad de `UpdatePocket` — smell S3776 (CRITICAL)
+
+`UpdatePocket.execute` era la unidad más compleja según ambos análisis (V(G)=17, cognitiva=16 en Sonar; SonarQube marcaba *"Refactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed"*).
+
+**Técnica:** *Extract Method* — el método monolítico se dividió en cuatro métodos privados con responsabilidad única, y se adelantó la validación de "sin cambios" (falla rápido antes de tocar la base de datos):
+
+| Antes | Después |
+|-------|---------|
+| `execute()` — 1 método con toda la lógica | `execute()` orquestador + `validateInput()` + `loadAuthorized()` + `adjustAmount()` + `notify()` |
 
 | Métrica (máximo por función) | Antes | Después |
 |------------------------------|:-----:|:-------:|
 | Complejidad **cognitiva** | 16 (crítica) | **6** |
 | Complejidad **ciclomática** | 17 | **7** |
 | Nº de funciones | 1 | 5 |
-| Code smell "Cognitive Complexity too high" | Presente | **Eliminado** |
+| Smell S3776 "Cognitive Complexity too high" | Presente | **Eliminado** |
 
-**Verificación:** las **58 pruebas unitarias siguen en verde** y la cobertura del módulo se mantiene en **100%** (líneas y ramas) — el comportamiento observable es idéntico.
+### 5.2 Uso de `node:crypto` — smell S7772 (MINOR)
 
-> **Pendiente:** reejecutar SonarQube con la rama integrada para reflejar (a) la cobertura de Bolsillos al 100% y (b) la caída de complejidad/deuda de `UpdatePocket`. Los valores "después" de esta tabla son los esperados; la 2.ª instantánea de Sonar los confirmará.
+SonarQube marcaba *"Prefer `node:crypto` over `crypto`"* en los casos de uso que generan UUID. Se corrigió el import en los cuatro archivos afectados:
+
+```
+- import { randomUUID } from 'crypto';
++ import { randomUUID } from 'node:crypto';
+```
+
+Archivos: `CreatePocket.ts`, `UpdatePocket.ts`, `DeletePocket.ts`, `TransferPocketBalance.ts`.
+
+### 5.3 Code smells eliminados (evidencia)
+
+| Regla | Descripción | Archivos | Severidad | Estado |
+|-------|-------------|----------|:---------:|:------:|
+| S3776 | Complejidad cognitiva 16 > 15 | `UpdatePocket.ts` | CRITICAL | ✅ Eliminado |
+| S7772 | Preferir `node:crypto` sobre `crypto` | Create · Update · Delete · Transfer | MINOR | ✅ Eliminado |
+
+### 5.4 Estado final del módulo Bolsillos
+
+| Indicador | Antes (1.ª corrida) | Después (esperado, 2.ª corrida) |
+|-----------|:-------------------:|:-------------------------------:|
+| Code smells | 4 (1 crítico + 3 menores) | **0** |
+| Complejidad cognitiva máx. por función | 16 | **6** |
+| Bugs / Vulnerabilidades | 0 / 0 | 0 / 0 |
+| Cobertura del módulo | 89.8%–97.8% por archivo | **100%** |
+
+**Verificación local:** tras ambas refactorizaciones, las **58 pruebas unitarias siguen en verde** y la cobertura del módulo se mantiene en **100%** (líneas y ramas) — el comportamiento observable es idéntico.
+
+> **Pendiente:** reejecutar SonarQube con la rama integrada para reflejar la 2.ª instantánea (Bolsillos con 0 smells y 100% de cobertura). Los valores "después" son los esperados; la 2.ª corrida los confirmará.
 
 ---
 
