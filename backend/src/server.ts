@@ -11,6 +11,8 @@ const app = createApp();
 const PORT = parseInt(env.PORT, 10);
 
 const server = app.listen(PORT, () => {
+  console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Environment: ${env.NODE_ENV}`);
 });
 
 process.on('unhandledRejection', (reason) => {
