@@ -90,7 +90,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
 
   const addToast = useCallback(
     (variant: ToastVariant, title: string, description?: string, duration = DEFAULT_DURATION) => {
-      const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+      const id = `${Date.now()}-${crypto.randomUUID()}`;
       const toast: Toast = { id, variant, title, description, duration };
 
       setToasts((current) => [toast, ...current].slice(0, 4));

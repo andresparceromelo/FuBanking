@@ -25,8 +25,8 @@ export default function RequestsPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const amountNum = parseFloat(amount);
-    if (!email || isNaN(amountNum) || amountNum <= 0) {
+    const amountNum = Number.parseFloat(amount);
+    if (!email || Number.isNaN(amountNum) || amountNum <= 0) {
       toast.error('Datos inválidos', 'Ingresa un correo y monto válidos.');
       return;
     }
@@ -85,8 +85,9 @@ export default function RequestsPage() {
 
             <form onSubmit={handleCreate} className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Correo del destinatario</label>
+                <label htmlFor="request-email" className="mb-1.5 block text-xs font-semibold text-muted-foreground">Correo del destinatario</label>
                 <input
+                  id="request-email"
                   type="email"
                   placeholder="amigo@correo.com"
                   value={email}
@@ -96,10 +97,11 @@ export default function RequestsPage() {
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Monto a cobrar</label>
+                <label htmlFor="request-amount" className="mb-1.5 block text-xs font-semibold text-muted-foreground">Monto a cobrar</label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold">$</span>
                   <input
+                    id="request-amount"
                     type="number"
                     min="1"
                     placeholder="0"
@@ -111,8 +113,9 @@ export default function RequestsPage() {
                 </div>
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-semibold text-muted-foreground">Concepto (Opcional)</label>
+                <label htmlFor="request-description" className="mb-1.5 block text-xs font-semibold text-muted-foreground">Concepto (Opcional)</label>
                 <input
+                  id="request-description"
                   type="text"
                   placeholder="Ej: Mitad de la pizza"
                   value={description}

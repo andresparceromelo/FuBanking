@@ -127,10 +127,11 @@ export function TransferForm() {
           )}
 
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
+            <label htmlFor="transfer-sender-account" className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
               Cuenta de origen
             </label>
             <select
+              id="transfer-sender-account"
               value={activeSenderAccountId}
               onChange={(event) => setSenderAccountId(event.target.value)}
               className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-primary"
@@ -144,7 +145,7 @@ export function TransferForm() {
           </div>
 
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
+            <label htmlFor="transfer-recipient-query" className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
               Buscar destinatario
             </label>
             <div className="mb-2 grid grid-cols-2 rounded-xl border border-border bg-background p-1">
@@ -181,6 +182,7 @@ export function TransferForm() {
             </div>
             <div className="flex gap-2">
               <input
+                id="transfer-recipient-query"
                 type={searchMode === 'email' ? 'email' : 'text'}
                 placeholder={searchMode === 'email' ? 'correo@ejemplo.com' : 'Numero de cuenta'}
                 value={recipientQuery}
@@ -213,10 +215,11 @@ export function TransferForm() {
           </div>
 
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
+            <label htmlFor="transfer-amount" className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
               Monto
             </label>
             <input
+              id="transfer-amount"
               type="number"
               min="1"
               placeholder="0"
@@ -228,10 +231,11 @@ export function TransferForm() {
           </div>
 
           <div>
-            <label className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
+            <label htmlFor="transfer-concept" className="mb-2 block text-xs font-semibold uppercase text-muted-foreground">
               Concepto
             </label>
             <input
+              id="transfer-concept"
               type="text"
               maxLength={255}
               placeholder="Pago, ahorro, regalo..."

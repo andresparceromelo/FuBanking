@@ -51,8 +51,17 @@ export function AccountCard({ account, showBalance = true, onClick, onDeposit, o
       `}
     >
       {/* Clickable Area for Details */}
-      <div 
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label="Ver detalles de la cuenta"
         onClick={() => onClick?.(account)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onClick?.(account);
+          }
+        }}
         className="cursor-pointer space-y-4"
       >
         {/* Header: tipo + estado */}

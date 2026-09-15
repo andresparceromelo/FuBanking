@@ -8,7 +8,7 @@ import { env } from './shared/config/env';
  * Las variables de entorno ya están validadas en env.ts antes de llegar aquí.
  */
 const app = createApp();
-const PORT = parseInt(env.PORT, 10);
+const PORT = Number.parseInt(env.PORT, 10);
 
 const server = app.listen(PORT, () => {
 });

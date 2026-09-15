@@ -32,9 +32,8 @@ apiClient.interceptors.response.use(
     if (error.response && error.response.data && error.response.data.error) {
       return Promise.reject(error.response.data.error);
     }
-    return Promise.reject({
-      code: 'NETWORK_ERROR',
-      message: 'No se pudo conectar al servidor.',
-    });
+    const networkError = new Error('No se pudo conectar al servidor.');
+    (networkError as Error & { code: string }).code = 'NETWORK_ERROR';
+    return Promise.reject(networkError);
   }
 );

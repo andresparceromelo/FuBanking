@@ -1,16 +1,17 @@
 'use client';
 
 import { useMemo } from 'react';
+import { secureRandom } from '@/shared/utils/secureRandom';
 
 export function SpaceBackground() {
   const stars = useMemo(() => {
     return Array.from({ length: 60 }, (_, i) => ({
       id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: Math.random() * 2 + 1,
-      delay: Math.random() * 5,
-      duration: Math.random() * 3 + 2,
+      x: secureRandom() * 100,
+      y: secureRandom() * 100,
+      size: secureRandom() * 2 + 1,
+      delay: secureRandom() * 5,
+      duration: secureRandom() * 3 + 2,
     }));
   }, []);
 

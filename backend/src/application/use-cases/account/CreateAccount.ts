@@ -2,7 +2,7 @@ import { IAccountRepository } from '../../../domain/repositories/IAccountReposit
 import { Account, AccountType, AccountDetails } from '../../../domain/entities/Account';
 import { CreateAccountDto, CreateAccountResponseDto } from '../../dtos/account/account.dtos';
 import { AppError } from '../../../shared/errors/AppError';
-import { randomUUID } from 'crypto';
+import { randomInt, randomUUID } from 'crypto';
 
 /**
  * Caso de Uso: Crear una cuenta bancaria.
@@ -54,7 +54,7 @@ export class CreateAccount {
     const maxAttempts = 5;
 
     do {
-      const digits = Math.floor(Math.random() * 9_000_000_000 + 1_000_000_000);
+      const digits = randomInt(1_000_000_000, 10_000_000_000);
       accountNumber = `BA${digits}`;
       const existing = await this.accountRepository.findByAccountNumber(accountNumber);
       if (!existing) return accountNumber;

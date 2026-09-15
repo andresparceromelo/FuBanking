@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 export function TwoFactorVerifyForm() {
   const router = useRouter();
   const { handleVerify, handleResend, isLoading, isResending, error, resendSuccess } = useTwoFactor();
-  const [code, setCode] = useState<string[]>(Array(6).fill(''));
+  const [code, setCode] = useState<string[]>(new Array(6).fill(''));
   const [maskedEmail, setMaskedEmail] = useState<string>('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 

@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { randomInt, randomUUID } from 'node:crypto';
 import { AppError } from '../../../shared/errors/AppError';
 import { LoanApplication, LoanApplicationStatus } from '../../../domain/entities/LoanApplication';
 import { Account, AccountType } from '../../../domain/entities/Account';
@@ -78,7 +78,7 @@ export class ApproveLoan {
     const maxAttempts = 5;
 
     do {
-      const digits = Math.floor(Math.random() * 9_000_000_000 + 1_000_000_000);
+      const digits = randomInt(1_000_000_000, 10_000_000_000);
       accountNumber = `BA${digits}`;
       const existing = await this.accountRepository.findByAccountNumber(accountNumber);
       if (!existing) return accountNumber;

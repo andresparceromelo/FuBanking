@@ -29,8 +29,8 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
     e.preventDefault();
     setError(null);
 
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount) || numericAmount <= 0) {
+    const numericAmount = Number.parseFloat(amount);
+    if (Number.isNaN(numericAmount) || numericAmount <= 0) {
       setError('Por favor ingresa un monto válido mayor a cero.');
       return;
     }
@@ -117,10 +117,11 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">
+            <label htmlFor="dw-description" className="block text-xs font-medium text-muted-foreground mb-1">
               Descripción / Concepto (opcional)
             </label>
             <input
+              id="dw-description"
               type="text"
               placeholder={isDeposit ? 'Abono en efectivo' : 'Retiro en cajero'}
               value={description}

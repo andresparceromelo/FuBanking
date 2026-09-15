@@ -1,3 +1,4 @@
+import { randomInt } from 'node:crypto';
 import { AppError } from '../../shared/errors/AppError';
 
 export enum CardStatus {
@@ -90,8 +91,8 @@ export class VirtualCard {
 
   static generateNumber(): { cardNumber: string; lastFour: string; expirationDate: string; cvv: string } {
     const prefix = '4532'; // Visa Prefix
-    const middle = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join('');
-    const end = Array.from({ length: 4 }, () => Math.floor(Math.random() * 10)).join('');
+    const middle = Array.from({ length: 8 }, () => randomInt(0, 10)).join('');
+    const end = Array.from({ length: 4 }, () => randomInt(0, 10)).join('');
     const cardNumber = `${prefix}${middle}${end}`;
     const lastFour = end;
     
@@ -100,7 +101,7 @@ export class VirtualCard {
     const expYear = String((now.getFullYear() + 4) % 100).padStart(2, '0');
     const expirationDate = `${expMonth}/${expYear}`;
 
-    const cvv = String(Math.floor(100 + Math.random() * 900));
+    const cvv = String(randomInt(100, 1000));
 
     return { cardNumber, lastFour, expirationDate, cvv };
   }

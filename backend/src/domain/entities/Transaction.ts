@@ -1,4 +1,5 @@
-﻿import { AppError } from '../../shared/errors/AppError';
+﻿import { randomInt } from 'node:crypto';
+import { AppError } from '../../shared/errors/AppError';
 
 /**
  * Tipo de transacción — en español, tal como se almacena en BD.
@@ -118,7 +119,7 @@ export class Transaction {
    * Formato: TRX-XXXXXXXX (8 caracteres hexadecimales en mayúsculas).
    */
   static generateReferenceNumber(): string {
-    const hex = Math.floor(Math.random() * 0xFFFFFFFF)
+    const hex = randomInt(0, 0x1_0000_0000)
       .toString(16)
       .toUpperCase()
       .padStart(8, '0');

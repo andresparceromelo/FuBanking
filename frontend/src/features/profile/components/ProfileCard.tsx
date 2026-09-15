@@ -100,7 +100,7 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
           <div>
             <CardTitle className="text-2xl">{user.fullName}</CardTitle>
             <p className="text-muted-foreground text-sm flex items-center gap-1 mt-1">
-              <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
+              <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />{' '}
               Cuenta activa
             </p>
           </div>

@@ -64,15 +64,24 @@ export function VirtualCard({ card, onToggleLock, isLoading }: VirtualCardProps)
   return (
     <div className="space-y-4" style={{ perspective: '1000px' }}>
       {/* Contenedor principal de la tarjeta con flip 3D */}
-      <div 
+      <div
+        role="button"
+        tabIndex={0}
+        aria-label="Girar tarjeta"
         className={cn(
           "relative w-full h-[220px] cursor-pointer transition-all duration-700 hover:scale-[1.02] group"
         )}
-        style={{ 
+        style={{
           transformStyle: 'preserve-3d',
           transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
         }}
         onClick={() => setIsFlipped(!isFlipped)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsFlipped(!isFlipped);
+          }
+        }}
       >
         {/* Lado Frontal */}
         <div 
