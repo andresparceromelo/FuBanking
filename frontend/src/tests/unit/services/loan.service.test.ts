@@ -16,28 +16,35 @@ describe('loanService', () => {
 
   describe('simulate / simulateLoan', () => {
     it('should POST /loans/simulate and return data', async () => {
+      // Arrange
       const payload = { amount: 5_000_000, installments: 12, annualRate: 24 };
       const simulation = { ...payload, monthlyRate: 0.02, monthlyPayment: 470_000, totalToPay: 5_640_000, totalInterest: 640_000 };
       post.mockResolvedValue({ data: simulation });
 
+      // Act
       const result = await loanService.simulate(payload);
 
+      // Assert
       expect(post).toHaveBeenCalledWith('/loans/simulate', payload);
       expect(result).toEqual(simulation);
     });
 
     it('should delegate simulateLoan to simulate', async () => {
+      // Arrange
       const payload = { amount: 1_000_000, installments: 6, annualRate: 12 };
       const simulation = { ...payload, monthlyRate: 0.01, monthlyPayment: 172_000, totalToPay: 1_032_000, totalInterest: 32_000 };
       post.mockResolvedValue({ data: simulation });
 
+      // Act + Assert
       await expect(loanService.simulateLoan(payload)).resolves.toEqual(simulation);
       expect(post).toHaveBeenCalledWith('/loans/simulate', payload);
     });
 
     it('should propagate errors', async () => {
+      // Arrange
       post.mockRejectedValue({ code: 'VALIDATION_ERROR', message: 'Monto inválido' });
 
+      // Act + Assert
       await expect(
         loanService.simulate({ amount: -1, installments: 12, annualRate: 24 }),
       ).rejects.toEqual({ code: 'VALIDATION_ERROR', message: 'Monto inválido' });
@@ -46,32 +53,40 @@ describe('loanService', () => {
 
   describe('create / createLoan', () => {
     it('should POST /loans and return the application', async () => {
+      // Arrange
       const payload = { amount: 5_000_000, installments: 12, annualRate: 24, monthlyIncome: 1_800_000 };
       const application = { ...payload, id: 'loan-1', userId: 'user-1', status: 'PENDING' };
       post.mockResolvedValue({ data: application });
 
+      // Act
       const result = await loanService.create(payload);
 
+      // Assert
       expect(post).toHaveBeenCalledWith('/loans', payload);
       expect(result).toEqual(application);
     });
 
     it('should delegate createLoan to create', async () => {
+      // Arrange
       const payload = { amount: 2_000_000, installments: 12, annualRate: 18, monthlyIncome: 2_000_000 };
       const application = { ...payload, id: 'loan-2', userId: 'user-1', status: 'PENDING' };
       post.mockResolvedValue({ data: application });
 
+      // Act + Assert
       await expect(loanService.createLoan(payload)).resolves.toEqual(application);
     });
   });
 
   describe('getMyLoans', () => {
     it('should GET /loans/me and return the list', async () => {
+      // Arrange
       const loans = [{ id: 'loan-1' }, { id: 'loan-2' }];
       get.mockResolvedValue({ data: loans });
 
+      // Act
       const result = await loanService.getMyLoans();
 
+      // Assert
       expect(get).toHaveBeenCalledWith('/loans/me');
       expect(result).toEqual(loans);
     });

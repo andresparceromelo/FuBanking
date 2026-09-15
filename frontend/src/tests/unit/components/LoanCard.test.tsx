@@ -28,10 +28,12 @@ const testLoan: AdminLoanApplication = {
 
 describe('LoanCard', () => {
   it('should render loan details', () => {
+    // Arrange + Act
     render(
       <LoanCard loan={testLoan} onApprove={() => {}} onReject={() => {}} isLoading={false} />,
     );
 
+    // Assert
     expect(screen.getByText(/user-abc/)).toBeInTheDocument();
     expect(screen.getByText(cop(5_000_000))).toBeInTheDocument();
     expect(screen.getByText(cop(480_000))).toBeInTheDocument();
@@ -41,43 +43,53 @@ describe('LoanCard', () => {
   });
 
   it('should show approve and reject buttons when status is PENDING', () => {
+    // Arrange + Act
     render(
       <LoanCard loan={testLoan} onApprove={() => {}} onReject={() => {}} isLoading={false} />,
     );
 
+    // Assert
     expect(screen.getByText('Aprobar')).toBeInTheDocument();
     expect(screen.getByText('Rechazar')).toBeInTheDocument();
   });
 
   it('should not show buttons when status is APPROVED', () => {
+    // Arrange
     const approvedLoan = { ...testLoan, status: 'APPROVED' as const };
     render(
       <LoanCard loan={approvedLoan} onApprove={() => {}} onReject={() => {}} isLoading={false} />,
     );
 
+    // Assert
     expect(screen.queryByText('Aprobar')).not.toBeInTheDocument();
     expect(screen.queryByText('Rechazar')).not.toBeInTheDocument();
   });
 
   it('should call onApprove when approve button is clicked', () => {
+    // Arrange
     let approvedId = '';
     const onApprove = (id: string) => { approvedId = id; };
     render(
       <LoanCard loan={testLoan} onApprove={onApprove} onReject={() => {}} isLoading={false} />,
     );
 
+    // Act
     fireEvent.click(screen.getByText('Aprobar'));
+    // Assert
     expect(approvedId).toBe('loan-1');
   });
 
   it('should call onReject when reject button is clicked', () => {
+    // Arrange
     let rejectedId = '';
     const onReject = (id: string) => { rejectedId = id; };
     render(
       <LoanCard loan={testLoan} onApprove={() => {}} onReject={onReject} isLoading={false} />,
     );
 
+    // Act
     fireEvent.click(screen.getByText('Rechazar'));
+    // Assert
     expect(rejectedId).toBe('loan-1');
   });
 

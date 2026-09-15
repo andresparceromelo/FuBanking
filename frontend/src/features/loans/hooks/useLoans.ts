@@ -3,12 +3,7 @@
 import { useCallback, useState } from 'react';
 import { loanService } from '../services/loan.service';
 import { CreateLoanPayload, LoanApplication, LoanSimulationPayload, LoanSimulationResponse } from '../types/loan.types';
-
-function getMessage(error: unknown, fallback: string) {
-  return error && typeof error === 'object' && 'message' in error
-    ? String((error as { message?: string }).message || fallback)
-    : fallback;
-}
+import { getMessage } from '@/shared/utils/getMessage';
 
 export function useLoans() {
   const [simulation, setSimulation] = useState<LoanSimulationResponse | null>(null);

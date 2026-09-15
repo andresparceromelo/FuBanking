@@ -10,7 +10,7 @@ function mockRes() {
   return { res, status: res.status as ReturnType<typeof vi.fn>, json };
 }
 
-function mockReq(data: Partial<Request> & { body?: unknown; params?: unknown; user?: { id: string } }): Request {
+function mockReq(data: Omit<Partial<Request>, 'user'> & { body?: unknown; params?: unknown; user?: { id: string; email?: string } }): Request {
   return { body: {}, params: {}, ...data } as unknown as Request;
 }
 

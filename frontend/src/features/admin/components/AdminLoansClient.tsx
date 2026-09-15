@@ -5,6 +5,13 @@ import { useAdminLoans } from '../hooks/useAdminLoans';
 import { LoanCard } from './LoanCard';
 import { Landmark, RefreshCw, AlertCircle } from 'lucide-react';
 
+const FILTER_LABELS = {
+  ALL: 'Todos',
+  PENDING: 'Pendientes',
+  APPROVED: 'Aprobados',
+  REJECTED: 'Rechazados',
+} as const;
+
 export function AdminLoansClient() {
   const { loans, isLoading, error, fetchLoans, approveLoan, rejectLoan } = useAdminLoans();
   const [filter, setFilter] = useState<'ALL' | 'PENDING' | 'APPROVED' | 'REJECTED'>('ALL');
@@ -14,6 +21,38 @@ export function AdminLoansClient() {
   }, [fetchLoans]);
 
   const filteredLoans = filter === 'ALL' ? loans : loans.filter(loan => loan.status === filter);
+  const showSpinner = isLoading && loans.length === 0;
+
+  const renderContent = () => {
+    if (showSpinner) {
+      return (
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      );
+    }
+    if (filteredLoans.length === 0) {
+      return (
+        <div className="text-center py-12 text-muted-foreground">
+          <Landmark size={48} className="mx-auto mb-4 opacity-50" />
+          <p className="text-lg font-medium">No hay prestamos {filter === 'ALL' ? '' : filter.toLowerCase()}</p>
+        </div>
+      );
+    }
+    return (
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {filteredLoans.map((loan, index) => (
+          <LoanCard
+            key={loan.id ?? index}
+            loan={loan}
+            onApprove={handleApprove}
+            onReject={handleReject}
+            isLoading={isLoading}
+          />
+        ))}
+      </div>
+    );
+  };
 
   const handleApprove = async (id: string) => {
     await approveLoan(id);
@@ -56,7 +95,7 @@ export function AdminLoansClient() {
                 : 'bg-muted text-muted-foreground hover:bg-muted/80'
             }`}
           >
-            {status === 'ALL' ? 'Todos' : status === 'PENDING' ? 'Pendientes' : status === 'APPROVED' ? 'Aprobados' : 'Rechazados'}
+            {FILTER_LABELS[status]}
           </button>
         ))}
       </div>
@@ -68,28 +107,7 @@ export function AdminLoansClient() {
         </div>
       )}
 
-      {isLoading && loans.length === 0 ? (
-        <div className="flex items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      ) : filteredLoans.length === 0 ? (
-        <div className="text-center py-12 text-muted-foreground">
-          <Landmark size={48} className="mx-auto mb-4 opacity-50" />
-          <p className="text-lg font-medium">No hay prestamos {filter === 'ALL' ? '' : filter.toLowerCase()}</p>
-        </div>
-      ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {filteredLoans.map((loan, index) => (
-            <LoanCard
-              key={loan.id ?? index}
-              loan={loan}
-              onApprove={handleApprove}
-              onReject={handleReject}
-              isLoading={isLoading}
-            />
-          ))}
-        </div>
-      )}
+      {renderContent()}
     </div>
   );
 }

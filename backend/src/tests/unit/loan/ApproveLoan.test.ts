@@ -29,14 +29,17 @@ describe('ApproveLoan', () => {
 
   describe('Happy path', () => {
     it('should approve the loan, create CREDITO account and notify user', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
       const loan = buildPendingLoan(user.id);
       await loanRepo.save(loan);
 
+      // Act
       const result = await useCase.execute(loan.id);
 
+      // Assert
       expect(result.status).toBe(LoanApplicationStatus.APPROVED);
 
       const accounts = await accountRepo.findByUserId(user.id);
@@ -55,8 +58,10 @@ describe('ApproveLoan', () => {
       const loan = buildPendingLoan(user.id, { installments: 24 });
       await loanRepo.save(loan);
 
+      // Act
       await useCase.execute(loan.id);
 
+      // Assert
       const accounts = await accountRepo.findByUserId(user.id);
       expect(accounts[0].details).toBeDefined();
       expect(accounts[0].details!.loanId).toBe(loan.id);
@@ -64,14 +69,17 @@ describe('ApproveLoan', () => {
     });
 
     it('should generate an account number starting with BA', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
       const loan = buildPendingLoan(user.id);
       await loanRepo.save(loan);
 
+      // Act
       await useCase.execute(loan.id);
 
+      // Assert
       const accounts = await accountRepo.findByUserId(user.id);
       expect(accounts).toHaveLength(1);
       expect(accounts[0].accountNumber).toMatch(/^BA\d{10}$/);
@@ -80,12 +88,14 @@ describe('ApproveLoan', () => {
 
   describe('Préstamo no encontrado', () => {
     it('should throw LOAN_NOT_FOUND for non-existent loan', async () => {
+      // Act + Assert (no arrange needed: empty repos from beforeEach)
       await expect(useCase.execute(randomUUID())).rejects.toThrow(/no encontrado/i);
     });
   });
 
   describe('Estado inválido', () => {
     it('should throw when approving an already APPROVED loan', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
@@ -94,10 +104,12 @@ describe('ApproveLoan', () => {
 
       await useCase.execute(loan.id);
 
+      // Act + Assert
       await expect(useCase.execute(loan.id)).rejects.toThrow(/PENDING/);
     });
 
     it('should throw when approving a REJECTED loan', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
@@ -107,12 +119,14 @@ describe('ApproveLoan', () => {
       await loan.reject();
       await loanRepo.save(loan);
 
+      // Act + Assert
       await expect(useCase.execute(loan.id)).rejects.toThrow(/PENDING/);
     });
   });
 
   describe('Generación de número de cuenta', () => {
     it('should retry when the generated number already exists', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
@@ -141,7 +155,9 @@ describe('ApproveLoan', () => {
       };
 
       try {
+        // Act
         const result = await useCase.execute(loan.id);
+        // Assert
         expect(result.status).toBe(LoanApplicationStatus.APPROVED);
         expect(calls).toBeGreaterThanOrEqual(2);
         const accounts = await accountRepo.findByUserId(user.id);
@@ -153,6 +169,7 @@ describe('ApproveLoan', () => {
     });
 
     it('should throw ACCOUNT_NUMBER_GENERATION_FAILED after 5 collisions', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
@@ -169,6 +186,7 @@ describe('ApproveLoan', () => {
         });
 
       try {
+        // Act + Assert
         await expect(useCase.execute(loan.id)).rejects.toThrow(/único/i);
       } finally {
         randomSpy.mockRestore();
@@ -176,12 +194,14 @@ describe('ApproveLoan', () => {
     });
 
     it('should return a complete DTO', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
       const loan = buildPendingLoan(user.id, { amount: 6_000_000, installments: 24, annualRate: 18 });
       await loanRepo.save(loan);
 
+      // Act
       const result = await useCase.execute(loan.id);
 
       expect(result).toMatchObject({
@@ -202,20 +222,24 @@ describe('ApproveLoan', () => {
     });
 
     it('should persist APPROVED status via updateStatus', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
       const loan = buildPendingLoan(user.id);
       await loanRepo.save(loan);
 
+      // Act
       await useCase.execute(loan.id);
 
+      // Assert
       expect(loanRepo.statusUpdates).toContainEqual({ id: loan.id, status: LoanApplicationStatus.APPROVED });
     });
   });
 
   describe('Sin repositorio de notificaciones', () => {
     it('should not throw when notificationRepository is undefined', async () => {
+      // Arrange
       const user = createTestUser();
       await userRepo.save(user);
 
@@ -223,6 +247,7 @@ describe('ApproveLoan', () => {
       await loanRepo.save(loan);
 
       const noNotifUseCase = new ApproveLoan(loanRepo, accountRepo, undefined);
+      // Act
       const result = await noNotifUseCase.execute(loan.id);
 
       expect(result.status).toBe(LoanApplicationStatus.APPROVED);

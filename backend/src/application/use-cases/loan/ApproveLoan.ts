@@ -6,25 +6,9 @@ import { ILoanApplicationRepository } from '../../../domain/repositories/ILoanAp
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { Notification, NotificationType } from '../../../domain/entities/Notification';
+import { LoanResponseDto, toLoanResponseDto } from './loanResponseMapper';
 
-export interface LoanResponseDto {
-  id: string;
-  userId: string;
-  amount: number;
-  installments: number;
-  annualRate: number;
-  monthlyIncome: number;
-  monthlyPayment: number;
-  totalToPay: number;
-  totalInterest: number;
-  documentVerified: boolean;
-  ageVerified: boolean;
-  incomeVerified: boolean;
-  creditHistoryVerified: boolean;
-  eligibility: { isEligible: boolean; reasons: string[] };
-  status: LoanApplicationStatus;
-  createdAt: string;
-}
+export { LoanResponseDto };
 
 export class ApproveLoan {
   constructor(
@@ -89,23 +73,6 @@ export class ApproveLoan {
   }
 
   private toDto(loan: LoanApplication): LoanResponseDto {
-    return {
-      id: loan.id,
-      userId: loan.userId,
-      amount: loan.amount,
-      installments: loan.installments,
-      annualRate: loan.annualRate,
-      monthlyIncome: loan.monthlyIncome,
-      monthlyPayment: loan.monthlyPayment,
-      totalToPay: loan.totalToPay,
-      totalInterest: loan.totalInterest,
-      documentVerified: loan.documentVerified,
-      ageVerified: loan.ageVerified,
-      incomeVerified: loan.incomeVerified,
-      creditHistoryVerified: loan.creditHistoryVerified,
-      eligibility: loan.eligibility,
-      status: loan.status,
-      createdAt: loan.createdAt.toISOString(),
-    };
+    return toLoanResponseDto(loan);
   }
 }

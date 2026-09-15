@@ -10,7 +10,7 @@ function mockRes() {
 }
 
 function mockReq(
-  data: Partial<Request> & { body?: unknown; params?: unknown; user?: { id: string } },
+  data: Omit<Partial<Request>, 'user'> & { body?: unknown; params?: unknown; user?: { id: string; email?: string } },
 ): Request {
   return { body: {}, params: {}, ...data } as unknown as Request;
 }

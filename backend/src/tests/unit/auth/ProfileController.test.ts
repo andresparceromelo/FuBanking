@@ -9,7 +9,7 @@ function mockRes() {
 }
 
 function mockReq(
-  data: Partial<Request> & { body?: unknown; user?: { id: string }; file?: unknown },
+  data: Omit<Partial<Request>, 'user'> & { body?: unknown; user?: { id: string; email?: string }; file?: unknown },
 ): Request {
   return { body: {}, ...data } as unknown as Request;
 }
@@ -130,11 +130,12 @@ describe('ProfileController', () => {
     const profile = { id: 'u1', documentVerified: true };
     useCases.upload.execute.mockResolvedValue(profile);
     const { res, status } = mockRes();
-    const file = { buffer: Buffer.from('%PDF'), originalname: 'cedula.pdf' };
+    const buffer = Buffer.from('%PDF');
+    const file = { buffer, originalname: 'cedula.pdf' } as never;
 
     await controller.uploadMyDocument(mockReq({ user: { id: 'u1' }, file }), res, next);
 
-    expect(useCases.upload.execute).toHaveBeenCalledWith('u1', file.buffer, 'cedula.pdf');
+    expect(useCases.upload.execute).toHaveBeenCalledWith('u1', buffer, 'cedula.pdf');
     expect(status).toHaveBeenCalledWith(200);
   });
 
@@ -147,7 +148,7 @@ describe('ProfileController', () => {
     const { res } = mockRes();
 
     await withoutUpload.uploadMyDocument(
-      mockReq({ user: { id: 'u1' }, file: { buffer: Buffer.from('x'), originalname: 'a.pdf' } }),
+      mockReq({ user: { id: 'u1' }, file: { buffer: Buffer.from('x'), originalname: 'a.pdf' } as never }),
       res,
       next,
     );

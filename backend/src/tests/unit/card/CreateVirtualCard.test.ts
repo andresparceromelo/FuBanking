@@ -37,7 +37,7 @@ describe('CreateVirtualCard', () => {
 
       expect(result.status).toBe(CardStatus.ACTIVA);
       expect(result.cardHolderName).toBe('TEST USER');
-      expect(result.cardNumber).toBeUndefined();
+      expect('cardNumber' in result).toBe(false);
       expect(result.cvvMasked).toBe('***');
       expect(result.lastFour).toMatch(/^\d{4}$/);
 

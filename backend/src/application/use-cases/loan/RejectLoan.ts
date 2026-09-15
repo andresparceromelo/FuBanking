@@ -4,7 +4,7 @@ import { LoanApplication, LoanApplicationStatus } from '../../../domain/entities
 import { ILoanApplicationRepository } from '../../../domain/repositories/ILoanApplicationRepository';
 import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
 import { Notification, NotificationType } from '../../../domain/entities/Notification';
-import { LoanResponseDto } from './ApproveLoan';
+import { LoanResponseDto, toLoanResponseDto } from './loanResponseMapper';
 
 export class RejectLoan {
   constructor(
@@ -37,23 +37,6 @@ export class RejectLoan {
   }
 
   private toDto(loan: LoanApplication): LoanResponseDto {
-    return {
-      id: loan.id,
-      userId: loan.userId,
-      amount: loan.amount,
-      installments: loan.installments,
-      annualRate: loan.annualRate,
-      monthlyIncome: loan.monthlyIncome,
-      monthlyPayment: loan.monthlyPayment,
-      totalToPay: loan.totalToPay,
-      totalInterest: loan.totalInterest,
-      documentVerified: loan.documentVerified,
-      ageVerified: loan.ageVerified,
-      incomeVerified: loan.incomeVerified,
-      creditHistoryVerified: loan.creditHistoryVerified,
-      eligibility: loan.eligibility,
-      status: loan.status,
-      createdAt: loan.createdAt.toISOString(),
-    };
+    return toLoanResponseDto(loan);
   }
 }

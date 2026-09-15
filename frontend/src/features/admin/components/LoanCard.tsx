@@ -6,10 +6,10 @@ import { formatCurrency } from '@/shared/utils/format';
 import { CheckCircle, XCircle, Clock, User, FileText, TrendingUp } from 'lucide-react';
 
 interface LoanCardProps {
-  loan: AdminLoanApplication;
-  onApprove: (id: string) => void;
-  onReject: (id: string) => void;
-  isLoading: boolean;
+  readonly loan: AdminLoanApplication;
+  readonly onApprove: (id: string) => void;
+  readonly onReject: (id: string) => void;
+  readonly isLoading: boolean;
 }
 
 export function LoanCard({ loan, onApprove, onReject, isLoading }: LoanCardProps) {

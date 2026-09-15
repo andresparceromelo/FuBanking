@@ -3,12 +3,7 @@
 import { useCallback, useState } from 'react';
 import { adminService } from '../services/admin.service';
 import { AdminLoanApplication } from '../types/admin.types';
-
-function getMessage(error: unknown, fallback: string) {
-  return error && typeof error === 'object' && 'message' in error
-    ? String((error as { message?: string }).message || fallback)
-    : fallback;
-}
+import { getMessage } from '@/shared/utils/getMessage';
 
 export function useAdminLoans() {
   const [loans, setLoans] = useState<AdminLoanApplication[]>([]);

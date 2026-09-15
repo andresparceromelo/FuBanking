@@ -14,7 +14,7 @@ export const createLoanSchema = z.object({
 });
 
 export const loanIdParamSchema = z.object({
-  id: z.string().uuid('ID de préstamo inválido'),
+  id: z.uuid('ID de préstamo inválido'),
 });
 
 export type SimulateLoanInput = z.infer<typeof simulateLoanSchema>;

@@ -16,8 +16,10 @@ describe('useLoans', () => {
   });
 
   it('should expose initial state', () => {
+    // Arrange + Act
     const { result } = renderHook(() => useLoans());
 
+    // Assert
     expect(result.current.simulation).toBeNull();
     expect(result.current.application).toBeNull();
     expect(result.current.isLoading).toBe(false);
@@ -26,15 +28,18 @@ describe('useLoans', () => {
 
   describe('simulateLoan', () => {
     it('should set simulation data on success and clear error', async () => {
+      // Arrange
       const simulation = { amount: 5_000_000, monthlyPayment: 470_000 };
       simulateLoan.mockResolvedValue(simulation);
       const { result } = renderHook(() => useLoans());
 
+      // Act
       let returned: unknown;
       await act(async () => {
         returned = await result.current.simulateLoan({ amount: 5_000_000, installments: 12, annualRate: 24 });
       });
 
+      // Assert
       expect(returned).toEqual(simulation);
       expect(result.current.simulation).toEqual(simulation);
       expect(result.current.error).toBeNull();
@@ -42,14 +47,17 @@ describe('useLoans', () => {
     });
 
     it('should set the server message on failure', async () => {
+      // Arrange
       simulateLoan.mockRejectedValue({ message: 'Monto inválido' });
       const { result } = renderHook(() => useLoans());
 
+      // Act
       let returned: unknown = 'pending';
       await act(async () => {
         returned = await result.current.simulateLoan({ amount: -1, installments: 12, annualRate: 24 });
       });
 
+      // Assert
       expect(returned).toBeNull();
       expect(result.current.error).toBe('Monto inválido');
       expect(result.current.simulation).toBeNull();
@@ -57,13 +65,16 @@ describe('useLoans', () => {
     });
 
     it('should fall back when the error is a plain string', async () => {
+      // Arrange
       simulateLoan.mockRejectedValue('boom');
       const { result } = renderHook(() => useLoans());
 
+      // Act
       await act(async () => {
         await result.current.simulateLoan({ amount: 1, installments: 1, annualRate: 0 });
       });
 
+      // Assert
       expect(result.current.error).toBe('No fue posible simular el credito.');
     });
 
@@ -79,23 +90,28 @@ describe('useLoans', () => {
     });
 
     it('should fall back when the error has no message', async () => {
+      // Arrange
       simulateLoan.mockRejectedValue(null);
       const { result } = renderHook(() => useLoans());
 
+      // Act
       await act(async () => {
         await result.current.simulateLoan({ amount: 1, installments: 1, annualRate: 0 });
       });
 
+      // Assert
       expect(result.current.error).toBe('No fue posible simular el credito.');
     });
   });
 
   describe('createLoan', () => {
     it('should set application data on success', async () => {
+      // Arrange
       const application = { id: 'loan-1', status: 'PENDING' };
       createLoan.mockResolvedValue(application);
       const { result } = renderHook(() => useLoans());
 
+      // Act
       let returned: unknown;
       await act(async () => {
         returned = await result.current.createLoan({
@@ -103,15 +119,18 @@ describe('useLoans', () => {
         });
       });
 
+      // Assert
       expect(returned).toEqual(application);
       expect(result.current.application).toEqual(application);
       expect(result.current.error).toBeNull();
     });
 
     it('should fall back when creation fails without message', async () => {
+      // Arrange
       createLoan.mockRejectedValue({});
       const { result } = renderHook(() => useLoans());
 
+      // Act
       let returned: unknown = 'pending';
       await act(async () => {
         returned = await result.current.createLoan({
@@ -119,18 +138,22 @@ describe('useLoans', () => {
         });
       });
 
+      // Assert
       expect(returned).toBeNull();
       expect(result.current.error).toBe('No fue posible crear la solicitud.');
       expect(result.current.application).toBeNull();
     });
 
     it('should expose setError', async () => {
+      // Arrange
       const { result } = renderHook(() => useLoans());
 
+      // Act
       await act(async () => {
         result.current.setError('custom');
       });
 
+      // Assert
       expect(result.current.error).toBe('custom');
     });
   });
