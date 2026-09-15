@@ -1,24 +1,53 @@
-import React, { useState } from 'react';
-import { CreditCard, Eye, EyeOff, Lock, Unlock, Zap } from 'lucide-react';
-import { VirtualCard as CardType } from '../types/card.types';
 import { cn } from '@/shared/utils/cn';
+import { CreditCard, Eye, EyeOff, Lock, Trash2, Unlock, Zap } from 'lucide-react';
+import React, { useState } from 'react';
 import { cardService } from '../services/card.service';
+import { VirtualCard as CardType } from '../types/card.types';
 
 export type Card = CardType;
 
 interface VirtualCardProps {
   card: CardType;
+  accountType?: 'AHORROS' | 'CORRIENTE' | 'NOMINA' | 'CREDITO';
   onToggleLock: (cardId: string) => void;
+  onDelete?: (cardId: string) => void;
   isLoading: boolean;
 }
 
-export function VirtualCard({ card, onToggleLock, isLoading }: VirtualCardProps) {
+export function VirtualCard({ card, accountType = 'AHORROS', onToggleLock, onDelete = () => {}, isLoading }: VirtualCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [showSensitiveData, setShowSensitiveData] = useState(false);
   const [sensitiveData, setSensitiveData] = useState<{ cardNumber: string; cvv: string } | null>(null);
   const [isRevealing, setIsRevealing] = useState(false);
   const [revealError, setRevealError] = useState<string | null>(null);
   const isBlocked = card.status === 'BLOQUEADA';
+
+  const colorPalette = {
+    AHORROS: {
+      face: 'border border-primary/30 bg-gradient-to-br from-[#820AD1] via-[#53178f] to-[#18111f]',
+      back: 'border border-primary/30 bg-gradient-to-br from-[#18111f] via-[#2a0e4a] to-[#40126e]',
+      badge: 'bg-green-500/20 text-green-200',
+    },
+    CORRIENTE: {
+      face: 'border border-emerald-500/30 bg-gradient-to-br from-[#166534] via-[#14532d] to-[#052e16]',
+      back: 'border border-emerald-500/30 bg-gradient-to-br from-[#052e16] via-[#022c22] to-[#14532d]',
+      badge: 'bg-emerald-500/20 text-emerald-200',
+    },
+    NOMINA: {
+      face: 'border border-red-500/30 bg-gradient-to-br from-[#7f1d1d] via-[#991b1b] to-[#2b0a0a]',
+      back: 'border border-red-500/30 bg-gradient-to-br from-[#2b0a0a] via-[#4c0519] to-[#7f1d1d]',
+      badge: 'bg-red-500/20 text-red-200',
+    },
+    CREDITO: {
+      face: 'border border-amber-500/30 bg-gradient-to-br from-[#78350f] via-[#92400e] to-[#451a03]',
+      back: 'border border-amber-500/30 bg-gradient-to-br from-[#451a03] via-[#78350f] to-[#92400e]',
+      badge: 'bg-amber-500/20 text-amber-200',
+    },
+  }[accountType] ?? {
+    face: 'border border-primary/30 bg-gradient-to-br from-[#820AD1] via-[#53178f] to-[#18111f]',
+    back: 'border border-primary/30 bg-gradient-to-br from-[#18111f] via-[#2a0e4a] to-[#40126e]',
+    badge: 'bg-green-500/20 text-green-200',
+  };
 
   const cardFaceStyle: React.CSSProperties = {
     backfaceVisibility: 'hidden',
@@ -80,7 +109,7 @@ export function VirtualCard({ card, onToggleLock, isLoading }: VirtualCardProps)
             "absolute inset-0 w-full h-full rounded-2xl p-6 text-white shadow-xl transition-colors duration-500 overflow-hidden",
             isBlocked 
               ? "border border-zinc-700/50 bg-gradient-to-br from-zinc-800 to-zinc-950 grayscale" 
-              : "border border-primary/30 bg-gradient-to-br from-[#820AD1] via-[#53178f] to-[#18111f]"
+              : colorPalette.face
           )}
           style={cardFaceStyle}
         >
@@ -108,7 +137,7 @@ export function VirtualCard({ card, onToggleLock, isLoading }: VirtualCardProps)
             <span>Vence {card.expirationDate}</span>
             <span className={cn(
               "px-2 py-1 rounded-full text-[10px] font-bold tracking-wider",
-              isBlocked ? "bg-red-500/20 text-red-200" : "bg-green-500/20 text-green-200"
+              isBlocked ? "bg-red-500/20 text-red-200" : colorPalette.badge
             )}>
               {card.status}
             </span>
@@ -130,7 +159,7 @@ export function VirtualCard({ card, onToggleLock, isLoading }: VirtualCardProps)
             "absolute inset-0 w-full h-full rounded-2xl text-white shadow-xl overflow-hidden",
             isBlocked 
               ? "border border-zinc-700/50 bg-gradient-to-br from-zinc-800 to-zinc-950 grayscale" 
-              : "border border-primary/30 bg-gradient-to-br from-[#18111f] via-[#2a0e4a] to-[#40126e]"
+              : colorPalette.back
           )}
           style={cardBackStyle}
         >
@@ -169,29 +198,41 @@ export function VirtualCard({ card, onToggleLock, isLoading }: VirtualCardProps)
       </div>
 
       {/* Controles */}
-      <button
-        type="button"
-        onClick={() => onToggleLock(card.id)}
-        disabled={isLoading || card.status === 'CANCELADA'}
-        className={cn(
-          "group relative flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-3.5 text-sm font-bold transition-all overflow-hidden",
-          isBlocked 
-            ? "border-primary text-primary hover:bg-primary hover:text-primary-foreground" 
-            : "border-border bg-card text-foreground hover:border-destructive hover:bg-destructive/10 hover:text-destructive",
-          "disabled:opacity-50 disabled:pointer-events-none"
-        )}
-      >
-        <span className={cn(
-          "absolute inset-0 w-full h-full transition-all duration-300 ease-out",
-          isBlocked 
-            ? "bg-primary scale-x-0 group-hover:scale-x-100 origin-left" 
-            : "bg-destructive/10 scale-x-0 group-hover:scale-x-100 origin-right"
-        )} />
-        <span className="relative flex items-center gap-2 z-10">
-          {isBlocked ? <Unlock size={18} /> : <Lock size={18} />}
-          {isBlocked ? 'Desbloquear Tarjeta' : 'Bloquear Temporalmente'}
-        </span>
-      </button>
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={() => onToggleLock(card.id)}
+          disabled={isLoading || card.status === 'CANCELADA'}
+          className={cn(
+            "group relative flex w-full items-center justify-center gap-2 rounded-xl border px-4 py-3.5 text-sm font-bold transition-all overflow-hidden",
+            isBlocked
+              ? "border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+              : "border-border bg-card text-foreground hover:border-destructive hover:bg-destructive/10 hover:text-destructive",
+            "disabled:opacity-50 disabled:pointer-events-none"
+          )}
+        >
+          <span className={cn(
+            "absolute inset-0 w-full h-full transition-all duration-300 ease-out",
+            isBlocked
+              ? "bg-primary scale-x-0 group-hover:scale-x-100 origin-left"
+              : "bg-destructive/10 scale-x-0 group-hover:scale-x-100 origin-right"
+          )} />
+          <span className="relative flex items-center gap-2 z-10">
+            {isBlocked ? <Unlock size={18} /> : <Lock size={18} />}
+            {isBlocked ? 'Desbloquear Tarjeta' : 'Bloquear Temporalmente'}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => onDelete(card.id)}
+          disabled={isLoading || card.status === 'CANCELADA'}
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3.5 text-sm font-bold text-destructive transition-colors hover:bg-destructive hover:text-destructive-foreground disabled:opacity-50 disabled:pointer-events-none"
+        >
+          <Trash2 size={18} />
+          Eliminar
+        </button>
+      </div>
     </div>
   );
 }

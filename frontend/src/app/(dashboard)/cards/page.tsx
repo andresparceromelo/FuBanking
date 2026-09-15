@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { AlertCircle, CreditCard, Plus } from 'lucide-react';
 import { useAccounts } from '@/features/account/hooks/useAccounts';
+import { VirtualCard } from '@/features/cards/components/VirtualCard';
 import { useCards } from '@/features/cards/hooks/useCards';
 import { useToast } from '@/shared/components/feedback/ToastProvider';
-import { VirtualCard } from '@/features/cards/components/VirtualCard';
+import { AlertCircle, CreditCard, Plus } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export default function CardsPage() {
   const toast = useToast();
   const { accounts } = useAccounts();
-  const { cards, isLoading, error, setError, fetchCards, createCard, toggleLock } = useCards();
+  const { cards, isLoading, error, setError, fetchCards, createCard, toggleLock, deleteCard } = useCards();
   const [accountId, setAccountId] = useState('');
   const activeAccountId = accountId || accounts[0]?.id || '';
   const selectedAccount = useMemo(
@@ -56,6 +56,16 @@ export default function CardsPage() {
       card.status === 'BLOQUEADA' ? 'Tarjeta bloqueada' : 'Tarjeta desbloqueada',
       `La tarjeta terminada en ${card.lastFour} quedo ${card.status.toLowerCase()}.`,
     );
+  };
+
+  const handleDelete = async (cardId: string) => {
+    const card = await deleteCard(cardId);
+    if (!card) {
+      toast.error('No pudimos eliminar la tarjeta', 'Intenta nuevamente.');
+      return;
+    }
+
+    toast.success('Tarjeta eliminada', `La tarjeta terminada en ${card.lastFour} fue eliminada.`);
   };
 
   return (
@@ -123,7 +133,9 @@ export default function CardsPage() {
               <VirtualCard 
                 key={card.id}
                 card={card}
+                accountType={accounts.find((account) => account.id === card.accountId)?.accountType ?? 'AHORROS'}
                 onToggleLock={handleToggle}
+                onDelete={handleDelete}
                 isLoading={isLoading}
               />
             ))

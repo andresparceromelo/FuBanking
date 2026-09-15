@@ -60,6 +60,21 @@ export function useCards() {
     }
   }, []);
 
-  return { cards, isLoading, error, setError, fetchCards, createCard, toggleLock };
+  const deleteCard = useCallback(async (cardId: string) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const card = await cardService.deleteCard(cardId);
+      setCards((current) => current.filter((item) => item.id !== cardId));
+      return card;
+    } catch (err) {
+      setError(getMessage(err, 'No se pudo eliminar la tarjeta.'));
+      return null;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  return { cards, isLoading, error, setError, fetchCards, createCard, toggleLock, deleteCard };
 }
 

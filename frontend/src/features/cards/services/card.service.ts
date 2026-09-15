@@ -21,6 +21,11 @@ class CardService {
     const response = await apiClient.get<RevealedVirtualCardDetails>(`/cards/${cardId}/reveal`);
     return response.data;
   }
+
+  async deleteCard(cardId: string): Promise<VirtualCard> {
+    const response = await apiClient.delete<VirtualCard>(`/cards/${cardId}`);
+    return response.data;
+  }
 }
 
 export const cardService = new CardService();
