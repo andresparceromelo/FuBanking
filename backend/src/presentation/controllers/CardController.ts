@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { CreateVirtualCard } from '../../application/use-cases/card/CreateVirtualCard';
+import { DeleteVirtualCard } from '../../application/use-cases/card/DeleteVirtualCard';
 import { GetUserCards } from '../../application/use-cases/card/GetUserCards';
-import { ToggleCardLock } from '../../application/use-cases/card/ToggleCardLock';
 import { RevealVirtualCardDetails } from '../../application/use-cases/card/RevealVirtualCardDetails';
+import { ToggleCardLock } from '../../application/use-cases/card/ToggleCardLock';
 import { sendSuccess } from '../../shared/utils/response';
 
 export class CardController {
@@ -11,6 +12,7 @@ export class CardController {
     private readonly getUserCards: GetUserCards,
     private readonly toggleCardLock: ToggleCardLock,
     private readonly revealVirtualCardDetails: RevealVirtualCardDetails,
+    private readonly deleteVirtualCard: DeleteVirtualCard,
   ) {}
 
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -56,6 +58,19 @@ export class CardController {
         cardId,
       });
       sendSuccess(res, details, 'Datos de tarjeta obtenidos exitosamente');
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  remove = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const cardId = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+      const card = await this.deleteVirtualCard.execute({
+        userId: req.user!.id,
+        cardId,
+      });
+      sendSuccess(res, card, 'Tarjeta virtual eliminada exitosamente');
     } catch (error) {
       next(error);
     }
