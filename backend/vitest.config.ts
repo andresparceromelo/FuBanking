@@ -40,6 +40,9 @@ export default defineConfig({
         'src/infrastructure/services/NodemailerEmailService.ts',
         'src/presentation/controllers/PocketController.ts',
         'src/infrastructure/repositories/SupabasePocketRepository.ts',
+        // Bolsillos: entidad + casos de uso (pruebas unitarias AAA + 5 dobles)
+        'src/domain/entities/Pocket.ts',
+        'src/application/use-cases/pocket/*.ts',
         'src/shared/utils/*.ts',
         'src/shared/errors/*.ts',
         'src/domain/value-objects/*.ts',
