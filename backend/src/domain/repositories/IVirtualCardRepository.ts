@@ -6,4 +6,5 @@ export interface IVirtualCardRepository {
   findByUserId(userId: string): Promise<VirtualCard[]>;
   findByAccountId(accountId: string): Promise<VirtualCard[]>;
   updateStatus(cardId: string, status: string): Promise<VirtualCard>;
+  delete(id: string): Promise<void>;
 }

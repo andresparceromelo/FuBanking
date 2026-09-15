@@ -1,7 +1,7 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import type { Request, Response, NextFunction } from 'express';
-import { CardController } from '../../../presentation/controllers/CardController';
+import type { NextFunction, Request, Response } from 'express';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { CardStatus } from '../../../domain/entities/VirtualCard';
+import { CardController } from '../../../presentation/controllers/CardController';
 import { buildVirtualCard } from './in-memory-repos';
 
 function mockRes() {
@@ -21,6 +21,7 @@ describe('CardController', () => {
     getMine: { execute: ReturnType<typeof vi.fn> };
     toggle: { execute: ReturnType<typeof vi.fn> };
     reveal: { execute: ReturnType<typeof vi.fn> };
+    remove: { execute: ReturnType<typeof vi.fn> };
   };
   let controller: CardController;
 
@@ -31,12 +32,14 @@ describe('CardController', () => {
       getMine: { execute: vi.fn() },
       toggle: { execute: vi.fn() },
       reveal: { execute: vi.fn() },
+      remove: { execute: vi.fn() },
     };
     controller = new CardController(
       useCases.create as never,
       useCases.getMine as never,
       useCases.toggle as never,
       useCases.reveal as never,
+      useCases.remove as never,
     );
   });
 
@@ -96,7 +99,7 @@ describe('CardController', () => {
     });
   });
 
-  describe('toggleLock / revealDetails', () => {
+  describe('toggleLock / revealDetails / remove', () => {
     it('should toggle with string and array param ids', async () => {
       const dto = buildVirtualCard('user-1', 'acc-1').toPublic();
       dto.status = CardStatus.BLOQUEADA;
@@ -131,15 +134,27 @@ describe('CardController', () => {
       expect(useCases.reveal.execute).toHaveBeenCalledWith({ userId: 'user-1', cardId: 'card-9' });
     });
 
-    it('should call next when toggle or reveal throw', async () => {
+    it('should delete by id', async () => {
+      const deletedCard = buildVirtualCard('user-1', 'acc-1').toPublic();
+      useCases.remove.execute.mockResolvedValue(deletedCard);
+      const { res, status } = mockRes();
+
+      await controller.remove(mockReq({ params: { id: 'card-3' }, user: { id: 'user-1' } }), res, next);
+      expect(useCases.remove.execute).toHaveBeenCalledWith({ userId: 'user-1', cardId: 'card-3' });
+      expect(status).toHaveBeenCalledWith(200);
+    });
+
+    it('should call next when toggle, reveal or delete throw', async () => {
       useCases.toggle.execute.mockRejectedValue(new Error('CARD_NOT_FOUND'));
       useCases.reveal.execute.mockRejectedValue(new Error('FORBIDDEN'));
+      useCases.remove.execute.mockRejectedValue(new Error('DELETE_FAILED'));
       const { res } = mockRes();
 
       await controller.toggleLock(mockReq({ params: { id: 'c' }, user: { id: 'u' } }), res, next);
       await controller.revealDetails(mockReq({ params: { id: 'c' }, user: { id: 'u' } }), res, next);
+      await controller.remove(mockReq({ params: { id: 'c' }, user: { id: 'u' } }), res, next);
 
-      expect(next).toHaveBeenCalledTimes(2);
+      expect(next).toHaveBeenCalledTimes(3);
     });
   });
 });

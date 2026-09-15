@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { CardStatus, VirtualCard, VirtualCardProps } from '../../domain/entities/VirtualCard';
 import { IVirtualCardRepository } from '../../domain/repositories/IVirtualCardRepository';
-import { VirtualCard, VirtualCardProps, CardStatus } from '../../domain/entities/VirtualCard';
 import { AppError } from '../../shared/errors/AppError';
 
 interface VirtualCardRow {
@@ -114,5 +114,20 @@ export class SupabaseVirtualCardRepository implements IVirtualCardRepository {
     }
 
     return this.mapRowToCard(data as VirtualCardRow);
+  }
+
+  async delete(id: string): Promise<void> {
+    const { error } = await this.client
+      .from(this.TABLE)
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      throw new AppError(
+        `Error al eliminar la tarjeta virtual: ${error.message}`,
+        500,
+        'DB_ERROR'
+      );
+    }
   }
 }

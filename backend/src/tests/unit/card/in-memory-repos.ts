@@ -1,15 +1,15 @@
 import { randomUUID } from 'node:crypto';
-import { VirtualCard, CardStatus } from '../../../domain/entities/VirtualCard';
-import { IVirtualCardRepository } from '../../../domain/repositories/IVirtualCardRepository';
 import { Account, AccountType } from '../../../domain/entities/Account';
+import { CardStatus, VirtualCard } from '../../../domain/entities/VirtualCard';
+import { IVirtualCardRepository } from '../../../domain/repositories/IVirtualCardRepository';
 import {
-  InMemoryUserRepo,
   InMemoryAccountRepo,
   InMemoryNotificationRepo,
+  InMemoryUserRepo,
   createTestUser,
 } from '../loan/in-memory-repos';
 
-export { InMemoryUserRepo, InMemoryAccountRepo, InMemoryNotificationRepo, createTestUser };
+export { InMemoryAccountRepo, InMemoryNotificationRepo, InMemoryUserRepo, createTestUser };
 
 export class InMemoryVirtualCardRepo implements IVirtualCardRepository {
   private readonly store = new Map<string, VirtualCard>();
@@ -38,6 +38,10 @@ export class InMemoryVirtualCardRepo implements IVirtualCardRepository {
     this.store.set(cardId, card);
     this.statusUpdates.push({ id: cardId, status });
     return card;
+  }
+
+  async delete(id: string): Promise<void> {
+    this.store.delete(id);
   }
 }
 
