@@ -130,26 +130,23 @@ describe('ApproveLoan', () => {
       );
       expect(existing.accountNumber).toBe(taken);
 
-      const randomSpy = vi.spyOn(Math, 'random').mockReturnValue(0.5);
-
       const realFind = accountRepo.findByAccountNumber.bind(accountRepo);
       let calls = 0;
       accountRepo.findByAccountNumber = async (n: string) => {
         calls += 1;
-        if (calls === 1) return existing;
+        if (calls === 1) return existing; // fuerza una colisión en el primer intento
         return realFind(n);
       };
 
-      try {
-        const result = await useCase.execute(loan.id);
-        expect(result.status).toBe(LoanApplicationStatus.APPROVED);
-        expect(calls).toBeGreaterThanOrEqual(2);
-        const accounts = await accountRepo.findByUserId(user.id);
-        expect(accounts).toHaveLength(2);
-        expect(accounts.map((a) => a.accountNumber)).toContain('BA5500000000');
-      } finally {
-        randomSpy.mockRestore();
-      }
+      const result = await useCase.execute(loan.id);
+      expect(result.status).toBe(LoanApplicationStatus.APPROVED);
+      expect(calls).toBeGreaterThanOrEqual(2); // reintentó tras la colisión
+
+      const accounts = await accountRepo.findByUserId(user.id);
+      expect(accounts).toHaveLength(2);
+      const creditAccount = accounts.find((a) => a.accountNumber !== taken);
+      expect(creditAccount).toBeDefined();
+      expect(creditAccount!.accountNumber).toMatch(/^BA\d{10}$/);
     });
 
     it('should throw ACCOUNT_NUMBER_GENERATION_FAILED after 5 collisions', async () => {
