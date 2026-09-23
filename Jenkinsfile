@@ -24,6 +24,20 @@ pipeline {
     stage('Backend: install + test + build') {
       steps {
         dir('backend') {
+          // Los tests importan env.ts (zod) que hace process.exit(1) sin .env.
+          // En CI no existe (.env está gitignoreado): se genera uno dummy con
+          // formato válido. Los tests mockean Supabase, no usan estos valores.
+          writeFile file: '.env', text: '''PORT=3001
+NODE_ENV=development
+JWT_SECRET=ci-dummy-secret-min-16-chars
+JWT_EXPIRES_IN=7d
+SUPABASE_URL=https://dummy.supabase.co
+SUPABASE_ANON_KEY=ci-dummy-anon-key
+SUPABASE_SERVICE_ROLE_KEY=ci-dummy-service-key
+CLIENT_URL=http://localhost:3000
+GMAIL_USSER=ci@example.com
+GMAIL_PASS=ci-dummy
+'''
           sh '''
             node -v; npm -v
             npm ci
