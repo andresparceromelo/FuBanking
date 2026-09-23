@@ -12,7 +12,7 @@ const config: Config = {
   testEnvironment: 'jsdom',
   roots: ['<rootDir>/src/__tests__'],
   testMatch: ['**/*.test.tsx', '**/*.test.ts'],
-  setupFilesAfterFramework: ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
