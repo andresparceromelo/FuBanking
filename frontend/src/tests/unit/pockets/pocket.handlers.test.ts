@@ -81,6 +81,18 @@ describe('handleCreate', () => {
     expect(service.create).not.toHaveBeenCalled();
   });
 
+  it('should warn on a name made only of spaces', async () => {
+    const service: Pick<PocketApi, 'create'> = { create: vi.fn() };
+    const t = toast();
+    const s = setters();
+    const deps = { service, toast: t, setLoading: s.setLoading, setPockets: s.setPockets, setName: s.setName, setAmount: s.setAmount };
+
+    await handleCreate(deps, { accountId: 'acc-1', name: '   ', amount: '100' });
+
+    expect(t.warning).toHaveBeenCalledWith('Falta información', 'Selecciona una cuenta y escribe el nombre del bolsillo.');
+    expect(service.create).not.toHaveBeenCalled();
+  });
+
   it('should create, prepend, reset and toast', async () => {
     const created = pocket('p9', 'Nuevo');
     const service: Pick<PocketApi, 'create'> = { create: vi.fn().mockResolvedValue(created) };

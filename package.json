@@ -19,7 +19,9 @@
     "test:report": "npm --prefix e2e/serenity run test:report",
     "test:e2e:vitest": "vitest run --config e2e/vitest/vitest.config.e2e.mts",
     "test:e2e:seed": "node e2e/serenity/scripts/seed-users.mjs",
-    "test:e2e:clean": "node backend/scripts/clean-e2e-users.mjs"
+    "test:e2e:clean": "node backend/scripts/clean-e2e-users.mjs",
+    "katalon:seed": "node katalon/scripts/seed-usuarios.mjs",
+    "katalon:generar": "node katalon/scripts/generar-casos.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",

@@ -145,6 +145,23 @@ describe('CreatePocket.execute', () => {
       });
     });
 
+    it.each([
+      ['vacío', ''],
+      ['de solo espacios', '   '],
+    ])('rechaza un nombre %s sin tocar el saldo ni notificar (DUMMY)', async (_label, name) => {
+      // Arrange — DUMMY: si el caso de uso intentara notificar, la prueba fallaría.
+      const sut = new CreatePocket(accountRepo, pocketRepo, new DummyNotificationRepository());
+      const dto = { userId: 'user-1', accountId: 'acc-1', name, amount: 100_000 };
+
+      // Act + Assert
+      await expect(sut.execute(dto)).rejects.to.include({
+        code: 'INVALID_POCKET_NAME',
+        statusCode: 400,
+      });
+      expect(await accountRepo.findById('acc-1')).to.have.property('balance', 1_000_000);
+      expect(await pocketRepo.findByAccountId('acc-1')).to.be.empty;
+    });
+
     it('lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe', async () => {
       // Arrange
       const dto = { userId: 'user-1', accountId: 'inexistente', name: 'X', amount: 1_000 };

@@ -15,6 +15,11 @@ export class CreatePocket {
   ) {}
 
   async execute(dto: CreatePocketDto): Promise<CreatePocketResponseDto> {
+    // Antes de tocar la cuenta: un nombre de solo espacios queda vacío tras el trim (D-01/D-03).
+    if (!dto.name?.trim()) {
+      throw new AppError('El nombre del bolsillo no puede estar vacío', 400, 'INVALID_POCKET_NAME');
+    }
+
     if (dto.amount < 0) {
       throw new AppError('El monto del bolsillo no puede ser negativo', 400, 'INVALID_POCKET_AMOUNT');
     }

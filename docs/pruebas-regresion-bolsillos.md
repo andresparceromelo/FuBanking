@@ -11,6 +11,8 @@
 
 > **Actualización (2026-10-08):** el refactor de seguridad corrigió **D-02** y **D-08** (hallazgos SEC-03 y SEC-04 de `pruebas-security-bolsillos.md`). Sus pruebas RG-CR-D02 y RG-DE-D08 pasaron de `it.fails` a pruebas normales y la suite queda en **195 aprobadas + 3 `it.fails`** (D-01/D-03, D-04 y D-05). Las cifras de la sección 7 corresponden a la medición original.
 
+> **Actualización (2026-10-10):** se corrigió **D-01/D-03** (nombre de solo espacios, DEF-001 del Excel). `CreatePocket` rechaza el nombre vacío tras el trim con `INVALID_POCKET_NAME` antes de tocar el saldo, y el frontend (`handleCreate`) avisa "Falta información". RG-CR-D03 pasó de `it.fails` a prueba normal: la suite queda en **196 aprobadas + 2 `it.fails`** (D-04 y D-05). Lo detectó TC-110 en Katalon Recorder (`katalon/evidencias/`).
+
 ## 1. Objetivo
 
 1. Construir una **suite de regresión automatizada** para **seis funcionalidades** —las cinco del

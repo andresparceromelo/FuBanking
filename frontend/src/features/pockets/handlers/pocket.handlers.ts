@@ -89,7 +89,8 @@ export interface CreateInput {
 }
 
 export async function handleCreate(deps: CreateDeps, input: CreateInput): Promise<void> {
-  if (!input.accountId || !input.name) {
+  // trim: un nombre de solo espacios cuenta como vacío (D-01/D-03).
+  if (!input.accountId || !input.name.trim()) {
     deps.toast.warning('Falta información', 'Selecciona una cuenta y escribe el nombre del bolsillo.');
     return;
   }
@@ -98,7 +99,7 @@ export async function handleCreate(deps: CreateDeps, input: CreateInput): Promis
   try {
     const created = await deps.service.create({
       accountId: input.accountId,
-      name: input.name,
+      name: input.name.trim(),
       amount: Number(input.amount || 0),
     });
     deps.setPockets((prev) => [created, ...prev]);

@@ -245,12 +245,17 @@ describe('Regresión · Crear bolsillo (POST /api/v1/pockets)', () => {
       expect(res.body).to.have.nested.property('error.code', 'VALIDATION_ERROR');
     });
 
-    it.fails('RG-CR-D03 · [D-01/D-03] rechaza un nombre de solo espacios', async () => {
+    it('RG-CR-D03 · [D-01/D-03, corregido] rechaza un nombre de solo espacios', async () => {
+      // Arrange
+      const before = await snapshot(ctx, CUENTA);
+
       // Act
       const res = await create({ accountId: CUENTA, name: '     ', amount: 1_000 });
 
-      // Assert — hoy responde 201 y persiste un bolsillo con nombre vacío.
+      // Assert — corregido en CreatePocket; antes respondía 201 y persistía un bolsillo con nombre vacío.
       expect(res.status).to.equal(400);
+      expect(res.body).to.have.nested.property('error.code', 'INVALID_POCKET_NAME');
+      expect(await snapshot(ctx, CUENTA)).to.deep.equal(before);
     });
 
     it.fails('RG-CR-D05 · [D-05] permite crear un bolsillo que cabe en el saldo disponible', async () => {

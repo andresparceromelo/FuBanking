@@ -1,0 +1,22 @@
+{
+  "web": "http://localhost:3000",
+  "api": "http://localhost:3001/api/v1",
+  "usuarios": {
+    "principal": {
+      "email": "katalon.bolsillos@fubanking.test",
+      "password": "Kat638766c5aeFb7",
+      "firstName": "Katalon",
+      "lastName": "Bolsillos",
+      "document": "KATALON0001",
+      "saldoMinimo": 1000000
+    },
+    "intruso": {
+      "email": "katalon.intruso@fubanking.test",
+      "password": "Kat638766c5aeFb7",
+      "firstName": "Katalon",
+      "lastName": "Intruso",
+      "document": "KATALON0002",
+      "saldoMinimo": 100000
+    }
+  }
+}
