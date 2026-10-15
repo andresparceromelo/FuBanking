@@ -23,7 +23,7 @@ export function LoanCard({ loan, onApprove, onReject, isLoading }: LoanCardProps
   const StatusIcon = status.icon;
 
   return (
-    <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+    <div data-testid="loan-card" className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-primary/10 rounded-full">
@@ -100,6 +100,8 @@ export function LoanCard({ loan, onApprove, onReject, isLoading }: LoanCardProps
       {loan.status === 'PENDING' && (
         <div className="flex gap-3 pt-4 border-t border-border">
           <button
+            id={`btn-approve-${loan.id}`}
+            data-testid="btn-approve"
             onClick={() => onApprove(loan.id)}
             disabled={isLoading}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg font-medium text-sm hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -108,6 +110,8 @@ export function LoanCard({ loan, onApprove, onReject, isLoading }: LoanCardProps
             Aprobar
           </button>
           <button
+            id={`btn-reject-${loan.id}`}
+            data-testid="btn-reject"
             onClick={() => onReject(loan.id)}
             disabled={isLoading}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg font-medium text-sm hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

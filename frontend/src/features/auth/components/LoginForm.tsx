@@ -18,6 +18,7 @@ export function LoginForm() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -32,8 +33,20 @@ export function LoginForm() {
     handleLogin(data);
   };
 
+  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const emailEl = document.getElementById('email') as HTMLInputElement | null;
+    const passEl = document.getElementById('password') as HTMLInputElement | null;
+    if (emailEl?.value) {
+      setValue('email', emailEl.value, { shouldValidate: true, shouldDirty: true });
+    }
+    if (passEl?.value) {
+      setValue('password', passEl.value, { shouldValidate: true, shouldDirty: true });
+    }
+    void handleSubmit(onSubmit)(e);
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full max-w-sm" noValidate>
+    <form onSubmit={onFormSubmit} className="space-y-6 w-full max-w-sm" noValidate>
       
       {error && (
         <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">

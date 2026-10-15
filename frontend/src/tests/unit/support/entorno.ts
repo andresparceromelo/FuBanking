@@ -13,7 +13,7 @@
  */
 
 import { apiClient } from '@/shared/services/api.client';
-import type { PocketItem } from '../../../features/pockets/services/pocket.service';
+import type { PocketItem } from '../@/features/pockets/services/pocket.service';
 
 /** UUID con formato válido que no corresponde a ningún registro. */
 export const UUID_INEXISTENTE = '00000000-0000-4000-8000-000000000000';

@@ -9,6 +9,7 @@ import { SupabaseAccountRepository } from '../../infrastructure/repositories/Sup
 import { SupabaseNotificationRepository } from '../../infrastructure/repositories/SupabaseNotificationRepository';
 import { SupabaseUserRepository } from '../../infrastructure/repositories/SupabaseUserRepository';
 import { SupabaseVirtualCardRepository } from '../../infrastructure/repositories/SupabaseVirtualCardRepository';
+import { BcryptPasswordService } from '../../infrastructure/services/BcryptPasswordService';
 import { CardController } from '../controllers/CardController';
 import { authMiddleware } from '../middlewares/authMiddleware';
 
@@ -18,8 +19,15 @@ const cardRepo = new SupabaseVirtualCardRepository(supabaseClient);
 const accountRepo = new SupabaseAccountRepository(supabaseClient);
 const userRepo = new SupabaseUserRepository(supabaseClient);
 const notificationRepo = new SupabaseNotificationRepository(supabaseClient);
+const passwordService = new BcryptPasswordService();
 
-const createVirtualCard = new CreateVirtualCard(cardRepo, accountRepo, userRepo, notificationRepo);
+const createVirtualCard = new CreateVirtualCard(
+  cardRepo,
+  accountRepo,
+  userRepo,
+  notificationRepo,
+  passwordService,
+);
 const getUserCards = new GetUserCards(cardRepo);
 const toggleCardLock = new ToggleCardLock(cardRepo, notificationRepo);
 const revealVirtualCardDetails = new RevealVirtualCardDetails(cardRepo);

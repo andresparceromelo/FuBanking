@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { randomUUID } from 'node:crypto';
 import { CreateVirtualCard } from '../../../application/use-cases/card/CreateVirtualCard';
 import { CardStatus } from '../../../domain/entities/VirtualCard';
+import { FakePasswordService } from '../../fakes/FakePasswordService';
 import {
   InMemoryVirtualCardRepo,
   InMemoryAccountRepo,
@@ -54,6 +55,90 @@ describe('CreateVirtualCard', () => {
       const result = await useCase.execute({ userId: ghostId, accountId: account.id });
 
       expect(result.cardHolderName).toBe('TITULAR FUBANK');
+    });
+  });
+
+  describe('Autenticación por contraseña', () => {
+    let passwordService: FakePasswordService;
+    let authUseCase: CreateVirtualCard;
+
+    beforeEach(() => {
+      passwordService = new FakePasswordService();
+      authUseCase = new CreateVirtualCard(
+        cardRepo,
+        accountRepo,
+        userRepo,
+        notifRepo,
+        passwordService,
+      );
+    });
+
+    it('debe fallar si no se proporciona la contraseña', async () => {
+      const user = createTestUser();
+      await userRepo.save(user);
+      const account = createTestAccount(user.id);
+      await accountRepo.save(account);
+
+      await expect(
+        authUseCase.execute({ userId: user.id, accountId: account.id }),
+      ).rejects.toMatchObject({
+        code: 'PASSWORD_REQUIRED',
+        statusCode: 400,
+      });
+    });
+
+    it('debe fallar si la contraseña es incorrecta', async () => {
+      const user = createTestUser();
+      // createTestUser has passwordHash: 'hash', FakePasswordService expects 'hashed_' + plain
+      user.updatePasswordHash('hashed_MiClave123!');
+      await userRepo.save(user);
+      const account = createTestAccount(user.id);
+      await accountRepo.save(account);
+
+      await expect(
+        authUseCase.execute({
+          userId: user.id,
+          accountId: account.id,
+          password: 'ClaveIncorrecta',
+        }),
+      ).rejects.toMatchObject({
+        code: 'INVALID_CREDENTIALS',
+        statusCode: 401,
+      });
+    });
+
+    it('debe crear la tarjeta si la contraseña es correcta', async () => {
+      const user = createTestUser();
+      user.updatePasswordHash('hashed_MiClave123!');
+      await userRepo.save(user);
+      const account = createTestAccount(user.id);
+      await accountRepo.save(account);
+
+      const result = await authUseCase.execute({
+        userId: user.id,
+        accountId: account.id,
+        password: 'MiClave123!',
+      });
+
+      expect(result.status).toBe(CardStatus.ACTIVA);
+      expect(result.cardHolderName).toBe('TEST USER');
+    });
+
+    it('debe fallar si el usuario no existe al validar contraseña', async () => {
+      const ghostId = randomUUID();
+      const account = createTestAccount(ghostId);
+      await accountRepo.save(account);
+
+      await expect(
+        authUseCase.execute({
+          userId: ghostId,
+          accountId: account.id,
+          password: 'Password123!',
+        }),
+      ).rejects.toMatchObject({
+        code: 'USER_NOT_FOUND',
+        statusCode: 404,
+      });
     });
   });
 

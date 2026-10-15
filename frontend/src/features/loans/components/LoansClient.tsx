@@ -158,9 +158,9 @@ export function LoansClient() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 md:grid-cols-3">
-              <Input label="Monto" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
-              <Input label="Cuotas" type="number" value={installments} onChange={(e) => setInstallments(e.target.value)} />
-              <Input label="Tasa anual (%)" type="number" value={annualRate} onChange={(e) => setAnnualRate(e.target.value)} />
+              <Input id="loan-amount" label="Monto" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+              <Input id="loan-installments" label="Cuotas" type="number" value={installments} onChange={(e) => setInstallments(e.target.value)} />
+              <Input id="loan-annual-rate" label="Tasa anual (%)" type="number" value={annualRate} onChange={(e) => setAnnualRate(e.target.value)} />
             </div>
 
             {/* Requisitos de solicitud — solo lectura, se activan al cumplirse */}
@@ -200,10 +200,10 @@ export function LoansClient() {
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button onClick={handleSimulate} isLoading={loading} className="w-full sm:w-auto">
+              <Button id="btn-simulate" onClick={handleSimulate} isLoading={loading} className="w-full sm:w-auto">
                 <span className="flex items-center gap-2"><Calculator size={16} /> Simular</span>
               </Button>
-              <Button variant="outline" onClick={handleCreate} isLoading={loading} disabled={!allRequirementsMet || hasPending} className="w-full sm:w-auto">
+              <Button id="btn-apply" variant="outline" onClick={handleCreate} isLoading={loading} disabled={!allRequirementsMet || hasPending} className="w-full sm:w-auto">
                 <span className="flex items-center gap-2"><BadgeCheck size={16} /> Solicitar</span>
               </Button>
             </div>
@@ -220,7 +220,7 @@ export function LoansClient() {
             <CardTitle>Resumen</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="rounded-2xl bg-primary/10 p-4">
+            <div id="result-box" className="rounded-2xl bg-primary/10 p-4">
               <div className="flex items-center gap-2 text-primary">
                 <Landmark size={18} />
                 <span className="font-semibold">Resultado del préstamo</span>

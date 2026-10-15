@@ -4,6 +4,9 @@
   "private": true,
   "description": "FuBanking - scripts raiz para CI local y sustentacion + analisis SonarQube.",
   "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND\" -c \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
     "sonar": "sonar-scanner",
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "npm --prefix backend test",
@@ -12,9 +15,27 @@
     "test:regression": "sh scripts/regression.sh",
     "test:regression:backend": "sh scripts/regression.sh backend",
     "test:regression:frontend": "sh scripts/regression.sh frontend",
-    "test:regression:loans": "sh scripts/regression.sh loans"
+    "test:regression:loans": "sh scripts/regression.sh loans",
+    "test:api": "npm --prefix backend run test:api",
+    "test:performance": "npm --prefix backend run test:performance",
+    "test:load:k6": "k6 run scripts/performance/loans-load.js",
+    "test:serenity": "npm --prefix e2e/serenity test",
+    "test:serenity:report": "npm --prefix e2e/serenity run test:report",
+    "test:serenity:creditos": "npm --prefix e2e/serenity run test:creditos",
+    "test:e2e:serenity": "npm --prefix e2e/serenity test",
+    "test:e2e:serenity:report": "npm --prefix e2e/serenity run test:report",
+    "test:report": "npm --prefix e2e/serenity run test:report",
+    "test:e2e:vitest": "npx --prefix backend vitest run --config e2e/vitest/vitest.config.e2e.mts",
+    "test:e2e:seed": "node e2e/serenity/scripts/seed-users.mjs",
+    "test:e2e:clean": "node backend/scripts/clean-e2e-users.mjs",
+    "katalon:seed": "node katalon/scripts/seed-usuarios.mjs",
+    "katalon:generar": "node katalon/scripts/generar-casos.mjs"
   },
   "devDependencies": {
-    "sonarqube-scanner": "^4.2.9"
+    "@types/node": "^26.6.5",
+    "concurrently": "^10.0.6",
+    "sonarqube-scanner": "^4.2.9",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
   }
 }

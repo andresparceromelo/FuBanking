@@ -30,11 +30,13 @@ export function useCards() {
     }
   }, []);
 
-  const createCard = useCallback(async (accountId: string) => {
+  const createCard = useCallback(async (accountId: string, password?: string) => {
     setIsLoading(true);
     setError(null);
     try {
-      const card = await cardService.createCard(accountId);
+      const card = password !== undefined
+        ? await cardService.createCard(accountId, password)
+        : await cardService.createCard(accountId);
       setCards((current) => [card, ...current]);
       return card;
     } catch (err) {

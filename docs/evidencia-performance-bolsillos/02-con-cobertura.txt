@@ -1,0 +1,31 @@
+ RUN  v4.1.11 <repo>/backend
+      Coverage enabled with v8
+◇ injected env (3) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-01 · Crear bolsillo — POST /pockets 211ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-02 · Consultar bolsillos — GET /pockets/account/:id 82ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-03 · Actualizar bolsillo — PATCH /pockets/:id 85ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-04 · Eliminar bolsillo — DELETE /pockets/:id 75ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-05 · Transferir entre bolsillos — POST /pockets/transfer 86ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-06 · Depositar dinero — POST /accounts/:id/deposit 67ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Escalabilidad y recorrido completo > PF-07 · Consultar una cuenta con 1.000 bolsillos escala dentro del presupuesto 168ms
+Tiempos de respuesta (ms) — HTTP real sobre la app en memoria
+Operación                                        n    min  media    p50    p95    máx   p50≤   p95≤  estado
+PF-01 Crear bolsillo (POST /pockets)            30   2.18   2.92    2.7    4.4   4.44    100    300      OK
+PF-02 Consultar bolsillos (GET)                 30   1.67   1.97   1.87    2.1   5.16    100    300      OK
+PF-03 Actualizar bolsillo (PATCH)               30   2.01   2.21   2.18   2.54   2.68    100    300      OK
+PF-04 Eliminar bolsillo (DELETE)                30   1.66    1.9   1.88   2.13   2.66    100    300      OK
+PF-05 Transferir entre bolsillos (POST)         30   1.58   2.24   1.93   5.45   5.71    100    300      OK
+PF-06 Depositar dinero (POST)                   30   1.44   1.74   1.67    2.2   3.39    100    300      OK
+PF-07 Consultar con 1.000 bolsillos (GET)       20   5.15   6.14   5.86   9.08   9.49    150    400      OK
+PF-08 Recorrido de 5 peticiones                 15   9.03   9.48    9.5  10.08  10.08    250    600      OK
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Escalabilidad y recorrido completo > PF-08 · Recorrido completo (crear → consultar → actualizar → transferir → eliminar) 199ms
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  09:52:54
+   Duration  2.74s (transform 361ms, setup 0ms, import 820ms, tests 977ms, environment 0ms)
+=============================== Coverage summary ===============================
+Statements   : 13.21% ( 173/1309 )
+Branches     : 8.45% ( 53/627 )
+Functions    : 13.2% ( 40/303 )
+Lines        : 13.7% ( 172/1255 )
+================================================================================

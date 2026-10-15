@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>FuBanking - Créditos y Préstamos</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; padding: 24px; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+    input { background: #0f172a; border: 1px solid #475569; color: #f8fafc; padding: 8px 12px; border-radius: 8px; width: 100%; box-sizing: border-box; }
+    button { background: #6366f1; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-right: 8px; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .req-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 12px 0; }
+    .req-item { background: #0f172a; border: 1px solid #334155; padding: 8px; border-radius: 6px; font-size: 13px; }
+    .req-item.done { color: #4ade80; border-color: #22c55e; }
+    .res-card { background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.2); padding: 16px; border-radius: 10px; margin-top: 12px; }
+    .msg { font-size: 13px; margin-top: 10px; color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div>
+    <h1>Créditos y Préstamos</h1>
+    <p>Simula tu cuota mensual y solicita un crédito.</p>
+  </div>
+
+  <div class="card">
+    <h2>Simulador de préstamo</h2>
+    <div class="grid">
+      <div>
+        <label>Monto</label>
+        <input id="loan-amount" type="number" value="5000" />
+      </div>
+      <div>
+        <label>Cuotas</label>
+        <input id="loan-installments" type="number" value="12" />
+      </div>
+      <div>
+        <label>Tasa anual (%)</label>
+        <input id="loan-annual-rate" type="number" value="18" />
+      </div>
+    </div>
+
+    <div class="card">
+      <p style="font-weight: 600; margin-top:0;">Requisitos para solicitar</p>
+      <div id="requirements-panel" class="req-grid">
+        <div class="req-item done">✓ Documento verificado</div>
+        <div class="req-item done">✓ Mayor de edad</div>
+        <div class="req-item done">✓ Ingreso validado</div>
+        <div class="req-item done">✓ Historial crediticio validado</div>
+      </div>
+    </div>
+
+    <div>
+      <button id="btn-simulate" onclick="simulate()">Simular</button>
+      <button id="btn-apply" onclick="apply()">Solicitar</button>
+    </div>
+
+    <p id="feedback-msg" class="msg"></p>
+  </div>
+
+  <div class="card">
+    <h2 id="summary-header">Resumen</h2>
+    <div id="result-box" class="res-card">
+      <div style="font-weight: bold; color: #818cf8;">Resultado del préstamo</div>
+      <div id="result-content" style="margin-top: 8px;">Aún no hay una simulación disponible.</div>
+    </div>
+  </div>
+
+  <script>
+    function simulate() {
+      const a = parseFloat(document.getElementById('loan-amount').value);
+      const n = parseInt(document.getElementById('loan-installments').value);
+      const r = parseFloat(document.getElementById('loan-annual-rate').value);
+      const msg = document.getElementById('feedback-msg');
+      const res = document.getElementById('result-content');
+
+      if (isNaN(a) || a <= 0 || isNaN(n) || n <= 0) {
+        msg.innerText = 'Ingresa un monto y número de cuotas válidos.';
+        return;
+      }
+
+      const monthlyRate = (r / 100) / 12;
+      const fee = monthlyRate === 0 ? a / n : (a * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -n));
+      const total = fee * n;
+      const interest = total - a;
+
+      msg.innerText = 'Simulación lista.';
+      res.innerHTML = `
+        <p>Cuota mensual: <strong>$${fee.toLocaleString('es-CO', { maximumFractionDigits: 2 })}</strong></p>
+        <p>Total a pagar: <strong>$${total.toLocaleString('es-CO', { maximumFractionDigits: 2 })}</strong></p>
+        <p>Intereses: <strong>$${interest.toLocaleString('es-CO', { maximumFractionDigits: 2 })}</strong></p>
+      `;
+    }
+
+    function apply() {
+      const msg = document.getElementById('feedback-msg');
+      msg.innerText = 'Solicitud enviada correctamente.';
+    }
+  </script>
+</body>
+</html>

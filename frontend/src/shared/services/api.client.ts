@@ -9,13 +9,22 @@ export const apiClient = axios.create({
   },
 });
 
+function getAuthToken(): string | null {
+  if (globalThis.window === undefined) return null;
+  const local = localStorage.getItem('token');
+  if (local) return local;
+  const session = sessionStorage.getItem('token');
+  if (session) return session;
+  const cookieMatch = document.cookie.match(/(?:^|;\s*)token=([^;]+)/);
+  if (cookieMatch) return decodeURIComponent(cookieMatch[1]);
+  return null;
+}
+
 apiClient.interceptors.request.use(
   (config) => {
-    if (globalThis.window !== undefined) {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
+    const token = getAuthToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },

@@ -75,6 +75,7 @@ export function AdminLoansClient() {
           </div>
         </div>
         <button
+          id="btn-refresh-loans"
           onClick={() => void fetchLoans()}
           disabled={isLoading}
           className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg font-medium text-sm hover:bg-primary/90 disabled:opacity-50 transition-colors"
@@ -88,6 +89,7 @@ export function AdminLoansClient() {
         {(['ALL', 'PENDING', 'APPROVED', 'REJECTED'] as const).map((status) => (
           <button
             key={status}
+            id={`filter-${status.toLowerCase()}`}
             onClick={() => setFilter(status)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               filter === status

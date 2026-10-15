@@ -3,7 +3,8 @@
  *  Pruebas unitarias — UpdatePocket (caso de uso "Actualizar bolsillo")
  * ----------------------------------------------------------------------------
  *  Es el caso de uso de mayor complejidad del módulo (candidato a refactor).
- *  Patrón AAA + principios FIRST (ver detalle en CreatePocket.test.ts).
+ *  Patrón AAA + principios FIRST + aserciones fluidas Chai BDD
+ *  (ver detalle en CreatePocket.test.ts).
  *  Dobles demostrados aquí: FAKE y STUB.
  * ============================================================================
  */
@@ -48,8 +49,7 @@ describe('UpdatePocket.execute', () => {
       const result = await sut.execute(dto);
 
       // Assert
-      expect(result.name).toBe('Vacaciones');
-      expect(result.amount).toBe(100_000);
+      expect(result).to.include({ name: 'Vacaciones', amount: 100_000 });
     });
 
     it('aumenta el monto y descuenta la diferencia del saldo', async () => {
@@ -60,9 +60,9 @@ describe('UpdatePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.amount).toBe(300_000);
+      expect(result).to.have.property('amount', 300_000);
       const account = await accountRepo.findById('acc-1');
-      expect(account?.balance).toBe(800_000); // 1.000.000 − (300.000 − 100.000)
+      expect(account).to.have.property('balance', 800_000); // 1.000.000 − (300.000 − 100.000)
     });
 
     it('reduce el monto y devuelve la diferencia al saldo', async () => {
@@ -73,9 +73,9 @@ describe('UpdatePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.amount).toBe(40_000);
+      expect(result).to.have.property('amount', 40_000);
       const account = await accountRepo.findById('acc-1');
-      expect(account?.balance).toBe(1_060_000); // 1.000.000 + (100.000 − 40.000)
+      expect(account).to.have.property('balance', 1_060_000); // 1.000.000 + (100.000 − 40.000)
     });
 
     it('actualiza nombre y monto a la vez', async () => {
@@ -86,8 +86,7 @@ describe('UpdatePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.name).toBe('Mixto');
-      expect(result.amount).toBe(150_000);
+      expect(result).to.include({ name: 'Mixto', amount: 150_000 });
     });
 
     it('no cambia el saldo cuando el monto enviado es igual al actual', async () => {
@@ -98,9 +97,9 @@ describe('UpdatePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.amount).toBe(100_000);
+      expect(result).to.have.property('amount', 100_000);
       const account = await accountRepo.findById('acc-1');
-      expect(account?.balance).toBe(1_000_000); // sin cambios
+      expect(account).to.have.property('balance', 1_000_000); // sin cambios
     });
 
     it('no renombra cuando el nombre enviado es igual al actual', async () => {
@@ -111,7 +110,7 @@ describe('UpdatePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.name).toBe('Ahorros viaje');
+      expect(result).to.have.property('name', 'Ahorros viaje');
     });
 
     it('funciona sin repositorio de notificaciones', async () => {
@@ -122,7 +121,7 @@ describe('UpdatePocket.execute', () => {
       const result = await sut.execute({ userId: 'user-1', pocketId: 'p1', name: 'Solo' });
 
       // Assert
-      expect(result.name).toBe('Solo');
+      expect(result).to.have.property('name', 'Solo');
     });
   });
 
@@ -131,19 +130,19 @@ describe('UpdatePocket.execute', () => {
     it('rechaza un nombre vacío o de solo espacios', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', pocketId: 'p1', name: '   ' }),
-      ).rejects.toMatchObject({ code: 'INVALID_POCKET_NAME', statusCode: 400 });
+      ).rejects.to.include({ code: 'INVALID_POCKET_NAME', statusCode: 400 });
     });
 
     it('rechaza un monto negativo', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', pocketId: 'p1', amount: -10 }),
-      ).rejects.toMatchObject({ code: 'INVALID_POCKET_AMOUNT', statusCode: 400 });
+      ).rejects.to.include({ code: 'INVALID_POCKET_AMOUNT', statusCode: 400 });
     });
 
     it('lanza POCKET_NOT_FOUND cuando el bolsillo no existe', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', pocketId: 'nope', name: 'X' }),
-      ).rejects.toMatchObject({ code: 'POCKET_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'POCKET_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza ACCOUNT_NOT_FOUND cuando la cuenta del bolsillo no existe', async () => {
@@ -155,7 +154,7 @@ describe('UpdatePocket.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', pocketId: 'p1', name: 'X' }),
-      ).rejects.toMatchObject({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza FORBIDDEN cuando la cuenta es de otro usuario', async () => {
@@ -165,7 +164,7 @@ describe('UpdatePocket.execute', () => {
 
       await expect(
         sut.execute({ userId: 'intruso', pocketId: 'p1', name: 'X' }),
-      ).rejects.toMatchObject({ code: 'FORBIDDEN', statusCode: 403 });
+      ).rejects.to.include({ code: 'FORBIDDEN', statusCode: 403 });
     });
 
     it('lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada', async () => {
@@ -177,7 +176,7 @@ describe('UpdatePocket.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', pocketId: 'p1', name: 'X' }),
-      ).rejects.toMatchObject({ code: 'ACCOUNT_NOT_OPERATIONAL', statusCode: 400 });
+      ).rejects.to.include({ code: 'ACCOUNT_NOT_OPERATIONAL', statusCode: 400 });
     });
 
     it('lanza INSUFFICIENT_AVAILABLE_BALANCE cuando el nuevo monto excede el disponible', async () => {
@@ -187,13 +186,13 @@ describe('UpdatePocket.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', pocketId: 'p1', amount: 500_000 }),
-      ).rejects.toMatchObject({ code: 'INSUFFICIENT_AVAILABLE_BALANCE', statusCode: 400 });
+      ).rejects.to.include({ code: 'INSUFFICIENT_AVAILABLE_BALANCE', statusCode: 400 });
     });
 
     it('lanza NO_CHANGES_PROVIDED cuando no se envía ni nombre ni monto', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', pocketId: 'p1' }),
-      ).rejects.toMatchObject({ code: 'NO_CHANGES_PROVIDED', statusCode: 400 });
+      ).rejects.to.include({ code: 'NO_CHANGES_PROVIDED', statusCode: 400 });
     });
   });
 });

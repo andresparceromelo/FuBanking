@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TC09_Admin_Inspeccion_Detalle_Solicitud</title>
+</head>
+<body>
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC09_Admin_Inspeccion_Detalle_Solicitud</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=filter-all</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//div[@data-testid='loan-card']</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Monto')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Cuotas')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Cuota mensual')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Total a pagar')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Documento')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Mayor de edad')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

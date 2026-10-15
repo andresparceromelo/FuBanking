@@ -14,7 +14,7 @@ export function useUpdateProfile(onSuccessCallback?: (user: PublicUser) => void)
     setError(null);
     try {
       const updatedUser = await profileService.updateProfile(data);
-      const token = localStorage.getItem('token') || '';
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token') || '';
       login(updatedUser, token);
       
       if (onSuccessCallback) {

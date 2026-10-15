@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { JwtTokenService } from '../../infrastructure/services/JwtTokenService';
 import { sendError } from '../../shared/utils/response';
 import { AuthError } from '../../shared/errors/AuthError';
+import { isAccessToken } from './accessToken';
 
 const tokenService = new JwtTokenService();
 
@@ -11,7 +12,9 @@ const tokenService = new JwtTokenService();
  * Extrae el token del header Authorization: Bearer <token>,
  * lo verifica y agrega el payload al objeto req.user.
  *
- * Si el token es inválido o falta, retorna 401 inmediatamente.
+ * Si el token es inválido o falta, retorna 401 inmediatamente. También rechaza
+ * los tokens de propósito único (2FA temporal, recuperación de contraseña):
+ * sin esa verificación servían como token de acceso y permitían saltarse el 2FA.
  * El siguiente handler puede confiar en que req.user siempre está definido.
  */
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
@@ -31,6 +34,10 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
 
   try {
     const payload = tokenService.verify(token);
+    if (!isAccessToken(payload)) {
+      sendError(res, 'Token inválido', 'TOKEN_INVALID', 401);
+      return;
+    }
     req.user = {
       id: payload.userId,
       email: payload.email,

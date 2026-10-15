@@ -16,7 +16,8 @@ import {
   CreditCard, 
   HandCoins, 
   Bell,
-  Shield 
+  Shield,
+  BarChart3 
 } from 'lucide-react';
 import { cn } from '@/shared/utils/cn';
 import Image from 'next/image';
@@ -41,6 +42,7 @@ export function Navbar() {
     { href: '/cards', label: 'Tarjeta', icon: CreditCard },
     { href: '/requests', label: 'Cobros', icon: HandCoins },
     { href: '/notifications', label: 'Avisos', icon: Bell },
+    { href: '/ux-report', label: 'Reporte UX', icon: BarChart3 },
     { href: '/profile', label: 'Perfil', icon: UserIcon },
     ...(user?.role === 'admin' ? [{ href: '/admin/loans', label: 'Admin', icon: Shield }] : []),
   ];

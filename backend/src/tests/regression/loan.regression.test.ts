@@ -3,7 +3,6 @@ import { createLoanTestApp } from '../helpers/createLoanTestApp';
 
 /**
  * Regresión por contrato HTTP del módulo créditos.
- * Patrón AAA + FIRST (ver ejemplo del profesor: RegressionTesting).
  * App con repos en memoria (sin Supabase, sin red).
  *
  * Ejecutar: npm run test:regression (o npx vitest run src/tests/regression)

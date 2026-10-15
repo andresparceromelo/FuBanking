@@ -2,7 +2,8 @@
  * ============================================================================
  *  Pruebas unitarias — GetAccountPockets ("Consultar bolsillos de la cuenta")
  * ----------------------------------------------------------------------------
- *  Patrón AAA + principios FIRST (ver detalle en CreatePocket.test.ts).
+ *  Patrón AAA + principios FIRST + aserciones fluidas Chai BDD
+ *  (ver detalle en CreatePocket.test.ts).
  *  Dobles demostrados aquí: FAKE y STUB.
  * ============================================================================
  */
@@ -32,9 +33,9 @@ describe('GetAccountPockets.execute', () => {
       const result = await useCase.execute({ userId: 'user-1', accountId: 'acc-1' });
 
       // Assert
-      expect(result).toHaveLength(2);
-      expect(result.map((p) => p.name)).toEqual(['A', 'B']);
-      expect(typeof result[0].createdAt).toBe('string'); // representación pública (ISO)
+      expect(result).to.be.an('array').with.lengthOf(2);
+      expect(result.map((p) => p.name)).to.deep.equal(['A', 'B']);
+      expect(result[0].createdAt).to.be.a('string'); // representación pública (ISO)
     });
 
     it('devuelve una lista vacía cuando la cuenta no tiene bolsillos', async () => {
@@ -47,7 +48,7 @@ describe('GetAccountPockets.execute', () => {
       const result = await useCase.execute({ userId: 'user-1', accountId: 'acc-1' });
 
       // Assert
-      expect(result).toEqual([]);
+      expect(result).to.be.an('array').that.is.empty;
     });
   });
 
@@ -61,7 +62,7 @@ describe('GetAccountPockets.execute', () => {
       // Act + Assert
       await expect(
         useCase.execute({ userId: 'user-1', accountId: 'inexistente' }),
-      ).rejects.toMatchObject({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza FORBIDDEN cuando la cuenta es de otro usuario', async () => {
@@ -73,7 +74,7 @@ describe('GetAccountPockets.execute', () => {
       // Act + Assert
       await expect(
         useCase.execute({ userId: 'intruso', accountId: 'acc-1' }),
-      ).rejects.toMatchObject({ code: 'FORBIDDEN', statusCode: 403 });
+      ).rejects.to.include({ code: 'FORBIDDEN', statusCode: 403 });
     });
   });
 });

@@ -1,0 +1,219 @@
+ RUN  v4.1.11 <repo>/backend
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > CRUD happy path > should save and map the row 77ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > CRUD happy path > should find by id, account and total amounts 11ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > CRUD happy path > should update and delete 5ms
+stderr | src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should map missing-table rejections per method
+Supabase pockets table is not available. Using in-memory fallback for pockets.
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > CRUD happy path > should throw DB_ERROR on save/update/delete failures 9ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > CRUD happy path > should throw Desconocido on empty save result 5ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > CRUD happy path > should fall back to Desconocido on messageless update error 4ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > CRUD happy path > should return 0 totals on error or empty data 3ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should rethrow non-missing errors from finders 4ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should rethrow generic rejections from list and total 14ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should rethrow generic save/update/delete/total rejections 6ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should map missing-table rejections per method 8ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should fall back on missing-table list/total rejections 5ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should fall back on missing-table save rejection 4ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should fall back on missing-table update rejection 3ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should fall back on missing-table delete rejection 3ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > client rejections > should fall back on missing-table total rejection 8ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > missing-table error results > should fall back to memory on save 4ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > missing-table error results > should fall back to memory on update 3ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > missing-table error results > should fall back to memory on delete 3ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > missing-table error results > should return 0 on getTotal with missing table 3ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > missing-table fallback > should detect all missing-table shapes 4ms
+ ✓ src/tests/unit/pocket/SupabasePocketRepository.test.ts > SupabasePocketRepository > missing-table fallback > should throw DB_TABLE_MISSING from the handler 5ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Camino feliz > crea el bolsillo y descuenta el monto del saldo de la cuenta 93ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Camino feliz > recorta los espacios del nombre al crear el bolsillo 2ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Camino feliz > suma el monto al saldo de la cuenta y lo persiste 82ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Camino feliz > conserva la identidad de la cuenta (id, titular, número, estado) 3ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Camino feliz > acepta montos con decimales 2ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Interacción con el repositorio (MOCK) > llama a updateBalance una sola vez con el saldo nuevo 8ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Camino feliz > mueve el monto del bolsillo origen al destino 92ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Camino feliz > funciona sin repositorio de notificaciones 2ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > rechaza montos menores o iguales a cero 4ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > rechaza transferir un bolsillo hacia sí mismo 1ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > lanza SOURCE_POCKET_NOT_FOUND cuando el origen no existe 2ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > lanza TARGET_POCKET_NOT_FOUND cuando el destino no existe 2ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > lanza POCKETS_DIFFERENT_ACCOUNT cuando los bolsillos son de cuentas distintas 2ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > lanza ACCOUNT_NOT_FOUND cuando la cuenta de los bolsillos no existe 2ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > lanza FORBIDDEN cuando la cuenta es de otro usuario 2ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada 2ms
+ ✓ src/tests/unit/pocket/TransferPocketBalance.test.ts > TransferPocketBalance.execute > Validaciones y errores > lanza INSUFFICIENT_POCKET_BALANCE cuando el origen no tiene saldo suficiente 2ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Notificación al usuario (SPY) > emite una notificación "Depósito realizado" con los últimos 4 dígitos de la cuenta 5ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Notificación al usuario (SPY) > funciona sin repositorio de notificaciones 1ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Validaciones y errores > rechaza un monto cero sin consultar la cuenta ni notificar (MOCK + DUMMY) 6ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Validaciones y errores > rechaza un monto negativo 1ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Validaciones y errores > rechaza un monto NaN (lo que llega si el body no trae un número) 2ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Validaciones y errores > lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe 7ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Validaciones y errores > lanza FORBIDDEN cuando la cuenta pertenece a otro usuario y no cambia el saldo 2ms
+ ✓ src/tests/unit/account/DepositMoney.test.ts > DepositMoney.execute > Validaciones y errores > lanza ACCOUNT_INACTIVE cuando la cuenta está cerrada (STUB) 2ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Interacción con los repositorios (MOCK) > llama a updateBalance con el saldo correcto y guarda el bolsillo una vez 16ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Notificación al usuario (SPY) > emite exactamente una notificación de "Bolsillo creado" 4ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Notificación al usuario (SPY) > no falla cuando no se inyecta repositorio de notificaciones 2ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Validaciones y errores > rechaza montos negativos y NO emite notificación (DUMMY) 4ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Validaciones y errores > lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe 2ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Validaciones y errores > lanza FORBIDDEN cuando la cuenta pertenece a otro usuario 2ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Validaciones y errores > lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada 3ms
+ ✓ src/tests/unit/pocket/CreatePocket.test.ts > CreatePocket.execute > Validaciones y errores > lanza INSUFFICIENT_AVAILABLE_BALANCE cuando no hay saldo disponible 4ms
+ ✓ src/tests/unit/pocket/DeletePocket.test.ts > DeletePocket.execute > Camino feliz > elimina el bolsillo y devuelve su monto al saldo de la cuenta 15ms
+ ✓ src/tests/unit/pocket/DeletePocket.test.ts > DeletePocket.execute > Camino feliz > emite una notificación de "Bolsillo eliminado" (SPY) 2ms
+ ✓ src/tests/unit/pocket/DeletePocket.test.ts > DeletePocket.execute > Camino feliz > funciona sin repositorio de notificaciones 1ms
+ ✓ src/tests/unit/pocket/DeletePocket.test.ts > DeletePocket.execute > Validaciones y errores > lanza POCKET_NOT_FOUND cuando el bolsillo no existe 4ms
+ ✓ src/tests/unit/pocket/DeletePocket.test.ts > DeletePocket.execute > Validaciones y errores > lanza ACCOUNT_NOT_FOUND cuando la cuenta del bolsillo no existe 2ms
+ ✓ src/tests/unit/pocket/DeletePocket.test.ts > DeletePocket.execute > Validaciones y errores > lanza FORBIDDEN cuando la cuenta es de otro usuario 3ms
+ ✓ src/tests/unit/pocket/DeletePocket.test.ts > DeletePocket.execute > Validaciones y errores > lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Camino feliz > actualiza solo el nombre sin tocar el saldo (STUB de cuenta) 17ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Camino feliz > aumenta el monto y descuenta la diferencia del saldo 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Camino feliz > reduce el monto y devuelve la diferencia al saldo 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Camino feliz > actualiza nombre y monto a la vez 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Camino feliz > no cambia el saldo cuando el monto enviado es igual al actual 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Camino feliz > no renombra cuando el nombre enviado es igual al actual 1ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Camino feliz > funciona sin repositorio de notificaciones 1ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > rechaza un nombre vacío o de solo espacios 3ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > rechaza un monto negativo 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > lanza POCKET_NOT_FOUND cuando el bolsillo no existe 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > lanza ACCOUNT_NOT_FOUND cuando la cuenta del bolsillo no existe 1ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > lanza FORBIDDEN cuando la cuenta es de otro usuario 1ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada 1ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > lanza INSUFFICIENT_AVAILABLE_BALANCE cuando el nuevo monto excede el disponible 2ms
+ ✓ src/tests/unit/pocket/UpdatePocket.test.ts > UpdatePocket.execute > Validaciones y errores > lanza NO_CHANGES_PROVIDED cuando no se envía ni nombre ni monto 1ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > Constructor > construye un bolsillo válido y expone sus getters 10ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > Constructor > acepta un monto de cero 1ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > Constructor > rechaza montos negativos 3ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > Constructor > rechaza montos NaN 2ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > Constructor > rechaza montos que no son número 1ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > Factory create() > recorta los espacios del nombre y fija las marcas de tiempo 2ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > updateName() > cambia el nombre recortando espacios 1ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > updateName() > rechaza un nombre vacío o de solo espacios 1ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > updateAmount() > actualiza el monto con un valor válido 1ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > updateAmount() > rechaza un monto negativo 1ms
+ ✓ src/tests/unit/pocket/Pocket.entity.test.ts > Pocket (entidad de dominio) > toPublic() > serializa las fechas como cadenas ISO 6ms
+stdout | src/tests/regression/pocket/eliminar.regression.test.ts
+◇ injected env (9) from .env // tip: ⌘ enable debugging { debug: true }
+stdout | src/tests/regression/pocket/transferir.regression.test.ts
+◇ injected env (9) from .env // tip: ⌘ enable debugging { debug: true }
+stdout | src/tests/regression/account/depositar.regression.test.ts
+◇ injected env (9) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+stdout | src/tests/regression/pocket/actualizar.regression.test.ts
+◇ injected env (9) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+stdout | src/tests/regression/pocket/ciclo-de-vida.regression.test.ts
+◇ injected env (9) from .env // tip: ⌘ suppress logs { quiet: true }
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should create with 201 26ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should call next on invalid create body 6ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should list by account with string and array params 5ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should update with string and array pocketIds 7ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should call next on empty update body 2ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should remove with string and array pocketIds 2ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should transfer with 200 3ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should call next when list, update or remove throw 2ms
+ ✓ src/tests/unit/pocket/PocketController.test.ts > PocketController > should call next when a use-case throws 2ms
+stdout | src/tests/regression/pocket/consultar.regression.test.ts
+◇ injected env (9) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+stdout | src/tests/regression/pocket/crear.regression.test.ts
+◇ injected env (9) from .env // tip: ⌘ override existing { override: true }
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Camino feliz > RG-EL-01 · responde 200 con la foto pública del bolsillo eliminado 113ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Camino feliz > RG-CO-01 · responde 200 con los bolsillos de la cuenta en su forma pública 113ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-01 · renombra y responde 200 con el contrato público, sin tocar el saldo 216ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-02 · persiste el cambio, conserva createdAt y renueva updatedAt 38ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-01 · responde 201 con el contrato público del bolsillo 231ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-02 · persiste el bolsillo y descuenta el monto del saldo disponible 29ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-03 · notifica al titular con el nombre del bolsillo 25ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-04 · recorta los espacios del nombre 19ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-05 · acepta el monto como texto numérico y lo convierte a número 20ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Camino feliz > RG-EL-02 · borra el bolsillo y devuelve su monto al saldo disponible 23ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Camino feliz > RG-EL-03 · notifica al titular con el nombre del bolsillo 18ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Camino feliz > RG-CO-02 · devuelve nombre y monto persistidos de cada bolsillo 26ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Camino feliz > RG-CO-03 · no mezcla bolsillos de otras cuentas 19ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Camino feliz > RG-CO-04 · devuelve una lista vacía para una cuenta sin bolsillos 38ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-03 · al aumentar el monto descuenta la diferencia del saldo 27ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-04 · al reducir el monto devuelve la diferencia al saldo 18ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-05 · actualiza nombre y monto en la misma petición 25ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-06 · con el mismo monto no mueve el saldo 19ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-07 · permite subir el monto hasta disponible + monto actual (límite) 17ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Camino feliz > RG-DE-01 · responde 200 con la cuenta pública y el saldo actualizado 284ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Camino feliz > RG-DE-02 · persiste el nuevo saldo sin tocar los bolsillos 53ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Camino feliz > RG-DE-03 · notifica al titular con los últimos 4 dígitos de la cuenta 22ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Camino feliz > RG-TR-01 · responde 200 con ambos bolsillos actualizados 290ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Camino feliz > RG-TR-02 · persiste ambos bolsillos y no toca el saldo de la cuenta 51ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Camino feliz > RG-TR-03 · notifica el movimiento con origen y destino 30ms
+ ✓ src/tests/regression/pocket/ciclo-de-vida.regression.test.ts > Regresión · Ciclo de vida de los bolsillos > RG-FL-01 · crear → consultar → actualizar → transferir → eliminar conserva el total 385ms
+ ✓ src/tests/unit/pocket/SupabasePocketFallback.test.ts > SupabasePocketRepository — fallback por metodo > findById: rejection missing-table 17ms
+ ✓ src/tests/unit/pocket/SupabasePocketFallback.test.ts > SupabasePocketRepository — fallback por metodo > fallback lifecycle: early returns serve from memory 14ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-06 · permite un bolsillo con monto cero sin tocar el saldo 18ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-07 · permite apartar exactamente todo el saldo disponible (límite) 23ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Camino feliz > RG-CR-08 · acepta un nombre de 150 caracteres (límite del validador) 20ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Validación de entrada (400 VALIDATION_ERROR) > RG-CR-09 · rechaza un accountId que no es UUID 31ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Camino feliz > RG-EL-04 · eliminar un bolsillo en cero no mueve el saldo 205ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Camino feliz > RG-EL-05 · el bolsillo eliminado desaparece de la consulta 53ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Camino feliz > RG-EL-06 · un segundo DELETE responde 404 y no devuelve el dinero dos veces 33ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Camino feliz > RG-CO-05 · refleja un bolsillo recién creado (lectura después de escritura) 174ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Camino feliz > RG-CO-06 · permite consultar una cuenta bloqueada (solo lectura) 18ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Camino feliz > RG-CO-07 · es de solo lectura: no altera saldo, bolsillos ni notificaciones 33ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Autenticación, autorización y errores > RG-CO-08 · responde 401 sin token 19ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Autenticación, autorización y errores > RG-CO-09 · responde 403 al consultar una cuenta ajena 18ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-08 · recorta los espacios del nombre 19ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Camino feliz > RG-AC-09 · notifica al titular con el nombre final del bolsillo 20ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Validación de entrada > RG-AC-10 · rechaza un cuerpo vacío 33ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Validación de entrada > RG-AC-11 · rechaza un monto negativo 23ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Camino feliz > RG-DE-04 · depósitos sucesivos se acumulan 57ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Camino feliz > RG-DE-05 · acepta el monto como texto numérico 20ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Camino feliz > RG-DE-06 · acepta montos con decimales 28ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Camino feliz > RG-TR-04 · permite transferir todo el saldo del bolsillo origen (límite) 20ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Camino feliz > RG-TR-05 · transferencias de ida y vuelta conservan el total de la cuenta 56ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Validación de entrada (400 VALIDATION_ERROR) > RG-TR-06 · rechaza un monto de cero 23ms
+ ✓ src/tests/regression/pocket/ciclo-de-vida.regression.test.ts > Regresión · Ciclo de vida de los bolsillos > RG-FL-02 · las operaciones de un usuario no afectan los bolsillos de otro 97ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Autenticación, autorización y errores > RG-CO-10 · responde 404 cuando la cuenta no existe 34ms
+ ✓ src/tests/regression/pocket/consultar.regression.test.ts > Regresión · Consultar bolsillos (GET /api/v1/pockets/account/:accountId) > Autenticación, autorización y errores > RG-CO-11 · responde 404 con un id de cuenta mal formado (la ruta no valida formato) 16ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-EL-07 · responde 404 cuando el bolsillo no existe 28ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-EL-08 · responde 403 sobre un bolsillo ajeno y no lo elimina 19ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-EL-09 · responde 400 en una cuenta bloqueada y no elimina nada 17ms
+ ✓ src/tests/regression/pocket/eliminar.regression.test.ts > Regresión · Eliminar bolsillo (DELETE /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-EL-10 · responde 401 sin token 23ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Validación de entrada (400 VALIDATION_ERROR) > RG-CR-10 · rechaza un monto negativo 30ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Validación de entrada (400 VALIDATION_ERROR) > RG-CR-11 · rechaza un nombre vacío 35ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Validación de entrada (400 VALIDATION_ERROR) > RG-CR-12 · rechaza un nombre de 151 caracteres 29ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Autenticación y autorización > RG-CR-13 · responde 401 sin token 15ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Autenticación y autorización > RG-CR-14 · responde 401 con un token inválido 17ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Validación de entrada > RG-AC-12 · rechaza un nombre vacío 19ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Validación de entrada > RG-AC-13 · rechaza un nombre de solo espacios (lo ataja el caso de uso) 19ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-AC-14 · responde 400 si el monto supera el límite por 1 peso y no modifica nada 21ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-AC-15 · responde 404 cuando el bolsillo no existe 20ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-AC-16 · responde 403 sobre un bolsillo ajeno y no lo modifica 17ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-AC-17 · responde 400 en una cuenta bloqueada y no la modifica 18ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Validación del monto (400 INVALID_AMOUNT) > RG-DE-07 · rechaza un monto de cero sin mover el saldo ni notificar 29ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Validación del monto (400 INVALID_AMOUNT) > RG-DE-08 · rechaza un monto negativo sin mover el saldo ni notificar 23ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Validación del monto (400 INVALID_AMOUNT) > RG-DE-09 · rechaza un monto no numérico sin mover el saldo ni notificar 17ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Validación del monto (400 INVALID_AMOUNT) > RG-DE-10 · rechaza una petición sin monto sin mover el saldo ni notificar 17ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Validación de entrada (400 VALIDATION_ERROR) > RG-TR-07 · rechaza ids de bolsillo que no son UUID 20ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-08 · responde 400 al transferir un bolsillo hacia sí mismo 22ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-09 · responde 404 cuando el bolsillo origen no existe 27ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-10 · responde 404 cuando el bolsillo destino no existe 23ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-11 · responde 400 entre bolsillos de cuentas distintas y no mueve dinero 19ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Autenticación, autorización y reglas de negocio > RG-AC-18 · responde 401 sin token 20ms
+ ✓ src/tests/regression/pocket/actualizar.regression.test.ts > Regresión · Actualizar bolsillo (PATCH /api/v1/pockets/:pocketId) > Defectos conocidos (it.fails) > RG-AC-D04 · [D-04] acepta el monto como texto numérico, igual que al crear 37ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Autenticación y autorización > RG-CR-15 · responde 403 al crear en una cuenta ajena y no la modifica 17ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Reglas de negocio > RG-CR-16 · responde 404 cuando la cuenta no existe 18ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Reglas de negocio > RG-CR-17 · responde 400 en una cuenta bloqueada y no la modifica 18ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Reglas de negocio > RG-CR-18 · responde 400 si el monto supera el saldo disponible por 1 peso 20ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-12 · responde 403 si un tercero mueve dinero entre bolsillos ajenos 16ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-13 · responde 400 en una cuenta bloqueada y no mueve dinero 15ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-14 · responde 400 si el origen no alcanza por 1 peso y no mueve dinero 20ms
+ ✓ src/tests/regression/pocket/transferir.regression.test.ts > Regresión · Transferir entre bolsillos (POST /api/v1/pockets/transfer) > Autenticación, autorización y reglas de negocio > RG-TR-15 · responde 401 sin token 18ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Autenticación, autorización y reglas de negocio > RG-DE-11 · responde 401 sin token 21ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Autenticación, autorización y reglas de negocio > RG-DE-12 · responde 403 al depositar en una cuenta ajena y no la modifica 17ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Autenticación, autorización y reglas de negocio > RG-DE-13 · responde 404 cuando la cuenta no existe 16ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Autenticación, autorización y reglas de negocio > RG-DE-14 · responde 400 en una cuenta bloqueada y no la modifica 22ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Integración con Bolsillos > RG-DE-15 · un depósito habilita apartar un bolsillo que antes no cabía 43ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Defectos conocidos (it.fails) > RG-CR-D02 · [D-02] rechaza un monto booleano en vez de convertirlo en $1 42ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Defectos conocidos (it.fails) > RG-CR-D03 · [D-01/D-03] rechaza un nombre de solo espacios 15ms
+ ✓ src/tests/regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Defectos conocidos (it.fails) > RG-CR-D05 · [D-05] permite crear un bolsillo que cabe en el saldo disponible 15ms
+ ✓ src/tests/unit/pocket/SupabasePocketFallbackMethods.test.ts > SupabasePocketRepository — fallback findByAccountId > should map missing-table rejection 13ms
+ ✓ src/tests/regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Defectos conocidos (it.fails) > RG-DE-D08 · [D-08] rechaza un monto booleano en vez de depositar $1 33ms
+ ✓ src/tests/unit/pocket/GetAccountPockets.test.ts > GetAccountPockets.execute > Camino feliz > devuelve la lista pública de bolsillos de la cuenta (STUB de cuenta) 9ms
+ ✓ src/tests/unit/pocket/GetAccountPockets.test.ts > GetAccountPockets.execute > Camino feliz > devuelve una lista vacía cuando la cuenta no tiene bolsillos 1ms
+ ✓ src/tests/unit/pocket/GetAccountPockets.test.ts > GetAccountPockets.execute > Validaciones y errores > lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe 3ms
+ ✓ src/tests/unit/pocket/GetAccountPockets.test.ts > GetAccountPockets.execute > Validaciones y errores > lanza FORBIDDEN cuando la cuenta es de otro usuario 1ms
+ Test Files  18 passed (18)
+      Tests  193 passed | 5 expected fail (198)
+   Start at  07:45:06
+   Duration  4.85s (transform 6.27s, setup 0ms, import 24.61s, tests 5.08s, environment 10ms)

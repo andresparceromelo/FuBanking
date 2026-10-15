@@ -49,8 +49,9 @@ export class GenerateTwoFactorCode {
 
     await this.emailService.sendTwoFactorCode(email, plainCode);
 
+    // type '2fa': token de propósito único; authMiddleware no lo acepta como acceso.
     const temporaryToken = this.tokenService.generate(
-      { userId, email, rememberMe },
+      { userId, email, rememberMe, type: '2fa' },
       { expiresIn: env.TWO_FACTOR_TOKEN_EXPIRES_IN },
     );
 

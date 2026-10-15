@@ -17,10 +17,11 @@ export class CardController {
 
   create = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const { accountId } = req.body;
+      const { accountId, password } = req.body;
       const card = await this.createVirtualCard.execute({
         userId: req.user!.id,
         accountId,
+        password,
       });
       sendSuccess(res, card, 'Tarjeta virtual creada exitosamente', 201);
     } catch (error) {

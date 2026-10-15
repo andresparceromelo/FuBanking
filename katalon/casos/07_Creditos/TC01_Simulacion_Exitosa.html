@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TC01_Simulacion_Exitosa</title>
+</head>
+<body>
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC01_Simulacion_Exitosa</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>assertVisible</td><td>xpath=//h1[contains(.,'Créditos')]</td><td></td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>5000</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>12</td></tr>
+      <tr><td>type</td><td>id=loan-annual-rate</td><td>18</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=result-box</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>id=result-box</td><td></td></tr>
+      <tr><td>assertVisible</td><td>xpath=//*[contains(.,'Cuota mensual')]</td><td></td></tr>
+      <tr><td>assertVisible</td><td>xpath=//*[contains(.,'Total a pagar')]</td><td></td></tr>
+      <tr><td>assertText</td><td>xpath=//p[contains(.,'Simulación lista.')]</td><td>glob:*Simulación lista.*</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

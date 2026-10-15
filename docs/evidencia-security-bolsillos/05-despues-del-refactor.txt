@@ -1,0 +1,176 @@
+### Backend — npm run test:security:bolsillos (después del refactor)
+ RUN  v4.1.11 <repo>/backend
+stdout | src/tests/security/pocket/endurecimiento.security.test.ts
+◇ injected env (3) from .env // tip: ⌘ enable debugging { debug: true }
+stdout | src/tests/security/pocket/autenticacion.security.test.ts
+◇ injected env (3) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+stdout | src/tests/security/pocket/autorizacion.security.test.ts
+◇ injected env (3) from .env // tip: ⌘ override existing { override: true }
+stdout | src/tests/security/pocket/entrada.security.test.ts
+◇ injected env (3) from .env // tip: ⌘ enable debugging { debug: true }
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > acepta número entero 76ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > acepta número decimal 13ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > acepta texto decimal 11ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > IDOR / BOLA: el intruso usa los ids de recursos del titular > 'Crear bolsillo' → 403 FORBIDDEN y ninguna de las dos cuentas cambia 74ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > IDOR / BOLA: el intruso usa los ids de recursos del titular > 'Consultar bolsillos' → 403 FORBIDDEN y ninguna de las dos cuentas cambia 15ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > IDOR / BOLA: el intruso usa los ids de recursos del titular > 'Actualizar bolsillo' → 403 FORBIDDEN y ninguna de las dos cuentas cambia 13ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza sin cabecera Authorization con 401 y sin efectos 71ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza esquema Basic en vez de Bearer con 401 y sin efectos 11ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza Bearer sin token con 401 y sin efectos 11ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > acepta texto con decimales 13ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza booleano true con 400 y no crea nada 17ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza booleano false con 400 y no crea nada 11ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza null con 400 y no crea nada 14ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza lista vacía con 400 y no crea nada 10ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza lista con un número con 400 y no crea nada 10ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza objeto con 400 y no crea nada 10ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza texto vacío con 400 y no crea nada 10ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza texto de espacios con 400 y no crea nada 9ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > IDOR / BOLA: el intruso usa los ids de recursos del titular > 'Eliminar bolsillo' → 403 FORBIDDEN y ninguna de las dos cuentas cambia 14ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > IDOR / BOLA: el intruso usa los ids de recursos del titular > 'Transferir entre bolsillos' → 403 FORBIDDEN y ninguna de las dos cuentas cambia 13ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > IDOR / BOLA: el intruso usa los ids de recursos del titular > 'Depositar dinero' → 403 FORBIDDEN y ninguna de las dos cuentas cambia 11ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Abuso de flujo: mover dinero entre cuentas de distintos dueños > el intruso saca dinero del bolsillo del titular hacia el suyo → 400 y no se mueve dinero 11ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Abuso de flujo: mover dinero entre cuentas de distintos dueños > el intruso mete dinero suyo en un bolsillo del titular → 400 y no se mueve dinero 10ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Abuso de flujo: mover dinero entre cuentas de distintos dueños > el titular empuja dinero hacia el bolsillo del intruso → 400 y no se mueve dinero 10ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Mass assignment: campos que el cliente no controla se ignoran > crear: id, userId y createdAt del body se ignoran; el bolsillo es nuevo y del titular 23ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza token malformado con 401 y sin efectos 15ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza token firmado con otro secreto con 401 y sin efectos 14ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza token vencido con 401 y sin efectos 10ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza token con algoritmo "none" (sin firma) con 401 y sin efectos 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > rechaza token alterado para suplantar al titular con 401 y sin efectos 9ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > control positivo: el token de acceso legítimo sí opera 22ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP) 12ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo) 10ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza sin cabecera Authorization con 401 y sin efectos 9ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Mass assignment: campos que el cliente no controla se ignoran > actualizar: accountId e id del body no mueven el bolsillo a otra cuenta 10ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Mass assignment: campos que el cliente no controla se ignoran > declarar userId del titular en el body no autoriza al intruso a crear un bolsillo 12ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Mass assignment: campos que el cliente no controla se ignoran > declarar userId del titular en el body no autoriza al intruso a depositar 8ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Mass assignment: campos que el cliente no controla se ignoran > declarar userId del titular en el body no autoriza al intruso a actualizar 8ms
+ ✓ src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > Mass assignment: campos que el cliente no controla se ignoran > transferir: el monto se descuenta del bolsillo de origen, no de uno indicado en el body 9ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza texto no numérico con 400 y no crea nada 9ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza hexadecimal con 400 y no crea nada 12ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza notación científica con 400 y no crea nada 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > rechaza negativo con 400 y no crea nada 9ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > acepta número entero 10ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > acepta número decimal 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > acepta texto decimal 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > acepta texto con decimales 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza booleano true con 400 y no mueve el saldo 9ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza booleano false con 400 y no mueve el saldo 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza null con 400 y no mueve el saldo 9ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza esquema Basic en vez de Bearer con 401 y sin efectos 9ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza Bearer sin token con 401 y sin efectos 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza token malformado con 401 y sin efectos 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza token firmado con otro secreto con 401 y sin efectos 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza token vencido con 401 y sin efectos 9ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza token con algoritmo "none" (sin firma) con 401 y sin efectos 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > rechaza token alterado para suplantar al titular con 401 y sin efectos 10ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > control positivo: el token de acceso legítimo sí opera 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP) 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo) 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza sin cabecera Authorization con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza esquema Basic en vez de Bearer con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza Bearer sin token con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza lista vacía con 400 y no mueve el saldo 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza lista con un número con 400 y no mueve el saldo 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza objeto con 400 y no mueve el saldo 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza texto vacío con 400 y no mueve el saldo 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza texto de espacios con 400 y no mueve el saldo 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza texto no numérico con 400 y no mueve el saldo 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza hexadecimal con 400 y no mueve el saldo 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza notación científica con 400 y no mueve el saldo 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > rechaza negativo con 400 y no mueve el saldo 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-02 · Montos dentro del rango entero seguro > [SEC-05] un depósito de MAX_SAFE_INTEGER + 2 se rechaza (pérdida de precisión) 18ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-02 · Montos dentro del rango entero seguro > [SEC-05] un depósito de 1e300 se rechaza (pérdida de precisión) 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > path traversal en PATCH y DELETE → 404 sin tocar datos 14ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza token malformado con 401 y sin efectos 9ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza token firmado con otro secreto con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza token vencido con 401 y sin efectos 11ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza token con algoritmo "none" (sin firma) con 401 y sin efectos 13ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > rechaza token alterado para suplantar al titular con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > control positivo: el token de acceso legítimo sí opera 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP) 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo) 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza sin cabecera Authorization con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza esquema Basic en vez de Bearer con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza Bearer sin token con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza token malformado con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > inyección SQL en PATCH y DELETE → 404 sin tocar datos 13ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > comando SQL apilado en PATCH y DELETE → 404 sin tocar datos 12ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > byte nulo en PATCH y DELETE → 404 sin tocar datos 14ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > id de 2.000 caracteres en PATCH y DELETE → 404 sin tocar datos 17ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > path traversal como cuenta en consultar y depositar → 404 12ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > inyección SQL como cuenta en consultar y depositar → 404 12ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > comando SQL apilado como cuenta en consultar y depositar → 404 14ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > byte nulo como cuenta en consultar y depositar → 404 11ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza token firmado con otro secreto con 401 y sin efectos 12ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza token vencido con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza token con algoritmo "none" (sin firma) con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > rechaza token alterado para suplantar al titular con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > control positivo: el token de acceso legítimo sí opera 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP) 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo) 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza sin cabecera Authorization con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza esquema Basic en vez de Bearer con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza Bearer sin token con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza token malformado con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza token firmado con otro secreto con 401 y sin efectos 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza token vencido con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza token con algoritmo "none" (sin firma) con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > rechaza token alterado para suplantar al titular con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > id de 2.000 caracteres como cuenta en consultar y depositar → 404 12ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-03 · Identificadores maliciosos en la URL > ids no-UUID en la transferencia → 400 VALIDATION_ERROR 8ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-04 · Contenido peligroso en el nombre se trata como dato literal > etiqueta script: se guarda y se devuelve idéntico, como JSON 13ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-04 · Contenido peligroso en el nombre se trata como dato literal > atributo con evento: se guarda y se devuelve idéntico, como JSON 13ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-04 · Contenido peligroso en el nombre se trata como dato literal > inyección SQL: se guarda y se devuelve idéntico, como JSON 11ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-04 · Contenido peligroso en el nombre se trata como dato literal > operador NoSQL como texto: se guarda y se devuelve idéntico, como JSON 12ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-04 · Contenido peligroso en el nombre se trata como dato literal > plantilla de servidor: se guarda y se devuelve idéntico, como JSON 12ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-04 · Contenido peligroso en el nombre se trata como dato literal > un objeto en lugar de texto en el nombre → 400 (no se interpreta como consulta) 6ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-04 · Contenido peligroso en el nombre se trata como dato literal > al actualizar con contenido peligroso también se conserva literal 7ms
+ ✓ src/tests/security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-05 · Prototype pollution > __proto__ y constructor en el body no contaminan Object.prototype 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > control positivo: el token de acceso legítimo sí opera 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP) 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo) 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza sin cabecera Authorization con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza esquema Basic en vez de Bearer con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza Bearer sin token con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza token malformado con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza token firmado con otro secreto con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza token vencido con 401 y sin efectos 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza token con algoritmo "none" (sin firma) con 401 y sin efectos 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > rechaza token alterado para suplantar al titular con 401 y sin efectos 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > control positivo: el token de acceso legítimo sí opera 8ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP) 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo) 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · adminMiddleware aplica la misma regla > control positivo: el token de acceso de un administrador entra 6ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · adminMiddleware aplica la misma regla > [SEC-01] rechaza el token temporal de 2FA de un administrador 7ms
+ ✓ src/tests/security/pocket/autenticacion.security.test.ts > SEC-AUTH · adminMiddleware aplica la misma regla > [SEC-02] rechaza el token de recuperación de contraseña de un administrador 7ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-01 · Cabeceras de seguridad > respuesta normal (GET /health) incluye las cabeceras de helmet y oculta la tecnología 21ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-01 · Cabeceras de seguridad > error 401 de Bolsillos incluye las cabeceras de helmet y oculta la tecnología 6ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-01 · Cabeceras de seguridad > error 401 del depósito incluye las cabeceras de helmet y oculta la tecnología 15ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-02 · CORS > permite el origen del frontend con los métodos que usa Bolsillos 5ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-02 · CORS > no autoriza un origen desconocido 5ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-03 · Cuerpos malformados o excesivos > [SEC-06] JSON malformado → 400 (error del cliente), no 500 11ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-03 · Cuerpos malformados o excesivos > [SEC-07] body de más de 10 KB → 413 Payload Too Large, no 500 6ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-04 · Los errores no exponen detalles internos > JSON malformado: respuesta JSON genérica, sin stack ni rutas del servidor 5ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-04 · Los errores no exponen detalles internos > body excesivo: respuesta JSON genérica, sin stack ni rutas del servidor 5ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-04 · Los errores no exponen detalles internos > ruta inexistente: respuesta JSON genérica, sin stack ni rutas del servidor 5ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-04 · Los errores no exponen detalles internos > token inválido: respuesta JSON genérica, sin stack ni rutas del servidor 5ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Crear bolsillo': una ráfaga de 100 peticiones recibe 429 394ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Consultar bolsillos': una ráfaga de 100 peticiones recibe 429 378ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Actualizar bolsillo': una ráfaga de 100 peticiones recibe 429 446ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Eliminar bolsillo': una ráfaga de 100 peticiones recibe 429 402ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Transferir entre bolsillos': una ráfaga de 100 peticiones recibe 429 449ms
+ ✓ src/tests/security/pocket/endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Depositar dinero': una ráfaga de 100 peticiones recibe 429 411ms
+ Test Files  4 passed (4)
+      Tests  144 passed | 10 expected fail (154)
+   Start at  09:31:22
+   Duration  4.95s (transform 1.95s, setup 0ms, import 5.14s, tests 4.06s, environment 1ms)
+
+### Backend — npm run test:regression:bolsillos (después del refactor)
+ Test Files  18 passed (18)
+      Tests  195 passed | 3 expected fail (198)
+
+### Backend — suite completa
+ Test Files  84 passed (84)
+      Tests  801 passed | 13 expected fail (814)

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>FuBanking Admin - Gestionar Creditos</title>
+  <style>
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0f172a; color: #f8fafc; padding: 24px; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .filters { display: flex; gap: 8px; margin-bottom: 20px; }
+    button { background: #6366f1; color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    .btn-approve { background: #16a34a; }
+    .btn-reject { background: #dc2626; }
+    .status-badge { display: inline-block; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: bold; }
+    .status-pending { background: #fef08a; color: #854d0e; }
+    .status-approved { background: #bbf7d0; color: #166534; }
+    .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 12px 0; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>Gestionar Creditos</h1>
+      <p style="color: #94a3b8; font-size: 14px;">Administra las solicitudes de crédito del sistema.</p>
+    </div>
+    <button id="btn-refresh-loans" onclick="refresh()">Actualizar</button>
+  </div>
+
+  <div class="filters">
+    <button id="filter-all" onclick="filter('ALL')">Todos</button>
+    <button id="filter-pending" onclick="filter('PENDING')">Pendientes</button>
+    <button id="filter-approved" onclick="filter('APPROVED')">Aprobados</button>
+    <button id="filter-rejected" onclick="filter('REJECTED')">Rechazados</button>
+  </div>
+
+  <div id="loan-card" data-testid="loan-card" class="card">
+    <div style="display:flex; justify-content: space-between; align-items: center;">
+      <span>Usuario: Gabriel (21099204)</span>
+      <span id="loan-status-badge" class="status-badge status-pending">Pendiente</span>
+    </div>
+    <div class="grid">
+      <div>Monto: <strong>$5.000</strong></div>
+      <div>Cuotas: <strong>12 meses</strong></div>
+      <div>Cuota mensual: <strong>$458,40</strong></div>
+      <div>Tasa: <strong>18% EA</strong></div>
+    </div>
+    <div style="border-top: 1px solid #334155; padding-top: 12px; display: flex; gap: 8px;">
+      <button id="btn-approve" class="btn-approve" onclick="approve()">Aprobar</button>
+      <button id="btn-reject" class="btn-reject" onclick="reject()">Rechazar</button>
+    </div>
+  </div>
+
+  <p id="admin-msg" style="color: #4ade80; font-weight: bold; margin-top: 16px;"></p>
+
+  <script>
+    function approve() {
+      const badge = document.getElementById('loan-status-badge');
+      badge.className = 'status-badge status-approved';
+      badge.innerText = 'Aprobado';
+      document.getElementById('btn-approve').style.display = 'none';
+      document.getElementById('btn-reject').style.display = 'none';
+      document.getElementById('admin-msg').innerText = 'Crédito aprobado exitosamente.';
+    }
+
+    function reject() {
+      const badge = document.getElementById('loan-status-badge');
+      badge.className = 'status-badge';
+      badge.style.background = '#fecaca';
+      badge.style.color = '#991b1b';
+      badge.innerText = 'Rechazado';
+      document.getElementById('btn-approve').style.display = 'none';
+      document.getElementById('btn-reject').style.display = 'none';
+      document.getElementById('admin-msg').innerText = 'Crédito rechazado.';
+    }
+
+    function refresh() {
+      document.getElementById('admin-msg').innerText = 'Lista actualizada.';
+    }
+
+    function filter(type) {
+      document.getElementById('admin-msg').innerText = 'Filtrando por ' + type;
+    }
+  </script>
+</body>
+</html>

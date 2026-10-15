@@ -1,0 +1,1576 @@
+{
+  "antes": "6102a28 (antes del refactor)",
+  "despues": "devops/jenkins-gitops 3205dc1 + pruebas de esta rama",
+  "total": 198,
+  "diferencias": 0,
+  "porArchivo": [
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "total": 16,
+      "antes": {
+        "passed": 16
+      },
+      "despues": {
+        "passed": 16
+      }
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "total": 19,
+      "antes": {
+        "passed": 19
+      },
+      "despues": {
+        "passed": 19
+      }
+    },
+    {
+      "file": "regression/pocket/ciclo-de-vida.regression.test.ts",
+      "total": 2,
+      "antes": {
+        "passed": 2
+      },
+      "despues": {
+        "passed": 2
+      }
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "total": 11,
+      "antes": {
+        "passed": 11
+      },
+      "despues": {
+        "passed": 11
+      }
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "total": 21,
+      "antes": {
+        "passed": 21
+      },
+      "despues": {
+        "passed": 21
+      }
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "total": 10,
+      "antes": {
+        "passed": 10
+      },
+      "despues": {
+        "passed": 10
+      }
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "total": 15,
+      "antes": {
+        "passed": 15
+      },
+      "despues": {
+        "passed": 15
+      }
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "total": 12,
+      "antes": {
+        "passed": 12
+      },
+      "despues": {
+        "passed": 12
+      }
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "total": 10,
+      "antes": {
+        "passed": 10
+      },
+      "despues": {
+        "passed": 10
+      }
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "total": 7,
+      "antes": {
+        "passed": 7
+      },
+      "despues": {
+        "passed": 7
+      }
+    },
+    {
+      "file": "unit/pocket/GetAccountPockets.test.ts",
+      "total": 4,
+      "antes": {
+        "passed": 4
+      },
+      "despues": {
+        "passed": 4
+      }
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "total": 11,
+      "antes": {
+        "passed": 11
+      },
+      "despues": {
+        "passed": 11
+      }
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "total": 9,
+      "antes": {
+        "passed": 9
+      },
+      "despues": {
+        "passed": 9
+      }
+    },
+    {
+      "file": "unit/pocket/SupabasePocketFallback.test.ts",
+      "total": 2,
+      "antes": {
+        "passed": 2
+      },
+      "despues": {
+        "passed": 2
+      }
+    },
+    {
+      "file": "unit/pocket/SupabasePocketFallbackMethods.test.ts",
+      "total": 1,
+      "antes": {
+        "passed": 1
+      },
+      "despues": {
+        "passed": 1
+      }
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "total": 22,
+      "antes": {
+        "passed": 22
+      },
+      "despues": {
+        "passed": 22
+      }
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "total": 11,
+      "antes": {
+        "passed": 11
+      },
+      "despues": {
+        "passed": 11
+      }
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "total": 15,
+      "antes": {
+        "passed": 15
+      },
+      "despues": {
+        "passed": 15
+      }
+    }
+  ],
+  "casos": [
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-11 · responde 401 sin token",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-12 · responde 403 al depositar en una cuenta ajena y no la modifica",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-13 · responde 404 cuando la cuenta no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-14 · responde 400 en una cuenta bloqueada y no la modifica",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-01 · responde 200 con la cuenta pública y el saldo actualizado",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-02 · persiste el nuevo saldo sin tocar los bolsillos",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-03 · notifica al titular con los últimos 4 dígitos de la cuenta",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-04 · depósitos sucesivos se acumulan",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-05 · acepta el monto como texto numérico",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-06 · acepta montos con decimales",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-D08 · [D-08] rechaza un monto booleano en vez de depositar $1",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "defecto-conocido (it.fails)"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-15 · un depósito habilita apartar un bolsillo que antes no cabía",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-07 · rechaza un monto de cero sin mover el saldo ni notificar",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-08 · rechaza un monto negativo sin mover el saldo ni notificar",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-09 · rechaza un monto no numérico sin mover el saldo ni notificar",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/account/depositar.regression.test.ts",
+      "name": "RG-DE-10 · rechaza una petición sin monto sin mover el saldo ni notificar",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-14 · responde 400 si el monto supera el límite por 1 peso y no modifica nada",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-15 · responde 404 cuando el bolsillo no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-16 · responde 403 sobre un bolsillo ajeno y no lo modifica",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-17 · responde 400 en una cuenta bloqueada y no la modifica",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-18 · responde 401 sin token",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-01 · renombra y responde 200 con el contrato público, sin tocar el saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-02 · persiste el cambio, conserva createdAt y renueva updatedAt",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-03 · al aumentar el monto descuenta la diferencia del saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-04 · al reducir el monto devuelve la diferencia al saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-05 · actualiza nombre y monto en la misma petición",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-06 · con el mismo monto no mueve el saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-07 · permite subir el monto hasta disponible + monto actual (límite)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-08 · recorta los espacios del nombre",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-09 · notifica al titular con el nombre final del bolsillo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-D04 · [D-04] acepta el monto como texto numérico, igual que al crear",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "defecto-conocido (it.fails)"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-10 · rechaza un cuerpo vacío",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-11 · rechaza un monto negativo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-12 · rechaza un nombre vacío",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/actualizar.regression.test.ts",
+      "name": "RG-AC-13 · rechaza un nombre de solo espacios (lo ataja el caso de uso)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/ciclo-de-vida.regression.test.ts",
+      "name": "RG-FL-01 · crear → consultar → actualizar → transferir → eliminar conserva el total",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/ciclo-de-vida.regression.test.ts",
+      "name": "RG-FL-02 · las operaciones de un usuario no afectan los bolsillos de otro",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-08 · responde 401 sin token",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-09 · responde 403 al consultar una cuenta ajena",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-10 · responde 404 cuando la cuenta no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-11 · responde 404 con un id de cuenta mal formado (la ruta no valida formato)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-01 · responde 200 con los bolsillos de la cuenta en su forma pública",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-02 · devuelve nombre y monto persistidos de cada bolsillo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-03 · no mezcla bolsillos de otras cuentas",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-04 · devuelve una lista vacía para una cuenta sin bolsillos",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-05 · refleja un bolsillo recién creado (lectura después de escritura)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-06 · permite consultar una cuenta bloqueada (solo lectura)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/consultar.regression.test.ts",
+      "name": "RG-CO-07 · es de solo lectura: no altera saldo, bolsillos ni notificaciones",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-13 · responde 401 sin token",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-14 · responde 401 con un token inválido",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-15 · responde 403 al crear en una cuenta ajena y no la modifica",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-01 · responde 201 con el contrato público del bolsillo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-02 · persiste el bolsillo y descuenta el monto del saldo disponible",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-03 · notifica al titular con el nombre del bolsillo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-04 · recorta los espacios del nombre",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-05 · acepta el monto como texto numérico y lo convierte a número",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-06 · permite un bolsillo con monto cero sin tocar el saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-07 · permite apartar exactamente todo el saldo disponible (límite)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-08 · acepta un nombre de 150 caracteres (límite del validador)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-D02 · [D-02] rechaza un monto booleano en vez de convertirlo en $1",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "defecto-conocido (it.fails)"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-D03 · [D-01/D-03] rechaza un nombre de solo espacios",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "defecto-conocido (it.fails)"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-D05 · [D-05] permite crear un bolsillo que cabe en el saldo disponible",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "defecto-conocido (it.fails)"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-16 · responde 404 cuando la cuenta no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-17 · responde 400 en una cuenta bloqueada y no la modifica",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-18 · responde 400 si el monto supera el saldo disponible por 1 peso",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-09 · rechaza un accountId que no es UUID",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-10 · rechaza un monto negativo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-11 · rechaza un nombre vacío",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/crear.regression.test.ts",
+      "name": "RG-CR-12 · rechaza un nombre de 151 caracteres",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-07 · responde 404 cuando el bolsillo no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-08 · responde 403 sobre un bolsillo ajeno y no lo elimina",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-09 · responde 400 en una cuenta bloqueada y no elimina nada",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-10 · responde 401 sin token",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-01 · responde 200 con la foto pública del bolsillo eliminado",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-02 · borra el bolsillo y devuelve su monto al saldo disponible",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-03 · notifica al titular con el nombre del bolsillo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-04 · eliminar un bolsillo en cero no mueve el saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-05 · el bolsillo eliminado desaparece de la consulta",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/eliminar.regression.test.ts",
+      "name": "RG-EL-06 · un segundo DELETE responde 404 y no devuelve el dinero dos veces",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-08 · responde 400 al transferir un bolsillo hacia sí mismo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-09 · responde 404 cuando el bolsillo origen no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-10 · responde 404 cuando el bolsillo destino no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-11 · responde 400 entre bolsillos de cuentas distintas y no mueve dinero",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-12 · responde 403 si un tercero mueve dinero entre bolsillos ajenos",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-13 · responde 400 en una cuenta bloqueada y no mueve dinero",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-14 · responde 400 si el origen no alcanza por 1 peso y no mueve dinero",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-15 · responde 401 sin token",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-01 · responde 200 con ambos bolsillos actualizados",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-02 · persiste ambos bolsillos y no toca el saldo de la cuenta",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-03 · notifica el movimiento con origen y destino",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-04 · permite transferir todo el saldo del bolsillo origen (límite)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-05 · transferencias de ida y vuelta conservan el total de la cuenta",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-06 · rechaza un monto de cero",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "regression/pocket/transferir.regression.test.ts",
+      "name": "RG-TR-07 · rechaza ids de bolsillo que no son UUID",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "acepta montos con decimales",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "conserva la identidad de la cuenta (id, titular, número, estado)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "suma el monto al saldo de la cuenta y lo persiste",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "llama a updateBalance una sola vez con el saldo nuevo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "emite una notificación \"Depósito realizado\" con los últimos 4 dígitos de la cuenta",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "funciona sin repositorio de notificaciones",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "lanza ACCOUNT_INACTIVE cuando la cuenta está cerrada (STUB)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "lanza FORBIDDEN cuando la cuenta pertenece a otro usuario y no cambia el saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "rechaza un monto NaN (lo que llega si el body no trae un número)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "rechaza un monto cero sin consultar la cuenta ni notificar (MOCK + DUMMY)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/account/DepositMoney.test.ts",
+      "name": "rechaza un monto negativo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "crea el bolsillo y descuenta el monto del saldo de la cuenta",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "recorta los espacios del nombre al crear el bolsillo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "llama a updateBalance con el saldo correcto y guarda el bolsillo una vez",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "emite exactamente una notificación de \"Bolsillo creado\"",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "no falla cuando no se inyecta repositorio de notificaciones",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "lanza FORBIDDEN cuando la cuenta pertenece a otro usuario",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "lanza INSUFFICIENT_AVAILABLE_BALANCE cuando no hay saldo disponible",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/CreatePocket.test.ts",
+      "name": "rechaza montos negativos y NO emite notificación (DUMMY)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "name": "elimina el bolsillo y devuelve su monto al saldo de la cuenta",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "name": "emite una notificación de \"Bolsillo eliminado\" (SPY)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "name": "funciona sin repositorio de notificaciones",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "name": "lanza ACCOUNT_NOT_FOUND cuando la cuenta del bolsillo no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "name": "lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "name": "lanza FORBIDDEN cuando la cuenta es de otro usuario",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/DeletePocket.test.ts",
+      "name": "lanza POCKET_NOT_FOUND cuando el bolsillo no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/GetAccountPockets.test.ts",
+      "name": "devuelve la lista pública de bolsillos de la cuenta (STUB de cuenta)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/GetAccountPockets.test.ts",
+      "name": "devuelve una lista vacía cuando la cuenta no tiene bolsillos",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/GetAccountPockets.test.ts",
+      "name": "lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/GetAccountPockets.test.ts",
+      "name": "lanza FORBIDDEN cuando la cuenta es de otro usuario",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "acepta un monto de cero",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "construye un bolsillo válido y expone sus getters",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "rechaza montos NaN",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "rechaza montos negativos",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "rechaza montos que no son número",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "recorta los espacios del nombre y fija las marcas de tiempo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "serializa las fechas como cadenas ISO",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "actualiza el monto con un valor válido",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "rechaza un monto negativo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "cambia el nombre recortando espacios",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/Pocket.entity.test.ts",
+      "name": "rechaza un nombre vacío o de solo espacios",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should call next on empty update body",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should call next on invalid create body",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should call next when a use-case throws",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should call next when list, update or remove throw",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should create with 201",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should list by account with string and array params",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should remove with string and array pocketIds",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should transfer with 200",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/PocketController.test.ts",
+      "name": "should update with string and array pocketIds",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketFallback.test.ts",
+      "name": "fallback lifecycle: early returns serve from memory",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketFallback.test.ts",
+      "name": "findById: rejection missing-table",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketFallbackMethods.test.ts",
+      "name": "should map missing-table rejection",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back to Desconocido on messageless update error",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should find by id, account and total amounts",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should return 0 totals on error or empty data",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should save and map the row",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should throw DB_ERROR on save/update/delete failures",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should throw Desconocido on empty save result",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should update and delete",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back on missing-table delete rejection",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back on missing-table list/total rejections",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back on missing-table save rejection",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back on missing-table total rejection",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back on missing-table update rejection",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should map missing-table rejections per method",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should rethrow generic rejections from list and total",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should rethrow generic save/update/delete/total rejections",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should rethrow non-missing errors from finders",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back to memory on delete",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back to memory on save",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should fall back to memory on update",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should return 0 on getTotal with missing table",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should detect all missing-table shapes",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/SupabasePocketRepository.test.ts",
+      "name": "should throw DB_TABLE_MISSING from the handler",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "funciona sin repositorio de notificaciones",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "mueve el monto del bolsillo origen al destino",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "lanza ACCOUNT_NOT_FOUND cuando la cuenta de los bolsillos no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "lanza FORBIDDEN cuando la cuenta es de otro usuario",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "lanza INSUFFICIENT_POCKET_BALANCE cuando el origen no tiene saldo suficiente",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "lanza POCKETS_DIFFERENT_ACCOUNT cuando los bolsillos son de cuentas distintas",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "lanza SOURCE_POCKET_NOT_FOUND cuando el origen no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "lanza TARGET_POCKET_NOT_FOUND cuando el destino no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "rechaza montos menores o iguales a cero",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/TransferPocketBalance.test.ts",
+      "name": "rechaza transferir un bolsillo hacia sí mismo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "actualiza nombre y monto a la vez",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "actualiza solo el nombre sin tocar el saldo (STUB de cuenta)",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "aumenta el monto y descuenta la diferencia del saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "funciona sin repositorio de notificaciones",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "no cambia el saldo cuando el monto enviado es igual al actual",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "no renombra cuando el nombre enviado es igual al actual",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "reduce el monto y devuelve la diferencia al saldo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "lanza ACCOUNT_NOT_FOUND cuando la cuenta del bolsillo no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "lanza FORBIDDEN cuando la cuenta es de otro usuario",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "lanza INSUFFICIENT_AVAILABLE_BALANCE cuando el nuevo monto excede el disponible",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "lanza NO_CHANGES_PROVIDED cuando no se envía ni nombre ni monto",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "lanza POCKET_NOT_FOUND cuando el bolsillo no existe",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "rechaza un monto negativo",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    },
+    {
+      "file": "unit/pocket/UpdatePocket.test.ts",
+      "name": "rechaza un nombre vacío o de solo espacios",
+      "antes": "passed",
+      "despues": "passed",
+      "tipo": "regla vigente"
+    }
+  ]
+}

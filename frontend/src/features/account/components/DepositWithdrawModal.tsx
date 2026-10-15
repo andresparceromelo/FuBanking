@@ -105,7 +105,7 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 p-3 text-xs bg-destructive/10 border border-destructive/20 text-destructive rounded-xl">
+          <div data-testid="dw-error" className="flex items-center gap-2 p-3 text-xs bg-destructive/10 border border-destructive/20 text-destructive rounded-xl">
             <AlertCircle size={16} />
             <span>{error}</span>
           </div>
@@ -113,10 +113,11 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-muted-foreground mb-1">
+            <label htmlFor="dw-amount" className="block text-xs font-medium text-muted-foreground mb-1">
               Monto a {isDeposit ? 'ingresar' : 'retirar'} (COP)
             </label>
             <input
+              id="dw-amount"
               type="number"
               placeholder="0.00"
               value={amount}
@@ -149,6 +150,7 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
               Cancelar
             </button>
             <button
+              data-testid="dw-submit"
               type="submit"
               disabled={isLoading}
               className={`w-1/2 py-2.5 px-4 rounded-xl text-sm font-semibold text-white transition-all shadow-md ${

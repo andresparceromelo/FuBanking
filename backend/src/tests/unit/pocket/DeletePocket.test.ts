@@ -2,7 +2,8 @@
  * ============================================================================
  *  Pruebas unitarias — DeletePocket (caso de uso "Eliminar bolsillo")
  * ----------------------------------------------------------------------------
- *  Patrón AAA + principios FIRST (ver detalle en CreatePocket.test.ts).
+ *  Patrón AAA + principios FIRST + aserciones fluidas Chai BDD
+ *  (ver detalle en CreatePocket.test.ts).
  *  Dobles demostrados aquí: FAKE y SPY.
  * ============================================================================
  */
@@ -42,10 +43,10 @@ describe('DeletePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.id).toBe('p1');
-      expect(await pocketRepo.findById('p1')).toBeNull();
+      expect(result).to.have.property('id', 'p1');
+      expect(await pocketRepo.findById('p1')).to.be.null;
       const account = await accountRepo.findById('acc-1');
-      expect(account?.balance).toBe(1_000_000); // 900.000 + 100.000
+      expect(account).to.have.property('balance', 1_000_000); // 900.000 + 100.000
     });
 
     it('emite una notificación de "Bolsillo eliminado" (SPY)', async () => {
@@ -57,8 +58,8 @@ describe('DeletePocket.execute', () => {
       await sut.execute({ userId: 'user-1', pocketId: 'p1' });
 
       // Assert
-      expect(spyNotif.saveCallCount).toBe(1);
-      expect(spyNotif.savedNotifications[0].title).toBe('Bolsillo eliminado');
+      expect(spyNotif.saveCallCount).to.equal(1);
+      expect(spyNotif.savedNotifications[0]).to.have.property('title', 'Bolsillo eliminado');
     });
 
     it('funciona sin repositorio de notificaciones', async () => {
@@ -69,7 +70,7 @@ describe('DeletePocket.execute', () => {
       const result = await sut.execute({ userId: 'user-1', pocketId: 'p1' });
 
       // Assert
-      expect(result.id).toBe('p1');
+      expect(result).to.have.property('id', 'p1');
     });
   });
 
@@ -77,7 +78,7 @@ describe('DeletePocket.execute', () => {
     it('lanza POCKET_NOT_FOUND cuando el bolsillo no existe', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', pocketId: 'nope' }),
-      ).rejects.toMatchObject({ code: 'POCKET_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'POCKET_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza ACCOUNT_NOT_FOUND cuando la cuenta del bolsillo no existe', async () => {
@@ -89,7 +90,7 @@ describe('DeletePocket.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', pocketId: 'p1' }),
-      ).rejects.toMatchObject({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza FORBIDDEN cuando la cuenta es de otro usuario', async () => {
@@ -99,7 +100,7 @@ describe('DeletePocket.execute', () => {
 
       await expect(
         sut.execute({ userId: 'intruso', pocketId: 'p1' }),
-      ).rejects.toMatchObject({ code: 'FORBIDDEN', statusCode: 403 });
+      ).rejects.to.include({ code: 'FORBIDDEN', statusCode: 403 });
     });
 
     it('lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada', async () => {
@@ -111,7 +112,7 @@ describe('DeletePocket.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', pocketId: 'p1' }),
-      ).rejects.toMatchObject({ code: 'ACCOUNT_NOT_OPERATIONAL', statusCode: 400 });
+      ).rejects.to.include({ code: 'ACCOUNT_NOT_OPERATIONAL', statusCode: 400 });
     });
   });
 });

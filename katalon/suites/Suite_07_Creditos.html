@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Suite Pruebas E2E Créditos FuBanking (Cliente y Admin)</title>
+</head>
+<body>
+  <!-- TC00: Iniciar Sesión Básica con Actor Gabriel -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC00_Iniciar_Sesion</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//a[@href='/loans']</td><td></td></tr>
+      <tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC01: Simulación Exitosa Estándar -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC01_Simulacion_Exitosa_Estandar</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>assertVisible</td><td>xpath=//h1[contains(.,'Créditos')]</td><td></td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>5000</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>12</td></tr>
+      <tr><td>type</td><td>id=loan-annual-rate</td><td>18</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=result-box</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>id=result-box</td><td></td></tr>
+      <tr><td>assertVisible</td><td>xpath=//*[contains(.,'Cuota mensual')]</td><td></td></tr>
+      <tr><td>assertVisible</td><td>xpath=//*[contains(.,'Total a pagar')]</td><td></td></tr>
+      <tr><td>assertText</td><td>xpath=//p[contains(.,'Simulación lista.')]</td><td>glob:*Simulación lista.*</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC02: Simulación con Valores Frontera y Recálculo Dinámico -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC02_Simulacion_Valores_Frontera_Limites</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>100</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>3</td></tr>
+      <tr><td>type</td><td>id=loan-annual-rate</td><td>10</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=result-box</td><td>10000</td></tr>
+      <tr><td>assertText</td><td>xpath=//p[contains(.,'Simulación lista.')]</td><td>glob:*Simulación lista.*</td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>25000000</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>36</td></tr>
+      <tr><td>type</td><td>id=loan-annual-rate</td><td>24</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=result-box</td><td>10000</td></tr>
+      <tr><td>assertText</td><td>xpath=//p[contains(.,'Simulación lista.')]</td><td>glob:*Simulación lista.*</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC03: Validación Defensiva ante Monto y Cuotas en Cero -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC03_Validacion_Monto_Cuotas_En_Cero</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>0</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>0</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//*[contains(.,'No fue posible simular') or contains(.,'válidos') or contains(.,'Simulador')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'No fue posible simular') or contains(.,'válidos') or contains(.,'Simulador')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC04: Validación de Tasa de Interés Extrema (0%) -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC04_Validacion_Tasa_Interes_Extrema</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>24</td></tr>
+      <tr><td>type</td><td>id=loan-annual-rate</td><td>0</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=result-box</td><td>10000</td></tr>
+      <tr><td>assertVisible</td><td>xpath=//*[contains(.,'Cuota mensual')]</td><td></td></tr>
+      <tr><td>assertText</td><td>xpath=//p[contains(.,'Simulación lista.')]</td><td>glob:*Simulación lista.*</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC05: Verificación de Requisitos de Elegibilidad de Perfil -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC05_Verificar_Requisitos_Perfil_Elegibilidad</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//*[contains(.,'Requisitos para solicitar')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Documento verificado')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Mayor de edad')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Ingreso validado')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Historial crediticio validado')]</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=btn-apply</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC06: Solicitar Crédito como Usuario -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC06_Solicitar_Credito_Usuario</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>5000</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>12</td></tr>
+      <tr><td>type</td><td>id=loan-annual-rate</td><td>18</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=result-box</td><td>10000</td></tr>
+      <tr><td>waitForElementPresent</td><td>id=btn-apply</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=btn-apply</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//*[contains(.,'Solicitud enviada') or contains(.,'registrada') or contains(.,'pendiente') or contains(.,'Requisitos')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Solicitud enviada') or contains(.,'registrada') or contains(.,'pendiente') or contains(.,'Requisitos')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC07: Admin - Iniciar Sesión y Acceder al Módulo de Gestión -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC07_Admin_Iniciar_Sesion_Y_Acceso</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//h1[contains(.,'Gestionar Creditos')]</td><td>10000</td></tr>
+      <tr><td>assertVisible</td><td>xpath=//h1[contains(.,'Gestionar Creditos')]</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=btn-refresh-loans</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC08: Admin - Filtrado por Estados y Actualización de Lista -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC08_Admin_Filtros_Y_Actualizacion</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=filter-pending</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=filter-pending</td><td></td></tr>
+      <tr><td>pause</td><td>400</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=filter-pending</td><td></td></tr>
+      <tr><td>click</td><td>id=filter-approved</td><td></td></tr>
+      <tr><td>pause</td><td>400</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=filter-approved</td><td></td></tr>
+      <tr><td>click</td><td>id=filter-rejected</td><td></td></tr>
+      <tr><td>pause</td><td>400</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=filter-rejected</td><td></td></tr>
+      <tr><td>click</td><td>id=filter-all</td><td></td></tr>
+      <tr><td>pause</td><td>400</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=filter-all</td><td></td></tr>
+      <tr><td>click</td><td>id=btn-refresh-loans</td><td></td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=btn-refresh-loans</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC09: Admin - Inspección de Detalle y Análisis de Riesgo -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC09_Admin_Inspeccion_Detalle_Solicitud</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=filter-all</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//div[@data-testid='loan-card']</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Monto')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Cuotas')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Cuota mensual')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Total a pagar')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Documento')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Mayor de edad')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC10: Admin - Aprobar Crédito Solicitado (Golden Flow) -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC10_Admin_Aprobar_Credito_Usuario</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=filter-pending</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=filter-pending</td><td></td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//button[contains(.,'Aprobar')]</td><td>10000</td></tr>
+      <tr><td>click</td><td>xpath=(//button[contains(.,'Aprobar')])[1]</td><td></td></tr>
+      <tr><td>pause</td><td>1000</td><td></td></tr>
+      <tr><td>click</td><td>id=filter-approved</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC11: Admin - Rechazar Solicitud Alternativa -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC11_Admin_Rechazar_Credito_Alternativo</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=filter-all</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=filter-rejected</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//span[contains(.,'Rechazado')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//span[contains(.,'Rechazado')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+
+  <!-- TC12: Ciclo Completo End-to-End: Gabriel Solicita -> Admin Aprueba -> Gabriel Confirma -->
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC12_Ciclo_Completo_End_To_End</td></tr>
+    </thead>
+    <tbody>
+      <!-- FASE 1: Gabriel solicita -->
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=loan-amount</td><td>10000</td></tr>
+      <tr><td>type</td><td>id=loan-amount</td><td>5000</td></tr>
+      <tr><td>type</td><td>id=loan-installments</td><td>12</td></tr>
+      <tr><td>type</td><td>id=loan-annual-rate</td><td>18</td></tr>
+      <tr><td>click</td><td>id=btn-simulate</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=result-box</td><td>10000</td></tr>
+      <tr><td>waitForElementPresent</td><td>id=btn-apply</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=btn-apply</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//*[contains(.,'Solicitud enviada') or contains(.,'registrada') or contains(.,'pendiente') or contains(.,'Requisitos')]</td><td>10000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+
+      <!-- FASE 2: Admin aprueba -->
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=filter-pending</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=filter-pending</td><td></td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//button[contains(.,'Aprobar')]</td><td>10000</td></tr>
+      <tr><td>click</td><td>xpath=(//button[contains(.,'Aprobar')])[1]</td><td></td></tr>
+      <tr><td>pause</td><td>1000</td><td></td></tr>
+      <tr><td>click</td><td>id=filter-approved</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+
+      <!-- FASE 3: Gabriel confirma aprobación -->
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//h1[contains(.,'Créditos')]</td><td>10000</td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

@@ -6,6 +6,7 @@ import { DepositMoney } from '../../application/use-cases/account/DepositMoney';
 import { WithdrawMoney } from '../../application/use-cases/account/WithdrawMoney';
 import { CloseAccount } from '../../application/use-cases/account/CloseAccount';
 import { createAccountSchema } from '../validators/account.validators';
+import { parseStrictAmount } from '../validators/amount.validators';
 import { sendSuccess } from '../../shared/utils/response';
 
 /**
@@ -90,7 +91,7 @@ export class AccountController {
       const updatedAccount = await this.depositMoneyUseCase.execute({
         userId: req.user!.id,
         accountId,
-        amount: Number(amount),
+        amount: parseStrictAmount(amount), // NaN si no es un monto: DepositMoney responde INVALID_AMOUNT
         description,
       });
       sendSuccess(res, updatedAccount.toPublic(), 'Depósito realizado exitosamente');

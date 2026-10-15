@@ -7,6 +7,8 @@ FuBanking/
   backend/src/{app.ts,server.ts,presentation,application,domain,infrastructure,shared,tests/}
   frontend/src/{app/(auth)+(dashboard),features/<mod>/,shared/}
   mcp-server/src/index.ts      # MCP solo-lectura (ver docs/mcp.md)
+  e2e/                         # Serenity/JS (Screenplay + Playwright + Cucumber) y Vitest (ver e2e/README.md)
+  katalon/                     # Katalon Recorder (Selenese HTML) para Créditos, Bolsillos y Depósito (ver katalon/README.md)
   frontend/middleware.ts  Jenkinsfile  ci/  scripts/  docs/
   package.json  sonar-project.properties
 ```
@@ -21,6 +23,8 @@ npm run test:frontend           # cd frontend && vitest run
 npm run test:coverage           # ambos con cobertura
 sh scripts/regression.sh [backend|frontend|loans]   # regresión (CI/Linux; en Windows: scripts/regression.ps1 [-Module loans])
 npm run sonar                   # requiere lcov + SONAR_TOKEN (ver docs/ops/sonar.md)
+npm run test:e2e                # E2E Serenity/JS; requiere backend :3001 y frontend :3000 arriba
+npm run katalon:seed            # usuarios estáticos para Katalon Recorder (backend :3001 arriba)
 ```
 
 Detalle por lado: `backend/AGENTS.md`, `frontend/AGENTS.md`.

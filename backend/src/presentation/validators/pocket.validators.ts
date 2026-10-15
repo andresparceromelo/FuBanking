@@ -1,9 +1,10 @@
 import { z } from 'zod';
+import { strictAmount } from './amount.validators';
 
 export const createPocketSchema = z.object({
   accountId: z.string().uuid({ message: 'accountId debe ser un UUID válido' }),
   name: z.string().min(1, 'El nombre del bolsillo es obligatorio').max(150, 'El nombre del bolsillo no puede superar 150 caracteres'),
-  amount: z.coerce.number().min(0, 'El monto del bolsillo no puede ser negativo'),
+  amount: strictAmount('El monto del bolsillo no puede ser negativo'),
 });
 
 export const updatePocketSchema = z.object({

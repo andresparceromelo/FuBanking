@@ -166,7 +166,7 @@ function ToastItem({ toast, onDismiss }: Readonly<{ toast: Toast; onDismiss: () 
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-foreground">{toast.title}</p>
+          <p data-testid="toast-title" className="text-sm font-semibold text-foreground">{toast.title}</p>
           {toast.description && (
             <p className="mt-1 text-sm leading-5 text-muted-foreground">{toast.description}</p>
           )}
