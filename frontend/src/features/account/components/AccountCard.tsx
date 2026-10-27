@@ -52,10 +52,9 @@ export function AccountCard({ account, showBalance = true, onClick, onDeposit, o
       `}
     >
       {/* Clickable Area for Details */}
-      <div // NOSONAR -- area operable por teclado (tabIndex + Enter/Espacio + aria-label)
+      <div // NOSONAR -- area operable por teclado (tabIndex + Enter/Espacio)
         role="button"
         tabIndex={0}
-        aria-label="Ver detalles de la cuenta"
         onClick={() => onClick?.(account)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -65,6 +64,8 @@ export function AccountCard({ account, showBalance = true, onClick, onDeposit, o
         }}
         className="cursor-pointer space-y-4"
       >
+        {/* El nombre accesible sale del contenido visible: un aria-label fijo lo ocultaba (A11Y-03, axe label-content-name-mismatch). */}
+        <span className="sr-only">Ver detalles de la cuenta</span>
         {/* Header: tipo + estado */}
         <div className="flex items-start justify-between">
           <div>

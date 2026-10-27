@@ -1,0 +1,50 @@
+# Regresión detectada al integrar upstream/dev (580bc62) — 2026-10-27T02:05:16.956Z
+
+Commit origen: c9ce5f4 (TomasH4, 2026-10-26) "Pruebas con Cypress" — backend/src/infrastructure/repositories/SupabaseAccountRepository.ts
+Cambios: cuentas falsas en memoria (acc-katalon-001 con 10.000.000), caché de cuentas en un Map y timeout de 1,2 s a Supabase.
+
+Colección Postman sobre la rama SIN el merge: 136/136 aserciones.
+Colección Postman sobre el código CON el merge: 99/134 aserciones.
+
+Fallas:
+ - PRE-01 Saldo inicial de Ana (500.000) → expected response to have status code 200 but got 500
+ - PRE-01 Saldo inicial de Ana (500.000) → expected +0 to deeply equal 500000
+ - PRE-02 Saldo inicial de Bruno (100.000) → expected response to have status code 200 but got 500
+ - PRE-03 Bolsillo "Moto" de Bruno → expected response to have status code 201 but got 400
+ - PRE-03 Bolsillo "Moto" de Bruno → Cannot read properties of undefined (reading 'id')
+ - CB-01 Crear "Vacaciones" con 100.000 → expected response to have status code 201 but got 400
+ - CB-01 Crear "Vacaciones" con 100.000 → expected data to satisfy schema but found following errors: 
+data should have required property 'data'
+ - CB-01 Crear "Vacaciones" con 100.000 → Cannot read properties of undefined (reading 'name')
+ - CB-01 Crear "Vacaciones" con 100.000 → Cannot read properties of undefined (reading 'id')
+ - CB-02 Crear "Mercado" con 50.000 → expected response to have status code 201 but got 400
+ - CB-02 Crear "Mercado" con 50.000 → Cannot read properties of undefined (reading 'id')
+ - CB-03 Rechazar nombre vacío → expected +0 to deeply equal 350000
+ - CB-04 Rechazar nombre de solo espacios (DEF-001) → expected +0 to deeply equal 350000
+ - CB-06 Rechazar monto mayor al saldo → expected +0 to deeply equal 350000
+ - CO-01 Listar los bolsillos de Ana → expected [] to deeply equal [ …(2) ]
+ - ED-01 Renombrar "Vacaciones" a "Viaje a Cartagena" → expected response to have status code 200 but got 404
+ - ED-01 Renombrar "Vacaciones" a "Viaje a Cartagena" → expected [] to deeply equal [ …(2) ]
+ - ED-02 Aumentar el monto a 150.000 → expected response to have status code 200 but got 404
+ - ED-02 Aumentar el monto a 150.000 → expected +0 to deeply equal 300000
+ - ED-03 Rechazar un monto por encima del dinero total → expected response to have status code 400 but got 404
+ - ED-03 Rechazar un monto por encima del dinero total → expected 'NOT_FOUND' to deeply equal 'INSUFFICIENT_AVAILABLE_BALANCE'
+ - ED-03 Rechazar un monto por encima del dinero total → expected +0 to deeply equal 300000
+ - TR-01 Transferir 30.000 de "Viaje a Cartagena" a "Mercado" → expected response to have status code 200 but got 400
+ - TR-01 Transferir 30.000 de "Viaje a Cartagena" a "Mercado" → expected +0 to deeply equal 300000
+ - TR-01 Transferir 30.000 de "Viaje a Cartagena" a "Mercado" → expected [] to deeply equal [ …(2) ]
+ - TR-02 Rechazar más de lo que tiene el origen → expected 'VALIDATION_ERROR' to deeply equal 'INSUFFICIENT_POCKET_BALANCE'
+ - TR-03 Rechazar origen y destino iguales → expected 'VALIDATION_ERROR' to deeply equal 'INVALID_TRANSFER_TARGET'
+ - EL-01 No eliminar el bolsillo de otro cliente → expected response to have status code 403 but got 404
+ - EL-01 No eliminar el bolsillo de otro cliente → expected 'NOT_FOUND' to deeply equal 'FORBIDDEN'
+ - EL-01 No eliminar el bolsillo de otro cliente → expected [] to deeply equal [ { name: 'Moto', amount: 50000 } ]
+ - EL-02 Eliminar "Mercado" → expected response to have status code 200 but got 404
+ - EL-02 Eliminar "Mercado" → expected +0 to deeply equal 380000
+ - EL-02 Eliminar "Mercado" → expected [] to deeply equal [ { name: 'Viaje a Cartagena', …(1) } ]
+ - DE-01 Depositar 250.000 con descripción → expected response to have status code 200 but got 500
+ - DE-01 Depositar 250.000 con descripción → expected +0 to deeply equal 630000
+ - DE-02 Rechazar monto 0 → expected +0 to deeply equal 630000
+ - DE-06 Rechazar null como monto → expected +0 to deeply equal 630000
+ - DE-07 No depositar en la cuenta de otro cliente → expected +0 to deeply equal 50000
+
+tsc -p backend también falla: TS2322 ("AHORROS"/"ACTIVA" no asignables a AccountType/AccountStatus) y TS2540 (balance es readonly) en el mismo archivo.

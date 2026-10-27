@@ -1,0 +1,125 @@
+{
+  "id": "SH-D06",
+  "functionality": "Depositar dinero",
+  "objective": "La IA abona saldo a la cuenta; antes comprueba que el formulario rechaza un monto en cero.",
+  "expected": "Con 0: error \"Por favor ingresa un monto válido mayor a cero.\" y saldo 0. Con 150.000: toast \"Deposito realizado\" y saldo 150.000.",
+  "obtained": "6/6 validaciones correctas",
+  "status": "APROBADO",
+  "model": "google/gemini-3.5-flash-lite",
+  "durationMs": 24195,
+  "steps": [
+    {
+      "capability": "observe",
+      "instruction": "Find the \"Abonar\" button of the account card",
+      "output": [
+        "Abonar button of the account card"
+      ],
+      "inputTokens": 1035,
+      "outputTokens": 60,
+      "durationMs": 1278
+    },
+    {
+      "capability": "act",
+      "instruction": "(acción observada) Abonar button of the account card",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/section[1]/div[3]/div[1]/div[2]/div[1]/button[1]",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "durationMs": 71
+    },
+    {
+      "capability": "act",
+      "instruction": "Type \"0\" into the \"Monto a ingresar (COP)\" input",
+      "output": "Action [fill] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/section[1]/div[4]/div[1]/form[1]/div[1]/input[1]",
+      "inputTokens": 1791,
+      "outputTokens": 70,
+      "durationMs": 1629
+    },
+    {
+      "capability": "act",
+      "instruction": "Click the \"Abonar Saldo\" button",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/section[1]/div[4]/div[1]/form[1]/div[3]/button[2]",
+      "inputTokens": 1800,
+      "outputTokens": 67,
+      "durationMs": 1650
+    },
+    {
+      "capability": "extract",
+      "instruction": "Extract the validation error message shown in the deposit form",
+      "output": {
+        "message": "Por favor ingresa un monto válido mayor a cero."
+      },
+      "inputTokens": 1421,
+      "outputTokens": 47,
+      "durationMs": 5532
+    },
+    {
+      "capability": "act",
+      "instruction": "Fill the \"Monto a ingresar (COP)\" input with \"150000\"",
+      "output": "Action [fill] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/section[1]/div[4]/div[1]/form[1]/div[1]/input[1]",
+      "inputTokens": 1832,
+      "outputTokens": 75,
+      "durationMs": 1609
+    },
+    {
+      "capability": "act",
+      "instruction": "Click the \"Abonar Saldo\" button",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/section[1]/div[4]/div[1]/form[1]/div[3]/button[2]",
+      "inputTokens": 1828,
+      "outputTokens": 64,
+      "durationMs": 1752
+    },
+    {
+      "capability": "extract",
+      "instruction": "Extract the balance shown in the account card",
+      "output": {
+        "balance": 150000
+      },
+      "inputTokens": 1177,
+      "outputTokens": 45,
+      "durationMs": 1855
+    }
+  ],
+  "checks": [
+    {
+      "description": "observe encuentra el botón \"Abonar\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "mensaje de error (extract)",
+      "expected": "Por favor ingresa un monto válido mayor a cero.",
+      "obtained": "Por favor ingresa un monto válido mayor a cero.",
+      "passed": true
+    },
+    {
+      "description": "el saldo no cambia (API)",
+      "expected": 0,
+      "obtained": 0,
+      "passed": true
+    },
+    {
+      "description": "notificación \"Deposito realizado\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "saldo en pantalla (extract)",
+      "expected": 150000,
+      "obtained": 150000,
+      "passed": true
+    },
+    {
+      "description": "saldo en el backend (API)",
+      "expected": 150000,
+      "obtained": 150000,
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "SH-D06-inicio.png",
+    "SH-D06-error-monto-cero.png",
+    "SH-D06-resultado.png"
+  ]
+}

@@ -38,8 +38,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {...props}
       >
-        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        {!isLoading && children}
+        {isLoading && <Loader2 aria-hidden="true" className="mr-2 h-4 w-4 animate-spin" />}
+        {/* Mientras carga se ve solo el spinner, pero el botón conserva su nombre accesible (A11Y-06, axe button-name). */}
+        {isLoading ? <span className="sr-only">{children}</span> : children}
       </button>
     );
   }

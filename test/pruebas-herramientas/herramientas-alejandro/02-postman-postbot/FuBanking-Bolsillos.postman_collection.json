@@ -1,0 +1,1788 @@
+{
+  "info": {
+    "name": "FuBanking — Bolsillos y Depositar",
+    "description": "Pruebas de API de las 5 funcionalidades de Bolsillos y de Depositar (Alejandro). Cada request trae su objetivo y resultado esperado; las pruebas verifican el código HTTP, el cuerpo y, con `pm.sendRequest`, el estado real (oráculo) del saldo y los bolsillos. Ejecutar en orden (Runner o Newman).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.test('[global] Responde en menos de 5 s', () => pm.expect(pm.response.responseTime).to.be.below(5000));",
+          "pm.test('[global] Responde JSON con el sobre success', () => pm.expect(pm.response.json()).to.have.property('success'));"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "00 Preparación",
+      "description": "Crea a Ana (clienta principal, 500.000) y a Bruno (otro cliente, para las pruebas de seguridad).",
+      "item": [
+        {
+          "name": "Registrar a Ana",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const stamp = Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36);",
+                  "const password = 'Pm' + Math.random().toString(36).slice(2, 10) + 'A1';",
+                  "pm.collectionVariables.set('ana_email', 'e2e.pm.' + stamp + '@fubanking.test');",
+                  "pm.collectionVariables.set('ana_document', ('PM' + stamp).toUpperCase().slice(0, 20));",
+                  "pm.collectionVariables.set('ana_password', password);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Devuelve el token de sesión', () => pm.expect(pm.response.json().data.token).to.be.a('string').and.not.empty);",
+                  "pm.collectionVariables.set('ana_token', pm.response.json().data.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Ana\",\n  \"lastName\": \"Postman\",\n  \"birthDate\": \"1995-05-10\",\n  \"email\": \"{{ana_email}}\",\n  \"document\": \"{{ana_document}}\",\n  \"monthlyIncome\": 3500000,\n  \"password\": \"{{ana_password}}\",\n  \"confirmPassword\": \"{{ana_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** crear un cliente nuevo para la corrida (sin 2FA).\n\n**Esperado:** 201 y un token de sesión."
+          }
+        },
+        {
+          "name": "Abrir cuenta de ahorros de Ana",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Cuenta de ahorros con saldo 0', () => {",
+                  "  const account = pm.response.json().data;",
+                  "  pm.expect(account.accountType).to.eql('AHORROS');",
+                  "  pm.expect(account.balance).to.eql(0);",
+                  "});",
+                  "pm.collectionVariables.set('ana_accountId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"AHORROS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** abrir la cuenta donde vivirán los bolsillos.\n\n**Esperado:** 201, tipo AHORROS y saldo 0."
+          }
+        },
+        {
+          "name": "PRE-01 Saldo inicial de Ana (500.000)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 500000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(500000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{ana_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{ana_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 500000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** dejar a Ana con 500.000 disponibles.\n\n**Esperado:** 200 y saldo 500.000."
+          }
+        },
+        {
+          "name": "Registrar a Bruno",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const stamp = Date.now().toString(36) + Math.floor(Math.random() * 1e6).toString(36);",
+                  "const password = 'Pm' + Math.random().toString(36).slice(2, 10) + 'A1';",
+                  "pm.collectionVariables.set('bruno_email', 'e2e.pm.' + stamp + '@fubanking.test');",
+                  "pm.collectionVariables.set('bruno_document', ('PM' + stamp).toUpperCase().slice(0, 20));",
+                  "pm.collectionVariables.set('bruno_password', password);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Devuelve el token de sesión', () => pm.expect(pm.response.json().data.token).to.be.a('string').and.not.empty);",
+                  "pm.collectionVariables.set('bruno_token', pm.response.json().data.token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Bruno\",\n  \"lastName\": \"Postman\",\n  \"birthDate\": \"1995-05-10\",\n  \"email\": \"{{bruno_email}}\",\n  \"document\": \"{{bruno_document}}\",\n  \"monthlyIncome\": 3500000,\n  \"password\": \"{{bruno_password}}\",\n  \"confirmPassword\": \"{{bruno_password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** crear un cliente nuevo para la corrida (sin 2FA).\n\n**Esperado:** 201 y un token de sesión."
+          }
+        },
+        {
+          "name": "Abrir cuenta de ahorros de Bruno",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.test('Cuenta de ahorros con saldo 0', () => {",
+                  "  const account = pm.response.json().data;",
+                  "  pm.expect(account.accountType).to.eql('AHORROS');",
+                  "  pm.expect(account.balance).to.eql(0);",
+                  "});",
+                  "pm.collectionVariables.set('bruno_accountId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bruno_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"AHORROS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** abrir la cuenta donde vivirán los bolsillos.\n\n**Esperado:** 201, tipo AHORROS y saldo 0."
+          }
+        },
+        {
+          "name": "PRE-02 Saldo inicial de Bruno (100.000)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bruno_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{bruno_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{bruno_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 100000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** dar saldo a Bruno.\n\n**Esperado:** 200."
+          }
+        },
+        {
+          "name": "PRE-03 Bolsillo \"Moto\" de Bruno",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('bruno_pocketId', pm.response.json().data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{bruno_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{bruno_accountId}}\",\n  \"name\": \"Moto\",\n  \"amount\": 50000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** bolsillo ajeno para las pruebas de autorización.\n\n**Esperado:** 201."
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 Crear bolsillo",
+      "description": "POST /pockets — el monto sale del saldo disponible de la cuenta.",
+      "item": [
+        {
+          "name": "CB-01 Crear \"Vacaciones\" con 100.000",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "const pocketSchema = {",
+                  "  type: 'object',",
+                  "  required: ['id', 'accountId', 'name', 'amount'],",
+                  "  properties: {",
+                  "    id: { type: 'string' }, accountId: { type: 'string' }, name: { type: 'string' }, amount: { type: 'number', minimum: 0 },",
+                  "  },",
+                  "};",
+                  "pm.test('El bolsillo cumple el esquema', () => pm.response.to.have.jsonSchema({",
+                  "  type: 'object', required: ['success', 'data'], properties: { data: pocketSchema },",
+                  "}));",
+                  "pm.test('Nombre y monto del bolsillo', () => {",
+                  "  const pocket = pm.response.json().data;",
+                  "  pm.expect(pocket.name).to.eql('Vacaciones');",
+                  "  pm.expect(pocket.amount).to.eql(100000);",
+                  "});",
+                  "pm.collectionVariables.set('ana_pocket_vacaciones', pm.response.json().data.id);",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 400000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(400000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{ana_accountId}}\",\n  \"name\": \"Vacaciones\",\n  \"amount\": 100000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** apartar dinero en un bolsillo.\n\n**Esperado:** 201 y el saldo de la cuenta baja de 500.000 a 400.000."
+          }
+        },
+        {
+          "name": "CB-02 Crear \"Mercado\" con 50.000",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 201', () => pm.response.to.have.status(201));",
+                  "pm.collectionVariables.set('ana_pocket_mercado', pm.response.json().data.id);",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 350000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(350000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{ana_accountId}}\",\n  \"name\": \"Mercado\",\n  \"amount\": 50000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** segundo bolsillo para consultar y transferir.\n\n**Esperado:** 201 y saldo 350.000."
+          }
+        },
+        {
+          "name": "CB-03 Rechazar nombre vacío",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 350000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(350000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{ana_accountId}}\",\n  \"name\": \"\",\n  \"amount\": 1000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** validar el nombre obligatorio.\n\n**Esperado:** 400 VALIDATION_ERROR y el saldo no cambia."
+          }
+        },
+        {
+          "name": "CB-04 Rechazar nombre de solo espacios (DEF-001)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INVALID_POCKET_NAME', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_POCKET_NAME'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 350000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(350000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{ana_accountId}}\",\n  \"name\": \"   \",\n  \"amount\": 1000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** regresión del defecto DEF-001 (nombre de solo espacios).\n\n**Esperado:** 400 INVALID_POCKET_NAME antes de tocar el saldo."
+          }
+        },
+        {
+          "name": "CB-05 Rechazar monto negativo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error VALIDATION_ERROR', () => pm.expect(pm.response.json().error.code).to.eql('VALIDATION_ERROR'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{ana_accountId}}\",\n  \"name\": \"Carro\",\n  \"amount\": -1000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** el monto debe ser positivo.\n\n**Esperado:** 400 VALIDATION_ERROR."
+          }
+        },
+        {
+          "name": "CB-06 Rechazar monto mayor al saldo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INSUFFICIENT_AVAILABLE_BALANCE', () => pm.expect(pm.response.json().error.code).to.eql('INSUFFICIENT_AVAILABLE_BALANCE'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 350000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(350000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{ana_accountId}}\",\n  \"name\": \"Carro\",\n  \"amount\": 350001\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** valor frontera (saldo + 1).\n\n**Esperado:** 400 INSUFFICIENT_AVAILABLE_BALANCE."
+          }
+        },
+        {
+          "name": "CB-07 Rechazar petición sin token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));",
+                  "pm.test('Código de error UNAUTHORIZED', () => pm.expect(pm.response.json().error.code).to.eql('UNAUTHORIZED'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"accountId\": \"{{ana_accountId}}\",\n  \"name\": \"Sin token\",\n  \"amount\": 1000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** el endpoint exige autenticación.\n\n**Esperado:** 401 UNAUTHORIZED."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Consultar bolsillos",
+      "description": "GET /pockets/account/:accountId",
+      "item": [
+        {
+          "name": "CO-01 Listar los bolsillos de Ana",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "const pocketSchema = {",
+                  "  type: 'object',",
+                  "  required: ['id', 'accountId', 'name', 'amount'],",
+                  "  properties: {",
+                  "    id: { type: 'string' }, accountId: { type: 'string' }, name: { type: 'string' }, amount: { type: 'number', minimum: 0 },",
+                  "  },",
+                  "};",
+                  "pm.test('Cada bolsillo cumple el esquema', () => pm.response.to.have.jsonSchema({",
+                  "  type: 'object', required: ['success', 'data'], properties: { data: { type: 'array', items: pocketSchema } },",
+                  "}));",
+                  "pm.test('Devuelve los 2 bolsillos de Ana', () => {",
+                  "  const pockets = pm.response.json().data.map(p => ({ name: p.name, amount: p.amount })).sort((a, b) => a.name.localeCompare(b.name));",
+                  "  pm.expect(pockets).to.eql([{ name: 'Mercado', amount: 50000 }, { name: 'Vacaciones', amount: 100000 }]);",
+                  "});",
+                  "pm.test('Todos los bolsillos son de la cuenta consultada', () => {",
+                  "  pm.response.json().data.forEach(p => pm.expect(p.accountId).to.eql(pm.collectionVariables.get('ana_accountId')));",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/account/{{ana_accountId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "account",
+                "{{ana_accountId}}"
+              ]
+            },
+            "description": "**Objetivo:** ver los bolsillos de la cuenta.\n\n**Esperado:** 200 con \"Mercado\" 50.000 y \"Vacaciones\" 100.000."
+          }
+        },
+        {
+          "name": "CO-02 No consultar los bolsillos de otro cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Código de error FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/account/{{bruno_accountId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "account",
+                "{{bruno_accountId}}"
+              ]
+            },
+            "description": "**Objetivo:** control de acceso (IDOR).\n\n**Esperado:** 403 FORBIDDEN."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Editar bolsillo",
+      "description": "PATCH /pockets/:pocketId — cambia el nombre o ajusta el monto contra la cuenta.",
+      "item": [
+        {
+          "name": "ED-01 Renombrar \"Vacaciones\" a \"Viaje a Cartagena\"",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/pockets/account/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: bolsillos reales [{\"name\":\"Mercado\",\"amount\":50000},{\"name\":\"Viaje a Cartagena\",\"amount\":100000}]', () => {",
+                  "    const pockets = res.json().data.map(p => ({ name: p.name, amount: p.amount }))",
+                  "      .sort((a, b) => a.name.localeCompare(b.name));",
+                  "    pm.expect(pockets).to.eql([{\"name\":\"Mercado\",\"amount\":50000},{\"name\":\"Viaje a Cartagena\",\"amount\":100000}]);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/{{ana_pocket_vacaciones}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "{{ana_pocket_vacaciones}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Viaje a Cartagena\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** renombrar sin tocar el dinero.\n\n**Esperado:** 200, nombre nuevo y monto 100.000."
+          }
+        },
+        {
+          "name": "ED-02 Aumentar el monto a 150.000",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 300000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(300000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/{{ana_pocket_vacaciones}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "{{ana_pocket_vacaciones}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 150000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** la diferencia sale de la cuenta.\n\n**Esperado:** 200 y saldo 300.000 (350.000 − 50.000)."
+          }
+        },
+        {
+          "name": "ED-03 Rechazar un monto por encima del dinero total",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INSUFFICIENT_AVAILABLE_BALANCE', () => pm.expect(pm.response.json().error.code).to.eql('INSUFFICIENT_AVAILABLE_BALANCE'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 300000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(300000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/{{ana_pocket_vacaciones}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "{{ana_pocket_vacaciones}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 450001\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** valor frontera: saldo (300.000) + bolsillo (150.000) + 1.\n\n**Esperado:** 400 INSUFFICIENT_AVAILABLE_BALANCE y nada cambia."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Transferir entre bolsillos",
+      "description": "POST /pockets/transfer — mueve dinero entre bolsillos sin tocar la cuenta.",
+      "item": [
+        {
+          "name": "TR-01 Transferir 30.000 de \"Viaje a Cartagena\" a \"Mercado\"",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/pockets/account/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: bolsillos reales [{\"name\":\"Mercado\",\"amount\":80000},{\"name\":\"Viaje a Cartagena\",\"amount\":120000}]', () => {",
+                  "    const pockets = res.json().data.map(p => ({ name: p.name, amount: p.amount }))",
+                  "      .sort((a, b) => a.name.localeCompare(b.name));",
+                  "    pm.expect(pockets).to.eql([{\"name\":\"Mercado\",\"amount\":80000},{\"name\":\"Viaje a Cartagena\",\"amount\":120000}]);",
+                  "  });",
+                  "});",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 300000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(300000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/transfer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "transfer"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fromPocketId\": \"{{ana_pocket_vacaciones}}\",\n  \"toPocketId\": \"{{ana_pocket_mercado}}\",\n  \"amount\": 30000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** mover dinero entre bolsillos.\n\n**Esperado:** 200, 120.000 / 80.000 y la cuenta sigue en 300.000."
+          }
+        },
+        {
+          "name": "TR-02 Rechazar más de lo que tiene el origen",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INSUFFICIENT_POCKET_BALANCE', () => pm.expect(pm.response.json().error.code).to.eql('INSUFFICIENT_POCKET_BALANCE'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/transfer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "transfer"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fromPocketId\": \"{{ana_pocket_vacaciones}}\",\n  \"toPocketId\": \"{{ana_pocket_mercado}}\",\n  \"amount\": 120001\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** valor frontera (120.000 + 1).\n\n**Esperado:** 400 INSUFFICIENT_POCKET_BALANCE."
+          }
+        },
+        {
+          "name": "TR-03 Rechazar origen y destino iguales",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INVALID_TRANSFER_TARGET', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_TRANSFER_TARGET'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/transfer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "transfer"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fromPocketId\": \"{{ana_pocket_mercado}}\",\n  \"toPocketId\": \"{{ana_pocket_mercado}}\",\n  \"amount\": 1000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** regla de negocio.\n\n**Esperado:** 400 INVALID_TRANSFER_TARGET."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Eliminar bolsillo",
+      "description": "DELETE /pockets/:pocketId — el saldo del bolsillo vuelve a la cuenta.",
+      "item": [
+        {
+          "name": "EL-01 No eliminar el bolsillo de otro cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Código de error FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/pockets/account/' + pm.collectionVariables.get('bruno_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('bruno_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: bolsillos reales [{\"name\":\"Moto\",\"amount\":50000}]', () => {",
+                  "    const pockets = res.json().data.map(p => ({ name: p.name, amount: p.amount }))",
+                  "      .sort((a, b) => a.name.localeCompare(b.name));",
+                  "    pm.expect(pockets).to.eql([{\"name\":\"Moto\",\"amount\":50000}]);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/{{bruno_pocketId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "{{bruno_pocketId}}"
+              ]
+            },
+            "description": "**Objetivo:** control de acceso.\n\n**Esperado:** 403 FORBIDDEN y el bolsillo de Bruno sigue ahí."
+          }
+        },
+        {
+          "name": "EL-02 Eliminar \"Mercado\"",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 380000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(380000);",
+                  "  });",
+                  "});",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/pockets/account/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: bolsillos reales [{\"name\":\"Viaje a Cartagena\",\"amount\":120000}]', () => {",
+                  "    const pockets = res.json().data.map(p => ({ name: p.name, amount: p.amount }))",
+                  "      .sort((a, b) => a.name.localeCompare(b.name));",
+                  "    pm.expect(pockets).to.eql([{\"name\":\"Viaje a Cartagena\",\"amount\":120000}]);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/pockets/{{ana_pocket_mercado}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "pockets",
+                "{{ana_pocket_mercado}}"
+              ]
+            },
+            "description": "**Objetivo:** borrar un bolsillo.\n\n**Esperado:** 200 y sus 80.000 vuelven a la cuenta (380.000)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Depositar dinero",
+      "description": "POST /accounts/:id/deposit — funcionalidad extra.",
+      "item": [
+        {
+          "name": "DE-01 Depositar 250.000 con descripción",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 630000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(630000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{ana_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{ana_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 250000,\n  \"description\": \"Ahorro mensual\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** abonar a la cuenta.\n\n**Esperado:** 200 y saldo 630.000."
+          }
+        },
+        {
+          "name": "DE-02 Rechazar monto 0",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INVALID_AMOUNT', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_AMOUNT'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 630000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(630000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{ana_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{ana_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 0\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** valor frontera inferior.\n\n**Esperado:** 400 INVALID_AMOUNT."
+          }
+        },
+        {
+          "name": "DE-03 Rechazar monto negativo",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INVALID_AMOUNT', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_AMOUNT'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{ana_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{ana_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": -50000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** partición inválida.\n\n**Esperado:** 400 INVALID_AMOUNT."
+          }
+        },
+        {
+          "name": "DE-04 Rechazar texto como monto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INVALID_AMOUNT', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_AMOUNT'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{ana_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{ana_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"abc\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** sin type juggling.\n\n**Esperado:** 400 INVALID_AMOUNT."
+          }
+        },
+        {
+          "name": "DE-05 Rechazar booleano como monto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INVALID_AMOUNT', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_AMOUNT'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{ana_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{ana_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** `true` no debe valer 1.\n\n**Esperado:** 400 INVALID_AMOUNT."
+          }
+        },
+        {
+          "name": "DE-06 Rechazar null como monto",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Código de error INVALID_AMOUNT', () => pm.expect(pm.response.json().error.code).to.eql('INVALID_AMOUNT'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('ana_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('ana_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 630000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(630000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{ana_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{ana_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": null\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** `null` no debe valer 0.\n\n**Esperado:** 400 INVALID_AMOUNT y el saldo no cambia."
+          }
+        },
+        {
+          "name": "DE-07 No depositar en la cuenta de otro cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('HTTP 403', () => pm.response.to.have.status(403));",
+                  "pm.test('Código de error FORBIDDEN', () => pm.expect(pm.response.json().error.code).to.eql('FORBIDDEN'));",
+                  "pm.sendRequest({",
+                  "  url: pm.environment.get('baseUrl') + '/accounts/' + pm.collectionVariables.get('bruno_accountId'),",
+                  "  method: 'GET',",
+                  "  header: { Authorization: 'Bearer ' + pm.collectionVariables.get('bruno_token') },",
+                  "}, (err, res) => {",
+                  "  pm.test('Oráculo: el saldo real de la cuenta es 50000', () => {",
+                  "    pm.expect(err).to.equal(null);",
+                  "    pm.expect(res.json().data.balance).to.eql(50000);",
+                  "  });",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{ana_token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{bruno_accountId}}/deposit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{bruno_accountId}}",
+                "deposit"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 50000\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "**Objetivo:** control de acceso.\n\n**Esperado:** 403 FORBIDDEN y la cuenta de Bruno sigue en 50.000."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "ana_email",
+      "value": ""
+    },
+    {
+      "key": "ana_document",
+      "value": ""
+    },
+    {
+      "key": "ana_password",
+      "value": ""
+    },
+    {
+      "key": "ana_token",
+      "value": ""
+    },
+    {
+      "key": "ana_accountId",
+      "value": ""
+    },
+    {
+      "key": "bruno_email",
+      "value": ""
+    },
+    {
+      "key": "bruno_document",
+      "value": ""
+    },
+    {
+      "key": "bruno_password",
+      "value": ""
+    },
+    {
+      "key": "bruno_token",
+      "value": ""
+    },
+    {
+      "key": "bruno_accountId",
+      "value": ""
+    },
+    {
+      "key": "ana_pocket_vacaciones",
+      "value": ""
+    },
+    {
+      "key": "ana_pocket_mercado",
+      "value": ""
+    },
+    {
+      "key": "bruno_pocketId",
+      "value": ""
+    }
+  ]
+}

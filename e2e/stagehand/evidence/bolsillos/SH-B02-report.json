@@ -1,0 +1,109 @@
+{
+  "id": "SH-B02",
+  "functionality": "Consultar bolsillos",
+  "objective": "La IA lee los bolsillos de la cuenta y descubre las acciones disponibles en cada tarjeta.",
+  "expected": "Extrae \"Mercado\" 50.000 y \"Vacaciones\" 100.000, igual que la API, y encuentra Editar y Eliminar.",
+  "obtained": "4/4 validaciones correctas",
+  "status": "APROBADO",
+  "model": "google/gemini-3.5-flash",
+  "durationMs": 21584,
+  "steps": [
+    {
+      "capability": "extract",
+      "instruction": "Extract every pocket card listed under \"Bolsillos actuales\" with its name and amount",
+      "output": {
+        "pockets": [
+          {
+            "name": "Mercado",
+            "amount": 50000
+          },
+          {
+            "name": "Vacaciones",
+            "amount": 100000
+          }
+        ]
+      },
+      "inputTokens": 1784,
+      "outputTokens": 739,
+      "durationMs": 7420
+    },
+    {
+      "capability": "observe",
+      "instruction": "Find the \"Editar\" and \"Eliminar\" buttons of the pocket cards",
+      "output": [
+        "Button 'Editar' for the 'Mercado' pocket card",
+        "Button 'Eliminar' for the 'Mercado' pocket card",
+        "Button 'Editar' for the 'Vacaciones' pocket card",
+        "Button 'Eliminar' for the 'Vacaciones' pocket card"
+      ],
+      "inputTokens": 1681,
+      "outputTokens": 711,
+      "durationMs": 5254
+    }
+  ],
+  "checks": [
+    {
+      "description": "bolsillos en pantalla (extract)",
+      "expected": [
+        {
+          "name": "Mercado",
+          "amount": 50000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Mercado",
+          "amount": 50000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "la pantalla coincide con el backend (API)",
+      "expected": [
+        {
+          "name": "Mercado",
+          "amount": 50000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Mercado",
+          "amount": 50000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "observe encuentra botones Editar",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "observe encuentra botones Eliminar",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "SH-B02-lista.png"
+  ]
+}

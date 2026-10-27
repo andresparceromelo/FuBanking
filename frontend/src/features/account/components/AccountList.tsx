@@ -79,8 +79,8 @@ export function AccountList() {
             <Wallet className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="text-white font-semibold">Mis cuentas</h2>
-            <p className="text-white/40 text-xs">
+            <h2 className="text-foreground font-semibold">Mis cuentas</h2>
+            <p className="text-muted-foreground text-xs">
               {accounts.length === 0
                 ? 'No tienes cuentas aún'
                 : `${accounts.length} cuenta${accounts.length !== 1 ? 's' : ''}`}
@@ -92,7 +92,7 @@ export function AccountList() {
           {/* Toggle Mostrar/Ocultar Saldo */}
           <button
             onClick={() => setShowBalance(!showBalance)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/10 bg-white/5 text-white/60 hover:text-white text-xs font-semibold transition-all"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-border bg-muted/40 text-muted-foreground hover:text-foreground text-xs font-semibold transition-all"
             title={showBalance ? 'Ocultar saldos' : 'Mostrar saldos'}
           >
             {showBalance ? <EyeOff size={14} /> : <Eye size={14} />}

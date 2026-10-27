@@ -1,4 +1,4 @@
-# Pruebas unitarias de caja blanca — Módulo Bolsillos (Frontend)
+# Pruebas unitarias de caja blanca — Módulo Bolsillos y Depositar (Frontend)
 
 Casos derivados de las **tablas de camino** del diagrama `Frontend.drawio`.
 Cada caso corresponde a una fila de la tabla de una de las cinco hojas del diagrama:
@@ -7,12 +7,20 @@ las entradas concretas que lo consiguen, el resultado esperado y el resultado ob
 al ejecutar el handler real con el servicio HTTP, la API de toasts y el estado de React
 sustituidos por dobles.
 
-- **Fecha de ejecución:** 2026-08-25
-- **Versión probada:** main-04800eb
-- **Entorno:** Frontend (Node + tsx), sin DOM ni red
+La sexta funcionalidad, **Depositar dinero** (módulo Cuentas), se agregó el 2026-10-26 con la
+misma técnica. `Frontend.drawio` no tiene una hoja para ella y su lógica no está en un archivo de
+handlers sino dentro del componente `DepositWithdrawModal`, así que se ejercita renderizando el
+modal real en jsdom; sus nodos se numeran en la sección [Depositar dinero](#depositar-dinero).
+
+| | Bolsillos (5 funcionalidades) | Depositar dinero |
+| --- | --- | --- |
+| **Fecha de ejecución** | 2026-08-25 | 2026-10-26 |
+| **Versión probada** | main-04800eb | rama `tests/bolsillos-katalon` @ df760a8 (la prueba aún no está commiteada) |
+| **Entorno** | Frontend (Node + tsx), sin DOM ni red | Frontend (Vitest + jsdom + Testing Library), sin red |
+| **Unidad bajo prueba** | `src/features/pockets/handlers/pocket.handlers.ts` | `handleSubmit` de `src/features/account/components/DepositWithdrawModal.tsx` (modo `deposit`) |
+| **Cómo reproducir** | `npm run test:paths` desde `frontend/` (runner `tsx` legacy: el script ya no figura en `package.json`) | `npx vitest run src/tests/unit/account/DepositWithdrawModal.paths.test.tsx` desde `frontend/` |
+
 - **Técnica:** prueba de caminos básicos (McCabe) sobre los handlers del módulo Bolsillos
-- **Unidad bajo prueba:** `src/features/pockets/handlers/pocket.handlers.ts`
-- **Cómo reproducir:** `npm run test:paths` desde `frontend/`
 
 ## Resumen
 
@@ -23,7 +31,8 @@ sustituidos por dobles.
 | Eliminar bolsillo | 3 | 3 | 0 | 0 |
 | Transferir entre bolsillos | 4 | 4 | 0 | 0 |
 | Consultar bolsillos | 3 | 3 | 0 | 0 |
-| **Total** | **17** | **17** | **0** | **0** |
+| Depositar dinero (Cuentas) | 9 | 7 | 0 | 2 |
+| **Total** | **26** | **24** | **0** | **2** |
 
 ## Índice de casos
 
@@ -46,6 +55,15 @@ sustituidos por dobles.
 | FE-CO-C1 | Consultar bolsillos | Camino 1 | `1 → 2 → 3 → 5 → 6 → 7 → Fin` | ✅ Aprobado |
 | FE-CO-C2 | Consultar bolsillos | Camino 2 | `1 → 2 → 3 → 4 → 7 → Fin` | ✅ Aprobado |
 | FE-CO-C1b | Consultar bolsillos | Camino 1 (mensaje de respaldo, no tabulado) | `1 → 2 → 3 → 5 → 6 → 7 → Fin` | ✅ Aprobado |
+| FE-DE-C1 | Depositar dinero | Camino 1 (monto 0) | `1 → 2 → 3 → Fin` | ✅ Aprobado |
+| FE-DE-C1b | Depositar dinero | Camino 1 (monto negativo) | `1 → 2 → 3 → Fin` | ✅ Aprobado |
+| FE-DE-C1c | Depositar dinero | Camino 1 (monto vacío → NaN, primera cláusula) | `1 → 2 → 3 → Fin` | ✅ Aprobado |
+| FE-DE-C2 | Depositar dinero | Camino 2 (saldo insuficiente, solo Retiro) | `1 → 2 → 4 → 5 → Fin` | ⚠️ No ejecutable |
+| FE-DE-C3 | Depositar dinero | Camino 3 (el servicio lanza error) | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 12 → 13 → Fin` | ✅ Aprobado |
+| FE-DE-C3b | Depositar dinero | Camino 3 (error sin `message`, texto de respaldo) | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 12 → 13 → Fin` | ✅ Aprobado |
+| FE-DE-C4 | Depositar dinero | Camino 4 (depósito correcto) | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 11 → 13 → Fin` | ✅ Aprobado |
+| FE-DE-C4b | Depositar dinero | Camino 4 (descripción vacía) | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 11 → 13 → Fin` | ✅ Aprobado |
+| FE-DE-C5 | Depositar dinero | Camino 5 (retiro correcto, solo Retiro) | `1 → 2 → 4 → 6 → 7 → 9 → 10 → 11 → 13 → Fin` | ⚠️ No ejecutable |
 
 ## Crear bolsillo
 
@@ -254,10 +272,159 @@ Función bajo prueba: `loadPockets()`
 | **Resultado obtenido** | Toast error · "No fue posible cargar los bolsillos" — "No fue posible cargar los bolsillos." · se aplicó el texto de respaldo del nodo 5 |
 | **Estado** | ✅ **Aprobado** |
 
+## Depositar dinero
+
+Función bajo prueba: `handleSubmit()` de `DepositWithdrawModal` en modo `deposit`
+
+Prueba: `frontend/src/tests/unit/account/DepositWithdrawModal.paths.test.tsx`. El modal real se
+renderiza en jsdom con `accountService` y `useToast` sustituidos por dobles; el formulario se envía con
+`fireEvent.submit`, que evita la validación nativa `required` (en un navegador real esa validación frena
+el monto vacío antes de llegar a `handleSubmit`, ver Katalon TC-150).
+
+### Grafo de flujo
+
+```mermaid
+flowchart TD
+  N1["1 · preventDefault · setError(null) · parseFloat(amount)"] --> N2{"2 · ¿isNaN o monto ≤ 0?"}
+  N2 -- sí --> N3["3 · error «monto válido mayor a cero» · return"]
+  N2 -- no --> N4{"4 · ¿!isDeposit y monto > saldo?"}
+  N4 -- sí --> N5["5 · error «saldo insuficiente» · return (solo Retiro)"]
+  N4 -- no --> N6["6 · setIsLoading(true)"]
+  N6 --> N7{"7 · ¿isDeposit?"}
+  N7 -- sí --> N8["8 · accountService.deposit(id, monto, descripción)"]
+  N7 -- no --> N9["9 · accountService.withdraw(...) (solo Retiro)"]
+  N8 --> N10{"10 · ¿el servicio lanzó error?"}
+  N9 --> N10
+  N10 -- no --> N11["11 · toast.success · limpiar campos · onSuccess · onClose"]
+  N10 -- sí --> N12["12 · catch: mensaje · setError · toast.error"]
+  N11 --> N13["13 · finally: setIsLoading(false)"]
+  N12 --> N13
+```
+
+| Nodo | Tipo | Sentencia de `DepositWithdrawModal.tsx` |
+| ---: | --- | --- |
+| 1 | Proceso | `e.preventDefault(); setError(null); const numericAmount = Number.parseFloat(amount)` |
+| 2 | Decisión | `Number.isNaN(numericAmount) \|\| numericAmount <= 0` |
+| 3 | Proceso | `setError('Por favor ingresa un monto válido mayor a cero.'); return` |
+| 4 | Decisión | `!isDeposit && numericAmount > account.balance` |
+| 5 | Proceso | `setError('Saldo insuficiente en la cuenta para realizar este retiro.'); return` |
+| 6 | Proceso | `setIsLoading(true)` |
+| 7 | Decisión | `isDeposit` |
+| 8 | Proceso | `await accountService.deposit(account.id, numericAmount, description)` |
+| 9 | Proceso | `await accountService.withdraw(account.id, numericAmount, description)` |
+| 10 | Decisión | ¿el `try` lanzó error? (`catch`) |
+| 11 | Proceso | `toast.success(...)`, `setAmount('')`, `setDescription('')`, `onSuccess()`, `onClose()` |
+| 12 | Proceso | catch: `message` del error o texto de respaldo, `setError(message)`, `toast.error(...)` |
+| 13 | Proceso | `finally { setIsLoading(false) }` |
+
+**V(G) = 4 decisiones (nodos 2, 4, 7 y 10) + 1 = 5** caminos independientes. El modal se comparte con Retiro:
+en modo `deposit` la decisión 4 es siempre FALSA y la 7 siempre VERDADERA, de modo que los nodos 5 y 9 son
+inalcanzables. Esos dos caminos (FE-DE-C2 y FE-DE-C5) se registran como **no ejecutables** y la prueba lo
+demuestra; su cobertura corresponde a la funcionalidad Retiro.
+
+### FE-DE-C1 — Camino 1
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 3 → Fin` |
+| **Condiciones forzadas** | • N2 (Number.isNaN(monto) \|\| monto <= 0) = VERDADERO — por la segunda cláusula (monto <= 0) |
+| **Entradas** | • Modal de depósito abierto sobre la cuenta "acc-1" (saldo $1.000.000)<br>• input = { amount: "0", description: "" }<br>• Valor límite: monto = 0 (el mínimo válido es mayor que cero) |
+| **Resultado esperado** | Se muestra el mensaje "Por favor ingresa un monto válido mayor a cero." y la función retorna en el nodo 3: no se llama al servicio, no se emite ningún toast ni se activa el indicador de carga. |
+| **Resultado obtenido** | Banner `dw-error` · "Por favor ingresa un monto válido mayor a cero." · llamadas a accountService.deposit: 0 · toasts emitidos: 0 · onSuccess y onClose: 0 · botón habilitado con la etiqueta "Abonar Saldo" (nodos 6 y 13 no recorridos) |
+| **Estado** | ✅ **Aprobado** |
+
+### FE-DE-C1b — Camino 1 (monto negativo)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 3 → Fin` |
+| **Condiciones forzadas** | • N2 = VERDADERO — por la segunda cláusula, con monto negativo |
+| **Entradas** | • input = { amount: "-50000", description: "" } |
+| **Resultado esperado** | El monto negativo también corta el flujo en el nodo 3 con el mismo mensaje. |
+| **Resultado obtenido** | Banner `dw-error` · "Por favor ingresa un monto válido mayor a cero." · llamadas al servicio: 0 · toasts emitidos: 0 · botón habilitado |
+| **Estado** | ✅ **Aprobado** |
+
+### FE-DE-C1c — Camino 1 (monto vacío → NaN, primera cláusula)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 3 → Fin` |
+| **Condiciones forzadas** | • N2 = VERDADERO — por la primera cláusula: parseFloat("") = NaN |
+| **Entradas** | • input = { amount: "", description: "" } enviado con `fireEvent.submit` (sin la validación nativa `required`) |
+| **Resultado esperado** | La primera cláusula de la condición compuesta también corta el flujo en el nodo 3 con el mismo mensaje. |
+| **Resultado obtenido** | Banner `dw-error` · "Por favor ingresa un monto válido mayor a cero." · llamadas al servicio: 0 · toasts emitidos: 0 · botón habilitado |
+| **Estado** | ✅ **Aprobado** |
+
+### FE-DE-C2 — Camino 2 (saldo insuficiente, solo Retiro)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 4 → 5 → Fin` |
+| **Condiciones forzadas** | • N4 (!isDeposit && monto > saldo) = VERDADERO exigiría `isDeposit = false` |
+| **Entradas** | • Para comprobar que no es alcanzable: depósito de $5.000.000 sobre una cuenta con saldo $1.000.000 (monto mayor al saldo) |
+| **Resultado esperado** | En modo depósito la primera cláusula de N4 (!isDeposit) es FALSA, así que el monto mayor al saldo no se rechaza y el flujo sigue al nodo 6. |
+| **Resultado obtenido** | El depósito se envió: accountService.deposit invocado 1 vez con ("acc-1", 5000000, "") · no apareció ningún banner de error (nodo 5 inalcanzable) |
+| **Estado** | ⚠️ **No ejecutable** en modo depósito — el camino pertenece a Retiro |
+
+### FE-DE-C3 — Camino 3 (el servicio lanza error)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 12 → 13 → Fin` |
+| **Condiciones forzadas** | • N2 = FALSO<br>• N4 = FALSO<br>• N7 (isDeposit) = VERDADERO<br>• N10 (¿lanzó error?) = VERDADERO, con un error que trae `message` |
+| **Entradas** | • input = { amount: "150000", description: "Ahorro mensual" }<br>• accountService.deposit rechaza con { message: "La cuenta no está activa" } (respuesta del backend) |
+| **Resultado esperado** | El catch (nodo 12) toma el mensaje del backend, lo muestra en el banner y en un toast de error; no se llama a onSuccess ni a onClose, el formulario conserva lo escrito y el finally (nodo 13) apaga el indicador de carga. |
+| **Resultado obtenido** | Banner `dw-error` · "La cuenta no está activa" · toast error · "No pudimos completar la operacion" — "La cuenta no está activa" · toast success: 0 · onSuccess y onClose: 0 · el campo monto conserva "150000" · botón habilitado con la etiqueta "Abonar Saldo" |
+| **Estado** | ✅ **Aprobado** |
+
+### FE-DE-C3b — Camino 3 (error sin `message`, texto de respaldo)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 12 → 13 → Fin` |
+| **Condiciones forzadas** | • N10 = VERDADERO<br>• El error no es un objeto con `message`: se usa el texto de respaldo del nodo 12 |
+| **Entradas** | • input = { amount: "150000" }<br>• accountService.deposit rechaza con la cadena "fallo de red" (no es un objeto) |
+| **Resultado esperado** | El nodo 12 recurre al mensaje de respaldo "Error al procesar la transaccion" en el banner y en el toast. |
+| **Resultado obtenido** | Banner `dw-error` · "Error al procesar la transaccion" · toast error · "No pudimos completar la operacion" — "Error al procesar la transaccion" |
+| **Estado** | ✅ **Aprobado** |
+
+### FE-DE-C4 — Camino 4 (depósito correcto)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 11 → 13 → Fin` |
+| **Condiciones forzadas** | • N2 = FALSO<br>• N4 = FALSO<br>• N7 = VERDADERO<br>• N10 (¿lanzó error?) = FALSO |
+| **Entradas** | • input = { amount: "150000", description: "Ahorro mensual" }<br>• accountService.deposit devuelve una promesa pendiente que se resuelve después, con la cuenta en $1.150.000 |
+| **Resultado esperado** | Mientras el servicio responde (nodo 6) el botón queda bloqueado como "Procesando..."; al resolver, el nodo 11 muestra el toast de éxito, limpia los campos y llama a onSuccess y a onClose, y el finally (nodo 13) apaga la carga. |
+| **Resultado obtenido** | Durante la espera: botón deshabilitado · "Procesando..." · enviado al servicio ("acc-1", 150000, "Ahorro mensual") · tras resolver: toast success · "Deposito realizado" — "Cuenta ****1234 actualizada correctamente." · campos monto y descripción vacíos · onSuccess 1 vez · onClose 1 vez · sin banner de error · botón habilitado con la etiqueta "Abonar Saldo" |
+| **Estado** | ✅ **Aprobado** |
+
+### FE-DE-C4b — Camino 4 (descripción vacía)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 4 → 6 → 7 → 8 → 10 → 11 → 13 → Fin` |
+| **Condiciones forzadas** | • Las mismas del camino 4, sin escribir la descripción (campo opcional) |
+| **Entradas** | • input = { amount: "50000", description: "" }<br>• accountService.deposit resuelve con la cuenta en $1.050.000 |
+| **Resultado esperado** | El depósito se realiza sin descripción. |
+| **Resultado obtenido** | Enviado al servicio ("acc-1", 50000, "") — la descripción viaja como cadena vacía, no como `undefined` · onClose invocado 1 vez |
+| **Estado** | ✅ **Aprobado** |
+
+### FE-DE-C5 — Camino 5 (retiro correcto, solo Retiro)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → 4 → 6 → 7 → 9 → 10 → 11 → 13 → Fin` |
+| **Condiciones forzadas** | • N7 (isDeposit) = FALSO exigiría `type = "withdraw"` |
+| **Entradas** | • Para comprobar que no es alcanzable: depósito de $100.000 sobre la cuenta "acc-1" |
+| **Resultado esperado** | En modo depósito el nodo 7 siempre es VERDADERO, así que el nodo 9 no se recorre. |
+| **Resultado obtenido** | El depósito se completó (onClose 1 vez) · accountService.withdraw invocado 0 veces (nodo 9 inalcanzable) |
+| **Estado** | ⚠️ **No ejecutable** en modo depósito — el camino pertenece a Retiro |
+
 ## Hallazgos
 
-Todos los caminos ejecutados terminaron en el nodo esperado.
+Todos los caminos ejecutados terminaron en el nodo esperado. En Depositar quedan dos caminos no ejecutables (FE-DE-C2 y FE-DE-C5) porque el modal es compartido con Retiro; no son un defecto, pero esa parte del grafo solo se cubre probando el modo `withdraw`.
 
 ---
 
-_Documento generado automáticamente por `npm run test:paths`; el resultado obtenido de cada camino proviene de la ejecución real del handler, no de una transcripción manual._
+_Los caminos de Bolsillos provienen de `npm run test:paths` (runner legacy); los de Depositar, de `DepositWithdrawModal.paths.test.tsx` (Vitest). En ambos casos el resultado obtenido proviene de la ejecución real del handler, no de una transcripción manual._

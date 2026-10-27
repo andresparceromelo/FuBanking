@@ -1,0 +1,4380 @@
+[
+  {
+    "description": "  Como cliente de FuBanking\n  Quiero abonar dinero a mi cuenta\n  Para tener saldo disponible para mis bolsillos",
+    "elements": [
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;depositar-un-monto-válido",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Depositar un monto válido",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4023000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 822000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "él deposita por API 250000 en su cuenta con la descripción \"Ahorro mensual\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 26000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 293000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "el saldo de su cuenta es 250000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@smoke",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;los-depósitos-se-acumulan-en-el-saldo",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Los depósitos se acumulan en el saldo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 26000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2458000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 805000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "él deposita por API 100000 en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 863000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "él deposita por API 50000 en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 303000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "el saldo de su cuenta es 150000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 16
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-depósito-de-0",
+        "keyword": "Scenario Outline",
+        "line": 31,
+        "name": "Rechazar un depósito de 0",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 18000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2353000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 46000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "él deposita por API 0 en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 23000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 280000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-depósito-de--50000",
+        "keyword": "Scenario Outline",
+        "line": 32,
+        "name": "Rechazar un depósito de -50000",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2047000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 37000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "él deposita por API -50000 en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 18000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 18000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 277000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-(true)",
+        "keyword": "Scenario Outline",
+        "line": 43,
+        "name": "Rechazar un monto que no es un número (true)",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2027000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 25000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON true en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 276000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-(\"abc\")",
+        "keyword": "Scenario Outline",
+        "line": 44,
+        "name": "Rechazar un monto que no es un número (\"abc\")",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 12000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2075000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 35000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON \"abc\" en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 17000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 286000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-(null)",
+        "keyword": "Scenario Outline",
+        "line": 45,
+        "name": "Rechazar un monto que no es un número (null)",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 12000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2010000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 20000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON null en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 12000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 255000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-([1000])",
+        "keyword": "Scenario Outline",
+        "line": 46,
+        "name": "Rechazar un monto que no es un número ([1000])",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 10000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2083000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 46000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON [1000] en su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 23000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 17000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 263000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;no-se-puede-depositar-en-la-cuenta-de-otro-cliente",
+        "keyword": "Scenario",
+        "line": 49,
+        "name": "No se puede depositar en la cuenta de otro cliente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2091000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3106000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 50,
+            "name": "Diana es clienta con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 306000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 51,
+            "name": "Carlos deposita por API 50000 en la cuenta de Diana",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 24000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 52,
+            "name": "la respuesta HTTP tiene estado 403",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 53,
+            "name": "el código de error es \"FORBIDDEN\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 288000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 54,
+            "name": "el saldo de la cuenta de Diana es 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 48
+          },
+          {
+            "name": "@seguridad",
+            "line": 48
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;abonar-saldo-desde-la-pantalla-de-cuentas",
+        "keyword": "Scenario",
+        "line": 57,
+        "name": "Abonar saldo desde la pantalla de cuentas",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 59000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3695000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 37397000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 58,
+            "name": "él está en la pantalla de cuentas",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 500000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 59,
+            "name": "él abona 150000 a su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3126000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 60,
+            "name": "él ve la notificación \"Deposito realizado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 429000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 61,
+            "name": "él ve el saldo de su cuenta en 150000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 498000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 62,
+            "name": "el saldo de su cuenta es 150000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 56
+          },
+          {
+            "name": "@smoke",
+            "line": 56
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;el-formulario-de-abono-rechaza-un-monto-en-cero",
+        "keyword": "Scenario",
+        "line": 65,
+        "name": "El formulario de abono rechaza un monto en cero",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 16000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3263000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4881000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 66,
+            "name": "él está en la pantalla de cuentas",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 568000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 67,
+            "name": "él abona 0 a su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 40000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 68,
+            "name": "él ve el error del formulario \"Por favor ingresa un monto válido mayor a cero.\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 347000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 69,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 64
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "depositar-dinero-en-la-cuenta",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Depositar dinero en la cuenta",
+    "tags": [
+      {
+        "name": "@deposito",
+        "line": 1
+      }
+    ],
+    "uri": "e2e\\serenity\\features\\deposito\\depositar.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero ver los bolsillos de mi cuenta\n  Para saber cuánto tengo apartado en cada uno",
+    "elements": [
+      {
+        "description": "",
+        "id": "consultar-bolsillos;consultar-los-bolsillos-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Consultar los bolsillos de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3692000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2943000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "line": 12,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 562000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "ella consulta por API los bolsillos de su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 19000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 19000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "la respuesta contiene 2 bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@smoke",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "consultar-bolsillos;una-cuenta-sin-bolsillos-devuelve-una-lista-vacía",
+        "keyword": "Scenario",
+        "line": 21,
+        "name": "Una cuenta sin bolsillos devuelve una lista vacía",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 10000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5988000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 604000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 22,
+            "name": "ella consulta por API los bolsillos de su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 17000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 23,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 21000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "la respuesta contiene 0 bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 20
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "consultar-bolsillos;no-se-pueden-consultar-los-bolsillos-de-otro-cliente",
+        "keyword": "Scenario",
+        "line": 27,
+        "name": "No se pueden consultar los bolsillos de otro cliente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 11000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3408000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2939000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 28,
+            "name": "Bruno es cliente con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 289000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 29,
+            "name": "Ana consulta por API los bolsillos de la cuenta de Bruno",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 19000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 30,
+            "name": "la respuesta HTTP tiene estado 403",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 17000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "el código de error es \"FORBIDDEN\"",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 26
+          },
+          {
+            "name": "@seguridad",
+            "line": 26
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "consultar-bolsillos;ver-en-pantalla-los-bolsillos-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 34,
+        "name": "Ver en pantalla los bolsillos de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 12000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 7826000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3019000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "line": 35,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3958000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "ella inició sesión en FuBanking",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1371000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 40,
+            "name": "ella abre la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 855000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "Vacaciones"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "line": 41,
+            "name": "ella ve los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 44,
+            "name": "ella ve el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 45,
+            "name": "ella ve el bolsillo \"Mercado\" con 50000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 33
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "consultar-bolsillos",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Consultar bolsillos",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "e2e\\serenity\\features\\bolsillos\\consultar_bolsillos.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero apartar parte de mi saldo en un bolsillo\n  Para organizar mis ahorros por objetivo",
+    "elements": [
+      {
+        "description": "",
+        "id": "crear-bolsillo;crear-un-bolsillo-descuenta-el-monto-del-saldo-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Crear un bolsillo descuenta el monto del saldo de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3574000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1368000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "ella crea por API el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "la respuesta HTTP tiene estado 201",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 280000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "el saldo de su cuenta es 400000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@smoke",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;se-puede-apartar-todo-el-saldo-disponible",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Se puede apartar todo el saldo disponible",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 8000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2964000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1525000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "ella crea por API el bolsillo \"Carro\" con 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 19,
+            "name": "la respuesta HTTP tiene estado 201",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 384000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 16
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;rechazar-un-bolsillo-con-nombre-vacío",
+        "keyword": "Scenario Outline",
+        "line": 31,
+        "name": "Rechazar un bolsillo con nombre vacío",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4774000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella crea por API el bolsillo \"\" con 1000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 18000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"VALIDATION_ERROR\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 266000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;rechazar-un-bolsillo-con-monto-negativo",
+        "keyword": "Scenario Outline",
+        "line": 32,
+        "name": "Rechazar un bolsillo con monto negativo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 10000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3271000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 48000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella crea por API el bolsillo \"Carro\" con -1000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 26000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"VALIDATION_ERROR\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 305000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;rechazar-un-bolsillo-con-monto-mayor-al-saldo",
+        "keyword": "Scenario Outline",
+        "line": 33,
+        "name": "Rechazar un bolsillo con monto mayor al saldo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 25000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3521000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 598000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella crea por API el bolsillo \"Carro\" con 500001",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 19000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"INSUFFICIENT_AVAILABLE_BALANCE\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 295000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;crear-un-bolsillo-desde-la-pantalla-de-bolsillos",
+        "keyword": "Scenario",
+        "line": 36,
+        "name": "Crear un bolsillo desde la pantalla de bolsillos",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 16000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4090000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5410000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 37,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1013000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 38,
+            "name": "ella crea el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1423000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 39,
+            "name": "ella ve la notificación \"Bolsillo creado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 40000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 40,
+            "name": "ella ve el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 302000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 41,
+            "name": "el saldo de su cuenta es 400000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 35
+          },
+          {
+            "name": "@smoke",
+            "line": 35
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;la-pantalla-pide-el-nombre-antes-de-crear-el-bolsillo",
+        "keyword": "Scenario",
+        "line": 44,
+        "name": "La pantalla pide el nombre antes de crear el bolsillo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 10000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15771000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5920000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 45,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 761000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 46,
+            "name": "ella crea el bolsillo \"\" con 1000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 27000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 47,
+            "name": "ella ve la notificación \"Falta información\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 351000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 48,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 43
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "crear-bolsillo",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Crear bolsillo",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "e2e\\serenity\\features\\bolsillos\\crear_bolsillo.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero cambiar el nombre o el monto de un bolsillo\n  Para ajustar mis ahorros cuando cambian mis planes",
+    "elements": [
+      {
+        "description": "",
+        "id": "editar-bolsillo;renombrar-un-bolsillo-conserva-su-saldo",
+        "keyword": "Scenario",
+        "line": 12,
+        "name": "Renombrar un bolsillo conserva su saldo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 17000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4218000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1604000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1383000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "ella renombra por API el bolsillo \"Vacaciones\" a \"Viaje a Cartagena\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 712000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "su bolsillo \"Viaje a Cartagena\" tiene 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 11
+          },
+          {
+            "name": "@smoke",
+            "line": 11
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;aumentar-el-monto-de-un-bolsillo-descuenta-la-diferencia-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 18,
+        "name": "Aumentar el monto de un bolsillo descuenta la diferencia de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3818000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1536000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1798000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 19,
+            "name": "ella ajusta por API el monto del bolsillo \"Vacaciones\" a 150000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 18000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 592000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "su bolsillo \"Vacaciones\" tiene 150000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 315000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "el saldo de su cuenta es 350000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 17
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;disminuir-el-monto-de-un-bolsillo-devuelve-la-diferencia-a-la-cuenta",
+        "keyword": "Scenario",
+        "line": 25,
+        "name": "Disminuir el monto de un bolsillo devuelve la diferencia a la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3143000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1698000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2196000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 26,
+            "name": "ella ajusta por API el monto del bolsillo \"Vacaciones\" a 40000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 27,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 638000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 28,
+            "name": "su bolsillo \"Vacaciones\" tiene 40000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 322000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 29,
+            "name": "el saldo de su cuenta es 460000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 24
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;no-se-puede-ajustar-un-bolsillo-por-encima-del-dinero-total",
+        "keyword": "Scenario",
+        "line": 32,
+        "name": "No se puede ajustar un bolsillo por encima del dinero total",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4965000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5232000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3033000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 33,
+            "name": "ella ajusta por API el monto del bolsillo \"Vacaciones\" a 500001",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 22000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 34,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 23000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 35,
+            "name": "el código de error es \"INSUFFICIENT_AVAILABLE_BALANCE\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 876000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 36,
+            "name": "el saldo de su cuenta es 400000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 31
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;renombrar-un-bolsillo-desde-la-pantalla",
+        "keyword": "Scenario",
+        "line": 39,
+        "name": "Renombrar un bolsillo desde la pantalla",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 8921000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1671000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 7191000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 40,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1887000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 41,
+            "name": "ella renombra el bolsillo \"Vacaciones\" a \"Viaje a Cartagena\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1326000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 42,
+            "name": "ella ve la notificación \"Bolsillo actualizado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 35000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 43,
+            "name": "ella ve el bolsillo \"Viaje a Cartagena\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 38
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "editar-bolsillo",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Editar bolsillo",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "e2e\\serenity\\features\\bolsillos\\editar_bolsillo.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero eliminar un bolsillo que ya no uso\n  Para que su dinero vuelva a mi cuenta",
+    "elements": [
+      {
+        "description": "",
+        "id": "eliminar-bolsillo;eliminar-un-bolsillo-devuelve-su-saldo-a-la-cuenta",
+        "keyword": "Scenario",
+        "line": 12,
+        "name": "Eliminar un bolsillo devuelve su saldo a la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 21000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4242000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1453000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1404000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "ella elimina por API el bolsillo \"Vacaciones\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 35000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 310000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 584000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "su cuenta no tiene bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 11
+          },
+          {
+            "name": "@smoke",
+            "line": 11
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eliminar-bolsillo;no-se-puede-eliminar-el-bolsillo-de-otro-cliente",
+        "keyword": "Scenario",
+        "line": 19,
+        "name": "No se puede eliminar el bolsillo de otro cliente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3159000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1351000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3100000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 20,
+            "name": "Bruno es cliente con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1408000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "él tiene el bolsillo \"Moto\" con 50000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 547000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 22,
+            "name": "Ana elimina por API el bolsillo \"Moto\" de Bruno",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 12000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 23,
+            "name": "la respuesta HTTP tiene estado 403",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 19000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "el código de error es \"FORBIDDEN\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 303000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "el saldo de la cuenta de Bruno es 50000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 18
+          },
+          {
+            "name": "@seguridad",
+            "line": 18
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eliminar-bolsillo;eliminar-un-bolsillo-desde-la-pantalla-con-confirmación",
+        "keyword": "Scenario",
+        "line": 28,
+        "name": "Eliminar un bolsillo desde la pantalla con confirmación",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 10000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2965000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1371000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5004000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 29,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 992000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 30,
+            "name": "ella elimina el bolsillo \"Vacaciones\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3972000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 31,
+            "name": "ella ve la notificación \"Bolsillo eliminado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 32,
+            "name": "ella ve que su cuenta no tiene bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 607000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 27
+          },
+          {
+            "name": "@smoke",
+            "line": 27
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "eliminar-bolsillo",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Eliminar bolsillo",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "e2e\\serenity\\features\\bolsillos\\eliminar_bolsillo.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero mover dinero de un bolsillo a otro\n  Para reorganizar mis ahorros sin tocar el saldo de la cuenta",
+    "elements": [
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;mover-dinero-de-un-bolsillo-a-otro",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Mover dinero de un bolsillo a otro",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3511000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2802000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1751000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "ella transfiere por API 30000 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 32000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 554000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "su bolsillo \"Vacaciones\" tiene 70000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 639000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "su bolsillo \"Mercado\" tiene 80000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 328000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "el saldo de su cuenta es 350000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 14
+          },
+          {
+            "name": "@smoke",
+            "line": 14
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;se-puede-transferir-todo-el-saldo-de-un-bolsillo",
+        "keyword": "Scenario",
+        "line": 23,
+        "name": "Se puede transferir todo el saldo de un bolsillo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 27000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3577000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2588000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1535000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella transfiere por API 100000 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 25000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 535000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "su bolsillo \"Vacaciones\" tiene 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 549000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "su bolsillo \"Mercado\" tiene 150000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;no-se-puede-transferir-más-de-lo-que-tiene-el-bolsillo-de-origen",
+        "keyword": "Scenario",
+        "line": 30,
+        "name": "No se puede transferir más de lo que tiene el bolsillo de origen",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 18000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3459000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3041000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 789000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 31,
+            "name": "ella transfiere por API 100001 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 33000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 32,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 32000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "el código de error es \"INSUFFICIENT_POCKET_BALANCE\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 660000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "su bolsillo \"Vacaciones\" tiene 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 29
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;el-bolsillo-de-origen-y-el-de-destino-deben-ser-diferentes",
+        "keyword": "Scenario",
+        "line": 37,
+        "name": "El bolsillo de origen y el de destino deben ser diferentes",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 16000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3355000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2662000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 50000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 38,
+            "name": "ella transfiere por API 10000 del bolsillo \"Vacaciones\" al bolsillo \"Vacaciones\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 37000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 39,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 40,
+            "name": "el código de error es \"INVALID_TRANSFER_TARGET\"",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 36
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;transferir-entre-bolsillos-desde-la-pantalla",
+        "keyword": "Scenario",
+        "line": 43,
+        "name": "Transferir entre bolsillos desde la pantalla",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 25000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2891000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2536000000
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 8416000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 44,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1538000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 45,
+            "name": "ella transfiere 30000 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1513000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 46,
+            "name": "ella ve la notificación \"Transferencia realizada\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 480000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 47,
+            "name": "ella ve el bolsillo \"Vacaciones\" con 70000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 36000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 48,
+            "name": "ella ve el bolsillo \"Mercado\" con 80000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 42
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "transferir-entre-bolsillos",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Transferir entre bolsillos",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "e2e\\serenity\\features\\bolsillos\\transferir_entre_bolsillos.feature"
+  },
+  {
+    "description": "  Como cliente nuevo de FuBanking\n  Quiero abonar dinero y apartar una parte en un bolsillo\n  Para empezar a ahorrar desde la aplicación",
+    "elements": [
+      {
+        "description": "",
+        "id": "recorrido-completo-de-ahorro;abonar-a-la-cuenta-y-apartar-una-parte-en-un-bolsillo-nuevo",
+        "keyword": "Scenario",
+        "line": 8,
+        "name": "Abonar a la cuenta y apartar una parte en un bolsillo nuevo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 22000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3010000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 7406000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "él está en la pantalla de cuentas",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 662000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "él abona 200000 a su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 761000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "él ve el saldo de su cuenta en 200000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1730000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "él abre la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 822000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "él crea el bolsillo \"Emergencias\" con 50000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1368000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 15,
+            "name": "él ve el bolsillo \"Emergencias\" con 50000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 297000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "el saldo de su cuenta es 150000",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 1
+          },
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@smoke",
+            "line": 7
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "recorrido-completo-de-ahorro",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Recorrido completo de ahorro",
+    "tags": [
+      {
+        "name": "@web",
+        "line": 1
+      },
+      {
+        "name": "@bolsillos",
+        "line": 1
+      },
+      {
+        "name": "@deposito",
+        "line": 1
+      }
+    ],
+    "uri": "e2e\\serenity\\features\\recorrido\\abonar_y_ahorrar.feature"
+  },
+  {
+    "description": "  Como clienta que usa lector de pantalla o solo teclado\n  Quiero que las pantallas de bolsillos y cuentas cumplan WCAG 2.1 AA\n  Para poder ahorrar sin barreras\n\n  Solo se aceptan violaciones de impacto \"moderate\" o \"minor\"; las \"serious\" y\n  \"critical\" de axe-core hacen fallar el escenario. Con un modal abierto se\n  evalúa el diálogo (role=\"dialog\", aria-modal): lo que queda detrás del velo\n  está inactivo y su contraste se evalúa sin velo en el primer escenario.",
+    "elements": [
+      {
+        "description": "",
+        "id": "accesibilidad-de-bolsillos-y-depositar;la-pantalla-de-bolsillos-no-tiene-violaciones-graves-de-accesibilidad",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "La pantalla de bolsillos no tiene violaciones graves de accesibilidad",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 46000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3624000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 13,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1321000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 12912000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 18,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 998000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 19,
+            "name": "la pantalla no tiene violaciones de accesibilidad graves",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@accesibilidad",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 16
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "accesibilidad-de-bolsillos-y-depositar;el-diálogo-para-eliminar-un-bolsillo-es-accesible",
+        "keyword": "Scenario",
+        "line": 22,
+        "name": "El diálogo para eliminar un bolsillo es accesible",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3111000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 13,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1513000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5408000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 23,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1166000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella abre la confirmación para eliminar el bolsillo \"Vacaciones\"",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1200000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "el diálogo no tiene violaciones de accesibilidad graves",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@accesibilidad",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 21
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "accesibilidad-de-bolsillos-y-depositar;la-pantalla-de-cuentas-no-tiene-violaciones-graves-de-accesibilidad",
+        "keyword": "Scenario",
+        "line": 28,
+        "name": "La pantalla de cuentas no tiene violaciones graves de accesibilidad",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4025000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 13,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1919000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 8733000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 29,
+            "name": "ella está en la pantalla de cuentas",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2245000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 30,
+            "name": "la pantalla no tiene violaciones de accesibilidad graves",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@accesibilidad",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 27
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "accesibilidad-de-bolsillos-y-depositar;el-modal-para-abonar-a-la-cuenta-es-accesible",
+        "keyword": "Scenario",
+        "line": 33,
+        "name": "El modal para abonar a la cuenta es accesible",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 103000000
+            },
+            "keyword": "Before",
+            "hidden": true
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 7111000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 13,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1439000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 15234000000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 34,
+            "name": "ella está en la pantalla de cuentas",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 391000000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 35,
+            "name": "ella abre el formulario para abonar a su cuenta",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1444000000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 36,
+            "name": "el diálogo no tiene violaciones de accesibilidad graves",
+            "match": {
+              "location": "not available:0"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 825000000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 37,
+            "name": "la pantalla no tiene violaciones de accesibilidad graves fuera de los diálogos",
+            "match": {
+              "location": "not available:0"
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@accesibilidad",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 32
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "accesibilidad-de-bolsillos-y-depositar",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Accesibilidad de Bolsillos y Depositar",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      },
+      {
+        "name": "@deposito",
+        "line": 1
+      },
+      {
+        "name": "@accesibilidad",
+        "line": 1
+      }
+    ],
+    "uri": "cypress\\bolsillos\\features\\accesibilidad.feature"
+  }
+]

@@ -1,0 +1,370 @@
+# Cypress + Gherkin — corrida 1 (antes de corregir accesibilidad) — 2026-10-26 20:19
+
+
+
+====================================================================================================
+
+  (Run Starting)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Cypress:        15.21.1                                                                        │
+  │ Browser:        Electron 138 (headless)                                                        │
+  │ Node Version:   v24.14.0 (C:\Program Files\nodejs\node.exe)                                    │
+  │ Specs:          8 found (e2e/serenity/features/deposito/depositar.feature, e2e/serenity/featur │
+  │                 es/bolsillos/consultar_bolsillos.feature, e2e/serenity/features/bolsillos/crea │
+  │                 r_bolsillo.feature, e2e/serenity/features/bolsillos/editar_bolsillo.feature, e │
+  │                 2e/serenity/features/b...)                                                     │
+  │ Searched:       e2e/serenity/features/{bolsillos,deposito,recorrido}/**/*.feature, cypress/bol │
+  │                 sillos/features/**/*.feature                                                   │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  e2e/serenity/features/deposito/depositar.feature                                (1 of 8)
+
+
+  Depositar dinero en la cuenta
+    √ Depositar un monto válido (9917ms)
+    √ Los depósitos se acumulan en el saldo (5228ms)
+    √ Rechazar un depósito de 0 (example #1) (2753ms)
+    √ Rechazar un depósito de -50000 (example #2) (2205ms)
+    √ Rechazar un monto que no es un número (true) (example #1) (2807ms)
+    √ Rechazar un monto que no es un número ("abc") (example #2) (5534ms)
+    √ Rechazar un monto que no es un número (null) (example #3) (2618ms)
+    √ Rechazar un monto que no es un número ([1000]) (example #4) (2399ms)
+    √ No se puede depositar en la cuenta de otro cliente (5530ms)
+    √ Abonar saldo desde la pantalla de cuentas (16954ms)
+    √ El formulario de abono rechaza un monto en cero (8260ms)
+
+
+  11 passing (1m)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        11                                                                               │
+  │ Passing:      11                                                                               │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     1 minute, 4 seconds                                                              │
+  │ Spec Ran:     e2e/serenity/features/deposito/depositar.feature                                 │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  e2e/serenity/features/bolsillos/consultar_bolsillos.feature                     (2 of 8)
+
+
+  Consultar bolsillos
+    √ Consultar los bolsillos de la cuenta (6658ms)
+    √ Una cuenta sin bolsillos devuelve una lista vacía (3659ms)
+    √ No se pueden consultar los bolsillos de otro cliente (6645ms)
+    √ Ver en pantalla los bolsillos de la cuenta (15717ms)
+
+
+  4 passing (33s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        4                                                                                │
+  │ Passing:      4                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     33 seconds                                                                       │
+  │ Spec Ran:     e2e/serenity/features/bolsillos/consultar_bolsillos.feature                      │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  e2e/serenity/features/bolsillos/crear_bolsillo.feature                          (3 of 8)
+
+
+  Crear bolsillo
+    √ Crear un bolsillo descuenta el monto del saldo de la cuenta (5161ms)
+    √ Se puede apartar todo el saldo disponible (4809ms)
+    √ Rechazar un bolsillo con nombre vacío (example #1) (3595ms)
+    √ Rechazar un bolsillo con monto negativo (example #2) (3636ms)
+    √ Rechazar un bolsillo con monto mayor al saldo (example #3) (3502ms)
+    √ Crear un bolsillo desde la pantalla de bolsillos (12887ms)
+    √ La pantalla pide el nombre antes de crear el bolsillo (9179ms)
+
+
+  7 passing (43s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        7                                                                                │
+  │ Passing:      7                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     43 seconds                                                                       │
+  │ Spec Ran:     e2e/serenity/features/bolsillos/crear_bolsillo.feature                           │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  e2e/serenity/features/bolsillos/editar_bolsillo.feature                         (4 of 8)
+
+
+  Editar bolsillo
+    √ Renombrar un bolsillo conserva su saldo (6881ms)
+    √ Aumentar el monto de un bolsillo descuenta la diferencia de la cuenta (6830ms)
+    √ Disminuir el monto de un bolsillo devuelve la diferencia a la cuenta (7097ms)
+    √ No se puede ajustar un bolsillo por encima del dinero total (5451ms)
+    √ Renombrar un bolsillo desde la pantalla (15763ms)
+
+
+  5 passing (42s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        5                                                                                │
+  │ Passing:      5                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     42 seconds                                                                       │
+  │ Spec Ran:     e2e/serenity/features/bolsillos/editar_bolsillo.feature                          │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  e2e/serenity/features/bolsillos/eliminar_bolsillo.feature                       (5 of 8)
+
+
+  Eliminar bolsillo
+    √ Eliminar un bolsillo devuelve su saldo a la cuenta (7421ms)
+    √ No se puede eliminar el bolsillo de otro cliente (9561ms)
+    √ Eliminar un bolsillo desde la pantalla con confirmación (13369ms)
+
+
+  3 passing (31s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        3                                                                                │
+  │ Passing:      3                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     30 seconds                                                                       │
+  │ Spec Ran:     e2e/serenity/features/bolsillos/eliminar_bolsillo.feature                        │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature              (6 of 8)
+
+
+  Transferir entre bolsillos
+    √ Mover dinero de un bolsillo a otro (8833ms)
+    √ Se puede transferir todo el saldo de un bolsillo (8639ms)
+    √ No se puede transferir más de lo que tiene el bolsillo de origen (6984ms)
+    √ El bolsillo de origen y el de destino deben ser diferentes (5814ms)
+    √ Transferir entre bolsillos desde la pantalla (15080ms)
+
+
+  5 passing (46s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        5                                                                                │
+  │ Passing:      5                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     45 seconds                                                                       │
+  │ Spec Ran:     e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature               │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  e2e/serenity/features/recorrido/abonar_y_ahorrar.feature                        (7 of 8)
+
+
+  Recorrido completo de ahorro
+    √ Abonar a la cuenta y apartar una parte en un bolsillo nuevo (14271ms)
+
+
+  1 passing (14s)
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        1                                                                                │
+  │ Passing:      1                                                                                │
+  │ Failing:      0                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  0                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     14 seconds                                                                       │
+  │ Spec Ran:     e2e/serenity/features/recorrido/abonar_y_ahorrar.feature                         │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  cypress/bolsillos/features/accesibilidad.feature                                (8 of 8)
+
+
+  Accesibilidad de Bolsillos y Depositar
+┌─────────┬──────────────────┬───────────┬──────────────────────────────────────────────────────────────┬─────────────┐
+│ (index) │ regla            │ impacto   │ descripcion                                                  │ nodos       │
+├─────────┼──────────────────┼───────────┼──────────────────────────────────────────────────────────────┼─────────────┤
+│ 0       │ 'color-contrast' │ 'serious' │ 'Elements must meet minimum color contrast ratio thresholds' │ [ '.mt-1' ] │
+└─────────┴──────────────────┴───────────┴──────────────────────────────────────────────────────────────┴─────────────┘
+    1) La pantalla de bolsillos no tiene violaciones graves de accesibilidad
+┌─────────┬──────────────────┬───────────┬──────────────────────────────────────────────────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ (index) │ regla            │ impacto   │ descripcion                                                  │ nodos                                                                                                                                                         │
+├─────────┼──────────────────┼───────────┼──────────────────────────────────────────────────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ 0       │ 'color-contrast' │ 'serious' │ 'Elements must meet minimum color contrast ratio thresholds' │ [ 'div:nth-child(1) > .mt-1', '.gap-3.items-center.flex > div:nth-child(2) > .text-lg', '.gap-3.items-center.flex > div:nth-child(2) > p', ... 4 more items ] │
+└─────────┴──────────────────┴───────────┴──────────────────────────────────────────────────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+    2) El diálogo para eliminar un bolsillo es accesible
+┌─────────┬───────────────────────────────┬────────────┬──────────────────────────────────────────────────────────────────────────┬───────────────────────────────────────────┐
+│ (index) │ regla                         │ impacto    │ descripcion                                                              │ nodos                                     │
+├─────────┼───────────────────────────────┼────────────┼──────────────────────────────────────────────────────────────────────────┼───────────────────────────────────────────┤
+│ 0       │ 'button-name'                 │ 'critical' │ 'Buttons must have discernible text'                                     │ [ '.p-1' ]                                │
+│ 1       │ 'color-contrast'              │ 'serious'  │ 'Elements must meet minimum color contrast ratio thresholds'             │ [ 'h1', '.mt-1', 'h2', ... 3 more items ] │
+│ 2       │ 'label-content-name-mismatch' │ 'serious'  │ 'Elements must have their visible text as part of their accessible name' │ [ '.cursor-pointer' ]                     │
+└─────────┴───────────────────────────────┴────────────┴──────────────────────────────────────────────────────────────────────────┴───────────────────────────────────────────┘
+    3) El modal para abonar a la cuenta es accesible
+
+
+  0 passing (47s)
+  3 failing
+
+  1) Accesibilidad de Bolsillos y Depositar
+       La pantalla de bolsillos no tiene violaciones graves de accesibilidad:
+     AssertionError: 1 accessibility violation was detected: expected 1 to equal 0
+      at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\bolsillos\support\e2e.ts:138:20)
+      at getRet (http://localhost:3000/__cypress/runner/cypress_runner.js:121394:20)
+      at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1780:23)
+      at Promise.attempt.Promise.try (http://localhost:3000/__cypress/runner/cypress_runner.js:4288:29)
+      at Context.thenFn (http://localhost:3000/__cypress/runner/cypress_runner.js:121405:66)
+      at Context.then (http://localhost:3000/__cypress/runner/cypress_runner.js:121656:21)
+      at wrapped (http://localhost:3000/__cypress/runner/cypress_runner.js:146597:19)
+
+  2) Accesibilidad de Bolsillos y Depositar
+       El diálogo para eliminar un bolsillo es accesible:
+     AssertionError: 1 accessibility violation was detected: expected 1 to equal 0
+      at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\bolsillos\support\e2e.ts:138:20)
+      at getRet (http://localhost:3000/__cypress/runner/cypress_runner.js:121394:20)
+      at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1780:23)
+      at Promise.attempt.Promise.try (http://localhost:3000/__cypress/runner/cypress_runner.js:4288:29)
+      at Context.thenFn (http://localhost:3000/__cypress/runner/cypress_runner.js:121405:66)
+      at Context.then (http://localhost:3000/__cypress/runner/cypress_runner.js:121656:21)
+      at wrapped (http://localhost:3000/__cypress/runner/cypress_runner.js:146597:19)
+
+  3) Accesibilidad de Bolsillos y Depositar
+       El modal para abonar a la cuenta es accesible:
+     AssertionError: 3 accessibility violations were detected: expected 3 to equal 0
+      at Context.eval (http://localhost:3000/__cypress/tests?p=cypress\bolsillos\support\e2e.ts:138:20)
+      at getRet (http://localhost:3000/__cypress/runner/cypress_runner.js:121394:20)
+      at tryCatcher (http://localhost:3000/__cypress/runner/cypress_runner.js:1780:23)
+      at Promise.attempt.Promise.try (http://localhost:3000/__cypress/runner/cypress_runner.js:4288:29)
+      at Context.thenFn (http://localhost:3000/__cypress/runner/cypress_runner.js:121405:66)
+      at Context.then (http://localhost:3000/__cypress/runner/cypress_runner.js:121656:21)
+      at wrapped (http://localhost:3000/__cypress/runner/cypress_runner.js:146597:19)
+
+
+
+
+  (Results)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Tests:        3                                                                                │
+  │ Passing:      0                                                                                │
+  │ Failing:      3                                                                                │
+  │ Pending:      0                                                                                │
+  │ Skipped:      0                                                                                │
+  │ Screenshots:  3                                                                                │
+  │ Video:        false                                                                            │
+  │ Duration:     47 seconds                                                                       │
+  │ Spec Ran:     cypress/bolsillos/features/accesibilidad.feature                                 │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+  (Screenshots)
+
+  -  C:\Users\Usuario\OneDrive\Documentos\2026-2\Validacion y Verificacion\FuBanking\     (1280x720)
+     cypress\reports\bolsillos\screenshots\cypress\bolsillos\features\accesibilidad.f               
+     eature\Accesibilidad de Bolsillos y Depositar -- La pantalla de bolsillos no tie               
+     ne violaciones graves de accesibilidad (failed).png                                            
+  -  C:\Users\Usuario\OneDrive\Documentos\2026-2\Validacion y Verificacion\FuBanking\     (1280x720)
+     cypress\reports\bolsillos\screenshots\cypress\bolsillos\features\accesibilidad.f               
+     eature\Accesibilidad de Bolsillos y Depositar -- El diálogo para eliminar un bol               
+     sillo es accesible (failed).png                                                                
+  -  C:\Users\Usuario\OneDrive\Documentos\2026-2\Validacion y Verificacion\FuBanking\     (1280x720)
+     cypress\reports\bolsillos\screenshots\cypress\bolsillos\features\accesibilidad.f               
+     eature\Accesibilidad de Bolsillos y Depositar -- El modal para abonar a la cuent               
+     a es accesible (failed).png                                                                    
+
+
+====================================================================================================
+
+  (Run Finished)
+
+
+       Spec                                              Tests  Passing  Failing  Pending  Skipped  
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ ✔  e2e/serenity/features/deposito/depo      01:04       11       11        -        -        - │
+  │    sitar.feature                                                                               │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ✔  e2e/serenity/features/bolsillos/con      00:33        4        4        -        -        - │
+  │    sultar_bolsillos.feature                                                                    │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ✔  e2e/serenity/features/bolsillos/cre      00:43        7        7        -        -        - │
+  │    ar_bolsillo.feature                                                                         │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ✔  e2e/serenity/features/bolsillos/edi      00:42        5        5        -        -        - │
+  │    tar_bolsillo.feature                                                                        │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ✔  e2e/serenity/features/bolsillos/eli      00:30        3        3        -        -        - │
+  │    minar_bolsillo.feature                                                                      │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ✔  e2e/serenity/features/bolsillos/tra      00:45        5        5        -        -        - │
+  │    nsferir_entre_bolsillos.feature                                                             │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ✔  e2e/serenity/features/recorrido/abo      00:14        1        1        -        -        - │
+  │    nar_y_ahorrar.feature                                                                       │
+  ├────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ✖  cypress/bolsillos/features/accesibi      00:47        3        -        3        -        - │
+  │    lidad.feature                                                                               │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+    ✖  1 of 8 failed (13%)                      05:21       39       36        3        -        -  
+

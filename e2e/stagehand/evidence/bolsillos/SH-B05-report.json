@@ -1,0 +1,129 @@
+{
+  "id": "SH-B05",
+  "functionality": "Transferir entre bolsillos",
+  "objective": "La IA mueve dinero de un bolsillo a otro con el formulario de transferencia.",
+  "expected": "Toast \"Transferencia realizada\", Vacaciones 70.000, Mercado 80.000 y la cuenta sigue en 350.000.",
+  "obtained": "4/4 validaciones correctas",
+  "status": "APROBADO",
+  "model": "google/gemini-3.5-flash-lite",
+  "durationMs": 20071,
+  "steps": [
+    {
+      "capability": "act",
+      "instruction": "Select the option that starts with \"Vacaciones\" in the \"Bolsillo origen\" dropdown",
+      "output": "Action [selectOptionFromDropdown] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[2]/div[2]/div[2]/div[1]/select[1]",
+      "inputTokens": 2136,
+      "outputTokens": 80,
+      "durationMs": 1892
+    },
+    {
+      "capability": "act",
+      "instruction": "Select the option that starts with \"Mercado\" in the \"Bolsillo destino\" dropdown",
+      "output": "Action [selectOptionFromDropdown] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[2]/div[2]/div[2]/div[2]/select[1]",
+      "inputTokens": 2136,
+      "outputTokens": 79,
+      "durationMs": 1616
+    },
+    {
+      "capability": "act",
+      "instruction": "Type \"30000\" into the \"Monto\" input of the \"Transferir entre bolsillos\" form",
+      "output": "Action [fill] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[2]/div[2]/div[2]/div[3]/input[1]",
+      "inputTokens": 2142,
+      "outputTokens": 77,
+      "durationMs": 1574
+    },
+    {
+      "capability": "act",
+      "instruction": "Click the \"Transferir\" button",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[2]/div[2]/div[2]/button[1]",
+      "inputTokens": 2142,
+      "outputTokens": 59,
+      "durationMs": 1427
+    },
+    {
+      "capability": "extract",
+      "instruction": "Extract every pocket card listed under \"Bolsillos actuales\" with its name and amount",
+      "output": {
+        "pockets": [
+          {
+            "name": "Mercado",
+            "amount": 80000
+          },
+          {
+            "name": "Vacaciones",
+            "amount": 70000
+          }
+        ]
+      },
+      "inputTokens": 1885,
+      "outputTokens": 89,
+      "durationMs": 1915
+    }
+  ],
+  "checks": [
+    {
+      "description": "notificación \"Transferencia realizada\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "bolsillos en pantalla (extract)",
+      "expected": [
+        {
+          "name": "Mercado",
+          "amount": 80000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 70000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Mercado",
+          "amount": 80000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 70000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "bolsillos en el backend (API)",
+      "expected": [
+        {
+          "name": "Mercado",
+          "amount": 80000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 70000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Mercado",
+          "amount": 80000
+        },
+        {
+          "name": "Vacaciones",
+          "amount": 70000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "la transferencia no toca la cuenta (API)",
+      "expected": 350000,
+      "obtained": 350000,
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "SH-B05-formulario.png",
+    "SH-B05-resultado.png"
+  ]
+}

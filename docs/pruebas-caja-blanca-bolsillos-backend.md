@@ -1,4 +1,4 @@
-# Pruebas unitarias de caja blanca — Módulo Bolsillos (Backend)
+# Pruebas unitarias de caja blanca — Módulo Bolsillos y Depositar (Backend)
 
 Casos derivados de las **tablas de camino** del diagrama `Backend.drawio`.
 Cada caso corresponde a una fila de la tabla de una de las cinco hojas del diagrama:
@@ -6,11 +6,18 @@ se declara la secuencia de nodos, las condiciones que hay que forzar en cada dec
 las entradas concretas que lo consiguen, el resultado esperado y el resultado obtenido
 al ejecutar el caso de uso real contra repositorios en memoria.
 
-- **Fecha de ejecución:** 2026-08-25
-- **Versión probada:** main-04800eb
-- **Entorno:** Backend (Node + tsx), repositorios en memoria, sin Supabase
+La sexta funcionalidad, **Depositar dinero** (módulo Cuentas), se agregó el 2026-10-26 con la
+misma técnica. Como `Backend.drawio` no tiene una hoja para ella, sus nodos se numeran en la
+propia sección [Depositar dinero](#depositar-dinero) y en el encabezado de la prueba.
+
+| | Bolsillos (5 funcionalidades) | Depositar dinero |
+| --- | --- | --- |
+| **Fecha de ejecución** | 2026-08-25 | 2026-10-26 |
+| **Versión probada** | main-04800eb | rama `tests/bolsillos-katalon` @ df760a8 (la prueba aún no está commiteada) |
+| **Cómo reproducir** | `npm run test:paths` desde `backend/` (runner `tsx` legacy: el script ya no figura en `package.json`) | `npx vitest run src/tests/unit/account/DepositMoney.paths.test.ts` desde `backend/` |
+
+- **Entorno:** Backend (Node), repositorios en memoria, sin Supabase
 - **Técnica:** prueba de caminos básicos (McCabe) sobre los casos de uso de la capa de aplicación
-- **Cómo reproducir:** `npm run test:paths` desde `backend/`
 
 ## Resumen
 
@@ -21,7 +28,8 @@ al ejecutar el caso de uso real contra repositorios en memoria.
 | Eliminar bolsillo | 5 | 5 | 0 | 0 |
 | Transferir entre bolsillos | 10 | 10 | 0 | 0 |
 | Consultar bolsillos | 3 | 3 | 0 | 0 |
-| **Total** | **36** | **35** | **1** | **0** |
+| Depositar dinero (Cuentas) | 8 | 8 | 0 | 0 |
+| **Total** | **44** | **43** | **1** | **0** |
 
 ## Índice de casos
 
@@ -63,6 +71,14 @@ al ejecutar el caso de uso real contra repositorios en memoria.
 | BE-CO-C1 | Consultar bolsillos | Camino 1 | `1 → 2 → 4 → Fin` | ✅ Aprobado |
 | BE-CO-C2 | Consultar bolsillos | Camino 2 | `1 → 2 → 3 → 5 → 6 → Fin` | ✅ Aprobado |
 | BE-CO-C2b | Consultar bolsillos | Camino 2 (rechazo en el nodo 3, no tabulado) | `1 → 2 → 3 → Fin (salida por excepción)` | ✅ Aprobado |
+| BE-DE-C1 | Depositar dinero | Camino 1 | `1 → 2 → Fin` | ✅ Aprobado |
+| BE-DE-C1b | Depositar dinero | Camino 1 (segunda cláusula de la condición) | `1 → 2 → Fin` | ✅ Aprobado |
+| BE-DE-C2 | Depositar dinero | Camino 2 | `1 → 3 → 4 → 5 → Fin` | ✅ Aprobado |
+| BE-DE-C2b | Depositar dinero | Camino 2 (rechazo en el nodo 6, no tabulado) | `1 → 3 → 4 → 6 → Fin (salida por excepción)` | ✅ Aprobado |
+| BE-DE-C3 | Depositar dinero | Camino 3 | `1 → 3 → 4 → 6 → 7 → 8 → Fin` | ✅ Aprobado |
+| BE-DE-C4 | Depositar dinero | Camino 4 | `1 → 3 → 4 → 6 → 7 → 9 → 10 → 11 → 12 → Fin` | ✅ Aprobado |
+| BE-DE-C4b | Depositar dinero | Camino 4 (valor límite) | `1 → 3 → 4 → 6 → 7 → 9 → 10 → 11 → 12 → Fin` | ✅ Aprobado |
+| BE-DE-C5 | Depositar dinero | Camino 5 | `1 → 3 → 4 → 6 → 7 → 9 → 10 → 12 → Fin` | ✅ Aprobado |
 
 ## Crear bolsillo
 
@@ -480,6 +496,141 @@ Caso de uso bajo prueba: `GetAccountPockets.execute`
 | **Resultado obtenido** | Rechazado con FORBIDDEN · HTTP 403 · "No tienes permiso para acceder a esta cuenta" · no se expuso ningún bolsillo al usuario "user-intruso" (nodos 5 y 6 no recorridos) |
 | **Estado** | ✅ **Aprobado** |
 
+## Depositar dinero
+
+Caso de uso bajo prueba: `DepositMoney.execute` (módulo Cuentas, sexta funcionalidad)
+
+Prueba: `backend/src/tests/unit/account/DepositMoney.paths.test.ts`. Cada caso instrumenta el repositorio
+de cuentas (cuántas veces se invocó `findById` y `updateBalance`) y el de notificaciones (cuántas se
+guardaron) para demostrar qué nodos se recorrieron.
+
+### Grafo de flujo
+
+```mermaid
+flowchart TD
+  N1{"1 · ¿!amount o amount ≤ 0?"} -- sí --> N2["2 · INVALID_AMOUNT (400)"]
+  N1 -- no --> N3["3 · findById(accountId)"]
+  N3 --> N4{"4 · ¿!account?"}
+  N4 -- sí --> N5["5 · ACCOUNT_NOT_FOUND (404)"]
+  N4 -- no --> N6["6 · assertBelongsTo(userId)"]
+  N6 -. no es el titular .-> XF["FORBIDDEN (403)"]
+  N6 --> N7{"7 · ¿!isOperational()?"}
+  N7 -- sí --> N8["8 · ACCOUNT_INACTIVE (400)"]
+  N7 -- no --> N9["9 · updateBalance(balance + amount)"]
+  N9 --> N10{"10 · ¿hay notificationRepository?"}
+  N10 -- sí --> N11["11 · save(Notificación «Depósito realizado»)"]
+  N10 -- no --> N12
+  N11 --> N12["12 · return updatedAccount"]
+```
+
+| Nodo | Tipo | Sentencia de `DepositMoney.ts` |
+| ---: | --- | --- |
+| 1 | Decisión | `!dto.amount \|\| dto.amount <= 0` |
+| 2 | Proceso | `throw new AppError(..., 400, 'INVALID_AMOUNT')` |
+| 3 | Proceso | `account = await accountRepository.findById(dto.accountId)` |
+| 4 | Decisión | `!account` |
+| 5 | Proceso | `throw new AppError(..., 404, 'ACCOUNT_NOT_FOUND')` |
+| 6 | Proceso | `account.assertBelongsTo(dto.userId)` (lanza `FORBIDDEN` 403 si no es el titular) |
+| 7 | Decisión | `!account.isOperational()` |
+| 8 | Proceso | `throw new AppError(..., 400, 'ACCOUNT_INACTIVE')` |
+| 9 | Proceso | `newBalance = account.balance + dto.amount` y `accountRepository.updateBalance(...)` |
+| 10 | Decisión | `this.notificationRepository` (¿presente?) |
+| 11 | Proceso | `notificationRepository.save(new Notification({ title: 'Depósito realizado', ... }))` |
+| 12 | Proceso | `return updatedAccount` |
+
+**V(G) = 4 decisiones + 1 = 5** caminos independientes (convención del proyecto: predicado, una decisión
+por cada `if`). Sonar cuenta además el `||` del nodo 1 y reporta 6. El cuarto camino se repite con un valor
+límite (BE-DE-C4b) y se añaden dos variantes que no suman a V(G): la segunda cláusula del nodo 1
+(BE-DE-C1b) y el rechazo por titularidad en el nodo 6 (BE-DE-C2b).
+
+### BE-DE-C1 — Camino 1
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → Fin` |
+| **Condiciones forzadas** | • N1 (!dto.amount \|\| dto.amount <= 0) = VERDADERO — por la primera cláusula (!dto.amount) |
+| **Entradas** | • Cuenta de ahorros ACTIVA del propietario, saldo = $1.000.000<br>• dto = { userId: propietario, accountId: "acc-1", amount: 0 }<br>• Valor límite: amount = 0 (el mínimo válido es 1) |
+| **Resultado esperado** | Se lanza AppError INVALID_AMOUNT (HTTP 400) en el nodo 2. No se consulta la cuenta, no se altera el saldo ni se notifica. |
+| **Resultado obtenido** | Rechazado con INVALID_AMOUNT · HTTP 400 · "El monto a depositar debe ser mayor a cero" · findById invocado 0 veces · updateBalance 0 veces · notificaciones guardadas: 0 · saldo intacto en $1.000.000 |
+| **Estado** | ✅ **Aprobado** |
+
+### BE-DE-C1b — Camino 1 (segunda cláusula de la condición)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 2 → Fin` |
+| **Condiciones forzadas** | • N1 = VERDADERO — por la segunda cláusula (dto.amount <= 0), con !dto.amount = FALSO |
+| **Entradas** | • Cuenta de ahorros ACTIVA del propietario, saldo = $1.000.000<br>• dto = { userId: propietario, accountId: "acc-1", amount: -1 } |
+| **Resultado esperado** | La segunda cláusula de la condición compuesta también corta el flujo en el nodo 2 con el mismo error. |
+| **Resultado obtenido** | Rechazado con INVALID_AMOUNT · HTTP 400 · findById invocado 0 veces · updateBalance 0 veces · notificaciones guardadas: 0 |
+| **Estado** | ✅ **Aprobado** |
+
+### BE-DE-C2 — Camino 2
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 3 → 4 → 5 → Fin` |
+| **Condiciones forzadas** | • N1 = FALSO<br>• N4 (!account) = VERDADERO |
+| **Entradas** | • Repositorio con la cuenta "acc-1", pero el dto apunta a otra<br>• dto = { userId: propietario, accountId: "inexistente", amount: 100 } |
+| **Resultado esperado** | Se ejecuta findById (nodo 3), devuelve null y se lanza AppError ACCOUNT_NOT_FOUND (HTTP 404) en el nodo 5. |
+| **Resultado obtenido** | Rechazado con ACCOUNT_NOT_FOUND · HTTP 404 · "La cuenta no existe" · findById invocado 1 vez con "inexistente" · updateBalance 0 veces · notificaciones guardadas: 0 |
+| **Estado** | ✅ **Aprobado** |
+
+### BE-DE-C2b — Camino 2 (rechazo en el nodo 6, no tabulado)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 3 → 4 → 6 → Fin (salida por excepción)` |
+| **Condiciones forzadas** | • N1 = FALSO<br>• N4 (!account) = FALSO<br>• N6 (assertBelongsTo) LANZA: el usuario no es el titular |
+| **Entradas** | • Cuenta de ahorros ACTIVA del usuario "dueño", saldo = $1.000.000<br>• dto = { userId: "intruso", accountId: "acc-1", amount: 100 } |
+| **Resultado esperado** | Se lanza AppError FORBIDDEN (HTTP 403) desde el nodo 6 y no se alcanzan los nodos 7 a 12: el saldo no cambia. |
+| **Resultado obtenido** | Rechazado con FORBIDDEN · HTTP 403 · "No tienes permiso para acceder a esta cuenta" · findById invocado 1 vez · updateBalance 0 veces · notificaciones guardadas: 0 · saldo intacto en $1.000.000 |
+| **Estado** | ✅ **Aprobado** |
+
+### BE-DE-C3 — Camino 3
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 3 → 4 → 6 → 7 → 8 → Fin` |
+| **Condiciones forzadas** | • N1 = FALSO<br>• N4 = FALSO<br>• N6 no lanza: el usuario es el titular<br>• N7 (!account.isOperational()) = VERDADERO |
+| **Entradas** | • Cuenta de ahorros del propietario en estado BLOQUEADA, saldo = $1.000.000<br>• dto = { userId: propietario, accountId: "acc-1", amount: 100 }<br>• Cualquier estado distinto de ACTIVA es equivalente (CERRADA se cubre en `DepositMoney.test.ts`) |
+| **Resultado esperado** | assertBelongsTo pasa (nodo 6) y, al no estar la cuenta ACTIVA, se lanza AppError ACCOUNT_INACTIVE (HTTP 400) en el nodo 8. |
+| **Resultado obtenido** | Rechazado con ACCOUNT_INACTIVE · HTTP 400 · "La cuenta no está activa" · estado de la cuenta: BLOQUEADA · findById invocado 1 vez · updateBalance 0 veces · notificaciones guardadas: 0 · saldo intacto en $1.000.000 |
+| **Estado** | ✅ **Aprobado** |
+
+### BE-DE-C4 — Camino 4
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 3 → 4 → 6 → 7 → 9 → 10 → 11 → 12 → Fin` |
+| **Condiciones forzadas** | • N1 = FALSO<br>• N4 = FALSO<br>• N7 = FALSO (cuenta ACTIVA)<br>• N10 (notificationRepository presente) = VERDADERO |
+| **Entradas** | • Cuenta de ahorros ACTIVA del propietario, saldo = $1.000.000<br>• DepositMoney construido CON repositorio de notificaciones (espía)<br>• dto = { userId: propietario, accountId: "acc-1", amount: 250000 } |
+| **Resultado esperado** | Se calcula el saldo nuevo (nodo 9), se persiste con updateBalance, se registra la notificación "Depósito realizado" (nodo 11) y se retorna la cuenta actualizada (nodo 12). Saldo final = $1.250.000. |
+| **Resultado obtenido** | Saldo $1.000.000 → $1.250.000 · updateBalance invocado 1 vez con ("acc-1", 1250000) · 1 notificación: "Depósito realizado" (SISTEMA, no leída) — "Depósito de $250.000 en tu cuenta ****0001" |
+| **Estado** | ✅ **Aprobado** |
+
+### BE-DE-C4b — Camino 4 (valor límite)
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 3 → 4 → 6 → 7 → 9 → 10 → 11 → 12 → Fin` |
+| **Condiciones forzadas** | • Las mismas del camino 4, con el monto en el límite inferior válido |
+| **Entradas** | • Cuenta de ahorros ACTIVA del propietario, saldo = $1.000.000, con repositorio de notificaciones<br>• dto = { userId: propietario, accountId: "acc-1", amount: 1 } |
+| **Resultado esperado** | El monto mínimo válido (1) se acepta en el nodo 1 y el depósito se completa. |
+| **Resultado obtenido** | Saldo $1.000.000 → $1.000.001 · updateBalance invocado 1 vez con ("acc-1", 1000001) · notificaciones guardadas: 1 |
+| **Estado** | ✅ **Aprobado** |
+
+### BE-DE-C5 — Camino 5
+
+| Campo | Contenido |
+| --- | --- |
+| **Secuencia de nodos** | `1 → 3 → 4 → 6 → 7 → 9 → 10 → 12 → Fin` |
+| **Condiciones forzadas** | • N1 = FALSO<br>• N4 = FALSO<br>• N7 = FALSO<br>• N10 (notificationRepository presente) = FALSO |
+| **Entradas** | • Cuenta de ahorros ACTIVA del propietario, saldo = $1.000.000<br>• DepositMoney construido SIN repositorio de notificaciones (parámetro opcional omitido)<br>• dto = { userId: propietario, accountId: "acc-1", amount: 5000 } |
+| **Resultado esperado** | El depósito se realiza igual que en el camino 4, pero se salta el nodo 11: no se registra ninguna notificación. |
+| **Resultado obtenido** | Saldo $1.000.000 → $1.005.000 · updateBalance invocado 1 vez con ("acc-1", 1005000) · notificaciones registradas: 0 (nodo 11 no recorrido) |
+| **Estado** | ✅ **Aprobado** |
+
 ## Hallazgos
 
 ### ❌ BE-CR-C5b — Crear bolsillo · Camino 5 (variante con reserva previa)
@@ -488,7 +639,14 @@ Caso de uso bajo prueba: `GetAccountPockets.execute`
 
 **Obtenido:** FALLO: El flujo tomó el camino 4 (nodo 12) en lugar del camino 5: INSUFFICIENT_AVAILABLE_BALANCE — "No tienes saldo disponible suficiente para crear este bolsillo". Saldo disponible $200, ya reservado $800, monto solicitado $150. Defecto: la decisión del nodo 10 compara "currentReserved + amount > account.balance", pero account.balance ya es el saldo DISPONIBLE (el reservado se descontó en el nodo 11 de creaciones anteriores), de modo que el monto reservado se cuenta dos veces y se rechazan bolsillos que sí caben.
 
+### Observaciones sobre Depositar dinero
+
+Los 8 caminos de `DepositMoney` terminaron en el nodo esperado. El análisis del grafo deja tres observaciones que no son caminos fallidos, sino comportamientos que ningún nodo cubre:
+
+1. **La descripción se descarta.** `DepositMoneyDto.description` entra al caso de uso y el controlador la reenvía, pero ningún nodo la lee: no se guarda ni aparece en la notificación (nodo 11). El campo "Descripción / Concepto" del modal no tiene efecto.
+2. **No hay nodo que registre una transacción.** El depósito solo actualiza el saldo (nodo 9) y notifica (nodo 11). La pantalla de historial ofrece el filtro "Depósito" (`DEPOSITO`) y en el backend no encontré otro código que cree ese tipo de transacción.
+3. **Lectura y escritura del saldo no son atómicas.** El nodo 3 lee la cuenta y el nodo 9 escribe `account.balance + dto.amount` calculado en memoria: dos depósitos simultáneos sobre la misma cuenta podrían pisarse. Con repositorios en memoria y una sola petición no se puede observar; requiere una prueba concurrente contra la base real.
 
 ---
 
-_Documento generado automáticamente por `npm run test:paths`; el resultado obtenido de cada camino proviene de la ejecución real del caso de uso, no de una transcripción manual._
+_Los caminos de Bolsillos provienen de `npm run test:paths` (runner legacy); los de Depositar, de `DepositMoney.paths.test.ts` (Vitest). En ambos casos el resultado obtenido proviene de la ejecución real del caso de uso, no de una transcripción manual._

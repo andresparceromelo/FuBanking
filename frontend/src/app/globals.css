@@ -11,10 +11,12 @@
   --card-foreground: #111111;
   --border: #e5e5e5;
   --input: #e5e5e5;
-  --destructive: #ef4444;
+  /* 4,8:1 con texto blanco; #ef4444 daba 3,8:1 (A11Y-05). */
+  --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --muted: #f4f4f5;
-  --muted-foreground: #71717a;
+  /* 5,5:1 sobre --background (#f5f5f5); #71717a daba 4,43:1 < 4,5:1 WCAG AA (A11Y-01). */
+  --muted-foreground: #63636b;
 }
 
 @theme inline {

@@ -1,0 +1,109 @@
+{
+  "id": "SH-B03",
+  "functionality": "Editar bolsillo",
+  "objective": "La IA renombra un bolsillo y aumenta su monto desde el formulario de edición.",
+  "expected": "Toast \"Bolsillo actualizado\", bolsillo \"Viaje a Cartagena\" con 150.000 y saldo de la cuenta en 350.000.",
+  "obtained": "4/4 validaciones correctas",
+  "status": "APROBADO",
+  "model": "google/gemini-3.5-flash",
+  "durationMs": 65872,
+  "steps": [
+    {
+      "capability": "act",
+      "instruction": "Click the \"Editar\" button of the \"Vacaciones\" pocket card",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/button[1]",
+      "inputTokens": 1915,
+      "outputTokens": 236,
+      "durationMs": 35598
+    },
+    {
+      "capability": "act",
+      "instruction": "Fill the \"Nombre\" input of the pocket being edited with \"Viaje a Cartagena\"",
+      "output": "Action [fill] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/div[1]/input[1]",
+      "inputTokens": 2057,
+      "outputTokens": 415,
+      "durationMs": 4446
+    },
+    {
+      "capability": "act",
+      "instruction": "Fill the \"Monto\" input of the pocket being edited with \"150000\"",
+      "output": "Action [fill] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/div[2]/input[1]",
+      "inputTokens": 2062,
+      "outputTokens": 559,
+      "durationMs": 4442
+    },
+    {
+      "capability": "act",
+      "instruction": "Click the \"Guardar\" button of the pocket being edited",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/div[3]/button[1]",
+      "inputTokens": 2054,
+      "outputTokens": 295,
+      "durationMs": 3510
+    },
+    {
+      "capability": "extract",
+      "instruction": "Extract every pocket card listed under \"Bolsillos actuales\" with its name and amount",
+      "output": {
+        "pockets": [
+          {
+            "name": "Viaje a Cartagena",
+            "amount": 150000
+          }
+        ]
+      },
+      "inputTokens": 1639,
+      "outputTokens": 1140,
+      "durationMs": 7773
+    }
+  ],
+  "checks": [
+    {
+      "description": "notificación \"Bolsillo actualizado\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "bolsillos en pantalla (extract)",
+      "expected": [
+        {
+          "name": "Viaje a Cartagena",
+          "amount": 150000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Viaje a Cartagena",
+          "amount": 150000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "bolsillos en el backend (API)",
+      "expected": [
+        {
+          "name": "Viaje a Cartagena",
+          "amount": 150000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Viaje a Cartagena",
+          "amount": 150000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "la diferencia sale de la cuenta (API)",
+      "expected": 350000,
+      "obtained": 350000,
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "SH-B03-edicion.png",
+    "SH-B03-resultado.png"
+  ]
+}

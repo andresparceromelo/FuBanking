@@ -11,8 +11,9 @@ export default function AccountsPage() {
   return (
     <section className="py-4">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Cuenta Digital</h1>
-        <p className="text-white/40 text-sm mt-1">Administra tus cuentas bancarias</p>
+        {/* Tokens del tema: text-white fijo era invisible en tema claro (A11Y-04). */}
+        <h1 className="text-2xl font-bold text-foreground">Cuenta Digital</h1>
+        <p className="text-muted-foreground text-sm mt-1">Administra tus cuentas bancarias</p>
       </div>
 
       <AccountList />

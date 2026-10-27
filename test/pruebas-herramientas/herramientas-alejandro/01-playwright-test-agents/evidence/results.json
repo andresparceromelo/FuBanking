@@ -1,0 +1,766 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "-c",
+      "test/pruebas-herramientas/herramientas-alejandro/01-playwright-test-agents/playwright.config.ts"
+    ],
+    "configFile": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\playwright.config.ts",
+    "rootDir": "C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/test/pruebas-herramientas/herramientas-alejandro/01-playwright-test-agents/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/test/pruebas-herramientas/herramientas-alejandro/01-playwright-test-agents/evidence/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/test/pruebas-herramientas/herramientas-alejandro/01-playwright-test-agents/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\tests",
+        "snapshotDir": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\tests",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 90000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "locale": "es-CO",
+          "trace": "retain-on-failure",
+          "screenshot": "on",
+          "navigationTimeout": 60000,
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "./evidence/html-report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "./evidence/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "consultar-bolsillos.spec.ts",
+      "file": "consultar-bolsillos.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Consultar bolsillos",
+          "file": "consultar-bolsillos.spec.ts",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CON-01 · La lista \"Bolsillos actuales\" muestra los bolsillos existentes con sus montos",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 15353,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:23:25.061Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\consultar-bolsillos-Consul-f07d5-s-existentes-con-sus-montos-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab51ac215c0b46feaad-09baa10ab3ebd87ee4ce",
+              "file": "consultar-bolsillos.spec.ts",
+              "line": 7,
+              "column": 7
+            },
+            {
+              "title": "CON-02 · Cuenta sin bolsillos muestra estado vacío y una falla de la API al cargar muestra un error",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9388,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:23:40.882Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\consultar-bolsillos-Consul-a584b--al-cargar-muestra-un-error-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "1ab51ac215c0b46feaad-42edfa798c5bcfa4e4f8",
+              "file": "consultar-bolsillos.spec.ts",
+              "line": 67,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "crear-bolsillo.spec.ts",
+      "file": "crear-bolsillo.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Crear bolsillo",
+          "file": "crear-bolsillo.spec.ts",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "CRE-01 · Crear un bolsillo con nombre y monto válidos descuenta el saldo de la cuenta",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9800,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:23:50.332Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\crear-bolsillo-Crear-bolsi-44eca-uenta-el-saldo-de-la-cuenta-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "77c611b386e855a5cfdc-d96117aa9d0462810a89",
+              "file": "crear-bolsillo.spec.ts",
+              "line": 7,
+              "column": 7
+            },
+            {
+              "title": "CRE-02 · Crear bolsillo sin nombre o con monto superior al saldo es rechazado y no cambia el saldo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7546,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:24:00.169Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\crear-bolsillo-Crear-bolsi-5f2af-hazado-y-no-cambia-el-saldo-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "77c611b386e855a5cfdc-b618476862504e2c564b",
+              "file": "crear-bolsillo.spec.ts",
+              "line": 49,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "depositar.spec.ts",
+      "file": "depositar.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Depositar dinero",
+          "file": "depositar.spec.ts",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "DEP-01 · Abonar un monto válido desde /accounts incrementa el saldo de la cuenta",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8335,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:24:07.779Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\depositar-Depositar-dinero-fcadc-menta-el-saldo-de-la-cuenta-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6b26594a08a5a8a952a2-6a2ef5d1958836a2d33b",
+              "file": "depositar.spec.ts",
+              "line": 7,
+              "column": 7
+            },
+            {
+              "title": "DEP-02 · Abonar con monto 0 (o negativo) muestra un error en línea y no cambia el saldo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7618,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:24:16.150Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\depositar-Depositar-dinero-c6563--línea-y-no-cambia-el-saldo-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "6b26594a08a5a8a952a2-6c70f172b638700c42c5",
+              "file": "depositar.spec.ts",
+              "line": 54,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "editar-bolsillo.spec.ts",
+      "file": "editar-bolsillo.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Editar bolsillo",
+          "file": "editar-bolsillo.spec.ts",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "EDI-01 · Editar nombre y monto de un bolsillo actualiza la tarjeta y ajusta el saldo",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10808,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:24:23.818Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\editar-bolsillo-Editar-bol-b3409-a-tarjeta-y-ajusta-el-saldo-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4284d3da3c0a954a9e2e-e6acf472300290b93304",
+              "file": "editar-bolsillo.spec.ts",
+              "line": 7,
+              "column": 7
+            },
+            {
+              "title": "EDI-02 · Editar con nombre vacío o con un monto mayor al disponible es rechazado sin modificar nada",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10346,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:24:34.656Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\editar-bolsillo-Editar-bol-b5fa4-echazado-sin-modificar-nada-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "4284d3da3c0a954a9e2e-faa54d1afde442fd6947",
+              "file": "editar-bolsillo.spec.ts",
+              "line": 53,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "eliminar-bolsillo.spec.ts",
+      "file": "eliminar-bolsillo.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Eliminar bolsillo",
+          "file": "eliminar-bolsillo.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "ELI-01 · Eliminar un bolsillo confirmando el diálogo devuelve su saldo a la cuenta",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11937,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:24:45.057Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\eliminar-bolsillo-Eliminar-2ddbf-vuelve-su-saldo-a-la-cuenta-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9efc2db16553f4b94d6-418473d9c5fadb948c68",
+              "file": "eliminar-bolsillo.spec.ts",
+              "line": 9,
+              "column": 7
+            },
+            {
+              "title": "ELI-02 · Cancelar la confirmación no elimina y eliminar un bolsillo ya borrado muestra un error",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10834,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:24:57.027Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\eliminar-bolsillo-Eliminar-12506-ya-borrado-muestra-un-error-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "c9efc2db16553f4b94d6-a9b670be0000eba27ead",
+              "file": "eliminar-bolsillo.spec.ts",
+              "line": 47,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "seed.spec.ts",
+      "file": "seed.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Bolsillos y Depositar",
+          "file": "seed.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "seed",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5307,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:25:07.906Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\seed-Bolsillos-y-Depositar-seed-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "11ceb7af692008938f3b-5e8d98a727dae8809162",
+              "file": "seed.spec.ts",
+              "line": 9,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "transferir-entre-bolsillos.spec.ts",
+      "file": "transferir-entre-bolsillos.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Transferir entre bolsillos",
+          "file": "transferir-entre-bolsillos.spec.ts",
+          "line": 6,
+          "column": 6,
+          "specs": [
+            {
+              "title": "TRA-01 · Transferir un monto entre dos bolsillos mueve el saldo sin tocar la cuenta",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11314,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:25:13.259Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\transferir-entre-bolsillos-7edc8-l-saldo-sin-tocar-la-cuenta-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8c957dd6209437045114-4ab5f357edd53c09fb35",
+              "file": "transferir-entre-bolsillos.spec.ts",
+              "line": 7,
+              "column": 7
+            },
+            {
+              "title": "TRA-02 · Transferir sin datos, más de lo disponible o al mismo bolsillo es rechazado",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11039,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-10-27T06:25:24.602Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Users\\Usuario\\OneDrive\\Documentos\\2026-2\\Validacion y Verificacion\\FuBanking\\test\\pruebas-herramientas\\herramientas-alejandro\\01-playwright-test-agents\\evidence\\test-results\\transferir-entre-bolsillos-f4338-mismo-bolsillo-es-rechazado-chromium\\test-finished-1.png"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8c957dd6209437045114-b55c1dacb9eb1d0bea0c",
+              "file": "transferir-entre-bolsillos.spec.ts",
+              "line": 51,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-27T06:23:23.567Z",
+    "duration": 132947.8,
+    "expected": 13,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

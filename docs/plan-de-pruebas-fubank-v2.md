@@ -1,9 +1,9 @@
 # PLAN DE PRUEBAS — FUBANK
 **Proyecto:** FuBanking  
-**Versión:** 2.0  
+**Versión:** 2.1  
 **Fecha:** 03/08/2026  
-**Equipo de Pruebas (Horizontal sin jerarquías):** Andres Bedoya Cano, Dubin Andres Soto, Tomas Henao, Stiven Alejandro Bustamante  
-**Módulos en Alcance del Sistema:** Autenticación & Seguridad (Soto) · Créditos y Préstamos (Bedoya) · Ahorros/Bolsillos (Henao) · Tarjetas Virtuales (Bustamante)
+**Equipo de Pruebas (Horizontal sin jerarquías):** Andres Bedoya Cano, Tomas Henao, Stiven Alejandro Bustamante, Dubin Andres Soto  
+**Módulos en Alcance del Sistema:** Usuarios & Autenticación + Retiro (Henao) · Créditos y Préstamos (Bedoya) · Ahorros/Bolsillos + Depositar (Bustamante) · Tarjetas Virtuales (Soto)
 
 ---
 
@@ -58,10 +58,10 @@ El sistema sigue un modelo cliente-servidor, donde el cliente web consume una AP
 
 | Módulo | Funcionalidades principales | Responsable |
 |---|---|---|
-| Auth | Registro, login/logout, JWT, 2FA, recuperación de contraseña, perfil | Dubin Andres Soto |
+| Auth | Registro, login/logout, JWT, 2FA, recuperación de contraseña, perfil y retiro (funcionalidad extra) | Tomas Henao |
 | Créditos (Loans) | Simulación de cuotas, solicitud de crédito, listado/estado, aprobación/rechazo admin | Andres Bedoya |
-| Ahorros (Pockets) | Crear/editar/eliminar bolsillos, depósitos y retiros desde/hacia cuenta principal | Tomas Henao |
-| Tarjetas Virtuales | Solicitud, listado, revelación segura de datos, bloqueo/desbloqueo | Stiven Bustamante |
+| Ahorros (Pockets) | Crear, consultar, editar, eliminar y transferir entre bolsillos (HU-23 a HU-26) + depositar dinero en la cuenta (funcionalidad extra) | Stiven Alejandro Bustamante |
+| Tarjetas Virtuales | Solicitud, listado, revelación segura de datos, bloqueo/desbloqueo | Dubin Andres Soto |
 
 ---
 
@@ -74,9 +74,11 @@ El sistema sigue un modelo cliente-servidor, donde el cliente web consume una AP
 |---|---|---|
 | Requisitos Funcionales (RF-01 a RF-81) | Documento oficial de RF del proyecto | Auth, Loans, Pockets, Virtual Cards |
 | Historias de Usuario (HU-27 a HU-32) | Backlog orientado al módulo de Créditos | Loans |
+| Historias de Usuario (HU-23 a HU-26) + Depositar | Bolsillos: crear, consultar, editar, eliminar, transferir; depósito a la cuenta | Pockets |
+| Casos y Escenarios FuBank.xlsx | ESC031–ESC044 y TC-101–TC-152 con resultado esperado/obtenido y evidencia | Pockets |
 | Código fuente (`backend/src/`, `frontend/src/`) | Implementación real sometida a prueba | Todos |
 | Contratos API (`docs/api/endpoints.md`) | Interfaz HTTP verificada en pruebas de integración | Todos |
-| Escenarios Gherkin (`e2e/serenity/features/`) | Criterios de aceptación en lenguaje natural | Loans |
+| Escenarios Gherkin (`e2e/serenity/features/`) | Criterios de aceptación en lenguaje natural (`creditos/`, `bolsillos/`, `deposito/`, `recorrido/`) | Loans, Pockets |
 | Commits Git (23/07/2026 – 25/10/2026) | Trazabilidad de cambios y versiones probadas | Todos |
 
 ---
@@ -98,14 +100,15 @@ El sistema sigue un modelo cliente-servidor, donde el cliente web consume una AP
 ## 5.1 Funcionalidades incluidas
 
 - **Módulo de Usuarios y Autenticación:** registro (RF-01 a RF-03), login/logout y sesión JWT (RF-04 a RF-07), recuperación y restablecimiento de contraseña (RF-08 a RF-10), activación/desactivación y verificación de 2FA (RF-11 a RF-14), consulta y edición de perfil (RF-15 a RF-17).
-- **Módulo de Ahorros (Bolsillos):** creación (RF-43, RF-44), consulta (RF-45), edición (RF-46), eliminación (RF-47) y movimientos hacia/desde la cuenta principal (RF-48 a RF-51).
+- **Módulo de Ahorros (Bolsillos):** crear (HU-23 · RF-43, RF-44), consultar (HU-24 · RF-45), editar (HU-24 · RF-46), eliminar (HU-25 · RF-47) y transferir entre bolsillos (HU-26 · RF-48 a RF-51).
+- **Funcionalidad extra Depositar:** abono a la cuenta de ahorros desde `/accounts` (`POST /accounts/:id/deposit`) con montos estrictos.
 - **Módulo de Créditos:** simulación y cálculo de cuotas (RF-52 a RF-54), envío y registro de solicitudes (RF-55, RF-56), consulta de estado e historial (RF-57, RF-58) y gestión administrativa: listado, aprobación y rechazo (RF-60 a RF-63).
 - **Módulo de Tarjetas Virtuales:** solicitud y generación (RF-64, RF-65), listado e información básica (RF-66, RF-67), revelación segura de datos sensibles (RF-69) y bloqueo/desbloqueo con actualización de estado (RF-70 a RF-72).
 - **(Transversal)** Generación de notificaciones derivada de los flujos anteriores (RF-76, RF-78, RF-81).
 
 ## 5.2 Funcionalidades excluidas
 
-- **Módulo de Cuentas Bancarias** como flujo propio (RF-18 a RF-29): depósitos, retiros directos, control de privacidad de saldo y consulta de movimientos.
+- **Módulo de Cuentas Bancarias** como flujo propio (RF-18 a RF-29): apertura, privacidad de saldo y movimientos. El **depósito** (extra de Bolsillos) y el **retiro** (extra de Usuarios) sí se prueban.
 - **Módulo de Transferencias y Movimientos** (RF-30 a RF-42): búsqueda de destinatarios, transferencias, comprobantes, historial y solicitudes de dinero.
 - **Gestión del buzón de notificaciones** como módulo independiente (RF-73 a RF-75).
 - Pruebas de carga y estrés a gran escala (miles de usuarios concurrentes), dado que no se cuenta con herramientas ni infraestructura dedicadas para ese volumen.
@@ -164,6 +167,22 @@ Adicionalmente se implementaron **3 herramientas avanzadas** de observabilidad y
 - **Evidencia trazable:** screenshots, videos, reportes HTML (Mochawesome), JSON traces MCP y dashboards ReportPortal.
 - **Regresión continua:** las suites se integran al pipeline CI/CD (Jenkins) mediante los comandos `npm run test:backend`, `npm run test:frontend` y el script `scripts/regression.ps1`.
 
+## Estrategia del módulo Bolsillos + Depositar
+
+Una sola especificación en Gherkin (`e2e/serenity/features/{bolsillos,deposito,recorrido}`) se ejecuta con dos motores, Serenity/JS y Cypress, contra el backend y Supabase reales. Cada escenario crea su cliente por la API y verifica el saldo real como oráculo. Las herramientas de IA generan, mantienen o reproducen casos; la verificación final es determinista.
+
+| Capa | Herramienta | Resultado (26–27/10/2026) |
+|---|---|---|
+| Unitarias (AAA + FIRST + 5 dobles), caja blanca y regresión | Vitest | 207 + 2 it.fails |
+| Seguridad · rendimiento | Vitest | 149 + 10 it.fails · 9/9 |
+| E2E Gherkin + Screenplay | Serenity/JS | 36/36 |
+| E2E Gherkin + accesibilidad | Cypress + cucumber-preprocessor + axe-core | 40/40 |
+| E2E con IA (`act`/`observe`/`extract`) | Stagehand + Gemini | 6/6 |
+| IA 1 · planear, generar y reparar tests | Playwright Test Agents | 12/12 |
+| IA 2 · API | Postman + Postbot (Newman) | 136/136 aserciones |
+| IA 3 · regresión desde tráfico real con mocks | Keploy (Docker) | 50/50 |
+| Grabación Selenese | Katalon Recorder | 52/52 |
+
 ---
 
 # 7. NIVELES DE PRUEBA
@@ -210,6 +229,9 @@ Se ejecutan sobre el sistema desplegado localmente (backend `:3001` + frontend `
 | Cypress E2E — Créditos (seguridad) | Cypress | 4 tests | 4/4 ✅ |
 | BDD/Gherkin — Créditos | Serenity/JS + Screenplay | 7 scenarios | 7/7 ✅ |
 | Pruebas asistidas por IA | Stagehand + Gemini Flash 2.0 | 3 escenarios | 3/3 ✅ |
+| Cypress E2E — Bolsillos + Depositar (funcional, seguridad, a11y) | Cypress + Gherkin | 40 escenarios | 40/40 ✅ |
+| BDD/Gherkin — Bolsillos + Depositar | Serenity/JS + Screenplay | 36 escenarios | 36/36 ✅ |
+| IA — Bolsillos + Depositar | Stagehand · Playwright Test Agents | 6 · 12 | 6/6 · 12/12 |
 
 - **Base de prueba:** especificación de RF, historias de usuario, objetivos de prueba del documento.
 
@@ -221,7 +243,7 @@ Se centran en confirmar que los flujos clave operan según lo esperado desde la 
 - El **usuario final (cliente)** puede simular un crédito, enviarlo y consultar su estado.
 - El **administrador** puede listar solicitudes, aprobarlas o rechazarlas con la correcta actualización de estados.
 
-Los criterios de aceptación están formalizados como escenarios **Gherkin** (Given/When/Then) en `e2e/serenity/features/creditos/`, validados mediante Serenity/JS con el patrón Screenplay.
+Los criterios de aceptación están formalizados como escenarios **Gherkin** (Given/When/Then) en `e2e/serenity/features/creditos/` y, para Bolsillos y Depositar, en `e2e/serenity/features/{bolsillos,deposito,recorrido}/`, validados mediante Serenity/JS con el patrón Screenplay y también por Cypress.
 
 - **Base de prueba:** requisitos del negocio, historias de usuario (HU-27 a HU-32), criterios de aceptación BDD.
 - **Evidencia:** reportes HTML de Serenity (`e2e/serenity/target/site/serenity/`).
@@ -240,6 +262,8 @@ Verifican que el sistema hace lo que el RF especifica. Se realizan en todos los 
 | Flujos E2E de negocio | Cypress | Loans | RF-52 a RF-63 |
 | Criterios de aceptación BDD | Serenity/JS + Gherkin | Loans | HU-27 a HU-32 |
 | Flujos guiados por IA | Stagehand + Gemini Flash | Loans | RF-52, RF-55, RF-60 |
+| Flujos E2E de Bolsillos + Depositar | Cypress, Serenity/JS, Stagehand, Playwright Test Agents | Pockets | HU-23 a HU-26 + Depositar |
+| API de Bolsillos + Depositar | Postman/Newman, Keploy | Pockets | HU-23 a HU-26 + Depositar |
 
 **Caso representativo — Ciclo de vida de un crédito (Cypress):**
 ```
@@ -258,6 +282,11 @@ simulate → create → list (client) → approve (admin) → verify status
 - Análisis con **axe-core** integrado en Cypress (`loans-a11y.cy.ts`)
 - Verificación de contraste de color, atributos ARIA y navegación por teclado en la UI del simulador de créditos
 - Herramienta: `cypress-axe` + `@axe-core/playwright`
+
+### Bolsillos + Depositar
+- **Seguridad:** 159 casos (149 + 10 `it.fails`): bypass de 2FA, IDOR (403), type juggling de montos (`true`, `null`, `"abc"`, listas) y XSS.
+- **Accesibilidad:** `accesibilidad.feature` de Cypress con axe (WCAG 2.1 AA) en `/pockets`, `/accounts` y sus modales; se corrigieron A11Y-01 a A11Y-06.
+- **Rendimiento:** 9 casos con presupuesto de tiempo por operación.
 
 ### Rendimiento básico
 - Tiempo de respuesta de endpoints críticos medido en pruebas de integración (Vitest)
@@ -279,6 +308,7 @@ Después de cada corrección o modificación, se re-ejecutan todas las suites pa
 - **Scope:** suite Cypress (18 tests) + suite Serenity/JS (7 scenarios) + tests unitarios e integración (Vitest)
 - **Integración CI:** Jenkins ejecuta regresión automáticamente en cada push a `dev`
 - **Criterio de paso:** 0 tests fallidos; cualquier fallo bloquea el merge a `main`
+- **Bolsillos + Depositar:** `npm --prefix backend run test:regression:bolsillos`, `npm run test:cypress:bolsillos`, `npm run test:postman:bolsillos` y `npm run test:keploy:bolsillos`
 
 ---
 
@@ -287,7 +317,7 @@ Después de cada corrección o modificación, se re-ejecutan todas las suites pa
 | Técnica | Descripción | Aplicada en |
 |---|---|---|
 | **Partición de equivalencia** | Divide entradas en clases válidas/inválidas. Ej: montos de crédito (rango válido 500K–50M, inválido: negativo, 0, > 50M, texto) | Vitest unitarios, Cypress E2E |
-| **Análisis de valores límite** | Prueba en bordes de rangos. Ej: monto = 500.000 (mínimo válido), 499.999 (inválido), 50.000.000 (máximo) | Vitest integración |
+| **Análisis de valores límite** | Prueba en bordes de rangos. Ej: monto = 500.000 (mínimo válido), 499.999 (inválido), 50.000.000 (máximo); en Bolsillos, saldo + 1 y monto total + 1 | Vitest integración, Postman |
 | **Tabla de decisión** | Combina condiciones para determinar acciones. Ej: (monto, plazo, tasa) → cuota mensual calculada | Pruebas de simulación de crédito |
 | **Transición de estados** | Traza el ciclo de vida de una entidad a través de sus estados. Ej: solicitud → `pending` → `approved`/`rejected` | Cypress `loans-lifecycle.cy.ts` |
 | **Casos de uso / BDD** | Escenarios Given/When/Then derivados de HU. Ej: "Dado que soy cliente, Cuando simulo un crédito de 1M a 12 meses, Entonces veo la cuota mensual calculada" | Serenity/JS + Gherkin |
@@ -346,6 +376,10 @@ docker compose up -d
 | `purpose` | "Compra de computador" | Propósito del crédito |
 | `amount` (límite bajo) | 500.000 COP | Valor mínimo permitido |
 | `amount` (inválido) | -1, 0, "abc" | Valores de partición inválida |
+
+## Datos de Bolsillos + Depositar
+
+No usan usuarios fijos: cada escenario registra un cliente nuevo por la API (`e2e.*@fubanking.test`, limpiable con `npm run test:e2e:clean`), le abre una cuenta de ahorros y deposita $500.000. Montos de prueba: 100.000 / 50.000 (bolsillos), 30.000 (transferencia), saldo + 1 (frontera), 0, negativo, `"abc"`, `true`, `null` y `[1000]` (inválidos).
 
 ## Datos para Katalon Recorder (pruebas Selenese)
 
@@ -447,6 +481,9 @@ Dado que el proyecto es académico y el equipo es pequeño (4 personas), la gest
 | R-08 | Resultados de IA no deterministas (Stagehand) | Alta | Bajo | Escenarios con instrucciones claras; reintentos configurados; evidencia capturada en fallo |
 | R-09 | Docker no disponible para ReportPortal | Baja | Bajo | Herramienta opcional; reportes Mochawesome/HTML como alternativa |
 | R-10 | Tokens JWT expirados durante la ejecución | Media | Alto | Tokens de larga duración generados al inicio de cada sesión de pruebas |
+| R-11 | Tabla `pockets` ausente en Supabase (D-07): bolsillos en memoria | Alta | Alto | Documentado como defecto abierto; migración recomendada |
+| R-12 | Proyecto Supabase pausado por inactividad | Media | Alto | Restaurarlo antes de cada corrida (ocurrió el 26/10) |
+| R-13 | Antivirus bloquea herramientas (Keploy para Windows) | Media | Medio | Binario Linux oficial dentro de Docker |
 
 ---
 
@@ -457,9 +494,9 @@ El equipo de pruebas opera bajo un modelo horizontal y colaborativo, donde cada 
 | Integrante | Módulo Asignado | Rol en el Proyecto | Responsabilidades Específicas |
 |---|---|---|---|
 | Andres Bedoya Cano | Créditos y Préstamos | Ingeniero de Calidad QA | Simulador, aprobación admin, suites Cypress E2E, BDD y herramientas |
-| Dubin Andres Soto | Autenticación & Usuarios | Ingeniero de Calidad QA | Pruebas de registro, login, tokens JWT, seguridad y 2FA |
-| Tomas Henao | Ahorros (Bolsillos) | Ingeniero de Calidad QA | Pruebas de bolsillos de ahorro, abonos, retiros e integridad de saldos |
-| Stiven Alejandro Bustamante | Tarjetas Virtuales | Ingeniero de Calidad QA | Pruebas de emisión de tarjetas, datos sensibles y bloqueo/desbloqueo |
+| Tomas Henao | Usuarios & Autenticación | Ingeniero de Calidad QA | Registro, login, tokens JWT, 2FA, perfil y retiro (extra) |
+| Stiven Alejandro Bustamante | Ahorros (Bolsillos) + Depositar | Ingeniero de Calidad QA | Crear, consultar, editar, eliminar y transferir bolsillos; depósito; integridad de saldos |
+| Dubin Andres Soto | Tarjetas Virtuales | Ingeniero de Calidad QA | Pruebas de emisión de tarjetas, datos sensibles y bloqueo/desbloqueo |
 
 **Herramientas de colaboración:** GitHub (control de versiones y gestión de issues), canales del equipo (comunicación ágil)
 
@@ -477,6 +514,19 @@ El equipo de pruebas opera bajo un modelo horizontal y colaborativo, donde cada 
 | S11 | 01 oct – 07 oct 2026 | Implementación Stagehand + IA (model routing Gemini Flash) | Bedoya |
 | S12-S13 | 08 oct – 21 oct 2026 | Herramientas avanzadas: Playwright MCP, Cypress Cloud + AI, ReportPortal | Bedoya |
 | S14 | 22 oct – 26 oct 2026 | Cierre: regresión final, revisión del plan de pruebas, commit final | Todo el equipo |
+
+**Hitos de Bolsillos + Depositar (Stiven Alejandro Bustamante):**
+
+| Fecha (2026) | Actividad |
+|---|---|
+| 24 ago | Pruebas manuales de caja negra (TC-101 a TC-141) |
+| 07–15 sep | Unitarias AAA + FIRST + 5 dobles (58 pruebas, 100 % de cobertura), SonarQube y refactor de `UpdatePocket` |
+| 15–22 sep | Refactor de confiabilidad (32 → 0) y 14 security hotspots |
+| sep–oct | Regresión con fluent assertions y rendimiento |
+| 08 oct | Seguridad: corrección del bypass de 2FA y type juggling |
+| 09–10 oct | Serenity/JS Screenplay + Gherkin (36) y Katalon Recorder (52) |
+| 26 oct | Cypress + Gherkin, accesibilidad, Postman, Keploy, Stagehand y matrices |
+| 27 oct | Playwright Test Agents y cierre del plan |
 
 ---
 
@@ -500,6 +550,19 @@ El equipo de pruebas opera bajo un modelo horizontal y colaborativo, donde cada 
 
 **Total de checks automatizados activos:** 39 tests + 7 BDD scenarios + 3 AI escenarios = **49 verificaciones automatizadas**
 
+**Bolsillos + Depositar (corrida del 26–27/10/2026):**
+
+| Suite | Herramienta | Resultado |
+|---|---|---|
+| Backend completo / frontend completo | Vitest | 927/929 (rendimiento aislado 15/15) / 461/461 |
+| Regresión + unitarias · seguridad · rendimiento | Vitest | 207 + 2 it.fails · 149 + 10 it.fails · 9/9 |
+| E2E + Gherkin + accesibilidad | Cypress | 40/40 |
+| E2E Screenplay | Serenity/JS | 36/36 |
+| E2E con IA | Stagehand + Gemini | 6/6 |
+| Playwright Test Agents | planner / generator / healer | 12/12 |
+| API · regresión con mocks | Postman/Newman · Keploy | 136/136 aserciones · 50/50 |
+| Selenese | Katalon Recorder | 52/52 |
+
 ## Métricas de calidad (SonarQube)
 
 - **Cobertura de código:** objetivo ≥ 70% (verificado con `npm run test:coverage` + `npm run sonar`)
@@ -517,6 +580,16 @@ El equipo de pruebas opera bajo un modelo horizontal y colaborativo, donde cada 
 
 > **Nota:** El defecto abierto de severidad Baja corresponde a un ajuste cosmético de la UI del simulador de créditos, diferido para una iteración posterior sin impacto en la funcionalidad.
 
+**Defectos de Bolsillos + Depositar:**
+
+| Categoría | Encontrados | Corregidos | Abiertos |
+|---|---|---|---|
+| Seguridad (SEC-01/02 bypass 2FA, SEC-03/04 type juggling) | 3 | 3 | 0 |
+| Funcionales (DEF-001, E2E-01, tema del login) | 3 | 3 | 0 |
+| Accesibilidad WCAG 2.1 AA (A11Y-01…06) | 6 | 6 | 0 |
+| Build (BUILD-01, `ws` sin tipos) | 1 | 1 | 0 |
+| Abiertos (D-04, D-05, D-07, SEC-05…08) | 7 | 0 | 7 (documentados con `it.fails` / migración) |
+
 ---
 
 # 18. ENTREGABLES DE PRUEBA
@@ -533,6 +606,11 @@ El equipo de pruebas opera bajo un modelo horizontal y colaborativo, donde cada 
 | Sustentación de herramientas | Documento técnico de justificación y uso | `test/pruebas-herramientas/herramientas-bedoya/SUSTENTACION.md` |
 | Reporte Serenity HTML | Sitio HTML con resultados BDD navegables | `e2e/serenity/target/site/serenity/` |
 | Katalon Recorder suites | Scripts Selenese HTML para Créditos, Bolsillos, Depósito | `katalon/` |
+| Bolsillos · Cypress + Gherkin | 40 escenarios (incluye accesibilidad) | `cypress.bolsillos.config.ts`, `cypress/bolsillos/` |
+| Bolsillos · 3 herramientas de IA | Playwright Test Agents, Postman/Newman y Keploy | `test/pruebas-herramientas/herramientas-alejandro/` |
+| Bolsillos · Stagehand | 6 escenarios con act/observe/extract y oráculo API | `e2e/stagehand/src/bolsillos/`, `e2e/stagehand/evidence/bolsillos/` |
+| Refactorización antes/después | R-01 a R-11 con hallazgo, código y verificación | `docs/refactorizacion-bolsillos-antes-despues.md` |
+| Matrices de trazabilidad | Requisito → caso → resultado → evidencia → defecto | `docs/matriz-trazabilidad-bolsillos.md`, `docs/matriz-trazabilidad-equipo.md` (+ xlsx) |
 | Informe final de pruebas | §19 de este documento | Este documento |
 
 ---
@@ -561,10 +639,12 @@ El ciclo de pruebas del proyecto FuBank fue completado satisfactoriamente dentro
 3. **ReportPortal** centraliza resultados de Cypress y Playwright en dashboards separados, habilitando observabilidad de calidad independiente de la herramienta.
 4. **Playwright MCP Server** demuestra una nueva modalidad de automatización donde el agente IA controla el browser via protocolo MCP, abriendo posibilidades de pruebas conversacionales.
 5. **Cypress Cloud** con Test Replay permite reproducir ejecuciones fallidas frame a frame, lo que reduce significativamente el tiempo de diagnóstico.
+6. **Bolsillos + Depositar** se cubrieron en todos los niveles con oráculo de backend; las pruebas llevaron a corregir 13 defectos (seguridad, montos, accesibilidad y build). Quedan abiertos D-04, D-05, D-07 y SEC-05…08, documentados.
+7. **Riesgo de cierre:** la integración de `dev` del 26/10 (`c9ce5f4`) rompe `tsc` y los depósitos/bolsillos (Newman 136 → 99/134); debe corregirse antes del merge `dev → main`.
 
 ## Conclusión
 
-El sistema FuBank, en su módulo de Créditos, cumple con todos los criterios de aceptación definidos. Los demás módulos (Auth, Pockets, Virtual Cards) cuentan con cobertura en niveles unitario e integración. Se recomienda extender la cobertura E2E a los módulos restantes en iteraciones futuras.
+El sistema FuBank, en sus módulos de Créditos y de Bolsillos + Depositar, cumple con los criterios de aceptación definidos. Auth y Virtual Cards cuentan con cobertura en niveles unitario, integración y E2E parcial. Se recomienda corregir la regresión de `dev` y los defectos abiertos de Bolsillos antes del despliegue final.
 
 ---
 
@@ -576,6 +656,7 @@ El sistema FuBank, en su módulo de Créditos, cumple con todos los criterios de
 |---|---|---|---|
 | 1.0 | 03/08/2026 | Versión inicial — estructura base e introducción | Equipo FuBanking |
 | 2.0 | 26/10/2026 | Versión completa — secciones 8 a 20 completadas con evidencia real de testing | Equipo de Testing FuBanking |
+| 2.1 | 27/10/2026 | Módulo Bolsillos + Depositar en todas las secciones y corrección de la asignación de módulos | Stiven Alejandro Bustamante |
 
 ## 20.2 Control de cambios
 
@@ -600,7 +681,7 @@ El sistema FuBank, en su módulo de Créditos, cumple con todos los criterios de
 | Rol / Función | Nombre Completo | Firma | Fecha |
 |---|---|---|---|
 | Ingeniero de Calidad (Créditos) | Andres Bedoya Cano | ___________________ | 26/10/2026 |
-| Ingeniero de Calidad (Auth) | Dubin Andres Soto | ___________________ | 26/10/2026 |
-| Ingeniero de Calidad (Bolsillos) | Tomas Henao | ___________________ | 26/10/2026 |
-| Ingeniero de Calidad (Tarjetas) | Stiven Alejandro Bustamante | ___________________ | 26/10/2026 |
+| Ingeniero de Calidad (Usuarios) | Tomas Henao | ___________________ | 26/10/2026 |
+| Ingeniero de Calidad (Bolsillos) | Stiven Alejandro Bustamante | ___________________ | 27/10/2026 |
+| Ingeniero de Calidad (Tarjetas) | Dubin Andres Soto | ___________________ | 26/10/2026 |
 | Docente Evaluador | Profesor Asignatura | ___________________ | ___________ |

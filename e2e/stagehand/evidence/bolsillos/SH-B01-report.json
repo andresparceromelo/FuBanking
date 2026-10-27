@@ -1,0 +1,117 @@
+{
+  "id": "SH-B01",
+  "functionality": "Crear bolsillo",
+  "objective": "La IA crea un bolsillo desde la pantalla siguiendo instrucciones en lenguaje natural.",
+  "expected": "Toast \"Bolsillo creado\", tarjeta \"Vacaciones\" con 100.000 y saldo de la cuenta en 400.000 (de 500.000).",
+  "obtained": "5/5 validaciones correctas",
+  "status": "APROBADO",
+  "model": "google/gemini-3.5-flash",
+  "durationMs": 53762,
+  "steps": [
+    {
+      "capability": "observe",
+      "instruction": "Find the \"Crear bolsillo\" button of the \"Nuevo bolsillo\" form",
+      "output": [
+        "The 'Crear bolsillo' button inside the 'Nuevo bolsillo' form"
+      ],
+      "inputTokens": 1285,
+      "outputTokens": 184,
+      "durationMs": 2613
+    },
+    {
+      "capability": "act",
+      "instruction": "Type \"Vacaciones\" into the \"Nombre del bolsillo\" input",
+      "output": "Action [fill] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[2]/div[1]/div[2]/div[2]/input[1]",
+      "inputTokens": 1733,
+      "outputTokens": 165,
+      "durationMs": 2724
+    },
+    {
+      "capability": "act",
+      "instruction": "Type \"100000\" into the \"Monto inicial\" input",
+      "output": "Action [fill] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[2]/div[1]/div[2]/div[3]/input[1]",
+      "inputTokens": 1751,
+      "outputTokens": 269,
+      "durationMs": 16352
+    },
+    {
+      "capability": "act",
+      "instruction": "(acción observada) The 'Crear bolsillo' button inside the 'Nuevo bolsillo' form",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[2]/div[1]/div[2]/button[1]",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "durationMs": 59
+    },
+    {
+      "capability": "extract",
+      "instruction": "Extract every pocket card listed under \"Bolsillos actuales\" with its name and amount",
+      "output": {
+        "pockets": [
+          {
+            "name": "Vacaciones",
+            "amount": 100000
+          }
+        ]
+      },
+      "inputTokens": 1630,
+      "outputTokens": 794,
+      "durationMs": 21748
+    }
+  ],
+  "checks": [
+    {
+      "description": "observe encuentra el botón \"Crear bolsillo\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "notificación \"Bolsillo creado\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "bolsillos en pantalla (extract)",
+      "expected": [
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "bolsillos en el backend (API)",
+      "expected": [
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "obtained": [
+        {
+          "name": "Vacaciones",
+          "amount": 100000
+        }
+      ],
+      "passed": true
+    },
+    {
+      "description": "saldo de la cuenta en el backend (API)",
+      "expected": 400000,
+      "obtained": 400000,
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "SH-B01-inicio.png",
+    "SH-B01-resultado.png"
+  ]
+}

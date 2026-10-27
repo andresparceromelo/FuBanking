@@ -1,0 +1,91 @@
+{
+  "id": "SH-B04",
+  "functionality": "Eliminar bolsillo",
+  "objective": "La IA elimina un bolsillo pasando por el diálogo de confirmación.",
+  "expected": "Toast \"Bolsillo eliminado\", mensaje de lista vacía y el saldo vuelve a 500.000.",
+  "obtained": "6/6 validaciones correctas",
+  "status": "APROBADO",
+  "model": "google/gemini-3.5-flash-lite",
+  "durationMs": 14308,
+  "steps": [
+    {
+      "capability": "act",
+      "instruction": "Click the \"Eliminar\" button of the \"Vacaciones\" pocket card",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[3]/div[2]/div[1]/div[1]/div[2]/button[2]",
+      "inputTokens": 1914,
+      "outputTokens": 62,
+      "durationMs": 2089
+    },
+    {
+      "capability": "observe",
+      "instruction": "Find the button that confirms the deletion in the \"Eliminar bolsillo\" dialog",
+      "output": [
+        "Button to confirm the deletion in the Eliminar bolsillo dialog"
+      ],
+      "inputTokens": 1645,
+      "outputTokens": 63,
+      "durationMs": 860
+    },
+    {
+      "capability": "act",
+      "instruction": "(acción observada) Button to confirm the deletion in the Eliminar bolsillo dialog",
+      "output": "Action [click] performed successfully on selector: xpath=/html[1]/body[1]/div[2]/main[1]/div[1]/div[4]/div[1]/div[3]/button[2]",
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "durationMs": 56
+    },
+    {
+      "capability": "extract",
+      "instruction": "Extract how many pocket cards are listed under \"Bolsillos actuales\" and the empty-state message, if any",
+      "output": {
+        "pocketCount": 0,
+        "emptyMessage": "No hay bolsillos para esta cuenta aún."
+      },
+      "inputTokens": 1450,
+      "outputTokens": 56,
+      "durationMs": 1709
+    }
+  ],
+  "checks": [
+    {
+      "description": "observe encuentra la confirmación \"Sí, eliminar\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "notificación \"Bolsillo eliminado\"",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "no quedan tarjetas en pantalla (extract)",
+      "expected": 0,
+      "obtained": 0,
+      "passed": true
+    },
+    {
+      "description": "mensaje de lista vacía (extract)",
+      "expected": true,
+      "obtained": true,
+      "passed": true
+    },
+    {
+      "description": "el backend no tiene bolsillos (API)",
+      "expected": [],
+      "obtained": [],
+      "passed": true
+    },
+    {
+      "description": "el saldo vuelve a la cuenta (API)",
+      "expected": 500000,
+      "obtained": 500000,
+      "passed": true
+    }
+  ],
+  "screenshots": [
+    "SH-B04-confirmacion.png",
+    "SH-B04-resultado.png"
+  ]
+}

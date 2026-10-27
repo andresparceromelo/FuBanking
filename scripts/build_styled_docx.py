@@ -170,7 +170,7 @@ def build_document():
     p_sub = doc.add_paragraph()
     p_sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_sub.paragraph_format.space_after = Pt(6)
-    run_sub = p_sub.add_run("Sistema Bancario Web FuBank — Versión 2.0")
+    run_sub = p_sub.add_run("Sistema Bancario Web FuBank — Versión 2.1")
     run_sub.font.size = Pt(13)
     run_sub.font.bold = True
     run_sub.font.color.rgb = COLOR_INDIGO
@@ -192,9 +192,9 @@ def build_document():
     meta_items = [
         ("Proyecto y Arquitectura", "FuBanking (Express 5 + TypeScript + Next.js 16 + Supabase)"),
         ("Módulos en Alcance (4)", "Usuarios/Auth, Créditos/Loans, Bolsillos/Pockets, Tarjetas/Cards"),
-        ("Equipo de Aseguramiento", "Andres Bedoya, Dubin Soto, Tomas Henao, Stiven Bustamante"),
+        ("Equipo de Aseguramiento", "Andres Bedoya, Tomas Henao, Stiven Alejandro Bustamante, Dubin Soto"),
         ("Modelo de Trabajo", "Equipo Horizontal de Aseguramiento QA (Sin jerarquías)"),
-        ("Fecha de Cierre y Commit", "26 de Octubre de 2026 — Versión 2.0 (Rama dev)"),
+        ("Fecha de Cierre y Commit", "27 de Octubre de 2026 — Versión 2.1 (Rama dev)"),
         ("Curso Académico", "Validación y Verificación de Software — Semestre 2026-2"),
     ]
 
@@ -254,7 +254,7 @@ def build_document():
 
     p_hl = cell_hl.paragraphs[0]
     p_hl.paragraph_format.space_after = Pt(0)
-    r_hl = p_hl.add_run("FuBank · Plan de Pruebas de Software v2.0")
+    r_hl = p_hl.add_run("FuBank · Plan de Pruebas de Software v2.1")
     r_hl.font.size = Pt(8.5)
     r_hl.font.bold = True
     r_hl.font.color.rgb = COLOR_PRIMARY_DARK
@@ -539,10 +539,10 @@ def build_document():
     add_styled_table(
         ["Módulo", "Funcionalidades Principales en Alcance", "Integrante Responsable"],
         [
-            ["Autenticación & Seguridad", "Registro, login/logout, tokens JWT, verificación 2FA, reseteo de contraseña", "Dubin Andres Soto"],
+            ["Usuarios y Autenticación", "Registro, login/logout, tokens JWT, verificación 2FA, reseteo de contraseña, perfil y retiro (funcionalidad extra)", "Tomas Henao"],
             ["Créditos y Préstamos", "Simulador de cuotas, envío de solicitud, historial, aprobación/rechazo admin", "Andres Bedoya Cano"],
-            ["Ahorros (Bolsillos)", "Creación, edición, eliminación de bolsillos, abonos y retiros de cuenta", "Tomas Henao"],
-            ["Tarjetas Virtuales", "Emisión de tarjetas, revelación segura de datos sensibles, bloqueo/desbloqueo", "Stiven Alejandro Bustamante"],
+            ["Ahorros (Bolsillos)", "Crear, consultar, editar, eliminar y transferir entre bolsillos (HU-23 a HU-26) + Depositar dinero en la cuenta (funcionalidad extra)", "Stiven Alejandro Bustamante"],
+            ["Tarjetas Virtuales", "Emisión de tarjetas, revelación segura de datos sensibles, bloqueo/desbloqueo", "Dubin Andres Soto"],
         ],
         [1.8, 3.2, 1.5]
     )
@@ -563,6 +563,8 @@ def build_document():
             ["Código Fuente de Producción", "backend/src/ y frontend/src/ auditados bajo Clean Architecture", "Totalidad del sistema"],
             ["Contratos API (docs/api/endpoints.md)", "Especificación HTTP formal: payloads, headers y status codes", "Integración REST"],
             ["Escenarios BDD (Gherkin)", "Criterios de aceptación formalizados en lenguaje natural", "Flujos E2E de negocio"],
+            ["Historias HU-23 a HU-26 + Depositar", "Bolsillos: crear, consultar, editar, eliminar, transferir; depósito a la cuenta", "Bolsillos"],
+            ["Casos y Escenarios FuBank.xlsx", "ESC031–ESC044 y TC-101–TC-152 con resultado esperado/obtenido y evidencia", "Bolsillos"],
             ["Historial Git (23/07/2026 - 26/10/2026)", "Registro de commits, refactorizaciones y fixes de calidad", "Trazabilidad continua"],
         ],
         [2.2, 3.0, 1.3]
@@ -573,7 +575,7 @@ def build_document():
     # ==============================================================
     add_h1("4. OBJETIVOS DE LAS PRUEBAS")
     add_bullet("Verificar que los requisitos funcionales de los 4 módulos cumplan con las especificaciones técnicas.", "RF Cumplidos: ")
-    add_bullet("Validar la integridad transaccional de movimientos entre cuenta principal y bolsillos sin duplicación o pérdida de fondos.", "Integridad Financiera: ")
+    add_bullet("Validar la integridad transaccional de movimientos entre cuenta principal y bolsillos sin duplicación o pérdida de fondos: cada prueba de Bolsillos y Depositar consulta el saldo real de la cuenta y de los bolsillos en el backend como oráculo.", "Integridad Financiera: ")
     add_bullet("Confirmar la robustez de los mecanismos de seguridad (bloqueo por 429, protección de rutas 401/403, tokens alterados).", "Seguridad Estricta: ")
     add_bullet("Asegurar que el flujo de aprobación y rechazo de solicitudes actualice estados atómicamente y genere cuentas de crédito.", "Ciclo de Créditos: ")
     add_bullet("Identificar y corregir oportunamente cualquier defecto de severidad Alta o Crítica antes del cierre del ciclo.", "Mitigación de Bugs: ")
@@ -585,13 +587,14 @@ def build_document():
     add_h1("5. ALCANCE (SCOPE)")
     add_h2("5.1 Funcionalidades incluidas")
     add_bullet("Módulo Auth: Registro (RF-01..03), login/logout (RF-04..07), 2FA (RF-11..14), perfil (RF-15..17).")
-    add_bullet("Módulo Bolsillos: Creación (RF-43,44), consulta (RF-45), abonos y retiros de cuenta (RF-48..51).")
+    add_bullet("Módulo Bolsillos: Crear (HU-23 · RF-43,44), consultar (HU-24 · RF-45), editar (HU-24 · RF-46), eliminar (HU-25 · RF-47) y transferir entre bolsillos (HU-26 · RF-48..51).")
+    add_bullet("Funcionalidad extra Depositar: abono de dinero a la cuenta de ahorros desde /accounts (POST /accounts/:id/deposit), con validación de montos estrictos.")
     add_bullet("Módulo Créditos: Simulación (RF-52..54), solicitud (RF-55,56), consulta (RF-57,58), gestión admin (RF-60..63).")
     add_bullet("Módulo Tarjetas: Emisión (RF-64,65), listado (RF-66,67), datos sensibles (RF-69), bloqueo (RF-70..72).")
     add_bullet("Transversal: Notificaciones del sistema generadas por eventos bancarios clave (RF-76, 78, 81).")
 
     add_h2("5.2 Funcionalidades excluidas y justificación")
-    add_bullet("Operativa directa de depósitos y retiros en ventanilla como módulo aislado (cubierto indirectamente por bolsillos).", "Cuentas bancarias directas: ")
+    add_bullet("Resto de la operativa de cuentas (apertura, cierre, movimientos). Se incluyen como funcionalidades extra el depósito (Bolsillos) y el retiro (Usuarios).", "Cuentas bancarias directas: ")
     add_bullet("Módulo de transferencias interbancarias masivas por estar fuera del alcance del sprint.", "Transferencias externas: ")
     add_bullet("Pruebas de estrés masivo a escala de decenas de miles de usuarios concurrentes (se aplican pruebas de rendimiento educativo).", "Carga extrema: ")
     add_bullet("Integración con pasarelas de pago externas reales (PSE/ACH/Redeban).", "Pasarelas externas: ")
@@ -600,7 +603,7 @@ def build_document():
     add_bullet("Disponibilidad del ambiente local de pruebas con backend en :3001 y frontend en :3000.", "Supuesto: ")
     add_bullet("Datos de prueba precargados para usuarios clientes y administradores con credenciales conocidas.", "Supuesto: ")
     add_bullet("Equipo conformado por 4 ingenieros de pruebas con dedicación académica semestral colaborativa.", "Restricción: ")
-    add_bullet("Uso de cuotas gratuitas de API de Google Gemini para las pruebas exploratorias con Stagehand.", "Restricción: ")
+    add_bullet("Uso de cuotas gratuitas de API de Google Gemini para las pruebas exploratorias con Stagehand (en Bolsillos se agotó la cuota de gemini-3.5-flash y se completó con gemini-3.5-flash-lite).", "Restricción: ")
 
     # ==============================================================
     # SECCIÓN 6: ENFOQUE Y ESTRATEGIA DE PRUEBAS
@@ -621,6 +624,28 @@ def build_document():
         "1. Microsoft Playwright MCP Server (@playwright/mcp): automatización browser controlada mediante protocolo MCP por agentes IA.\n"
         "2. Cypress Cloud + Studio AI: dashboard en la nube (Project ID: ypgf2b) con Test Replay y comando cy.prompt().\n"
         "3. ReportPortal (Docker :8088): ingestión unificada de resultados Cypress y Playwright con métricas de salud en tiempo real."
+    )
+
+    add_h2("6.1 Estrategia del módulo Bolsillos + Depositar")
+    add_body(
+        "El módulo de Bolsillos se probó con una misma especificación en Gherkin ejecutada por dos motores (Serenity/JS y Cypress), "
+        "siempre contra el backend y Supabase reales: cada escenario crea su propio cliente por la API y verifica el saldo real como oráculo. "
+        "Las pruebas de IA generan, mantienen o reproducen casos, pero la verificación final es determinista."
+    )
+    add_styled_table(
+        ["Capa", "Herramienta", "Resultado"],
+        [
+            ["Unitarias (AAA + FIRST + 5 dobles) y caja blanca", "Vitest", "207 + 2 it.fails"],
+            ["Seguridad y rendimiento", "Vitest", "149 + 10 it.fails · 9/9"],
+            ["E2E Gherkin + Screenplay", "Serenity/JS", "36/36"],
+            ["E2E Gherkin + accesibilidad", "Cypress + cucumber-preprocessor + axe-core", "40/40"],
+            ["E2E con IA (act/observe/extract)", "Stagehand + Gemini", "6/6"],
+            ["IA 1 · planear, generar y reparar tests", "Playwright Test Agents", "12/12"],
+            ["IA 2 · pruebas de API", "Postman + Postbot (Newman)", "136/136 aserciones"],
+            ["IA 3 · regresión desde tráfico real con mocks", "Keploy (Docker)", "50/50"],
+            ["Grabación Selenese", "Katalon Recorder", "52/52"],
+        ],
+        [2.4, 2.4, 1.7]
     )
 
     # ==============================================================
@@ -660,6 +685,10 @@ def build_document():
             ["Sistema E2E Funcional", "Cypress 15.21.1", "18 specs (5 suites)", "PASS ✅"],
             ["Aceptación BDD", "Serenity/JS + Screenplay", "7 escenarios Gherkin", "PASS ✅"],
             ["Exploratorio con IA", "Stagehand + Gemini Flash", "3 escenarios cognitivos", "PASS ✅"],
+            ["Bolsillos · Unitario/Regresión", "Vitest (AAA, 5 dobles)", "207 + 2 it.fails", "PASS ✅"],
+            ["Bolsillos · Sistema E2E", "Cypress + Gherkin", "40/40", "PASS ✅"],
+            ["Bolsillos · Aceptación BDD", "Serenity/JS + Screenplay", "36/36", "PASS ✅"],
+            ["Bolsillos · IA", "Stagehand / Playwright Agents", "6/6 · 12/12", "PASS ✅"],
         ],
         [1.8, 2.2, 1.5, 1.0]
     )
@@ -678,6 +707,7 @@ def build_document():
     add_bullet("Protección contra inyección en campos numéricos, rechazo 401 sin JWT, bloqueo 403 a rutas admin.", "Seguridad: ")
     add_bullet("Auditoría con axe-core integrado en Cypress (WCAG 2.1 AA) sin violaciones críticas.", "Accesibilidad (a11y): ")
     add_bullet("Medición de latencia de endpoints en pruebas de integración (POST /loans/simulate < 500 ms).", "Rendimiento básico: ")
+    add_bullet("Bolsillos: 159 casos de seguridad (149 + 10 it.fails) (bypass de 2FA, IDOR, type juggling de montos, XSS) y accesibilidad WCAG 2.1 AA con axe en /pockets, /accounts y sus modales; se corrigieron 6 violaciones (A11Y-01…06) detectadas por Cypress.", "Bolsillos y Depositar: ")
 
     add_h2("8.3 Pruebas estáticas")
     add_bullet("ESLint estricto en backend y frontend como compuerta del pipeline.", "Linting: ")
@@ -697,8 +727,8 @@ def build_document():
     add_styled_table(
         ["Técnica Aplicada", "Principio de Diseño", "Implementación en FuBanking"],
         [
-            ["Partición de Equivalencia", "Clases válidas e inválidas", "Montos válidos vs negativos, cero o strings"],
-            ["Valores Límite (BVA)", "Fronteras de rangos", "Límites mínimo ($500.000) y máximo ($50.000.000)"],
+            ["Partición de Equivalencia", "Clases válidas e inválidas", "Montos válidos vs negativos, cero, texto, true, null o listas (depósito y bolsillos)"],
+            ["Valores Límite (BVA)", "Fronteras de rangos", "Créditos: $500.000 y $50.000.000 · Bolsillos: saldo + 1, monto total + 1, 0"],
             ["Tablas de Decisión", "Combinatoria de condiciones", "Matriz: (Ingreso validado, Edad >=18, Doc OK) → Apto"],
             ["Transición de Estados", "Ciclo de vida de entidades", "Solicitud → PENDING → APPROVED/REJECTED"],
             ["BDD Given/When/Then", "Especificación ejecutable", "Escenarios Gherkin en Serenity/JS"],
@@ -719,7 +749,7 @@ def build_document():
             ["Cliente Frontend Web", "Next.js 16 + React 19 (:3000)", "Interfaz gráfica responsive y módulos de banca"],
             ["Base de Datos", "PostgreSQL gestionado en Supabase Cloud", "Persistencia transaccional de todos los módulos"],
             ["Navegadores de Ejecución", "Chromium y Electron (modo Headless y GUI)", "Ejecución de Cypress, Serenity y Playwright"],
-            ["Contenedores Docker", "Docker Desktop (ReportPortal en puerto :8088)", "Observabilidad y dashboards centralizados"],
+            ["Contenedores Docker", "Docker Desktop (ReportPortal :8088; Keploy con eBPF y --privileged)", "Observabilidad y regresión de API con mocks"],
             ["Pipeline CI/CD", "Jenkins (Jenkinsfile) ejecutado en ramas dev/main", "Construcción automatizada e integración continua"],
         ],
         [1.8, 2.5, 2.2]
@@ -739,6 +769,11 @@ def build_document():
         [1.8, 2.5, 2.2]
     )
 
+    add_body(
+        "Bolsillos y Depositar no usan usuarios fijos: cada escenario registra un cliente nuevo por la API (correo e2e.*@fubanking.test, "
+        "limpiable con npm run test:e2e:clean), le abre una cuenta de ahorros y deposita $500.000. Katalon usa 2 usuarios estáticos "
+        "creados con npm run katalon:seed (principal e intruso)."
+    )
     add_body("Parámetros financieros utilizados en los casos de prueba de crédito:")
     add_styled_table(
         ["Campo", "Valor de Prueba Típico", "Propósito de la Validación"],
@@ -769,7 +804,7 @@ def build_document():
 
     add_h2("12.3 Criterios de aceptación por módulo")
     add_bullet("Auth: Autenticación JWT y bloqueo de seguridad 429 ante intentos reiterados.", "Módulo Usuarios: ")
-    add_bullet("Bolsillos: Integridad de saldos en abonos y retiros entre cuenta principal y bolsillo.", "Módulo Bolsillos: ")
+    add_bullet("Bolsillos y Depositar: los 6 flujos con al menos un caso PASS en cada nivel, saldo real de cuenta y bolsillos verificado en el backend, sin defectos Altos/Críticos abiertos y 0 violaciones axe serias/críticas.", "Módulo Bolsillos: ")
     add_bullet("Créditos: Amortización exacta con LoanCalculator y creación de cuenta de crédito al aprobar.", "Módulo Créditos: ")
     add_bullet("Tarjetas: Emisión correcta y revelación segura de datos sensibles.", "Módulo Tarjetas: ")
 
@@ -796,7 +831,7 @@ def build_document():
     # SECCIÓN 14: IDENTIFICACIÓN Y ANÁLISIS DE RIESGOS
     # ==============================================================
     add_h1("14. IDENTIFICACIÓN Y ANÁLISIS DE RIESGOS")
-    add_body("Matriz de los 10 riesgos evaluados durante el proceso de aseguramiento:")
+    add_body("Matriz de los 13 riesgos evaluados durante el proceso de aseguramiento:")
     add_styled_table(
         ["ID", "Riesgo Técnico o de Proceso", "Prob.", "Impacto", "Estrategia de Mitigación Implementada"],
         [
@@ -810,6 +845,9 @@ def build_document():
             ["R-08", "No determinismo en pruebas IA", "Alta", "Bajo", "Prompts estructurados y reintentos automáticos"],
             ["R-09", "Indisponibilidad de Docker local", "Baja", "Bajo", "Reportes HTML locales independientes"],
             ["R-10", "Expiración de tokens JWT en tests", "Media", "Alto", "Generación de tokens con vigencia extendida"],
+            ["R-11", "Tabla pockets ausente en Supabase (D-07): bolsillos en memoria", "Alta", "Alto", "Documentado como defecto abierto; migración recomendada"],
+            ["R-12", "Proyecto Supabase pausado por inactividad", "Media", "Alto", "Restaurar el proyecto antes de cada corrida; detectado el 26/10"],
+            ["R-13", "Antivirus bloquea herramientas (Keploy para Windows)", "Media", "Medio", "Binario Linux oficial dentro de Docker"],
         ],
         [0.6, 2.1, 0.7, 0.7, 2.4]
     )
@@ -826,9 +864,9 @@ def build_document():
         ["Integrante del Equipo", "Módulo Asignado", "Rol en el Proyecto", "Responsabilidades Específicas"],
         [
             ["Andres Bedoya Cano", "Créditos y Préstamos", "Ingeniero de Calidad QA", "Simulador, aprobación admin, suites Cypress E2E, BDD y herramientas"],
-            ["Dubin Andres Soto", "Autenticación & Usuarios", "Ingeniero de Calidad QA", "Pruebas de registro, login, tokens JWT, seguridad y 2FA"],
-            ["Tomas Henao", "Ahorros (Bolsillos)", "Ingeniero de Calidad QA", "Pruebas de bolsillos de ahorro, abonos, retiros e integridad de saldos"],
-            ["Stiven Alejandro Bustamante", "Tarjetas Virtuales", "Ingeniero de Calidad QA", "Pruebas de emisión de tarjetas, datos sensibles y bloqueo/desbloqueo"],
+            ["Tomas Henao", "Usuarios y Autenticación", "Ingeniero de Calidad QA", "Registro, login, tokens JWT, 2FA, perfil y retiro (extra)"],
+            ["Stiven Alejandro Bustamante", "Ahorros (Bolsillos) + Depositar", "Ingeniero de Calidad QA", "Crear, consultar, editar, eliminar y transferir bolsillos; depósito; integridad de saldos"],
+            ["Dubin Andres Soto", "Tarjetas Virtuales", "Ingeniero de Calidad QA", "Pruebas de emisión de tarjetas, datos sensibles y bloqueo/desbloqueo"],
         ],
         [1.7, 1.6, 1.4, 1.8]
     )
@@ -850,6 +888,22 @@ def build_document():
             ["S14", "22 Oct - 26 Oct", "Regresión final de los 4 módulos, refactorización y entrega", "Equipo de Testing"],
         ],
         [0.9, 1.3, 3.2, 1.1]
+    )
+
+    add_body("Hitos del módulo Bolsillos + Depositar (fechas de los commits):")
+    add_styled_table(
+        ["Fecha (2026)", "Actividad de Bolsillos + Depositar"],
+        [
+            ["24 Ago", "Pruebas manuales de caja negra (TC-101 a TC-141) en el Excel de casos"],
+            ["07–15 Sep", "Unitarias AAA + FIRST + 5 dobles (58 pruebas, 100 % de cobertura), SonarQube y refactor de UpdatePocket"],
+            ["15–22 Sep", "Refactor de confiabilidad (32 → 0) y 14 security hotspots del proyecto"],
+            ["Sep–Oct", "Regresión con fluent assertions y pruebas de rendimiento (8 casos PF)"],
+            ["08 Oct", "Pruebas de seguridad (158 casos) y corrección del bypass de 2FA y type juggling"],
+            ["09–10 Oct", "E2E Serenity/JS Screenplay + Gherkin (36 escenarios) y Katalon Recorder (52 casos)"],
+            ["26 Oct", "Cypress + Gherkin, accesibilidad, 3 herramientas de IA, Stagehand y matrices de trazabilidad"],
+            ["27 Oct", "Playwright Test Agents y cierre del plan"],
+        ],
+        [1.3, 5.2]
     )
 
     # ==============================================================
@@ -877,6 +931,37 @@ def build_document():
         [1.8, 1.8, 1.1, 0.9, 0.9]
     )
 
+    add_body("Métricas del módulo Bolsillos + Depositar (corrida del 26–27/10/2026):")
+    add_styled_table(
+        ["Suite", "Herramienta", "Resultado", "Estado"],
+        [
+            ["Backend completo", "Vitest", "927/929 (rendimiento aislado 15/15)", "PASS ✅"],
+            ["Frontend completo", "Vitest + Testing Library", "461/461", "PASS ✅"],
+            ["Regresión + unitarias de Bolsillos", "Vitest", "207 + 2 it.fails", "PASS ✅"],
+            ["Seguridad de Bolsillos", "Vitest", "149 + 10 it.fails", "PASS ✅"],
+            ["Rendimiento de Bolsillos", "Vitest", "9/9", "PASS ✅"],
+            ["E2E + Gherkin + a11y", "Cypress", "40/40", "PASS ✅"],
+            ["E2E Screenplay", "Serenity/JS", "36/36", "PASS ✅"],
+            ["E2E con IA", "Stagehand + Gemini", "6/6", "PASS ✅"],
+            ["Playwright Test Agents", "planner / generator / healer", "12/12", "PASS ✅"],
+            ["API", "Postman + Newman", "136/136 aserciones", "PASS ✅"],
+            ["Regresión con mocks", "Keploy", "50/50", "PASS ✅"],
+            ["Selenese", "Katalon Recorder", "52/52", "PASS ✅"],
+        ],
+        [1.9, 1.9, 1.8, 0.9]
+    )
+    add_styled_table(
+        ["Defectos de Bolsillos + Depositar", "Encontrados", "Corregidos", "Abiertos"],
+        [
+            ["Seguridad (SEC-01/02 bypass 2FA, SEC-03/04 type juggling)", "3", "3", "0"],
+            ["Funcionales (DEF-001, E2E-01, tema del login)", "3", "3", "0"],
+            ["Accesibilidad WCAG 2.1 AA (A11Y-01…06)", "6", "6", "0"],
+            ["Build (BUILD-01, ws sin tipos)", "1", "1", "0"],
+            ["Abiertos (D-04, D-05, D-07, SEC-05…08)", "7", "0", "7 (documentados con it.fails / migración)"],
+        ],
+        [2.7, 1.2, 1.2, 1.4]
+    )
+
     # ==============================================================
     # SECCIÓN 18: ENTREGABLES DE PRUEBA
     # ==============================================================
@@ -891,7 +976,12 @@ def build_document():
             ["Playwright MCP Server", "test/pruebas-herramientas/herramientas-bedoya/01-mcp/", "Runner TypeScript, trace JSON y captura"],
             ["Cypress Cloud + AI", "test/pruebas-herramientas/herramientas-bedoya/02-cypress/", "Specs con cy.prompt() vinculadas al cloud ypgf2b"],
             ["ReportPortal Stack", "test/pruebas-herramientas/herramientas-bedoya/03-report/", "docker-compose.yml y agentes Cypress/Playwright"],
-            ["Documento de Sustentación", "test/pruebas-herramientas/.../SUSTENTACION.md", "Justificación técnica profunda de las 3 herramientas"],
+            ["Documento de Sustentación", "test/pruebas-herramientas/herramientas-bedoya/SUSTENTACION.md", "Justificación técnica profunda de las 3 herramientas"],
+            ["Bolsillos · Cypress + Gherkin", "cypress.bolsillos.config.ts, cypress/bolsillos/", "40 escenarios (incluye accesibilidad)"],
+            ["Bolsillos · 3 herramientas de IA", "test/pruebas-herramientas/herramientas-alejandro/", "Playwright Test Agents, Postman/Newman y Keploy"],
+            ["Bolsillos · Stagehand", "e2e/stagehand/src/bolsillos/ y evidence/bolsillos/", "6 escenarios con act/observe/extract y oráculo API"],
+            ["Refactorización antes/después", "docs/refactorizacion-bolsillos-antes-despues.md", "R-01 a R-11 con hallazgo, código y verificación"],
+            ["Matrices de trazabilidad", "docs/matriz-trazabilidad-{bolsillos,equipo}.md + xlsx", "Requisito → caso → resultado → evidencia → defecto"],
         ],
         [2.0, 2.5, 2.0]
     )
@@ -925,6 +1015,8 @@ def build_document():
     add_bullet("Los módulos evaluados cuentan con cobertura robusta y reproducible que protege contra regresiones.", "Robustez Demostrada: ")
     add_bullet("La incorporación de Stagehand y Playwright MCP evidencia la viabilidad de pruebas asistidas por IA para flujos bancarios.", "Innovación Técnica: ")
     add_bullet("El trabajo en equipo permitió abordar múltiples niveles de prueba con criterios uniformes y calidad homogénea.", "Trabajo Colaborativo: ")
+    add_bullet("Bolsillos y Depositar se cubrieron en todos los niveles con oráculo de backend; las pruebas detectaron y llevaron a corregir 13 defectos (seguridad, montos, accesibilidad y build). Quedan abiertos D-04, D-05, D-07 y SEC-05…08, documentados con it.fails.", "Bolsillos + Depositar: ")
+    add_bullet("La integración de dev del 26/10 (commit c9ce5f4) rompe tsc y los depósitos/bolsillos (Newman 136 → 99/134): debe corregirse antes del merge dev → main.", "Riesgo de cierre: ")
 
     # ==============================================================
     # SECCIÓN 20: GESTIÓN DEL DOCUMENTO
@@ -936,6 +1028,7 @@ def build_document():
         [
             ["1.0", "03/08/2026", "Estructura inicial e introducción base del plan", "Equipo de Testing FuBanking"],
             ["2.0", "26/10/2026", "Documento completo auditado con evidencia de testing y diseño corporativo", "Equipo de Testing FuBanking"],
+            ["2.1", "27/10/2026", "Módulo Bolsillos + Depositar en todas las secciones y corrección de la asignación de módulos", "Stiven Alejandro Bustamante"],
         ],
         [1.0, 1.3, 3.0, 1.2]
     )
@@ -945,9 +1038,9 @@ def build_document():
         ["Rol / Función", "Nombre Completo", "Firma", "Fecha"],
         [
             ["Ingeniero de Calidad (Créditos)", "Andres Bedoya Cano", "_________________________", "26/10/2026"],
-            ["Ingeniero de Calidad (Auth)", "Dubin Andres Soto", "_________________________", "26/10/2026"],
-            ["Ingeniero de Calidad (Bolsillos)", "Tomas Henao", "_________________________", "26/10/2026"],
-            ["Ingeniero de Calidad (Tarjetas)", "Stiven Alejandro Bustamante", "_________________________", "26/10/2026"],
+            ["Ingeniero de Calidad (Usuarios)", "Tomas Henao", "_________________________", "26/10/2026"],
+            ["Ingeniero de Calidad (Bolsillos)", "Stiven Alejandro Bustamante", "_________________________", "27/10/2026"],
+            ["Ingeniero de Calidad (Tarjetas)", "Dubin Andres Soto", "_________________________", "26/10/2026"],
             ["Docente Evaluador", "Profesor Asignatura", "_________________________", "___________"],
         ],
         [1.8, 1.8, 1.8, 1.1]

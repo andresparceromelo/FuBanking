@@ -1,0 +1,1041 @@
+# Serenity/JS (Screenplay + Gherkin) — todas las features del equipo — 2026-10-26 21:57
+
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:11
+
+Consultar bolsillos: Consultar los bolsillos de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  Given ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Mercado" con 50000
+  When ella consulta por API los bolsillos de su cuenta
+    Ana consulta por API los bolsillos de su cuenta
+  Then la respuesta HTTP tiene estado 200
+  And la respuesta contiene 2 bolsillos
+
+✓ Execution successful (7s 134ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:21
+
+Consultar bolsillos: Una cuenta sin bolsillos devuelve una lista vacía
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  When ella consulta por API los bolsillos de su cuenta
+    Ana consulta por API los bolsillos de su cuenta
+  Then la respuesta HTTP tiene estado 200
+  And la respuesta contiene 0 bolsillos
+
+✓ Execution successful (3s 520ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:27
+
+Consultar bolsillos: No se pueden consultar los bolsillos de otro cliente
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  Given Bruno es cliente con una cuenta de ahorros con saldo de 100000
+    Bruno es cliente con una cuenta de ahorros con saldo de 100000
+  When Ana consulta por API los bolsillos de la cuenta de Bruno
+    Ana consulta por API los bolsillos de la cuenta 9ee86058-2a0f-448b-a57d-e98d4b6f412a
+  Then la respuesta HTTP tiene estado 403
+  And el código de error es "FORBIDDEN"
+
+✓ Execution successful (6s 598ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:34
+
+Consultar bolsillos: Ver en pantalla los bolsillos de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  Given ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Mercado" con 50000
+  And ella inició sesión en FuBanking
+    Ana inicia sesión en FuBanking
+  When ella abre la pantalla de bolsillos
+    Ana abre la pantalla de bolsillos
+  Then ella ve los bolsillos:
+  | Vacaciones |
+  | Mercado    |
+  And ella ve el bolsillo "Vacaciones" con 100000
+  And ella ve el bolsillo "Mercado" con 50000
+
+✓ Execution successful (15s 322ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:11
+
+Crear bolsillo: Crear un bolsillo descuenta el monto del saldo de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  When ella crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  Then la respuesta HTTP tiene estado 201
+  And el saldo de su cuenta es 400000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (4s 636ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:17
+
+Crear bolsillo: Se puede apartar todo el saldo disponible
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  When ella crea por API el bolsillo "Carro" con 500000
+    Ana crea por API el bolsillo "Carro" con 500000
+  Then la respuesta HTTP tiene estado 201
+  And el saldo de su cuenta es 0
+    Ana consulta su cuenta por API
+
+✓ Execution successful (4s 576ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:31
+
+Crear bolsillo: Rechazar un bolsillo con nombre vacío
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  When ella crea por API el bolsillo "" con 1000
+    Ana crea por API el bolsillo "" con 1000
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "VALIDATION_ERROR"
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (3s 378ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:32
+
+Crear bolsillo: Rechazar un bolsillo con monto negativo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  When ella crea por API el bolsillo "Carro" con -1000
+    Ana crea por API el bolsillo "Carro" con -1000
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "VALIDATION_ERROR"
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (3s 422ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:33
+
+Crear bolsillo: Rechazar un bolsillo con monto mayor al saldo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  When ella crea por API el bolsillo "Carro" con 500001
+    Ana crea por API el bolsillo "Carro" con 500001
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INSUFFICIENT_AVAILABLE_BALANCE"
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (3s 890ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:36
+
+Crear bolsillo: Crear un bolsillo desde la pantalla de bolsillos
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+    Ana abre la pantalla de bolsillos
+  When ella crea el bolsillo "Vacaciones" con 100000
+    Ana crea el bolsillo "Vacaciones" con 100000 desde la pantalla
+  Then ella ve la notificación "Bolsillo creado"
+  And ella ve el bolsillo "Vacaciones" con 100000
+  And el saldo de su cuenta es 400000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (14s 173ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:44
+
+Crear bolsillo: La pantalla pide el nombre antes de crear el bolsillo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+    Ana abre la pantalla de bolsillos
+  When ella crea el bolsillo "" con 1000
+    Ana crea el bolsillo "" con 1000 desde la pantalla
+  Then ella ve la notificación "Falta información"
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (9s 666ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:12
+
+Editar bolsillo: Renombrar un bolsillo conserva su saldo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  When ella renombra por API el bolsillo "Vacaciones" a "Viaje a Cartagena"
+    Ana renombra por API el bolsillo "Vacaciones" a "Viaje a Cartagena"
+  Then la respuesta HTTP tiene estado 200
+  And su bolsillo "Viaje a Cartagena" tiene 100000
+    Ana consulta por API los bolsillos de su cuenta
+
+✓ Execution successful (6s 85ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:18
+
+Editar bolsillo: Aumentar el monto de un bolsillo descuenta la diferencia de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  When ella ajusta por API el monto del bolsillo "Vacaciones" a 150000
+    Ana ajusta por API el monto del bolsillo "Vacaciones" a 150000
+  Then la respuesta HTTP tiene estado 200
+  And su bolsillo "Vacaciones" tiene 150000
+    Ana consulta por API los bolsillos de su cuenta
+  And el saldo de su cuenta es 350000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (6s 901ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:25
+
+Editar bolsillo: Disminuir el monto de un bolsillo devuelve la diferencia a la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  When ella ajusta por API el monto del bolsillo "Vacaciones" a 40000
+    Ana ajusta por API el monto del bolsillo "Vacaciones" a 40000
+  Then la respuesta HTTP tiene estado 200
+  And su bolsillo "Vacaciones" tiene 40000
+    Ana consulta por API los bolsillos de su cuenta
+  And el saldo de su cuenta es 460000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (6s 651ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:32
+
+Editar bolsillo: No se puede ajustar un bolsillo por encima del dinero total
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  When ella ajusta por API el monto del bolsillo "Vacaciones" a 500001
+    Ana ajusta por API el monto del bolsillo "Vacaciones" a 500001
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INSUFFICIENT_AVAILABLE_BALANCE"
+  And el saldo de su cuenta es 400000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (6s 21ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:39
+
+Editar bolsillo: Renombrar un bolsillo desde la pantalla
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+    Ana abre la pantalla de bolsillos
+  When ella renombra el bolsillo "Vacaciones" a "Viaje a Cartagena"
+    Ana renombra el bolsillo "Vacaciones" a "Viaje a Cartagena" desde la pantalla
+  Then ella ve la notificación "Bolsillo actualizado"
+  And ella ve el bolsillo "Viaje a Cartagena" con 100000
+
+✓ Execution successful (24s 35ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/eliminar_bolsillo.feature:12
+
+Eliminar bolsillo: Eliminar un bolsillo devuelve su saldo a la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  When ella elimina por API el bolsillo "Vacaciones"
+    Ana elimina por API el bolsillo "Vacaciones"
+  Then la respuesta HTTP tiene estado 200
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+  And su cuenta no tiene bolsillos
+    Ana consulta por API los bolsillos de su cuenta
+
+✓ Execution successful (7s 552ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/eliminar_bolsillo.feature:19
+
+Eliminar bolsillo: No se puede eliminar el bolsillo de otro cliente
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  Given Bruno es cliente con una cuenta de ahorros con saldo de 100000
+    Bruno es cliente con una cuenta de ahorros con saldo de 100000
+  And él tiene el bolsillo "Moto" con 50000
+    Bruno crea por API el bolsillo "Moto" con 50000
+  When Ana elimina por API el bolsillo "Moto" de Bruno
+    Ana elimina por API el bolsillo 8bf07faf-8a17-43d5-9a95-5a7f27bc6595
+  Then la respuesta HTTP tiene estado 403
+  And el código de error es "FORBIDDEN"
+  And el saldo de la cuenta de Bruno es 50000
+    Bruno consulta su cuenta por API
+
+✓ Execution successful (11s 406ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/eliminar_bolsillo.feature:28
+
+Eliminar bolsillo: Eliminar un bolsillo desde la pantalla con confirmación
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+    Ana abre la pantalla de bolsillos
+  When ella elimina el bolsillo "Vacaciones"
+    Ana elimina el bolsillo "Vacaciones" desde la pantalla
+  Then ella ve la notificación "Bolsillo eliminado"
+  And ella ve que su cuenta no tiene bolsillos
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (12s 362ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:15
+
+Transferir entre bolsillos: Mover dinero de un bolsillo a otro
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Mercado" con 50000
+  When ella transfiere por API 30000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere por API 30000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+  Then la respuesta HTTP tiene estado 200
+  And su bolsillo "Vacaciones" tiene 70000
+    Ana consulta por API los bolsillos de su cuenta
+  And su bolsillo "Mercado" tiene 80000
+    Ana consulta por API los bolsillos de su cuenta
+  And el saldo de su cuenta es 350000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (8s 489ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:23
+
+Transferir entre bolsillos: Se puede transferir todo el saldo de un bolsillo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Mercado" con 50000
+  When ella transfiere por API 100000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere por API 100000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+  Then la respuesta HTTP tiene estado 200
+  And su bolsillo "Vacaciones" tiene 0
+    Ana consulta por API los bolsillos de su cuenta
+  And su bolsillo "Mercado" tiene 150000
+    Ana consulta por API los bolsillos de su cuenta
+
+✓ Execution successful (8s 513ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:30
+
+Transferir entre bolsillos: No se puede transferir más de lo que tiene el bolsillo de origen
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Mercado" con 50000
+  When ella transfiere por API 100001 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere por API 100001 del bolsillo "Vacaciones" al bolsillo "Mercado"
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INSUFFICIENT_POCKET_BALANCE"
+  And su bolsillo "Vacaciones" tiene 100000
+    Ana consulta por API los bolsillos de su cuenta
+
+✓ Execution successful (7s 244ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:37
+
+Transferir entre bolsillos: El bolsillo de origen y el de destino deben ser diferentes
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Mercado" con 50000
+  When ella transfiere por API 10000 del bolsillo "Vacaciones" al bolsillo "Vacaciones"
+    Ana transfiere por API 10000 del bolsillo "Vacaciones" al bolsillo "Vacaciones"
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INVALID_TRANSFER_TARGET"
+
+✓ Execution successful (5s 765ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:43
+
+Transferir entre bolsillos: Transferir entre bolsillos desde la pantalla
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Mercado" con 50000
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+    Ana abre la pantalla de bolsillos
+  When ella transfiere 30000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere 30000 del bolsillo "Vacaciones" al bolsillo "Mercado" desde la pantalla
+  Then ella ve la notificación "Transferencia realizada"
+  And ella ve el bolsillo "Vacaciones" con 70000
+  And ella ve el bolsillo "Mercado" con 80000
+
+✓ Execution successful (13s 331ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:11
+
+Restablecimiento de Contraseña: Solicitar restablecimiento con email existente
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 0
+    Ana es cliente con una cuenta de ahorros con saldo de 0
+  Cuando ella solicita restablecer la contraseña con su email
+    Ana solicita restablecer la contraseña con su email
+  Entonces la respuesta HTTP tiene estado 200
+
+✓ Execution successful (6s 996ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:17
+
+Restablecimiento de Contraseña: Solicitar restablecimiento con email no registrado
+
+  Cuando alguien solicita restablecer la contraseña del email "fantasma@fubanking.test"
+    Visitante solicita restablecer la contraseña del email fantasma@fubanking.test
+  Entonces la respuesta HTTP tiene estado 200
+
+✓ Execution successful (612ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:22
+
+Restablecimiento de Contraseña: Solicitar restablecimiento con email con formato inválido
+
+  Cuando alguien solicita restablecer la contraseña del email "esto-no-es-un-email"
+    Visitante solicita restablecer la contraseña del email esto-no-es-un-email
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (96ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:29
+
+Restablecimiento de Contraseña: Verificar token de restablecimiento inválido
+
+  Cuando alguien verifica el token de restablecimiento "token-falso-12345"
+    Visitante verifica el token de restablecimiento "token-falso-12345"
+  Entonces la respuesta HTTP tiene estado 401
+
+✓ Execution successful (98ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:34
+
+Restablecimiento de Contraseña: Verificar token de restablecimiento vacío
+
+  Cuando alguien verifica el token de restablecimiento ""
+    Visitante verifica el token de restablecimiento ""
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (96ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:41
+
+Restablecimiento de Contraseña: Restablecer contraseña con token inválido
+
+  Cuando alguien intenta restablecer la contraseña con token "token-falso" y nueva contraseña "NuevaClave123!"
+    Visitante restablece la contraseña con token "token-falso"
+  Entonces la respuesta HTTP tiene estado 401
+
+✓ Execution successful (98ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:46
+
+Restablecimiento de Contraseña: Restablecer contraseña con contraseña débil
+
+  Cuando alguien intenta restablecer la contraseña con token "token-falso" y nueva contraseña "1234"
+    Visitante restablece la contraseña con token "token-falso"
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (101ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/contrasena/restablecer_contrasena.feature:51
+
+Restablecimiento de Contraseña: Restablecer contraseña con contraseñas que no coinciden
+
+  Cuando alguien intenta restablecer la contraseña con token "token-falso", nueva contraseña "NuevaClave123!" y confirmación "OtraClave456!"
+    Visitante restablece la contraseña con token "token-falso"
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (100ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/creditos/creditos.feature:9
+
+Gestión y Simulación de Créditos Bancarios: Simulación exitosa de crédito con cálculo de cuota mensual
+
+  Dado que Gabriel abre la plataforma FuBanking
+    Gabriel abre FuBanking en "http://127.0.0.1:60835"
+  Y él ingresa al simulador de créditos
+    Gabriel navega a la sección de préstamos y créditos
+  Cuando él simula un préstamo con monto "5000", cuotas "12" y tasa "18"
+    Gabriel simula préstamo por $5000 a 12 cuotas con tasa 18%
+  Entonces él observa el resultado de la simulación
+  Y él confirma que la simulación está lista
+
+✓ Execution successful (1s 822ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/creditos/creditos.feature:16
+
+Gestión y Simulación de Créditos Bancarios: Simulación con límites y valores de frontera
+
+  Dado que Gabriel abre la plataforma FuBanking
+    Gabriel abre FuBanking en "http://127.0.0.1:60835"
+  Y él ingresa al simulador de créditos
+    Gabriel navega a la sección de préstamos y créditos
+  Cuando él simula un préstamo con monto "25000000", cuotas "36" y tasa "24"
+    Gabriel simula préstamo por $25000000 a 36 cuotas con tasa 24%
+  Entonces él observa el resultado de la simulación
+  Y él confirma que la simulación está lista
+
+✓ Execution successful (2s 139ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/creditos/creditos.feature:23
+
+Gestión y Simulación de Créditos Bancarios: Validación preventiva ante montos y cuotas en cero
+
+  Dado que Gabriel abre la plataforma FuBanking
+    Gabriel abre FuBanking en "http://127.0.0.1:60835"
+  Y él ingresa al simulador de créditos
+    Gabriel navega a la sección de préstamos y créditos
+  Cuando él simula un préstamo con monto "0", cuotas "0" y tasa "18"
+    Gabriel simula préstamo por $0 a 0 cuotas con tasa 18%
+  Entonces él observa un mensaje de validación en pantalla
+
+✓ Execution successful (1s 834ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/creditos/creditos.feature:29
+
+Gestión y Simulación de Créditos Bancarios: Verificación de requisitos de elegibilidad de perfil
+
+  Dado que Gabriel abre la plataforma FuBanking
+    Gabriel abre FuBanking en "http://127.0.0.1:60835"
+  Y él ingresa al simulador de créditos
+    Gabriel navega a la sección de préstamos y créditos
+  Entonces él observa los requisitos para solicitar crédito en pantalla
+  Y él visualiza el botón de solicitar crédito disponible
+
+✓ Execution successful (1s 448ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/creditos/creditos.feature:35
+
+Gestión y Simulación de Créditos Bancarios: Inspección de contenedores informativos y resumen de crédito
+
+  Dado que Gabriel abre la plataforma FuBanking
+    Gabriel abre FuBanking en "http://127.0.0.1:60835"
+  Y él ingresa al simulador de créditos
+    Gabriel navega a la sección de préstamos y créditos
+  Entonces él observa el panel de resumen del préstamo
+
+✓ Execution successful (1s 479ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/creditos/creditos.feature:40
+
+Gestión y Simulación de Créditos Bancarios: Envío de solicitud de crédito por el cliente Gabriel
+
+  Dado que Gabriel abre la plataforma FuBanking
+    Gabriel abre FuBanking en "http://127.0.0.1:60835"
+  Y él ingresa al simulador de créditos
+    Gabriel navega a la sección de préstamos y créditos
+  Cuando él simula un préstamo con monto "5000", cuotas "12" y tasa "18"
+    Gabriel simula préstamo por $5000 a 12 cuotas con tasa 18%
+  Y él intenta enviar la solicitud de crédito
+    Gabriel intenta enviar la solicitud de crédito
+  Entonces él confirma que la solicitud fue enviada
+
+✓ Execution successful (2s 163ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/creditos/creditos.feature:48
+
+Gestión y Simulación de Créditos Bancarios: Aprobación de crédito por el Administrador Andresito
+
+  Dado que Andresito abre la plataforma FuBanking
+    Andresito abre FuBanking en "http://127.0.0.1:60835"
+  Y él ingresa al panel de administración de créditos
+    Andresito navega a la sección de administración de créditos
+  Cuando él aprueba la solicitud de crédito pendiente
+    Andresito aprueba la solicitud de crédito
+  Entonces él observa el estado "Aprobado" en la solicitud
+
+✓ Execution successful (1s 667ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:11
+
+Depositar dinero en la cuenta: Depositar un monto válido
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API 250000 en su cuenta con la descripción "Ahorro mensual"
+    Carlos deposita 250000 en su cuenta
+  Then la respuesta HTTP tiene estado 200
+  And el saldo de su cuenta es 250000
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (3s 725ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:17
+
+Depositar dinero en la cuenta: Los depósitos se acumulan en el saldo
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API 100000 en su cuenta
+    Carlos deposita 100000 en su cuenta
+  And él deposita por API 50000 en su cuenta
+    Carlos deposita 50000 en su cuenta
+  Then el saldo de su cuenta es 150000
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (4s 235ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:31
+
+Depositar dinero en la cuenta: Rechazar un depósito de 0
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API 0 en su cuenta
+    Carlos deposita 0 en su cuenta
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INVALID_AMOUNT"
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (2s 489ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:32
+
+Depositar dinero en la cuenta: Rechazar un depósito de -50000
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API -50000 en su cuenta
+    Carlos deposita -50000 en su cuenta
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INVALID_AMOUNT"
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (2s 518ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:43
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número (true)
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API el valor JSON true en su cuenta
+    Carlos deposita true en su cuenta
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INVALID_AMOUNT"
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (2s 496ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:44
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número ("abc")
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API el valor JSON "abc" en su cuenta
+    Carlos deposita "abc" en su cuenta
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INVALID_AMOUNT"
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (2s 500ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:45
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número (null)
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API el valor JSON null en su cuenta
+    Carlos deposita null en su cuenta
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INVALID_AMOUNT"
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (2s 468ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:46
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número ([1000])
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  When él deposita por API el valor JSON [1000] en su cuenta
+    Carlos deposita [1000] en su cuenta
+  Then la respuesta HTTP tiene estado 400
+  And el código de error es "INVALID_AMOUNT"
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (2s 501ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:49
+
+Depositar dinero en la cuenta: No se puede depositar en la cuenta de otro cliente
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  Given Diana es clienta con una cuenta de ahorros con saldo de 100000
+    Diana es cliente con una cuenta de ahorros con saldo de 100000
+  When Carlos deposita por API 50000 en la cuenta de Diana
+    Carlos deposita 50000 en la cuenta 1cd642af-414f-4d50-859e-5bd621451492
+  Then la respuesta HTTP tiene estado 403
+  And el código de error es "FORBIDDEN"
+  And el saldo de la cuenta de Diana es 100000
+    Diana consulta su cuenta por API
+
+✓ Execution successful (5s 530ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:57
+
+Depositar dinero en la cuenta: Abonar saldo desde la pantalla de cuentas
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  Given él está en la pantalla de cuentas
+    Carlos inicia sesión en FuBanking
+    Carlos abre la pantalla de cuentas
+  When él abona 150000 a su cuenta
+    Carlos abona 150000 a su cuenta desde la pantalla
+  Then él ve la notificación "Deposito realizado"
+  And él ve el saldo de su cuenta en 150000
+  And el saldo de su cuenta es 150000
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (8s 896ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:65
+
+Depositar dinero en la cuenta: El formulario de abono rechaza un monto en cero
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  Given él está en la pantalla de cuentas
+    Carlos inicia sesión en FuBanking
+    Carlos abre la pantalla de cuentas
+  When él abona 0 a su cuenta
+    Carlos abona 0 a su cuenta desde la pantalla
+  Then él ve el error del formulario "Por favor ingresa un monto válido mayor a cero."
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (7s 780ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/login/login.feature:11
+
+Autenticación de Usuarios: Inicio de sesión exitoso
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 0
+    Ana es cliente con una cuenta de ahorros con saldo de 0
+  Cuando ella inicia sesión con sus credenciales correctas
+    Ana inicia sesión con sus credenciales correctas
+  Entonces la respuesta HTTP tiene estado 200
+  Y la respuesta contiene un token de sesión
+
+✓ Execution successful (2s 698ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/login/login.feature:20
+
+Autenticación de Usuarios: Inicio de sesión con contraseña incorrecta
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 0
+    Ana es cliente con una cuenta de ahorros con saldo de 0
+  Cuando ella intenta iniciar sesión con la contraseña "claveIncorrecta123!"
+    Ana intenta iniciar sesión con contraseña incorrecta
+  Entonces la respuesta HTTP tiene estado 401
+
+✓ Execution successful (2s 597ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/login/login.feature:26
+
+Autenticación de Usuarios: Inicio de sesión con email no registrado
+
+  Cuando alguien intenta iniciar sesión con el email "noexiste@fubanking.test" y contraseña "Clave123!"
+    Visitante intenta iniciar sesión como noexiste@fubanking.test
+  Entonces la respuesta HTTP tiene estado 401
+
+✓ Execution successful (327ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/login/login.feature:31
+
+Autenticación de Usuarios: Inicio de sesión con campos vacíos
+
+  Cuando alguien intenta iniciar sesión con el email "" y contraseña ""
+    Visitante intenta iniciar sesión como 
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (94ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/perfil/perfil.feature:11
+
+Edición de Perfil: Actualizar nombre exitosamente
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 0
+    Ana es cliente con una cuenta de ahorros con saldo de 0
+  Cuando ella actualiza su perfil con nombre "Ana María" y apellido "García"
+    Ana actualiza su perfil con nombre "Ana María García"
+  Entonces la respuesta HTTP tiene estado 200
+
+✓ Execution successful (2s 575ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/perfil/perfil.feature:19
+
+Edición de Perfil: Actualizar perfil con nombre vacío
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 0
+    Ana es cliente con una cuenta de ahorros con saldo de 0
+  Cuando ella actualiza su perfil con nombre "" y apellido "García"
+    Ana actualiza su perfil con nombre " García"
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (2s 302ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/perfil/perfil.feature:25
+
+Edición de Perfil: Actualizar perfil con apellido vacío
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 0
+    Ana es cliente con una cuenta de ahorros con saldo de 0
+  Cuando ella actualiza su perfil con nombre "Ana" y apellido ""
+    Ana actualiza su perfil con nombre "Ana "
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (2s 308ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/perfil/perfil.feature:33
+
+Edición de Perfil: Actualizar perfil sin autenticación
+
+  Cuando alguien intenta actualizar un perfil sin token de sesión
+    Anónimo intenta actualizar el perfil sin autenticación
+  Entonces la respuesta HTTP tiene estado 401
+
+✓ Execution successful (107ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/recorrido/abonar_y_ahorrar.feature:8
+
+Recorrido completo de ahorro: Abonar a la cuenta y apartar una parte en un bolsillo nuevo
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+  And él está en la pantalla de cuentas
+    Carlos inicia sesión en FuBanking
+    Carlos abre la pantalla de cuentas
+  When él abona 200000 a su cuenta
+    Carlos abona 200000 a su cuenta desde la pantalla
+  Then él ve el saldo de su cuenta en 200000
+  When él abre la pantalla de bolsillos
+    Carlos abre la pantalla de bolsillos
+  And él crea el bolsillo "Emergencias" con 50000
+    Carlos crea el bolsillo "Emergencias" con 50000 desde la pantalla
+  Then él ve el bolsillo "Emergencias" con 50000
+  And el saldo de su cuenta es 150000
+    Carlos consulta su cuenta por API
+
+✓ Execution successful (12s 619ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/registro/registro.feature:11
+
+Registro de Usuarios: Registro exitoso de nuevo usuario
+
+  Cuando un nuevo usuario se registra con datos válidos
+    Nuevo Usuario se registra con datos válidos
+  Entonces la respuesta HTTP tiene estado 201
+  Y la respuesta contiene un token de sesión
+
+✓ Execution successful (1s 116ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/registro/registro.feature:19
+
+Registro de Usuarios: Registro con email ya existente
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 0
+    Ana es cliente con una cuenta de ahorros con saldo de 0
+  Cuando alguien intenta registrarse con el email de Ana
+    Intruso intenta registrarse con el email e2e.mvq3h6hbbhc1@fubanking.test
+  Entonces la respuesta HTTP tiene estado 401
+
+✓ Execution successful (2s 553ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/registro/registro.feature:25
+
+Registro de Usuarios: Registro con contraseña débil
+
+  Cuando un nuevo usuario se registra con la contraseña "1234"
+    Nuevo Usuario intenta registrarse con contraseña débil
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (139ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/registro/registro.feature:30
+
+Registro de Usuarios: Registro con email inválido
+
+  Cuando un nuevo usuario se registra con el email "esto-no-es-un-email"
+    Nuevo Usuario intenta registrarse con el email esto-no-es-un-email
+  Entonces la respuesta HTTP tiene estado 400
+
+✓ Execution successful (107ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/retiro/retirar_dinero.feature:11
+
+Retiro de Dinero: Retirar un monto válido
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 100000
+    Ana es cliente con una cuenta de ahorros con saldo de 100000
+  Cuando ella retira por API 20000 de su cuenta
+    Ana intenta retirar 20000 de su cuenta
+  Entonces la respuesta HTTP tiene estado 200
+  Y el saldo de su cuenta es 80000
+    Ana consulta su cuenta por API
+
+✓ Execution successful (3s 866ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/retiro/retirar_dinero.feature:20
+
+Retiro de Dinero: Intentar retirar un monto negativo
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 100000
+    Ana es cliente con una cuenta de ahorros con saldo de 100000
+  Cuando ella retira por API -50000 de su cuenta
+    Ana intenta retirar -50000 de su cuenta
+  Entonces la respuesta HTTP tiene estado 400
+  Y el código de error es "INVALID_AMOUNT"
+
+✓ Execution successful (3s 135ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/retiro/retirar_dinero.feature:27
+
+Retiro de Dinero: Intentar retirar cero
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 100000
+    Ana es cliente con una cuenta de ahorros con saldo de 100000
+  Cuando ella retira por API 0 de su cuenta
+    Ana intenta retirar 0 de su cuenta
+  Entonces la respuesta HTTP tiene estado 400
+  Y el código de error es "INVALID_AMOUNT"
+
+✓ Execution successful (3s 236ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/retiro/retirar_dinero.feature:34
+
+Retiro de Dinero: Intentar retirar más del saldo disponible
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 50000
+    Ana es cliente con una cuenta de ahorros con saldo de 50000
+  Cuando ella retira por API 200000 de su cuenta
+    Ana intenta retirar 200000 de su cuenta
+  Entonces la respuesta HTTP tiene estado 400
+  Y el código de error es "INSUFFICIENT_FUNDS"
+
+✓ Execution successful (3s 154ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/retiro/retirar_dinero.feature:43
+
+Retiro de Dinero: Intentar retirar sin autenticación
+
+  Cuando alguien intenta retirar por API 10000 sin autenticación
+    Anónimo intenta retirar 10000 de la cuenta 00000000-0000-0000-0000-000000000000
+  Entonces la respuesta HTTP tiene estado 401
+
+✓ Execution successful (118ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/retiro/retirar_dinero.feature:48
+
+Retiro de Dinero: Intentar retirar de una cuenta inexistente
+
+  Dado Ana es clienta con una cuenta de ahorros con saldo de 100000
+    Ana es cliente con una cuenta de ahorros con saldo de 100000
+  Cuando ella intenta retirar por API 20000 de una cuenta inexistente
+    Ana intenta retirar 20000 de la cuenta 00000000-0000-0000-0000-000000000000
+  Entonces la respuesta HTTP tiene estado 404
+  Y el código de error es "ACCOUNT_NOT_FOUND"
+
+✓ Execution successful (3s 136ms)
+================================================================================
+Execution Summary
+
+Autenticación de Usuarios:      4 successful, 4 total (5s 716ms)
+Consultar bolsillos:            4 successful, 4 total (32s 574ms)
+Crear bolsillo:                 7 successful, 7 total (43s 741ms)
+Depositar dinero en la cuenta:  11 successful, 11 total (45s 138ms)
+Edición de Perfil:              4 successful, 4 total (7s 292ms)
+Editar bolsillo:                5 successful, 5 total (49s 693ms)
+Eliminar bolsillo:              3 successful, 3 total (31s 320ms)
+Gestión y Simulación de Cr...:  7 successful, 7 total (12s 552ms)
+Recorrido completo de ahorro:   1 successful, 1 total (12s 619ms)
+Registro de Usuarios:           4 successful, 4 total (3s 915ms)
+Restablecimiento de Contraseña: 8 successful, 8 total (8s 197ms)
+Retiro de Dinero:               6 successful, 6 total (16s 645ms)
+Transferir entre bolsillos:     5 successful, 5 total (43s 342ms)
+
+Total time: 5m 12s 744ms
+Real time: 5m 19s 62ms
+Scenarios:  69
+================================================================================

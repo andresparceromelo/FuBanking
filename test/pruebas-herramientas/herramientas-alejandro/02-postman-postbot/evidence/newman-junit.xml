@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="FuBanking — Bolsillos y Depositar" tests="31" time="15.458">
+  <testsuite name="00 Preparación / Registrar a Ana" id="c4bd8ddf-26af-489d-8c90-19d0803af73b" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="1.828">
+    <testcase name="[global] Responde en menos de 5 s" time="1.828" classname="00PreparacionRegistrarAAna"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="1.828" classname="00PreparacionRegistrarAAna"/>
+    <testcase name="HTTP 201" time="1.828" classname="00PreparacionRegistrarAAna"/>
+    <testcase name="Devuelve el token de sesión" time="1.828" classname="00PreparacionRegistrarAAna"/>
+  </testsuite>
+  <testsuite name="00 Preparación / Abrir cuenta de ahorros de Ana" id="7097632a-46fa-4ecd-b32c-5077d2edf958" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="1.425">
+    <testcase name="[global] Responde en menos de 5 s" time="1.425" classname="00PreparacionAbrirCuentaDeAhorrosDeAna"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="1.425" classname="00PreparacionAbrirCuentaDeAhorrosDeAna"/>
+    <testcase name="HTTP 201" time="1.425" classname="00PreparacionAbrirCuentaDeAhorrosDeAna"/>
+    <testcase name="Cuenta de ahorros con saldo 0" time="1.425" classname="00PreparacionAbrirCuentaDeAhorrosDeAna"/>
+  </testsuite>
+  <testsuite name="00 Preparación / PRE-01 Saldo inicial de Ana (500.000)" id="e2117c76-8be5-444a-9b7a-1419ebc7abed" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.292">
+    <testcase name="[global] Responde en menos de 5 s" time="0.292" classname="00PreparacionPre01SaldoInicialDeAna500000"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.292" classname="00PreparacionPre01SaldoInicialDeAna500000"/>
+    <testcase name="HTTP 200" time="0.292" classname="00PreparacionPre01SaldoInicialDeAna500000"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 500000" time="0.292" classname="00PreparacionPre01SaldoInicialDeAna500000"/>
+  </testsuite>
+  <testsuite name="00 Preparación / Registrar a Bruno" id="da80f0af-0cf6-451c-bd04-f6bfc30399c4" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="1.364">
+    <testcase name="[global] Responde en menos de 5 s" time="1.364" classname="00PreparacionRegistrarABruno"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="1.364" classname="00PreparacionRegistrarABruno"/>
+    <testcase name="HTTP 201" time="1.364" classname="00PreparacionRegistrarABruno"/>
+    <testcase name="Devuelve el token de sesión" time="1.364" classname="00PreparacionRegistrarABruno"/>
+  </testsuite>
+  <testsuite name="00 Preparación / Abrir cuenta de ahorros de Bruno" id="dd64133f-064b-4e1e-9796-a4f4a5ffa6d2" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="1.104">
+    <testcase name="[global] Responde en menos de 5 s" time="1.104" classname="00PreparacionAbrirCuentaDeAhorrosDeBruno"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="1.104" classname="00PreparacionAbrirCuentaDeAhorrosDeBruno"/>
+    <testcase name="HTTP 201" time="1.104" classname="00PreparacionAbrirCuentaDeAhorrosDeBruno"/>
+    <testcase name="Cuenta de ahorros con saldo 0" time="1.104" classname="00PreparacionAbrirCuentaDeAhorrosDeBruno"/>
+  </testsuite>
+  <testsuite name="00 Preparación / PRE-02 Saldo inicial de Bruno (100.000)" id="05cf871a-667c-4af4-9740-18dd6d343cdb" timestamp="2026-10-27T01:57:35.200Z" tests="3" failures="0" errors="0" time="0.854">
+    <testcase name="[global] Responde en menos de 5 s" time="0.854" classname="00PreparacionPre02SaldoInicialDeBruno100000"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.854" classname="00PreparacionPre02SaldoInicialDeBruno100000"/>
+    <testcase name="HTTP 200" time="0.854" classname="00PreparacionPre02SaldoInicialDeBruno100000"/>
+  </testsuite>
+  <testsuite name="00 Preparación / PRE-03 Bolsillo &quot;Moto&quot; de Bruno" id="e3afbd4e-b87e-4a5b-b8c6-ecc5c489b0d6" timestamp="2026-10-27T01:57:35.200Z" tests="3" failures="0" errors="0" time="1.453">
+    <testcase name="[global] Responde en menos de 5 s" time="1.453" classname="00PreparacionPre03BolsilloQuotMotoQuotDeBruno"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="1.453" classname="00PreparacionPre03BolsilloQuotMotoQuotDeBruno"/>
+    <testcase name="HTTP 201" time="1.453" classname="00PreparacionPre03BolsilloQuotMotoQuotDeBruno"/>
+  </testsuite>
+  <testsuite name="01 Crear bolsillo / CB-01 Crear &quot;Vacaciones&quot; con 100.000" id="e89dd129-0a6e-42cf-aa1f-73d7564c5e02" timestamp="2026-10-27T01:57:35.200Z" tests="6" failures="0" errors="0" time="0.267">
+    <testcase name="[global] Responde en menos de 5 s" time="0.267" classname="01CrearBolsilloCb01CrearQuotVacacionesQuotCon100000"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.267" classname="01CrearBolsilloCb01CrearQuotVacacionesQuotCon100000"/>
+    <testcase name="HTTP 201" time="0.267" classname="01CrearBolsilloCb01CrearQuotVacacionesQuotCon100000"/>
+    <testcase name="El bolsillo cumple el esquema" time="0.267" classname="01CrearBolsilloCb01CrearQuotVacacionesQuotCon100000"/>
+    <testcase name="Nombre y monto del bolsillo" time="0.267" classname="01CrearBolsilloCb01CrearQuotVacacionesQuotCon100000"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 400000" time="0.267" classname="01CrearBolsilloCb01CrearQuotVacacionesQuotCon100000"/>
+  </testsuite>
+  <testsuite name="01 Crear bolsillo / CB-02 Crear &quot;Mercado&quot; con 50.000" id="3a328ecf-80c5-438a-b016-2820e208e902" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.288">
+    <testcase name="[global] Responde en menos de 5 s" time="0.288" classname="01CrearBolsilloCb02CrearQuotMercadoQuotCon50000"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.288" classname="01CrearBolsilloCb02CrearQuotMercadoQuotCon50000"/>
+    <testcase name="HTTP 201" time="0.288" classname="01CrearBolsilloCb02CrearQuotMercadoQuotCon50000"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 350000" time="0.288" classname="01CrearBolsilloCb02CrearQuotMercadoQuotCon50000"/>
+  </testsuite>
+  <testsuite name="01 Crear bolsillo / CB-03 Rechazar nombre vacío" id="799a3f46-5e9c-4a80-8249-796fd2ad5336" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.279">
+    <testcase name="[global] Responde en menos de 5 s" time="0.279" classname="01CrearBolsilloCb03RechazarNombreVacio"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.279" classname="01CrearBolsilloCb03RechazarNombreVacio"/>
+    <testcase name="HTTP 400" time="0.279" classname="01CrearBolsilloCb03RechazarNombreVacio"/>
+    <testcase name="Código de error VALIDATION_ERROR" time="0.279" classname="01CrearBolsilloCb03RechazarNombreVacio"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 350000" time="0.279" classname="01CrearBolsilloCb03RechazarNombreVacio"/>
+  </testsuite>
+  <testsuite name="01 Crear bolsillo / CB-04 Rechazar nombre de solo espacios (DEF-001)" id="fd0a1675-a066-49bb-8202-c8f3bf2a5e81" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.270">
+    <testcase name="[global] Responde en menos de 5 s" time="0.270" classname="01CrearBolsilloCb04RechazarNombreDeSoloEspaciosDef001"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.270" classname="01CrearBolsilloCb04RechazarNombreDeSoloEspaciosDef001"/>
+    <testcase name="HTTP 400" time="0.270" classname="01CrearBolsilloCb04RechazarNombreDeSoloEspaciosDef001"/>
+    <testcase name="Código de error INVALID_POCKET_NAME" time="0.270" classname="01CrearBolsilloCb04RechazarNombreDeSoloEspaciosDef001"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 350000" time="0.270" classname="01CrearBolsilloCb04RechazarNombreDeSoloEspaciosDef001"/>
+  </testsuite>
+  <testsuite name="01 Crear bolsillo / CB-05 Rechazar monto negativo" id="153cc5cb-dd3d-4c29-b6d3-95686bdcf6e5" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.006">
+    <testcase name="[global] Responde en menos de 5 s" time="0.006" classname="01CrearBolsilloCb05RechazarMontoNegativo"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.006" classname="01CrearBolsilloCb05RechazarMontoNegativo"/>
+    <testcase name="HTTP 400" time="0.006" classname="01CrearBolsilloCb05RechazarMontoNegativo"/>
+    <testcase name="Código de error VALIDATION_ERROR" time="0.006" classname="01CrearBolsilloCb05RechazarMontoNegativo"/>
+  </testsuite>
+  <testsuite name="01 Crear bolsillo / CB-06 Rechazar monto mayor al saldo" id="cf18e148-e1e7-47ec-b77f-390dd97b5de7" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.269">
+    <testcase name="[global] Responde en menos de 5 s" time="0.269" classname="01CrearBolsilloCb06RechazarMontoMayorAlSaldo"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.269" classname="01CrearBolsilloCb06RechazarMontoMayorAlSaldo"/>
+    <testcase name="HTTP 400" time="0.269" classname="01CrearBolsilloCb06RechazarMontoMayorAlSaldo"/>
+    <testcase name="Código de error INSUFFICIENT_AVAILABLE_BALANCE" time="0.269" classname="01CrearBolsilloCb06RechazarMontoMayorAlSaldo"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 350000" time="0.269" classname="01CrearBolsilloCb06RechazarMontoMayorAlSaldo"/>
+  </testsuite>
+  <testsuite name="01 Crear bolsillo / CB-07 Rechazar petición sin token" id="758a68e1-72db-4390-b891-98faf4d7a6e4" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.004">
+    <testcase name="[global] Responde en menos de 5 s" time="0.004" classname="01CrearBolsilloCb07RechazarPeticionSinToken"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.004" classname="01CrearBolsilloCb07RechazarPeticionSinToken"/>
+    <testcase name="HTTP 401" time="0.004" classname="01CrearBolsilloCb07RechazarPeticionSinToken"/>
+    <testcase name="Código de error UNAUTHORIZED" time="0.004" classname="01CrearBolsilloCb07RechazarPeticionSinToken"/>
+  </testsuite>
+  <testsuite name="02 Consultar bolsillos / CO-01 Listar los bolsillos de Ana" id="785e72a2-94ea-4778-bead-39f2755dd5f7" timestamp="2026-10-27T01:57:35.200Z" tests="6" failures="0" errors="0" time="0.564">
+    <testcase name="[global] Responde en menos de 5 s" time="0.564" classname="02ConsultarBolsillosCo01ListarLosBolsillosDeAna"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.564" classname="02ConsultarBolsillosCo01ListarLosBolsillosDeAna"/>
+    <testcase name="HTTP 200" time="0.564" classname="02ConsultarBolsillosCo01ListarLosBolsillosDeAna"/>
+    <testcase name="Cada bolsillo cumple el esquema" time="0.564" classname="02ConsultarBolsillosCo01ListarLosBolsillosDeAna"/>
+    <testcase name="Devuelve los 2 bolsillos de Ana" time="0.564" classname="02ConsultarBolsillosCo01ListarLosBolsillosDeAna"/>
+    <testcase name="Todos los bolsillos son de la cuenta consultada" time="0.564" classname="02ConsultarBolsillosCo01ListarLosBolsillosDeAna"/>
+  </testsuite>
+  <testsuite name="02 Consultar bolsillos / CO-02 No consultar los bolsillos de otro cliente" id="a39d3ce3-334a-4f8b-b1a2-ad62fd3cfa84" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.280">
+    <testcase name="[global] Responde en menos de 5 s" time="0.280" classname="02ConsultarBolsillosCo02NoConsultarLosBolsillosDeOtroCliente"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.280" classname="02ConsultarBolsillosCo02NoConsultarLosBolsillosDeOtroCliente"/>
+    <testcase name="HTTP 403" time="0.280" classname="02ConsultarBolsillosCo02NoConsultarLosBolsillosDeOtroCliente"/>
+    <testcase name="Código de error FORBIDDEN" time="0.280" classname="02ConsultarBolsillosCo02NoConsultarLosBolsillosDeOtroCliente"/>
+  </testsuite>
+  <testsuite name="03 Editar bolsillo / ED-01 Renombrar &quot;Vacaciones&quot; a &quot;Viaje a Cartagena&quot;" id="532410c2-3fbb-4c9b-8f93-14f506b9f342" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.565">
+    <testcase name="[global] Responde en menos de 5 s" time="0.565" classname="03EditarBolsilloEd01RenombrarQuotVacacionesQuotAQuotViajeACartagenaQuot"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.565" classname="03EditarBolsilloEd01RenombrarQuotVacacionesQuotAQuotViajeACartagenaQuot"/>
+    <testcase name="HTTP 200" time="0.565" classname="03EditarBolsilloEd01RenombrarQuotVacacionesQuotAQuotViajeACartagenaQuot"/>
+    <testcase name="Oráculo: bolsillos reales [{&quot;name&quot;:&quot;Mercado&quot;,&quot;amount&quot;:50000},{&quot;name&quot;:&quot;Viaje a Cartagena&quot;,&quot;amount&quot;:100000}]" time="0.565" classname="03EditarBolsilloEd01RenombrarQuotVacacionesQuotAQuotViajeACartagenaQuot"/>
+  </testsuite>
+  <testsuite name="03 Editar bolsillo / ED-02 Aumentar el monto a 150.000" id="c985eec0-bcb9-417b-a549-88ff511b6b26" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.282">
+    <testcase name="[global] Responde en menos de 5 s" time="0.282" classname="03EditarBolsilloEd02AumentarElMontoA150000"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.282" classname="03EditarBolsilloEd02AumentarElMontoA150000"/>
+    <testcase name="HTTP 200" time="0.282" classname="03EditarBolsilloEd02AumentarElMontoA150000"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 300000" time="0.282" classname="03EditarBolsilloEd02AumentarElMontoA150000"/>
+  </testsuite>
+  <testsuite name="03 Editar bolsillo / ED-03 Rechazar un monto por encima del dinero total" id="0dbff445-808d-4796-82ef-468ef52f9db8" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.286">
+    <testcase name="[global] Responde en menos de 5 s" time="0.286" classname="03EditarBolsilloEd03RechazarUnMontoPorEncimaDelDineroTotal"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.286" classname="03EditarBolsilloEd03RechazarUnMontoPorEncimaDelDineroTotal"/>
+    <testcase name="HTTP 400" time="0.286" classname="03EditarBolsilloEd03RechazarUnMontoPorEncimaDelDineroTotal"/>
+    <testcase name="Código de error INSUFFICIENT_AVAILABLE_BALANCE" time="0.286" classname="03EditarBolsilloEd03RechazarUnMontoPorEncimaDelDineroTotal"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 300000" time="0.286" classname="03EditarBolsilloEd03RechazarUnMontoPorEncimaDelDineroTotal"/>
+  </testsuite>
+  <testsuite name="04 Transferir entre bolsillos / TR-01 Transferir 30.000 de &quot;Viaje a Cartagena&quot; a &quot;Mercado&quot;" id="991e17e6-b0da-46a1-aa7e-970ea10c0060" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.567">
+    <testcase name="[global] Responde en menos de 5 s" time="0.567" classname="04TransferirEntreBolsillosTr01Transferir30000DeQuotViajeACartagenaQuotAQuotMercadoQuot"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.567" classname="04TransferirEntreBolsillosTr01Transferir30000DeQuotViajeACartagenaQuotAQuotMercadoQuot"/>
+    <testcase name="HTTP 200" time="0.567" classname="04TransferirEntreBolsillosTr01Transferir30000DeQuotViajeACartagenaQuotAQuotMercadoQuot"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 300000" time="0.567" classname="04TransferirEntreBolsillosTr01Transferir30000DeQuotViajeACartagenaQuotAQuotMercadoQuot"/>
+    <testcase name="Oráculo: bolsillos reales [{&quot;name&quot;:&quot;Mercado&quot;,&quot;amount&quot;:80000},{&quot;name&quot;:&quot;Viaje a Cartagena&quot;,&quot;amount&quot;:120000}]" time="0.567" classname="04TransferirEntreBolsillosTr01Transferir30000DeQuotViajeACartagenaQuotAQuotMercadoQuot"/>
+  </testsuite>
+  <testsuite name="04 Transferir entre bolsillos / TR-02 Rechazar más de lo que tiene el origen" id="6e77dc72-93d3-4927-b8aa-3783608c15f0" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.888">
+    <testcase name="[global] Responde en menos de 5 s" time="0.888" classname="04TransferirEntreBolsillosTr02RechazarMasDeLoQueTieneElOrigen"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.888" classname="04TransferirEntreBolsillosTr02RechazarMasDeLoQueTieneElOrigen"/>
+    <testcase name="HTTP 400" time="0.888" classname="04TransferirEntreBolsillosTr02RechazarMasDeLoQueTieneElOrigen"/>
+    <testcase name="Código de error INSUFFICIENT_POCKET_BALANCE" time="0.888" classname="04TransferirEntreBolsillosTr02RechazarMasDeLoQueTieneElOrigen"/>
+  </testsuite>
+  <testsuite name="04 Transferir entre bolsillos / TR-03 Rechazar origen y destino iguales" id="a2c35e45-d079-41bc-b72a-37b4ea047662" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.004">
+    <testcase name="[global] Responde en menos de 5 s" time="0.004" classname="04TransferirEntreBolsillosTr03RechazarOrigenYDestinoIguales"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.004" classname="04TransferirEntreBolsillosTr03RechazarOrigenYDestinoIguales"/>
+    <testcase name="HTTP 400" time="0.004" classname="04TransferirEntreBolsillosTr03RechazarOrigenYDestinoIguales"/>
+    <testcase name="Código de error INVALID_TRANSFER_TARGET" time="0.004" classname="04TransferirEntreBolsillosTr03RechazarOrigenYDestinoIguales"/>
+  </testsuite>
+  <testsuite name="05 Eliminar bolsillo / EL-01 No eliminar el bolsillo de otro cliente" id="b5af9903-85ef-44da-b033-cc791d90a157" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.557">
+    <testcase name="[global] Responde en menos de 5 s" time="0.557" classname="05EliminarBolsilloEl01NoEliminarElBolsilloDeOtroCliente"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.557" classname="05EliminarBolsilloEl01NoEliminarElBolsilloDeOtroCliente"/>
+    <testcase name="HTTP 403" time="0.557" classname="05EliminarBolsilloEl01NoEliminarElBolsilloDeOtroCliente"/>
+    <testcase name="Código de error FORBIDDEN" time="0.557" classname="05EliminarBolsilloEl01NoEliminarElBolsilloDeOtroCliente"/>
+    <testcase name="Oráculo: bolsillos reales [{&quot;name&quot;:&quot;Moto&quot;,&quot;amount&quot;:50000}]" time="0.557" classname="05EliminarBolsilloEl01NoEliminarElBolsilloDeOtroCliente"/>
+  </testsuite>
+  <testsuite name="05 Eliminar bolsillo / EL-02 Eliminar &quot;Mercado&quot;" id="6d47f250-11ee-46c9-9e79-2f684d8a4998" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.564">
+    <testcase name="[global] Responde en menos de 5 s" time="0.564" classname="05EliminarBolsilloEl02EliminarQuotMercadoQuot"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.564" classname="05EliminarBolsilloEl02EliminarQuotMercadoQuot"/>
+    <testcase name="HTTP 200" time="0.564" classname="05EliminarBolsilloEl02EliminarQuotMercadoQuot"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 380000" time="0.564" classname="05EliminarBolsilloEl02EliminarQuotMercadoQuot"/>
+    <testcase name="Oráculo: bolsillos reales [{&quot;name&quot;:&quot;Viaje a Cartagena&quot;,&quot;amount&quot;:120000}]" time="0.564" classname="05EliminarBolsilloEl02EliminarQuotMercadoQuot"/>
+  </testsuite>
+  <testsuite name="06 Depositar dinero / DE-01 Depositar 250.000 con descripción" id="1044f865-9a1f-4ff9-a41d-4c5abfd869cb" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.347">
+    <testcase name="[global] Responde en menos de 5 s" time="0.347" classname="06DepositarDineroDe01Depositar250000ConDescripcion"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.347" classname="06DepositarDineroDe01Depositar250000ConDescripcion"/>
+    <testcase name="HTTP 200" time="0.347" classname="06DepositarDineroDe01Depositar250000ConDescripcion"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 630000" time="0.347" classname="06DepositarDineroDe01Depositar250000ConDescripcion"/>
+  </testsuite>
+  <testsuite name="06 Depositar dinero / DE-02 Rechazar monto 0" id="c23cc311-0c22-4d18-b56c-fac1f450d226" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.269">
+    <testcase name="[global] Responde en menos de 5 s" time="0.269" classname="06DepositarDineroDe02RechazarMonto0"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.269" classname="06DepositarDineroDe02RechazarMonto0"/>
+    <testcase name="HTTP 400" time="0.269" classname="06DepositarDineroDe02RechazarMonto0"/>
+    <testcase name="Código de error INVALID_AMOUNT" time="0.269" classname="06DepositarDineroDe02RechazarMonto0"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 630000" time="0.269" classname="06DepositarDineroDe02RechazarMonto0"/>
+  </testsuite>
+  <testsuite name="06 Depositar dinero / DE-03 Rechazar monto negativo" id="58cc55b4-75dc-427c-a05f-6d0622f6c34d" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.005">
+    <testcase name="[global] Responde en menos de 5 s" time="0.005" classname="06DepositarDineroDe03RechazarMontoNegativo"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.005" classname="06DepositarDineroDe03RechazarMontoNegativo"/>
+    <testcase name="HTTP 400" time="0.005" classname="06DepositarDineroDe03RechazarMontoNegativo"/>
+    <testcase name="Código de error INVALID_AMOUNT" time="0.005" classname="06DepositarDineroDe03RechazarMontoNegativo"/>
+  </testsuite>
+  <testsuite name="06 Depositar dinero / DE-04 Rechazar texto como monto" id="4481e572-03c8-4929-822d-03034ad37ef9" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.006">
+    <testcase name="[global] Responde en menos de 5 s" time="0.006" classname="06DepositarDineroDe04RechazarTextoComoMonto"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.006" classname="06DepositarDineroDe04RechazarTextoComoMonto"/>
+    <testcase name="HTTP 400" time="0.006" classname="06DepositarDineroDe04RechazarTextoComoMonto"/>
+    <testcase name="Código de error INVALID_AMOUNT" time="0.006" classname="06DepositarDineroDe04RechazarTextoComoMonto"/>
+  </testsuite>
+  <testsuite name="06 Depositar dinero / DE-05 Rechazar booleano como monto" id="65efdda9-13b6-42dc-a4b5-b2a1b1ba211e" timestamp="2026-10-27T01:57:35.200Z" tests="4" failures="0" errors="0" time="0.005">
+    <testcase name="[global] Responde en menos de 5 s" time="0.005" classname="06DepositarDineroDe05RechazarBooleanoComoMonto"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.005" classname="06DepositarDineroDe05RechazarBooleanoComoMonto"/>
+    <testcase name="HTTP 400" time="0.005" classname="06DepositarDineroDe05RechazarBooleanoComoMonto"/>
+    <testcase name="Código de error INVALID_AMOUNT" time="0.005" classname="06DepositarDineroDe05RechazarBooleanoComoMonto"/>
+  </testsuite>
+  <testsuite name="06 Depositar dinero / DE-06 Rechazar null como monto" id="1a0f6a4f-172c-4905-a8cd-94cadafa730b" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.288">
+    <testcase name="[global] Responde en menos de 5 s" time="0.288" classname="06DepositarDineroDe06RechazarNullComoMonto"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.288" classname="06DepositarDineroDe06RechazarNullComoMonto"/>
+    <testcase name="HTTP 400" time="0.288" classname="06DepositarDineroDe06RechazarNullComoMonto"/>
+    <testcase name="Código de error INVALID_AMOUNT" time="0.288" classname="06DepositarDineroDe06RechazarNullComoMonto"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 630000" time="0.288" classname="06DepositarDineroDe06RechazarNullComoMonto"/>
+  </testsuite>
+  <testsuite name="06 Depositar dinero / DE-07 No depositar en la cuenta de otro cliente" id="799acd41-7ebd-4cb4-8bdb-d22c7fafcbc8" timestamp="2026-10-27T01:57:35.200Z" tests="5" failures="0" errors="0" time="0.278">
+    <testcase name="[global] Responde en menos de 5 s" time="0.278" classname="06DepositarDineroDe07NoDepositarEnLaCuentaDeOtroCliente"/>
+    <testcase name="[global] Responde JSON con el sobre success" time="0.278" classname="06DepositarDineroDe07NoDepositarEnLaCuentaDeOtroCliente"/>
+    <testcase name="HTTP 403" time="0.278" classname="06DepositarDineroDe07NoDepositarEnLaCuentaDeOtroCliente"/>
+    <testcase name="Código de error FORBIDDEN" time="0.278" classname="06DepositarDineroDe07NoDepositarEnLaCuentaDeOtroCliente"/>
+    <testcase name="Oráculo: el saldo real de la cuenta es 50000" time="0.278" classname="06DepositarDineroDe07NoDepositarEnLaCuentaDeOtroCliente"/>
+  </testsuite>
+</testsuites>

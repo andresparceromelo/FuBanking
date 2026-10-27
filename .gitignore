@@ -41,6 +41,11 @@ e2e/serenity/reports/
 e2e/serenity/target/
 e2e/serenity/.playwright/
 
+# Keploy: los mocks grabados llevan la service_role de Supabase en los encabezados.
+# Solo se versiona la copia saneada (ver 03-keploy/README.md).
+test/pruebas-herramientas/herramientas-alejandro/03-keploy/keploy/
+test/pruebas-herramientas/herramientas-alejandro/03-keploy/keploy-logs.txt
+
 # Cypress
 cypress/videos/
 cypress/screenshots/
@@ -54,3 +59,6 @@ e2e/stagehand/evidence/*.png
 # Python
 __pycache__/
 *.pyc
+
+# Instantáneas locales del servidor MCP playwright-test (Playwright Test Agents)
+.playwright-mcp/

@@ -1,0 +1,1407 @@
+# Serenity/JS (Screenplay + Gherkin) — Bolsillos y Depositar — corrida final 2026-10-26 20:55
+
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:11
+
+Consultar bolsillos: Consultar los bolsillos de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0y0mdmpbw@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (2s 494ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0y0mdmpbw@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 549ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (7ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "a03f497c-e61a-4015-b821-c7b5a411f77f"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (877ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  Given ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 406ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (3ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+    Ana crea por API el bolsillo "Mercado" con 50000
+      ✓ Ana sends a POST request to 'pockets' (1s 361ms)
+      ✓ Ana anota el id del bolsillo "Mercado" (3ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+  When ella consulta por API los bolsillos de su cuenta
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (561ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And la respuesta contiene 2 bolsillos
+    ✓ Ana ensures that la cantidad de bolsillos en la respuesta does equal 2 (5ms)
+
+✓ Execution successful (8s 828ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:21
+
+Consultar bolsillos: Una cuenta sin bolsillos devuelve una lista vacía
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0y7fkai57@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 98ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0y7fkai57@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 134ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (1ms)
+          - accountId: "78ea6acb-9728-4abb-84ef-e02d91c47a56"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (820ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  When ella consulta por API los bolsillos de su cuenta
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (525ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (0ms)
+  And la respuesta contiene 0 bolsillos
+    ✓ Ana ensures that la cantidad de bolsillos en la respuesta does equal 0 (2ms)
+
+✓ Execution successful (3s 914ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:27
+
+Consultar bolsillos: No se pueden consultar los bolsillos de otro cliente
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0yagevmw0@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 51ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0yagevmw0@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 63ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "0f9cc76d-0815-4b7b-bbc5-a7de66060d28"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (842ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  Given Bruno es cliente con una cuenta de ahorros con saldo de 100000
+    Bruno es cliente con una cuenta de ahorros con saldo de 100000
+      Bruno se registra en FuBanking como e2e.mvq0ycwudxl5@fubanking.test
+        ✓ Bruno envía su registro a POST auth/register (1s 35ms)
+        ✓ Bruno takes notes: (1ms)
+          - email: "e2e.mvq0ycwudxl5@fubanking.test"
+      Bruno abre una cuenta de ahorros
+        ✓ Bruno sends a POST request to 'accounts' (1s 120ms)
+        ✓ Bruno ensures that the status of the last response does equal 201 (2ms)
+        ✓ Bruno takes notes: (0ms)
+          - accountId: "646528e2-5d42-4c06-a742-b722f711cd85"
+      Bruno deposita 100000 en su cuenta
+        ✓ Bruno sends a POST request to accounts/{a note of accountId}/deposit (907ms)
+      ✓ Bruno ensures that the status of the last response does equal 200 (2ms)
+  When Ana consulta por API los bolsillos de la cuenta de Bruno
+    Ana consulta por API los bolsillos de la cuenta 646528e2-5d42-4c06-a742-b722f711cd85
+      ✓ Ana sends a GET request to 'pockets/account/646528e2-5d42-4c06-a742-b722f711cd85' (274ms)
+  Then la respuesta HTTP tiene estado 403
+    ✓ Ana ensures that the status of the last response does equal 403 (1ms)
+  And el código de error es "FORBIDDEN"
+    ✓ Ana ensures that el código de error does equal "FORBIDDEN" (1ms)
+
+✓ Execution successful (6s 864ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/consultar_bolsillos.feature:34
+
+Consultar bolsillos: Ver en pantalla los bolsillos de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0yfr6lbvs@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 70ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0yfr6lbvs@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 67ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "6391c3f5-bb68-4f97-9f7f-74955df15ff4"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (845ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  Given ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 495ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+    Ana crea por API el bolsillo "Mercado" con 50000
+      ✓ Ana sends a POST request to 'pockets' (1s 373ms)
+      ✓ Ana anota el id del bolsillo "Mercado" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+  And ella inició sesión en FuBanking
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (2s 466ms)
+      ✓ Ana enters "e2e.mvq0yfr6lbvs@fubanking.test" into campo de correo (92ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (20ms)
+      ✓ Ana clicks on botón Iniciar sesión (163ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 31ms)
+  When ella abre la pantalla de bolsillos
+    Ana abre la pantalla de bolsillos
+      ✓ Ana navigates to "/pockets" (1s 846ms)
+      ✓ Ana waits until the value of selector de cuenta does not equal "" (41ms)
+  Then ella ve los bolsillos:
+  | Vacaciones |
+  | Mercado    |
+    ✓ Ana ensures that los nombres de los bolsillos en pantalla does eventually equal [ "Mercado", "Vacaciones" ] (62ms)
+  And ella ve el bolsillo "Vacaciones" con 100000
+    ✓ Ana ensures that el saldo en pantalla del bolsillo "Vacaciones" does eventually equal 100000 (74ms)
+  And ella ve el bolsillo "Mercado" con 50000
+    ✓ Ana ensures that el saldo en pantalla del bolsillo "Mercado" does eventually equal 50000 (92ms)
+
+✓ Execution successful (12s 399ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:11
+
+Crear bolsillo: Crear un bolsillo descuenta el monto del saldo de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0ypbz2pw0@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 151ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0ypbz2pw0@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 175ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "eb722253-712d-4c18-859a-cafa5135e152"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (829ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  When ella crea por API el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 377ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+  Then la respuesta HTTP tiene estado 201
+    ✓ Ana ensures that the status of the last response does equal 201 (0ms)
+  And el saldo de su cuenta es 400000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (285ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 400000 (2ms)
+
+✓ Execution successful (5s 229ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:17
+
+Crear bolsillo: Se puede apartar todo el saldo disponible
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0ytd7licn@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 61ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq0ytd7licn@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 105ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "00c586e9-7234-42f8-b012-05de4b7169b4"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (776ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  When ella crea por API el bolsillo "Carro" con 500000
+    Ana crea por API el bolsillo "Carro" con 500000
+      ✓ Ana sends a POST request to 'pockets' (1s 333ms)
+      ✓ Ana anota el id del bolsillo "Carro" (2ms)
+  Then la respuesta HTTP tiene estado 201
+    ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+  And el saldo de su cuenta es 0
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (265ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 0 (2ms)
+
+✓ Execution successful (4s 912ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:31
+
+Crear bolsillo: Rechazar un bolsillo con nombre vacío
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0yx5rscx4@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 65ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0yx5rscx4@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 71ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "173212e8-fca3-4aee-894f-7ca1a9a119e0"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (814ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  When ella crea por API el bolsillo "" con 1000
+    Ana crea por API el bolsillo "" con 1000
+      ✓ Ana sends a POST request to 'pockets' (6ms)
+      ✓ Ana anota el id del bolsillo "" (1ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Ana ensures that the status of the last response does equal 400 (1ms)
+  And el código de error es "VALIDATION_ERROR"
+    ✓ Ana ensures that el código de error does equal "VALIDATION_ERROR" (1ms)
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (281ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 500000 (1ms)
+
+✓ Execution successful (3s 617ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:32
+
+Crear bolsillo: Rechazar un bolsillo con monto negativo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0yzydfttm@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 35ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0yzydfttm@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 102ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "34f23d37-55b9-4489-9926-d3f705e2a40f"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (830ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  When ella crea por API el bolsillo "Carro" con -1000
+    Ana crea por API el bolsillo "Carro" con -1000
+      ✓ Ana sends a POST request to 'pockets' (6ms)
+      ✓ Ana anota el id del bolsillo "Carro" (2ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Ana ensures that the status of the last response does equal 400 (0ms)
+  And el código de error es "VALIDATION_ERROR"
+    ✓ Ana ensures that el código de error does equal "VALIDATION_ERROR" (1ms)
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (267ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 500000 (1ms)
+
+✓ Execution successful (3s 639ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:33
+
+Crear bolsillo: Rechazar un bolsillo con monto mayor al saldo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0z2rlbwx1@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 15ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0z2rlbwx1@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 48ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "b49e01d8-572f-4dc1-a3f6-31c2baf39fd8"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (794ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  When ella crea por API el bolsillo "Carro" con 500001
+    Ana crea por API el bolsillo "Carro" con 500001
+      ✓ Ana sends a POST request to 'pockets' (558ms)
+      ✓ Ana anota el id del bolsillo "Carro" (1ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Ana ensures that the status of the last response does equal 400 (0ms)
+  And el código de error es "INSUFFICIENT_AVAILABLE_BALANCE"
+    ✓ Ana ensures that el código de error does equal "INSUFFICIENT_AVAILABLE_BALANCE" (0ms)
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (251ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 500000 (2ms)
+
+✓ Execution successful (4s 31ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:36
+
+Crear bolsillo: Crear un bolsillo desde la pantalla de bolsillos
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0z5vlyywo@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 31ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq0z5vlyywo@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 48ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "c32553e8-09b0-4f56-8f74-4cb4cff8e3d2"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (766ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (1s 864ms)
+      ✓ Ana enters "e2e.mvq0z5vlyywo@fubanking.test" into campo de correo (39ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (14ms)
+      ✓ Ana clicks on botón Iniciar sesión (121ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 45ms)
+    Ana abre la pantalla de bolsillos
+      ✓ Ana navigates to "/pockets" (1s 925ms)
+      ✓ Ana waits until the value of selector de cuenta does not equal "" (43ms)
+  When ella crea el bolsillo "Vacaciones" con 100000
+    Ana crea el bolsillo "Vacaciones" con 100000 desde la pantalla
+      ✓ Ana enters "Vacaciones" into campo nombre del bolsillo (19ms)
+      ✓ Ana enters "100000" into campo monto inicial (23ms)
+      ✓ Ana clicks on botón Crear bolsillo (107ms)
+  Then ella ve la notificación "Bolsillo creado"
+    ✓ Ana ensures that the text of notificaciones does eventually contain at least one item that does equal "Bolsillo creado" (1s 482ms)
+  And ella ve el bolsillo "Vacaciones" con 100000
+    ✓ Ana ensures that el saldo en pantalla del bolsillo "Vacaciones" does eventually equal 100000 (136ms)
+  And el saldo de su cuenta es 400000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (283ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 400000 (3ms)
+
+✓ Execution successful (10s 615ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/crear_bolsillo.feature:44
+
+Crear bolsillo: La pantalla pide el nombre antes de crear el bolsillo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0ze2q5ad4@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 88ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq0ze2q5ad4@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 71ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+        ✓ Ana takes notes: (1ms)
+          - accountId: "6ab327fd-64fa-4837-bd85-f50f68e1440c"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (810ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (1s 980ms)
+      ✓ Ana enters "e2e.mvq0ze2q5ad4@fubanking.test" into campo de correo (35ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (12ms)
+      ✓ Ana clicks on botón Iniciar sesión (122ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 46ms)
+    Ana abre la pantalla de bolsillos
+      ✓ Ana navigates to "/pockets" (1s 850ms)
+      ✓ Ana waits until the value of selector de cuenta does not equal "" (36ms)
+  When ella crea el bolsillo "" con 1000
+    Ana crea el bolsillo "" con 1000 desde la pantalla
+      ✓ Ana enters "" into campo nombre del bolsillo (21ms)
+      ✓ Ana enters "1000" into campo monto inicial (16ms)
+      ✓ Ana clicks on botón Crear bolsillo (108ms)
+  Then ella ve la notificación "Falta información"
+    ✓ Ana ensures that the text of notificaciones does eventually contain at least one item that does equal "Falta información" (23ms)
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (300ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 500000 (1ms)
+
+✓ Execution successful (9s 104ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:12
+
+Editar bolsillo: Renombrar un bolsillo conserva su saldo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0zl3msgr4@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 62ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq0zl3msgr4@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 102ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "aa0e1891-ba74-440c-a097-14097d3cfd6b"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (829ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (2s 881ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+  When ella renombra por API el bolsillo "Vacaciones" a "Viaje a Cartagena"
+    Ana renombra por API el bolsillo "Vacaciones" a "Viaje a Cartagena"
+      ✓ Ana sends a PATCH request to pockets/{el id del bolsillo "Vacaciones"} (3s 643ms)
+      ✓ Ana actualiza el nombre en sus notas (2ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (0ms)
+  And su bolsillo "Viaje a Cartagena" tiene 100000
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (806ms)
+    ✓ Ana ensures that el saldo del bolsillo "Viaje a Cartagena" en la respuesta does equal 100000 (2ms)
+
+✓ Execution successful (10s 721ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:18
+
+Editar bolsillo: Aumentar el monto de un bolsillo descuenta la diferencia de la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0ztdin29a@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 211ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq0ztdin29a@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 440ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "c6f72b74-e551-4e5e-b267-f6483018e5ad"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (838ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 406ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+  When ella ajusta por API el monto del bolsillo "Vacaciones" a 150000
+    Ana ajusta por API el monto del bolsillo "Vacaciones" a 150000
+      ✓ Ana sends a PATCH request to pockets/{el id del bolsillo "Vacaciones"} (1s 688ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And su bolsillo "Vacaciones" tiene 150000
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (548ms)
+    ✓ Ana ensures that el saldo del bolsillo "Vacaciones" en la respuesta does equal 150000 (2ms)
+  And el saldo de su cuenta es 350000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (287ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 350000 (2ms)
+
+✓ Execution successful (7s 893ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:25
+
+Editar bolsillo: Disminuir el monto de un bolsillo devuelve la diferencia a la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq0zzgu26ti@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 15ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq0zzgu26ti@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 137ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (1ms)
+          - accountId: "ffc42b80-0179-4f39-ae4b-8dfff46487fe"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (809ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 320ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+  When ella ajusta por API el monto del bolsillo "Vacaciones" a 40000
+    Ana ajusta por API el monto del bolsillo "Vacaciones" a 40000
+      ✓ Ana sends a PATCH request to pockets/{el id del bolsillo "Vacaciones"} (1s 602ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And su bolsillo "Vacaciones" tiene 40000
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (532ms)
+    ✓ Ana ensures that el saldo del bolsillo "Vacaciones" en la respuesta does equal 40000 (3ms)
+  And el saldo de su cuenta es 460000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (262ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 460000 (1ms)
+
+✓ Execution successful (7s 158ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:32
+
+Editar bolsillo: No se puede ajustar un bolsillo por encima del dinero total
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq104zr856j@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 49ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq104zr856j@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 90ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "4ba603f7-5307-4587-9bcc-8ba49e5a00cd"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (802ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 392ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+  When ella ajusta por API el monto del bolsillo "Vacaciones" a 500001
+    Ana ajusta por API el monto del bolsillo "Vacaciones" a 500001
+      ✓ Ana sends a PATCH request to pockets/{el id del bolsillo "Vacaciones"} (799ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Ana ensures that the status of the last response does equal 400 (0ms)
+  And el código de error es "INSUFFICIENT_AVAILABLE_BALANCE"
+    ✓ Ana ensures that el código de error does equal "INSUFFICIENT_AVAILABLE_BALANCE" (1ms)
+  And el saldo de su cuenta es 400000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (285ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 400000 (1ms)
+
+✓ Execution successful (5s 852ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/editar_bolsillo.feature:39
+
+Editar bolsillo: Renombrar un bolsillo desde la pantalla
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq109ier01b@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 99ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq109ier01b@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 96ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (1ms)
+          - accountId: "15ac6aa6-8b5d-46ff-af08-b763dd5a3616"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (803ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 415ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (2s 502ms)
+      ✓ Ana enters "e2e.mvq109ier01b@fubanking.test" into campo de correo (111ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (26ms)
+      ✓ Ana clicks on botón Iniciar sesión (169ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 39ms)
+    Ana abre la pantalla de bolsillos
+      ✓ Ana navigates to "/pockets" (1s 935ms)
+      ✓ Ana waits until the value of selector de cuenta does not equal "" (51ms)
+  When ella renombra el bolsillo "Vacaciones" a "Viaje a Cartagena"
+    Ana renombra el bolsillo "Vacaciones" a "Viaje a Cartagena" desde la pantalla
+      ✓ Ana waits until tarjeta del bolsillo "Vacaciones" does become present (100ms)
+      ✓ Ana clicks on botón Editar de "Vacaciones" (213ms)
+      ✓ Ana enters "Viaje a Cartagena" into campo nuevo nombre (40ms)
+      ✓ Ana clicks on botón Guardar (115ms)
+      ✓ Ana actualiza el nombre en sus notas (1ms)
+  Then ella ve la notificación "Bolsillo actualizado"
+    ✓ Ana ensures that the text of notificaciones does eventually contain at least one item that does equal "Bolsillo actualizado" (1s 497ms)
+  And ella ve el bolsillo "Viaje a Cartagena" con 100000
+    ✓ Ana ensures that el saldo en pantalla del bolsillo "Viaje a Cartagena" does eventually equal 100000 (54ms)
+
+✓ Execution successful (13s 61ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/eliminar_bolsillo.feature:12
+
+Eliminar bolsillo: Eliminar un bolsillo devuelve su saldo a la cuenta
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq10jllbd9n@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 148ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq10jllbd9n@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 460ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (4ms)
+        ✓ Ana takes notes: (1ms)
+          - accountId: "196cb7a6-ce6f-41e8-8bf1-794e8d35bd4e"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (861ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 419ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (2ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (1ms)
+  When ella elimina por API el bolsillo "Vacaciones"
+    Ana elimina por API el bolsillo "Vacaciones"
+      ✓ Ana sends a DELETE request to pockets/{el id del bolsillo "Vacaciones"} (1s 517ms)
+      ✓ Ana borra "Vacaciones" de sus notas (2ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (0ms)
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (309ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 500000 (2ms)
+  And su cuenta no tiene bolsillos
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (605ms)
+    ✓ Ana ensures that la cantidad de bolsillos en la respuesta does equal 0 (2ms)
+
+✓ Execution successful (7s 853ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/eliminar_bolsillo.feature:19
+
+Eliminar bolsillo: No se puede eliminar el bolsillo de otro cliente
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq10pnoowvc@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 239ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq10pnoowvc@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 495ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "57554a8f-ff05-48f0-8cff-b741bca40a00"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (1s 329ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (1ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 545ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (4ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+  Given Bruno es cliente con una cuenta de ahorros con saldo de 100000
+    Bruno es cliente con una cuenta de ahorros con saldo de 100000
+      Bruno se registra en FuBanking como e2e.mvq10u6vnuig@fubanking.test
+        ✓ Bruno envía su registro a POST auth/register (1s 320ms)
+        ✓ Bruno takes notes: (0ms)
+          - email: "e2e.mvq10u6vnuig@fubanking.test"
+      Bruno abre una cuenta de ahorros
+        ✓ Bruno sends a POST request to 'accounts' (1s 356ms)
+        ✓ Bruno ensures that the status of the last response does equal 201 (4ms)
+        ✓ Bruno takes notes: (0ms)
+          - accountId: "c4548069-6d7a-4093-b29f-dc7b78695a8f"
+      Bruno deposita 100000 en su cuenta
+        ✓ Bruno sends a POST request to accounts/{a note of accountId}/deposit (930ms)
+      ✓ Bruno ensures that the status of the last response does equal 200 (4ms)
+  And él tiene el bolsillo "Moto" con 50000
+    Bruno crea por API el bolsillo "Moto" con 50000
+      ✓ Bruno sends a POST request to 'pockets' (1s 391ms)
+      ✓ Bruno anota el id del bolsillo "Moto" (6ms)
+    ✓ Bruno ensures that the status of the last response does equal 201 (5ms)
+  When Ana elimina por API el bolsillo "Moto" de Bruno
+    Ana elimina por API el bolsillo 5d07f7a0-4894-47bb-ab0e-f7447f22a1a0
+      ✓ Ana sends a DELETE request to 'pockets/5d07f7a0-4894-47bb-ab0e-f7447f22a1a0' (702ms)
+  Then la respuesta HTTP tiene estado 403
+    ✓ Ana ensures that the status of the last response does equal 403 (1ms)
+  And el código de error es "FORBIDDEN"
+    ✓ Ana ensures that el código de error does equal "FORBIDDEN" (1ms)
+  And el saldo de la cuenta de Bruno es 50000
+    Bruno consulta su cuenta por API
+      ✓ Bruno sends a GET request to accounts/{a note of accountId} (312ms)
+    ✓ Bruno ensures that el saldo de la cuenta does equal 50000 (3ms)
+
+✓ Execution successful (12s 465ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/eliminar_bolsillo.feature:28
+
+Eliminar bolsillo: Eliminar un bolsillo desde la pantalla con confirmación
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq10zan1fn9@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (2s 96ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq10zan1fn9@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (3s 945ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (6ms)
+        ✓ Ana takes notes: (1ms)
+          - accountId: "b43c99e2-c5d7-4626-bb46-5d209d9946c4"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (1s 249ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And ella tiene el bolsillo "Vacaciones" con 100000
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 761ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (4ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (2s 577ms)
+      ✓ Ana enters "e2e.mvq10zan1fn9@fubanking.test" into campo de correo (91ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (22ms)
+      ✓ Ana clicks on botón Iniciar sesión (170ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 40ms)
+    Ana abre la pantalla de bolsillos
+      ✓ Ana navigates to "/pockets" (2s 75ms)
+      ✓ Ana waits until the value of selector de cuenta does not equal "" (49ms)
+  When ella elimina el bolsillo "Vacaciones"
+    Ana elimina el bolsillo "Vacaciones" desde la pantalla
+      ✓ Ana waits until tarjeta del bolsillo "Vacaciones" does become present (80ms)
+      ✓ Ana clicks on botón Eliminar de "Vacaciones" (161ms)
+      ✓ Ana clicks on botón Sí, eliminar (91ms)
+      ✓ Ana borra "Vacaciones" de sus notas (0ms)
+  Then ella ve la notificación "Bolsillo eliminado"
+    ✓ Ana ensures that the text of notificaciones does eventually contain at least one item that does equal "Bolsillo eliminado" (3s 100ms)
+  And ella ve que su cuenta no tiene bolsillos
+    ✓ Ana ensures that mensaje de cuenta sin bolsillos does eventually become present (30ms)
+  And el saldo de su cuenta es 500000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (293ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 500000 (3ms)
+
+✓ Execution successful (19s 786ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:15
+
+Transferir entre bolsillos: Mover dinero de un bolsillo a otro
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq11ekmw4x0@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 321ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq11ekmw4x0@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 649ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "6daa7306-2039-4f50-9b78-cca418801c23"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (957ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (3ms)
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 455ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (6ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+    Ana crea por API el bolsillo "Mercado" con 50000
+      ✓ Ana sends a POST request to 'pockets' (1s 441ms)
+      ✓ Ana anota el id del bolsillo "Mercado" (5ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+  When ella transfiere por API 30000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere por API 30000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+      ✓ Ana sends a POST request to 'pockets/transfer' (1s 707ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And su bolsillo "Vacaciones" tiene 70000
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (550ms)
+    ✓ Ana ensures that el saldo del bolsillo "Vacaciones" en la respuesta does equal 70000 (6ms)
+  And su bolsillo "Mercado" tiene 80000
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (670ms)
+    ✓ Ana ensures that el saldo del bolsillo "Mercado" en la respuesta does equal 80000 (6ms)
+  And el saldo de su cuenta es 350000
+    Ana consulta su cuenta por API
+      ✓ Ana sends a GET request to accounts/{a note of accountId} (347ms)
+    ✓ Ana ensures that el saldo de la cuenta does equal 350000 (3ms)
+
+✓ Execution successful (10s 928ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:23
+
+Transferir entre bolsillos: Se puede transferir todo el saldo de un bolsillo
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq11n0fyurr@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 482ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq11n0fyurr@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 675ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "72b3dc7f-0a97-40ec-9553-d958cee3bd4f"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (982ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 393ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (4ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+    Ana crea por API el bolsillo "Mercado" con 50000
+      ✓ Ana sends a POST request to 'pockets' (1s 511ms)
+      ✓ Ana anota el id del bolsillo "Mercado" (5ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+  When ella transfiere por API 100000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere por API 100000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+      ✓ Ana sends a POST request to 'pockets/transfer' (1s 869ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And su bolsillo "Vacaciones" tiene 0
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (548ms)
+    ✓ Ana ensures that el saldo del bolsillo "Vacaciones" en la respuesta does equal 0 (5ms)
+  And su bolsillo "Mercado" tiene 150000
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (545ms)
+    ✓ Ana ensures that el saldo del bolsillo "Mercado" en la respuesta does equal 150000 (4ms)
+
+✓ Execution successful (10s 711ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:30
+
+Transferir entre bolsillos: No se puede transferir más de lo que tiene el bolsillo de origen
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq11vb24wao@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 241ms)
+        ✓ Ana takes notes: (0ms)
+          - email: "e2e.mvq11vb24wao@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 425ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "9ab2a391-7431-4216-a2f5-14d76a39e86a"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (934ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (3ms)
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 719ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (5ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+    Ana crea por API el bolsillo "Mercado" con 50000
+      ✓ Ana sends a POST request to 'pockets' (1s 471ms)
+      ✓ Ana anota el id del bolsillo "Mercado" (5ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+  When ella transfiere por API 100001 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere por API 100001 del bolsillo "Vacaciones" al bolsillo "Mercado"
+      ✓ Ana sends a POST request to 'pockets/transfer' (851ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Ana ensures that the status of the last response does equal 400 (2ms)
+  And el código de error es "INSUFFICIENT_POCKET_BALANCE"
+    ✓ Ana ensures that el código de error does equal "INSUFFICIENT_POCKET_BALANCE" (2ms)
+  And su bolsillo "Vacaciones" tiene 100000
+    Ana consulta por API los bolsillos de su cuenta
+      ✓ Ana sends a GET request to pockets/account/{a note of accountId} (572ms)
+    ✓ Ana ensures that el saldo del bolsillo "Vacaciones" en la respuesta does equal 100000 (3ms)
+
+✓ Execution successful (8s 855ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:37
+
+Transferir entre bolsillos: El bolsillo de origen y el de destino deben ser diferentes
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq122559wsp@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 149ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq122559wsp@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 411ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (1ms)
+          - accountId: "e749c14a-ac1c-4312-adba-1a52487ffef6"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (883ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (1s 367ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (5ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+    Ana crea por API el bolsillo "Mercado" con 50000
+      ✓ Ana sends a POST request to 'pockets' (1s 392ms)
+      ✓ Ana anota el id del bolsillo "Mercado" (3ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+  When ella transfiere por API 10000 del bolsillo "Vacaciones" al bolsillo "Vacaciones"
+    Ana transfiere por API 10000 del bolsillo "Vacaciones" al bolsillo "Vacaciones"
+      ✓ Ana sends a POST request to 'pockets/transfer' (15ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Ana ensures that the status of the last response does equal 400 (2ms)
+  And el código de error es "INVALID_TRANSFER_TARGET"
+    ✓ Ana ensures that el código de error does equal "INVALID_TRANSFER_TARGET" (1ms)
+
+✓ Execution successful (6s 746ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/bolsillos/transferir_entre_bolsillos.feature:43
+
+Transferir entre bolsillos: Transferir entre bolsillos desde la pantalla
+
+  Given Ana es clienta con una cuenta de ahorros con saldo de 500000
+    Ana es cliente con una cuenta de ahorros con saldo de 500000
+      Ana se registra en FuBanking como e2e.mvq127cus4si@fubanking.test
+        ✓ Ana envía su registro a POST auth/register (1s 152ms)
+        ✓ Ana takes notes: (1ms)
+          - email: "e2e.mvq127cus4si@fubanking.test"
+      Ana abre una cuenta de ahorros
+        ✓ Ana sends a POST request to 'accounts' (1s 124ms)
+        ✓ Ana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Ana takes notes: (0ms)
+          - accountId: "85c6b0a4-cb1a-4239-bb94-a7ed5f43b283"
+      Ana deposita 500000 en su cuenta
+        ✓ Ana sends a POST request to accounts/{a note of accountId}/deposit (5s 178ms)
+      ✓ Ana ensures that the status of the last response does equal 200 (2ms)
+  And ella tiene los bolsillos:
+  | nombre     | monto  |
+  | Vacaciones | 100000 |
+  | Mercado    | 50000  |
+    Ana crea por API el bolsillo "Vacaciones" con 100000
+      ✓ Ana sends a POST request to 'pockets' (7s 290ms)
+      ✓ Ana anota el id del bolsillo "Vacaciones" (5ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+    Ana crea por API el bolsillo "Mercado" con 50000
+      ✓ Ana sends a POST request to 'pockets' (2s 216ms)
+      ✓ Ana anota el id del bolsillo "Mercado" (4ms)
+    ✓ Ana ensures that the status of the last response does equal 201 (3ms)
+  Given ella está en la pantalla de bolsillos
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (3s 141ms)
+      ✓ Ana enters "e2e.mvq127cus4si@fubanking.test" into campo de correo (118ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (29ms)
+      ✓ Ana clicks on botón Iniciar sesión (223ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 53ms)
+    Ana abre la pantalla de bolsillos
+      ✓ Ana navigates to "/pockets" (2s 64ms)
+      ✓ Ana waits until the value of selector de cuenta does not equal "" (58ms)
+  When ella transfiere 30000 del bolsillo "Vacaciones" al bolsillo "Mercado"
+    Ana transfiere 30000 del bolsillo "Vacaciones" al bolsillo "Mercado" desde la pantalla
+      ✓ Ana selects value el id del bolsillo "Vacaciones" from selector bolsillo origen (33ms)
+      ✓ Ana selects value el id del bolsillo "Mercado" from selector bolsillo destino (24ms)
+      ✓ Ana enters "30000" into campo monto a transferir (37ms)
+      ✓ Ana clicks on botón Transferir (136ms)
+  Then ella ve la notificación "Transferencia realizada"
+    ✓ Ana ensures that the text of notificaciones does eventually contain at least one item that does equal "Transferencia realizada" (3s 120ms)
+  And ella ve el bolsillo "Vacaciones" con 70000
+    ✓ Ana ensures that el saldo en pantalla del bolsillo "Vacaciones" does eventually equal 70000 (253ms)
+  And ella ve el bolsillo "Mercado" con 80000
+    ✓ Ana ensures that el saldo en pantalla del bolsillo "Mercado" does eventually equal 80000 (94ms)
+
+✓ Execution successful (28s 392ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:11
+
+Depositar dinero en la cuenta: Depositar un monto válido
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq12t9trj0p@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 308ms)
+        ✓ Carlos takes notes: (1ms)
+          - email: "e2e.mvq12t9trj0p@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 548ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (3ms)
+        ✓ Carlos takes notes: (0ms)
+          - accountId: "5df5a8d4-3b51-4b7f-bde8-366dca5d8a2d"
+  When él deposita por API 250000 en su cuenta con la descripción "Ahorro mensual"
+    Carlos deposita 250000 en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (929ms)
+  Then la respuesta HTTP tiene estado 200
+    ✓ Carlos ensures that the status of the last response does equal 200 (1ms)
+  And el saldo de su cuenta es 250000
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (329ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 250000 (2ms)
+
+✓ Execution successful (4s 467ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:17
+
+Depositar dinero en la cuenta: Los depósitos se acumulan en el saldo
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq12wq0nz8o@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (3s 89ms)
+        ✓ Carlos takes notes: (0ms)
+          - email: "e2e.mvq12wq0nz8o@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 969ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (2ms)
+        ✓ Carlos takes notes: (0ms)
+          - accountId: "c4311030-00e0-431d-a5ad-589a1f5fdb3f"
+  When él deposita por API 100000 en su cuenta
+    Carlos deposita 100000 en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (900ms)
+  And él deposita por API 50000 en su cuenta
+    Carlos deposita 50000 en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (824ms)
+  Then el saldo de su cuenta es 150000
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (258ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 150000 (2ms)
+
+✓ Execution successful (7s 358ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:31
+
+Depositar dinero en la cuenta: Rechazar un depósito de 0
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq132eemq64@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 156ms)
+        ✓ Carlos takes notes: (1ms)
+          - email: "e2e.mvq132eemq64@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 499ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (1ms)
+        ✓ Carlos takes notes: (0ms)
+          - accountId: "32ac2f2f-99f3-4f62-99df-66ebe24841be"
+  When él deposita por API 0 en su cuenta
+    Carlos deposita 0 en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (65ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Carlos ensures that the status of the last response does equal 400 (0ms)
+  And el código de error es "INVALID_AMOUNT"
+    ✓ Carlos ensures that el código de error does equal "INVALID_AMOUNT" (1ms)
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (313ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 0 (1ms)
+
+✓ Execution successful (3s 360ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:32
+
+Depositar dinero en la cuenta: Rechazar un depósito de -50000
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq134zsuwc1@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 67ms)
+        ✓ Carlos takes notes: (0ms)
+          - email: "e2e.mvq134zsuwc1@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 58ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (1ms)
+        ✓ Carlos takes notes: (1ms)
+          - accountId: "c5b1da85-5f09-4d71-9564-96b300cc469e"
+  When él deposita por API -50000 en su cuenta
+    Carlos deposita -50000 en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (6ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Carlos ensures that the status of the last response does equal 400 (1ms)
+  And el código de error es "INVALID_AMOUNT"
+    ✓ Carlos ensures that el código de error does equal "INVALID_AMOUNT" (1ms)
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (380ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 0 (1ms)
+
+✓ Execution successful (2s 867ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:43
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número (true)
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq1377lirzr@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 22ms)
+        ✓ Carlos takes notes: (0ms)
+          - email: "e2e.mvq1377lirzr@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 171ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (1ms)
+        ✓ Carlos takes notes: (1ms)
+          - accountId: "d9b69c97-7b3e-4752-8a19-fc4d2ce6a1e4"
+  When él deposita por API el valor JSON true en su cuenta
+    Carlos deposita true en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (5ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Carlos ensures that the status of the last response does equal 400 (0ms)
+  And el código de error es "INVALID_AMOUNT"
+    ✓ Carlos ensures that el código de error does equal "INVALID_AMOUNT" (1ms)
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (282ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 0 (2ms)
+
+✓ Execution successful (2s 805ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:44
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número ("abc")
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq139dinen1@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 84ms)
+        ✓ Carlos takes notes: (1ms)
+          - email: "e2e.mvq139dinen1@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 49ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (1ms)
+        ✓ Carlos takes notes: (1ms)
+          - accountId: "f17831b2-133d-4759-87a5-cf67a5edb477"
+  When él deposita por API el valor JSON "abc" en su cuenta
+    Carlos deposita "abc" en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (7ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Carlos ensures that the status of the last response does equal 400 (1ms)
+  And el código de error es "INVALID_AMOUNT"
+    ✓ Carlos ensures that el código de error does equal "INVALID_AMOUNT" (1ms)
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (262ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 0 (2ms)
+
+✓ Execution successful (2s 745ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:45
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número (null)
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq13bhuic4p@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 45ms)
+        ✓ Carlos takes notes: (0ms)
+          - email: "e2e.mvq13bhuic4p@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 90ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (3ms)
+        ✓ Carlos takes notes: (1ms)
+          - accountId: "4ff4f528-3b00-49e9-86b2-e3153c93b053"
+  When él deposita por API el valor JSON null en su cuenta
+    Carlos deposita null en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (11ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Carlos ensures that the status of the last response does equal 400 (2ms)
+  And el código de error es "INVALID_AMOUNT"
+    ✓ Carlos ensures that el código de error does equal "INVALID_AMOUNT" (2ms)
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (257ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 0 (2ms)
+
+✓ Execution successful (2s 732ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:46
+
+Depositar dinero en la cuenta: Rechazar un monto que no es un número ([1000])
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq13dlyjf1s@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 80ms)
+        ✓ Carlos takes notes: (0ms)
+          - email: "e2e.mvq13dlyjf1s@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 49ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (2ms)
+        ✓ Carlos takes notes: (1ms)
+          - accountId: "25ce003a-5a0c-47d3-80af-2a82ceffd675"
+  When él deposita por API el valor JSON [1000] en su cuenta
+    Carlos deposita [1000] en su cuenta
+      ✓ Carlos sends a POST request to accounts/{a note of accountId}/deposit (5ms)
+  Then la respuesta HTTP tiene estado 400
+    ✓ Carlos ensures that the status of the last response does equal 400 (0ms)
+  And el código de error es "INVALID_AMOUNT"
+    ✓ Carlos ensures that el código de error does equal "INVALID_AMOUNT" (1ms)
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (254ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 0 (2ms)
+
+✓ Execution successful (2s 720ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:49
+
+Depositar dinero en la cuenta: No se puede depositar en la cuenta de otro cliente
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq13fpgd819@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 26ms)
+        ✓ Carlos takes notes: (1ms)
+          - email: "e2e.mvq13fpgd819@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 83ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (1ms)
+        ✓ Carlos takes notes: (1ms)
+          - accountId: "c2fbf708-98b3-49df-a402-febe19cf0bea"
+  Given Diana es clienta con una cuenta de ahorros con saldo de 100000
+    Diana es cliente con una cuenta de ahorros con saldo de 100000
+      Diana se registra en FuBanking como e2e.mvq13hg7n9eb@fubanking.test
+        ✓ Diana envía su registro a POST auth/register (1s 38ms)
+        ✓ Diana takes notes: (0ms)
+          - email: "e2e.mvq13hg7n9eb@fubanking.test"
+      Diana abre una cuenta de ahorros
+        ✓ Diana sends a POST request to 'accounts' (1s 174ms)
+        ✓ Diana ensures that the status of the last response does equal 201 (2ms)
+        ✓ Diana takes notes: (1ms)
+          - accountId: "07f74af9-1322-4a0a-9878-dfd1cf73f3d0"
+      Diana deposita 100000 en su cuenta
+        ✓ Diana sends a POST request to accounts/{a note of accountId}/deposit (1s 644ms)
+      ✓ Diana ensures that the status of the last response does equal 200 (1ms)
+  When Carlos deposita por API 50000 en la cuenta de Diana
+    Carlos deposita 50000 en la cuenta 07f74af9-1322-4a0a-9878-dfd1cf73f3d0
+      ✓ Carlos sends a POST request to 'accounts/07f74af9-1322-4a0a-9878-dfd1cf73f3d0/deposit' (609ms)
+  Then la respuesta HTTP tiene estado 403
+    ✓ Carlos ensures that the status of the last response does equal 403 (1ms)
+  And el código de error es "FORBIDDEN"
+    ✓ Carlos ensures that el código de error does equal "FORBIDDEN" (0ms)
+  And el saldo de la cuenta de Diana es 100000
+    Diana consulta su cuenta por API
+      ✓ Diana sends a GET request to accounts/{a note of accountId} (395ms)
+    ✓ Diana ensures that el saldo de la cuenta does equal 100000 (1ms)
+
+✓ Execution successful (7s 520ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:57
+
+Depositar dinero en la cuenta: Abonar saldo desde la pantalla de cuentas
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq13ligxco1@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (3s 888ms)
+        ✓ Carlos takes notes: (0ms)
+          - email: "e2e.mvq13ligxco1@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (4s 787ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (1ms)
+        ✓ Carlos takes notes: (0ms)
+          - accountId: "5134a41f-51c1-4aa4-93f1-98fe3a3c52ae"
+  Given él está en la pantalla de cuentas
+    Carlos inicia sesión en FuBanking
+      ✓ Carlos navigates to "/login" (3s 135ms)
+      ✓ Carlos enters "e2e.mvq13ligxco1@fubanking.test" into campo de correo (191ms)
+      ✓ Carlos enters [a masked value] into campo de contraseña (21ms)
+      ✓ Carlos clicks on botón Iniciar sesión (172ms)
+      ✓ Carlos waits until "/profile" does end with "/profile" (1s 33ms)
+    Carlos abre la pantalla de cuentas
+      ✓ Carlos navigates to "/accounts" (1s 699ms)
+      ✓ Carlos waits until botón Abonar does become visible (146ms)
+  When él abona 150000 a su cuenta
+    Carlos abona 150000 a su cuenta desde la pantalla
+      ✓ Carlos clicks on botón Abonar (95ms)
+      ✓ Carlos enters "150000" into campo monto a ingresar (27ms)
+      ✓ Carlos clicks on botón Abonar Saldo (124ms)
+  Then él ve la notificación "Deposito realizado"
+    ✓ Carlos ensures that the text of notificaciones does eventually contain at least one item that does equal "Deposito realizado" (1s 490ms)
+  And él ve el saldo de su cuenta en 150000
+    ✓ Carlos ensures that el saldo de la cuenta en pantalla does eventually equal 150000 (31ms)
+  And el saldo de su cuenta es 150000
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (293ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 150000 (2ms)
+
+✓ Execution successful (17s 700ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/deposito/depositar.feature:65
+
+Depositar dinero en la cuenta: El formulario de abono rechaza un monto en cero
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq13z679is4@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 149ms)
+        ✓ Carlos takes notes: (1ms)
+          - email: "e2e.mvq13z679is4@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 451ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (1ms)
+        ✓ Carlos takes notes: (0ms)
+          - accountId: "0ca929a9-f24a-42c8-a66b-88991239b282"
+  Given él está en la pantalla de cuentas
+    Carlos inicia sesión en FuBanking
+      ✓ Carlos navigates to "/login" (2s 70ms)
+      ✓ Carlos enters "e2e.mvq13z679is4@fubanking.test" into campo de correo (34ms)
+      ✓ Carlos enters [a masked value] into campo de contraseña (11ms)
+      ✓ Carlos clicks on botón Iniciar sesión (116ms)
+      ✓ Carlos waits until "/profile" does end with "/profile" (1s 41ms)
+    Carlos abre la pantalla de cuentas
+      ✓ Carlos navigates to "/accounts" (1s 570ms)
+      ✓ Carlos waits until botón Abonar does become visible (90ms)
+  When él abona 0 a su cuenta
+    Carlos abona 0 a su cuenta desde la pantalla
+      ✓ Carlos clicks on botón Abonar (113ms)
+      ✓ Carlos enters "0" into campo monto a ingresar (27ms)
+      ✓ Carlos clicks on botón Abonar Saldo (141ms)
+  Then él ve el error del formulario "Por favor ingresa un monto válido mayor a cero."
+    ✓ Carlos ensures that the text of mensaje de error del formulario does eventually equal "Por favor ingresa un monto válido mayor a cero." (27ms)
+  And el saldo de su cuenta es 0
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (295ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 0 (1ms)
+
+✓ Execution successful (8s 654ms)
+--------------------------------------------------------------------------------
+C:/Users/Usuario/OneDrive/Documentos/2026-2/Validacion y Verificacion/FuBanking/e2e/serenity/features/recorrido/abonar_y_ahorrar.feature:8
+
+Recorrido completo de ahorro: Abonar a la cuenta y apartar una parte en un bolsillo nuevo
+
+  Given Carlos es cliente con una cuenta de ahorros con saldo de 0
+    Carlos es cliente con una cuenta de ahorros con saldo de 0
+      Carlos se registra en FuBanking como e2e.mvq145up90x0@fubanking.test
+        ✓ Carlos envía su registro a POST auth/register (1s 113ms)
+        ✓ Carlos takes notes: (0ms)
+          - email: "e2e.mvq145up90x0@fubanking.test"
+      Carlos abre una cuenta de ahorros
+        ✓ Carlos sends a POST request to 'accounts' (1s 164ms)
+        ✓ Carlos ensures that the status of the last response does equal 201 (2ms)
+        ✓ Carlos takes notes: (1ms)
+          - accountId: "c4d68b2b-0064-4111-b090-b46b1c616015"
+  And él está en la pantalla de cuentas
+    Carlos inicia sesión en FuBanking
+      ✓ Carlos navigates to "/login" (1s 895ms)
+      ✓ Carlos enters "e2e.mvq145up90x0@fubanking.test" into campo de correo (33ms)
+      ✓ Carlos enters [a masked value] into campo de contraseña (9ms)
+      ✓ Carlos clicks on botón Iniciar sesión (118ms)
+      ✓ Carlos waits until "/profile" does end with "/profile" (1s 46ms)
+    Carlos abre la pantalla de cuentas
+      ✓ Carlos navigates to "/accounts" (1s 473ms)
+      ✓ Carlos waits until botón Abonar does become visible (100ms)
+  When él abona 200000 a su cuenta
+    Carlos abona 200000 a su cuenta desde la pantalla
+      ✓ Carlos clicks on botón Abonar (122ms)
+      ✓ Carlos enters "200000" into campo monto a ingresar (19ms)
+      ✓ Carlos clicks on botón Abonar Saldo (111ms)
+  Then él ve el saldo de su cuenta en 200000
+    ✓ Carlos ensures that el saldo de la cuenta en pantalla does eventually equal 200000 (1s 498ms)
+  When él abre la pantalla de bolsillos
+    Carlos abre la pantalla de bolsillos
+      ✓ Carlos navigates to "/pockets" (2s 111ms)
+      ✓ Carlos waits until the value of selector de cuenta does not equal "" (41ms)
+  And él crea el bolsillo "Emergencias" con 50000
+    Carlos crea el bolsillo "Emergencias" con 50000 desde la pantalla
+      ✓ Carlos enters "Emergencias" into campo nombre del bolsillo (18ms)
+      ✓ Carlos enters "50000" into campo monto inicial (14ms)
+      ✓ Carlos clicks on botón Crear bolsillo (112ms)
+  Then él ve el bolsillo "Emergencias" con 50000
+    ✓ Carlos ensures that el saldo en pantalla del bolsillo "Emergencias" does eventually equal 50000 (1s 496ms)
+  And el saldo de su cuenta es 150000
+    Carlos consulta su cuenta por API
+      ✓ Carlos sends a GET request to accounts/{a note of accountId} (272ms)
+    ✓ Carlos ensures that el saldo de la cuenta does equal 150000 (2ms)
+
+✓ Execution successful (13s 474ms)
+================================================================================
+Execution Summary
+
+Consultar bolsillos:           4 successful, 4 total (32s 5ms)
+Crear bolsillo:                7 successful, 7 total (41s 147ms)
+Depositar dinero en la cuenta: 11 successful, 11 total (1m 2s 928ms)
+Editar bolsillo:               5 successful, 5 total (44s 685ms)
+Eliminar bolsillo:             3 successful, 3 total (40s 104ms)
+Recorrido completo de ahorro:  1 successful, 1 total (13s 474ms)
+Transferir entre bolsillos:    5 successful, 5 total (1m 5s 632ms)
+
+Total time: 4m 59s 975ms
+Real time: 5m 1s 516ms
+Scenarios:  36
+================================================================================

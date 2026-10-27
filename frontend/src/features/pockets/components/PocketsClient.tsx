@@ -235,13 +235,19 @@ export function PocketsClient() {
 
       {pendingDeletePocket && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-3xl border border-primary/20 bg-[#111827] p-6 shadow-2xl shadow-primary/20">
+          {/* bg-card y no un color fijo: en tema claro el texto oscuro quedaba sobre fondo oscuro (A11Y-01, axe color-contrast). */}
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-pocket-title"
+            className="w-full max-w-md rounded-3xl border border-primary/20 bg-card p-6 shadow-2xl shadow-primary/20"
+          >
             <div className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary">
                 <Trash2 size={22} />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-foreground">Eliminar bolsillo</h3>
+                <h3 id="delete-pocket-title" className="text-lg font-semibold text-foreground">Eliminar bolsillo</h3>
                 <p className="text-sm text-muted-foreground">Esta acción devolverá el saldo a tu cuenta.</p>
               </div>
             </div>

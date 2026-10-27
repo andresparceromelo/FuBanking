@@ -79,7 +79,12 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-      <div className="bg-card border border-border rounded-2xl w-full max-w-md p-6 shadow-xl space-y-5">
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dw-title"
+        className="bg-card border border-border rounded-2xl w-full max-w-md p-6 shadow-xl space-y-5"
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -88,7 +93,7 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
               {isDeposit ? <ArrowDownLeft size={20} /> : <ArrowUpRight size={20} />}
             </div>
             <div>
-              <h3 className="text-lg font-bold text-foreground">
+              <h3 id="dw-title" className="text-lg font-bold text-foreground">
                 {isDeposit ? 'Agregar Dinero (Depósito)' : 'Retirar Dinero'}
               </h3>
               <p className="text-xs text-muted-foreground">
@@ -96,7 +101,10 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
               </p>
             </div>
           </div>
+          {/* Solo tiene un ícono: sin aria-label el lector de pantalla lo anuncia como "botón" (A11Y-02, axe button-name). */}
           <button
+            type="button"
+            aria-label="Cerrar"
             onClick={onClose}
             className="p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted"
           >
@@ -155,7 +163,7 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
               disabled={isLoading}
               className={`w-1/2 py-2.5 px-4 rounded-xl text-sm font-semibold text-white transition-all shadow-md ${
                 isDeposit 
-                  ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-900/20' 
+                  ? 'bg-emerald-700 hover:bg-emerald-600 shadow-emerald-900/20' // blanco sobre emerald-600 = 3,8:1 (A11Y-05)
                   : 'bg-rose-600 hover:bg-rose-500 shadow-rose-900/20'
               } disabled:opacity-50`}
             >

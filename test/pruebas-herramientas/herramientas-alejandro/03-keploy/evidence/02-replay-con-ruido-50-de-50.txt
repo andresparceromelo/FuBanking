@@ -1,0 +1,409 @@
+
+═══════════════════════════════════════════════════════════════════════════════
+  🚀  TRY THE FULL KEPLOY (FREE)
+  This is Keploy's open-source build. Keploy from keploy.io (free with an account) adds:
+    • PostgreSQL, MongoDB, gRPC, HTTP/2, Kafka — on top of this build's HTTP + MySQL
+    • Recording apps running natively on macOS and Windows
+    • Recording and testing apps that run in Podman
+    • AI-powered test generation, sandbox replay, MCP for AI agents
+      (Claude Code, Cursor, Copilot, Gemini, …)
+  Install:  curl --silent -O -L https://keploy.io/install.sh && source install.sh
+═══════════════════════════════════════════════════════════════════════════════
+
+
+       ▓██▓▄
+    ▓▓▓▓██▓█▓▄
+     ████████▓▒
+          ▀▓▓███▄      ▄▄   ▄               ▌
+         ▄▌▌▓▓████▄    ██ ▓█▀  ▄▌▀▄  ▓▓▌▄   ▓█  ▄▌▓▓▌▄ ▌▌   ▓
+       ▓█████████▌▓▓   ██▓█▄  ▓█▄▓▓ ▐█▌  ██ ▓█  █▌  ██  █▌ █▓
+      ▓▓▓▓▀▀▀▀▓▓▓▓▓▓▌  ██  █▓  ▓▌▄▄ ▐█▓▄▓█▀ █▓█ ▀█▄▄█▀   █▓█
+       ▓▌                           ▐█▌                   █▌
+        ▓                                         OPEN SOURCE
+
+version: 3.6.167
+
+🐰 Keploy: 2026-10-27T01:53:55.519061628Z 	INFO	Test Sets to be Replayed	{"testSets": ["test-set-0"]}
+🐰 Keploy: 2026-10-27T01:53:55.547110607Z 	INFO	coverage tool not found, skipping coverage calculation. please install coverage tool using 'npm install -g nyc'
+🐰 Keploy(agent): 2026-10-27T01:53:59Z	INFO	starting UDP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-27T01:53:59Z	INFO	starting TCP DNS server at addr :26789
+🐰 Keploy(agent): 2026-10-27T01:53:59Z	INFO	Keploy has taken control of the DNS resolution mechanism, your application may misbehave if you have provided wrong domain name in your application code.
+🐰 Keploy(agent): 2026-10-27T01:53:59Z	INFO	Proxy started at port:16789
+🐰 Keploy(agent): 2026-10-27T01:53:59Z	INFO	Starting Agent's HTTP server	{"addr": "127.0.0.1:64177"}
+🐰 Keploy: 2026-10-27T01:53:59.625873219Z 	INFO	pointing Java at a merged keploy truststore via JAVA_TOOL_OPTIONS (the JDK's cacerts is left untouched)	{"truststore": "/tmp/keploy-java-truststore-0.jks", "system_source": "/etc/ssl/certs/ca-certificates.crt"}
+🐰 Keploy: 2026-10-27T01:53:59.637970292Z 	INFO	running	{"test-set": "test-set-0", "attempt": 1}
+🐰 Keploy: 2026-10-27T01:54:00.712588295Z 	INFO	Successfully loaded test-mock mappings	{"testSetID": "test-set-0", "filePath": "/keploy-data/keploy/test-set-0/mappings.yaml", "numTests": 34, "hasMeaningfulMappings": true}
+🐰 Keploy(agent): 2026-10-27T01:54:01Z	INFO	agent mock residency: per-test mocks parked on disk (windowed)	{"onDisk": 95, "spilledResponses": 0, "diskBytes": 969844, "residentPerTest": 0, "residentConfig": 1}
+🐰 Keploy(agent): 2026-10-27T01:54:01Z	INFO	seeded the set's statement catalog from the on-disk store: the first recording of each statement, to describe a statement the app prepares before the test that runs it, never served	{"statements": 0, "onDisk": 95}
+🐰 Keploy: 2026-10-27T01:54:01.440004285Z 	INFO	stored the mocks on the agent	{"mocks": 96, "payloadsReadBack": 96, "bytes": 248287, "sentBytes": 38558, "encoding": "zstd", "took": "532.485691ms"}
+🐰 Keploy(agent): 2026-10-27T01:54:01Z	INFO	strict mock-window containment is ACTIVE for this session — per-test mocks whose request timestamp falls outside the outer test window will be dropped rather than promoted across tests. If your replays start reporting missing mocks after an upgrade, this is likely why. To opt out: set KEPLOY_STRICT_MOCK_WINDOW=0 in the environment, OR test.strictMockWindow: false in keploy.yaml. A recording whose recorder stated each mock's lifetime (spec.metadata.lifetime) serves each test its own calls in every mode: declare an HTTP call every test may make in keploy.yaml (sessionCalls), or record the test set again.	{"viaPerCallFlag": true, "viaEnvOverride": false, "escape_hatch_env": "KEPLOY_STRICT_MOCK_WINDOW=0", "escape_hatch_config": "test.strictMockWindow: false"}
+🐰 Keploy(agent): 2026-10-27T01:54:01Z	INFO	staged the set's app-startup mocks from the on-disk store; each test reads its own when it runs	{"startupMocks": 0, "declaredMocks": 0, "poolMocks": 0, "onDisk": 95, "firstRecordedTest": "2026-10-27T01:50:49.992226431Z"}
+🐰 Keploy: 2026-10-27T01:54:01.450482366Z 	INFO	Starting Application :	{"executing_cmd": "/usr/bin/sh -c node /app/dist/server.js"}
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+🚀 Servidor corriendo en http://localhost:3001
+Environment: development
+🐰 Keploy: 2026-10-27T01:54:11.52974939Z 	INFO	starting test for	{"test case": "get-health-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-health-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:11.545684541Z 	INFO	result	{"testcase id": "get-health-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:11.553450833Z 	INFO	starting test for	{"test case": "post-api-v1-auth-register-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-auth-register-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:11.948352689Z 	INFO	result	{"testcase id": "post-api-v1-auth-register-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:11.954409729Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-1", "test set": "test-set-0"}
+🐰 Keploy(agent): 2026-10-27T01:54:11Z	WARN	mock mismatch: no matching mock for outgoing call	{"protocol": "HTTP", "destination": "tjsdcuddiucceuvnzfyp.supabase.co", "actual": "GET /rest/v1/accounts", "match_phase": "no_schema_candidates", "candidates": 3, "closest": "mock-7", "next_step": "Request structure changed since recording. Re-record the test set with 'keploy record', or, if you edited its mocks, remap it with --disable-mapping --update-test-mapping. Each test is served the HTTP calls it recorded. If another test recorded this call and every test may make it (a token, a shared configuration read), declare it in keploy.yaml to serve it to every test (sessionCalls: [{host: \"tjsdcuddiucceuvnzfyp.supabase.co\", method: \"GET\", pathPrefix: \"/rest/v1/accounts\"}]), or record again with 'keploy record' so this test records it.", "destination_scope": "in_compared_set"}
+🐰 Keploy(agent): 2026-10-27T01:54:11Z	ERROR	failed to mock the outgoing message	{"Client ConnectionID": "0", "Destination ConnectionID": "1", "Destination Address": "172.64.149.246:443", "Client IP Address": "127.0.0.1:47692", "error": "no matching mock found for GET /rest/v1/accounts"}
+🐰 Keploy(agent): 2026-10-27T01:54:11Z	ERROR	failed to handle the client connection	{"error": "no matching mock found for GET /rest/v1/accounts"}
+Testrun passed for testcase with id: "post-api-v1-accounts-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.008828285Z 	INFO	result	{"testcase id": "post-api-v1-accounts-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.014348075Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.094129749Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.099176017Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.1145309Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.1197847Z 	INFO	starting test for	{"test case": "post-api-v1-auth-register-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-auth-register-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.383801827Z 	INFO	result	{"testcase id": "post-api-v1-auth-register-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.389104977Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-2", "test set": "test-set-0"}
+🐰 Keploy(agent): 2026-10-27T01:54:12Z	WARN	mock mismatch: no matching mock for outgoing call	{"protocol": "HTTP", "destination": "tjsdcuddiucceuvnzfyp.supabase.co", "actual": "GET /rest/v1/accounts", "match_phase": "no_schema_candidates", "candidates": 3, "closest": "mock-18", "next_step": "Request structure changed since recording. Re-record the test set with 'keploy record', or, if you edited its mocks, remap it with --disable-mapping --update-test-mapping. Each test is served the HTTP calls it recorded. If another test recorded this call and every test may make it (a token, a shared configuration read), declare it in keploy.yaml to serve it to every test (sessionCalls: [{host: \"tjsdcuddiucceuvnzfyp.supabase.co\", method: \"GET\", pathPrefix: \"/rest/v1/accounts\"}]), or record again with 'keploy record' so this test records it.", "destination_scope": "in_compared_set"}
+🐰 Keploy(agent): 2026-10-27T01:54:12Z	ERROR	failed to mock the outgoing message	{"Client ConnectionID": "4", "Destination ConnectionID": "5", "Destination Address": "172.64.149.246:443", "Client IP Address": "127.0.0.1:47718", "error": "no matching mock found for GET /rest/v1/accounts"}
+🐰 Keploy(agent): 2026-10-27T01:54:12Z	ERROR	failed to handle the client connection	{"error": "no matching mock found for GET /rest/v1/accounts"}
+Testrun passed for testcase with id: "post-api-v1-accounts-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.421668428Z 	INFO	result	{"testcase id": "post-api-v1-accounts-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.427795622Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.454364108Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.461685607Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.49344219Z 	INFO	result	{"testcase id": "post-api-v1-pockets-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.49911464Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.530386517Z 	INFO	result	{"testcase id": "post-api-v1-pockets-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.534721221Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.545428536Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.551457059Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-3", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-3"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.577351616Z 	INFO	result	{"testcase id": "post-api-v1-pockets-3", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.580976849Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-3", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-3"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.590586545Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-3", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.593762975Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-4", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-4"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.601283259Z 	INFO	result	{"testcase id": "post-api-v1-pockets-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.605195002Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-4", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-4"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.614237085Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.617579523Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-5", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-5"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.624859567Z 	INFO	result	{"testcase id": "post-api-v1-pockets-5", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.628779889Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-5", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-5"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.638431701Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-5", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.641476103Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-6", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-6"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.648445216Z 	INFO	result	{"testcase id": "post-api-v1-pockets-6", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.652281668Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-7", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-7"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.664045679Z 	INFO	result	{"testcase id": "post-api-v1-pockets-7", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.669109152Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-6", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-6"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.679770323Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-6", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.683238115Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-8", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-8"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.690172758Z 	INFO	result	{"testcase id": "post-api-v1-pockets-8", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.695035905Z 	INFO	starting test for	{"test case": "get-api-v1-pockets-account-by-id-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-pockets-account-by-id-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.708822914Z 	INFO	result	{"testcase id": "get-api-v1-pockets-account-by-id-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.712601438Z 	INFO	starting test for	{"test case": "get-api-v1-pockets-account-by-id-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-pockets-account-by-id-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.722595033Z 	INFO	result	{"testcase id": "get-api-v1-pockets-account-by-id-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.729030884Z 	INFO	starting test for	{"test case": "patch-api-v1-pockets-by-id-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "patch-api-v1-pockets-by-id-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.754285632Z 	INFO	result	{"testcase id": "patch-api-v1-pockets-by-id-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.759204942Z 	INFO	starting test for	{"test case": "get-api-v1-pockets-account-by-id-3", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-pockets-account-by-id-3"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.773229714Z 	INFO	result	{"testcase id": "get-api-v1-pockets-account-by-id-3", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.77913187Z 	INFO	starting test for	{"test case": "patch-api-v1-pockets-by-id-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "patch-api-v1-pockets-by-id-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.802018119Z 	INFO	result	{"testcase id": "patch-api-v1-pockets-by-id-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.805411069Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-7", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-7"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.816353371Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-7", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.821148871Z 	INFO	starting test for	{"test case": "patch-api-v1-pockets-by-id-3", "test set": "test-set-0"}
+Testrun passed for testcase with id: "patch-api-v1-pockets-by-id-3"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.844536437Z 	INFO	result	{"testcase id": "patch-api-v1-pockets-by-id-3", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.850590251Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-8", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-8"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.864277167Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-8", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.870084772Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-transfer-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-transfer-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.900746852Z 	INFO	result	{"testcase id": "post-api-v1-pockets-transfer-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.90547324Z 	INFO	starting test for	{"test case": "get-api-v1-pockets-account-by-id-4", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-pockets-account-by-id-4"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.921206902Z 	INFO	result	{"testcase id": "get-api-v1-pockets-account-by-id-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.924963872Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-9", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-9"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.935965325Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-9", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.941747868Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-transfer-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-transfer-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.957950453Z 	INFO	result	{"testcase id": "post-api-v1-pockets-transfer-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.961129179Z 	INFO	starting test for	{"test case": "post-api-v1-pockets-transfer-3", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-pockets-transfer-3"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.968150007Z 	INFO	result	{"testcase id": "post-api-v1-pockets-transfer-3", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.972252508Z 	INFO	starting test for	{"test case": "delete-api-v1-pockets-by-id-1", "test set": "test-set-0"}
+Testrun passed for testcase with id: "delete-api-v1-pockets-by-id-1"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:12.986986792Z 	INFO	result	{"testcase id": "delete-api-v1-pockets-by-id-1", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:12.992233406Z 	INFO	starting test for	{"test case": "get-api-v1-pockets-account-by-id-5", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-pockets-account-by-id-5"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.007273401Z 	INFO	result	{"testcase id": "get-api-v1-pockets-account-by-id-5", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.013447039Z 	INFO	starting test for	{"test case": "delete-api-v1-pockets-by-id-2", "test set": "test-set-0"}
+Testrun passed for testcase with id: "delete-api-v1-pockets-by-id-2"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.041783174Z 	INFO	result	{"testcase id": "delete-api-v1-pockets-by-id-2", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.046316571Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-10", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-10"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.055936658Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-10", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.060572883Z 	INFO	starting test for	{"test case": "get-api-v1-pockets-account-by-id-6", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-pockets-account-by-id-6"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.075068361Z 	INFO	result	{"testcase id": "get-api-v1-pockets-account-by-id-6", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.079683073Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-3", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-3"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.09845713Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-3", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.10265221Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-11", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-11"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.113775559Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-11", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.116967843Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-4", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-4"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.124264942Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-4", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.128351801Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-12", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-12"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.138986299Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-12", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.142121586Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-5", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-5"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.14776657Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-5", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.150860743Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-6", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-6"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.158078512Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-6", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.160861985Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-7", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-7"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.166746525Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-7", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.169844998Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-8", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-8"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.176296801Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-8", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.180371375Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-13", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-13"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.196080769Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-13", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.200393707Z 	INFO	starting test for	{"test case": "post-api-v1-accounts-by-id-deposit-9", "test set": "test-set-0"}
+Testrun passed for testcase with id: "post-api-v1-accounts-by-id-deposit-9"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.210939404Z 	INFO	result	{"testcase id": "post-api-v1-accounts-by-id-deposit-9", "testset id": "test-set-0", "passed": "true"}
+🐰 Keploy: 2026-10-27T01:54:13.215173002Z 	INFO	starting test for	{"test case": "get-api-v1-accounts-by-id-14", "test set": "test-set-0"}
+Testrun passed for testcase with id: "get-api-v1-accounts-by-id-14"
+
+--------------------------------------------------------------------
+
+🐰 Keploy: 2026-10-27T01:54:13.225368117Z 	INFO	result	{"testcase id": "get-api-v1-accounts-by-id-14", "testset id": "test-set-0", "passed": "true"}
+
+ <=========================================> 
+  TESTRUN SUMMARY. For test-set: "test-set-0"
+	Total tests:        50
+	Total test passed:  50
+	Total test failed:  0
+	Time Taken:         "13.59 s"
+ <=========================================> 
+
+
+ <=========================================> 
+  COMPLETE TESTRUN SUMMARY. 
+	Total tests: 50
+	Total test passed: 50
+	Total test failed: 0
+	Total time taken: "13.59 s"
+
+	Test Suite Name		Total Test	Passed		Failed		Time Taken	
+
+	"test-set-0"		50		50		0		"13.59 s"
+<=========================================> 
+
+🐰 Keploy: 2026-10-27T01:54:14.173250825Z 	WARN	Tests passed, but some outgoing calls did not match the recorded mocks.	{"test_sets": "test-set-0", "next_step": "Review the mismatch summary below. Add drifting dynamic fields as noise (test.globalNoise), or re-record the test-set with 'keploy record' if the request structure changed."}
+
+=========================== MOCK MISMATCH ===========================
+
+Test: test-set-0 / post-api-v1-accounts-1
+  Mock mismatch: [HTTP] GET /rest/v1/accounts  →  tjsdcuddiucceuvnzfyp.supabase.co   (closest mock: mock-7)   [match stopped at: no_schema_candidates, 3 candidate mock(s)]
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                               MOCK - 7                                                │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                   EXPECT HEADER                   │                  ACTUAL HEADER                    │
+│ ──────────────────────────────────────────────────┼────────────────────────────────────────────────── │
+│  url: /rest/v1/accounts?id=eq.62cf7fe4-315c-4476- │ url: /rest/v1/accounts?account_number=eq.BA90957  │
+│  d-9c6700460ab6&select=%2A%2Caccount_details%28%2 │ 32&select=%2A%2Caccount_details%28%2A%29          │
+│  9                                                │                                                   │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Hint: Request structure changed since recording. Re-record the test set with 'keploy record', or, if you edited its mocks, remap it with --disable-mapping --update-test-mapping. Each test is served the HTTP calls it recorded. If another test recorded this call and every test may make it (a token, a shared configuration read), declare it in keploy.yaml to serve it to every test (sessionCalls: [{host: "tjsdcuddiucceuvnzfyp.supabase.co", method: "GET", pathPrefix: "/rest/v1/accounts"}]), or record again with 'keploy record' so this test records it.
+
+Test: test-set-0 / post-api-v1-accounts-2
+  Mock mismatch: [HTTP] GET /rest/v1/accounts  →  tjsdcuddiucceuvnzfyp.supabase.co   (closest mock: mock-18)   [match stopped at: no_schema_candidates, 3 candidate mock(s)]
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                               MOCK - 18                                               │
+├───────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                   EXPECT HEADER                   │                  ACTUAL HEADER                    │
+│ ──────────────────────────────────────────────────┼────────────────────────────────────────────────── │
+│  url: /rest/v1/accounts?id=eq.dec8d6ab-33a8-4fe3- │ url: /rest/v1/accounts?account_number=eq.BA50947  │
+│  c-ba35cefdc48c&select=%2A%2Caccount_details%28%2 │ 85&select=%2A%2Caccount_details%28%2A%29          │
+│  9                                                │                                                   │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────┘
+  Hint: Request structure changed since recording. Re-record the test set with 'keploy record', or, if you edited its mocks, remap it with --disable-mapping --update-test-mapping. Each test is served the HTTP calls it recorded. If another test recorded this call and every test may make it (a token, a shared configuration read), declare it in keploy.yaml to serve it to every test (sessionCalls: [{host: "tjsdcuddiucceuvnzfyp.supabase.co", method: "GET", pathPrefix: "/rest/v1/accounts"}]), or record again with 'keploy record' so this test records it.
+
+🐰 Keploy: 2026-10-27T01:54:14.180680252Z 	INFO	stopping Keploy	{"reason": "replay completed successfully"}
+🐰 Keploy: 2026-10-27T01:54:14.182382179Z 	INFO	Stopping keploy agent
+🐰 Keploy(agent): 2026-10-27T01:54:14Z	INFO	stopping Keploy	{"reason": "stop requested via agent API"}
+🐰 Keploy(agent): 2026-10-27T01:54:14Z	INFO	Shutting down agent HTTP server
+🐰 Keploy: 2026-10-27T01:54:14.185512205Z 	INFO	Asked the keploy agent to stop	{"pid": 27}
+🐰 Keploy(agent): 2026-10-27T01:54:14Z	INFO	HTTP server stopped
+🐰 Keploy: 2026-10-27T01:54:14.437033168Z 	INFO	Waiting for the keploy agent to finish shutting down: it removes what it attached to the kernel before it exits, and is stopped by force only if it stops making progress	{"pid": 27}

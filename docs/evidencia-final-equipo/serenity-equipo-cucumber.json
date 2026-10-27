@@ -1,0 +1,6373 @@
+[
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero ver los bolsillos de mi cuenta\n  Para saber cuánto tengo apartado en cada uno",
+    "elements": [
+      {
+        "description": "",
+        "id": "consultar-bolsillos;consultar-los-bolsillos-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Consultar los bolsillos de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3900371500
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2535845300
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "line": 12,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 519184999
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "ella consulta por API los bolsillos de su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:37"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29441599
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29687700
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "la respuesta contiene 2 bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:69"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 91202499
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@smoke",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "consultar-bolsillos;una-cuenta-sin-bolsillos-devuelve-una-lista-vacía",
+        "keyword": "Scenario",
+        "line": 21,
+        "name": "Una cuenta sin bolsillos devuelve una lista vacía",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2890047000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 511484800
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 22,
+            "name": "ella consulta por API los bolsillos de su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:37"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 34190900
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 23,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28394299
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "la respuesta contiene 0 bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:69"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 41442299
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 20
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "consultar-bolsillos;no-se-pueden-consultar-los-bolsillos-de-otro-cliente",
+        "keyword": "Scenario",
+        "line": 27,
+        "name": "No se pueden consultar los bolsillos de otro cliente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2894172399
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3141425499
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 28,
+            "name": "Bruno es cliente con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 426524700
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 29,
+            "name": "Ana consulta por API los bolsillos de la cuenta de Bruno",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:41"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30193799
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 30,
+            "name": "la respuesta HTTP tiene estado 403",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 33448399
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 31,
+            "name": "el código de error es \"FORBIDDEN\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 62273100
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 26
+          },
+          {
+            "name": "@seguridad",
+            "line": 26
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "consultar-bolsillos;ver-en-pantalla-los-bolsillos-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 34,
+        "name": "Ver en pantalla los bolsillos de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2879530599
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2495329599
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Given ",
+            "line": 35,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 7304804799
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "ella inició sesión en FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:20"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2155111400
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 40,
+            "name": "ella abre la pantalla de bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:91"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 94009599
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "Vacaciones"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "Then ",
+            "line": 41,
+            "name": "ella ve los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:119"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 155000599
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 44,
+            "name": "ella ve el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:113"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 169898500
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 45,
+            "name": "ella ve el bolsillo \"Mercado\" con 50000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:113"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 49456500
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 33
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "consultar-bolsillos",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Consultar bolsillos",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "features\\bolsillos\\consultar_bolsillos.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero apartar parte de mi saldo en un bolsillo\n  Para organizar mis ahorros por objetivo",
+    "elements": [
+      {
+        "description": "",
+        "id": "crear-bolsillo;crear-un-bolsillo-descuenta-el-monto-del-saldo-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Crear un bolsillo descuenta el monto del saldo de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2995554999
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1211987299
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "ella crea por API el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:33"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30462799
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "la respuesta HTTP tiene estado 201",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 316414700
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "el saldo de su cuenta es 400000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 68081999
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@smoke",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;se-puede-apartar-todo-el-saldo-disponible",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Se puede apartar todo el saldo disponible",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3009746199
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1232836800
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "ella crea por API el bolsillo \"Carro\" con 500000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:33"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 16989300
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 19,
+            "name": "la respuesta HTTP tiene estado 201",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 275705300
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30878100
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 16
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;rechazar-un-bolsillo-con-nombre-vacío",
+        "keyword": "Scenario Outline",
+        "line": 31,
+        "name": "Rechazar un bolsillo con nombre vacío",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2882744900
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 68025099
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella crea por API el bolsillo \"\" con 1000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:33"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29918699
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 33328599
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"VALIDATION_ERROR\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 312549299
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 39080000
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;rechazar-un-bolsillo-con-monto-negativo",
+        "keyword": "Scenario Outline",
+        "line": 32,
+        "name": "Rechazar un bolsillo con monto negativo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2932972399
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 61207999
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella crea por API el bolsillo \"Carro\" con -1000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:33"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28927900
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28680500
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"VALIDATION_ERROR\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 309759000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45768700
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;rechazar-un-bolsillo-con-monto-mayor-al-saldo",
+        "keyword": "Scenario Outline",
+        "line": 33,
+        "name": "Rechazar un bolsillo con monto mayor al saldo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2935941100
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 530745899
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella crea por API el bolsillo \"Carro\" con 500001",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:33"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29998099
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30182899
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"INSUFFICIENT_AVAILABLE_BALANCE\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 300229300
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 47403800
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;crear-un-bolsillo-desde-la-pantalla-de-bolsillos",
+        "keyword": "Scenario",
+        "line": 36,
+        "name": "Crear un bolsillo desde la pantalla de bolsillos",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3053851999
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 8825351999
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 37,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:24"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 307523900
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 38,
+            "name": "ella crea el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:95"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1523080900
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 39,
+            "name": "ella ve la notificación \"Bolsillo creado\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:61"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 106957600
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 40,
+            "name": "ella ve el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:113"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 310384799
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 41,
+            "name": "el saldo de su cuenta es 400000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31103200
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 35
+          },
+          {
+            "name": "@smoke",
+            "line": 35
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "crear-bolsillo;la-pantalla-pide-el-nombre-antes-de-crear-el-bolsillo",
+        "keyword": "Scenario",
+        "line": 44,
+        "name": "La pantalla pide el nombre antes de crear el bolsillo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3002464500
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5826143400
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 45,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:24"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 359773799
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 46,
+            "name": "ella crea el bolsillo \"\" con 1000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:95"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 87859399
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 47,
+            "name": "ella ve la notificación \"Falta información\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:61"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 337244600
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 48,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 37778599
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 43
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "crear-bolsillo",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Crear bolsillo",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "features\\bolsillos\\crear_bolsillo.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero cambiar el nombre o el monto de un bolsillo\n  Para ajustar mis ahorros cuando cambian mis planes",
+    "elements": [
+      {
+        "description": "",
+        "id": "editar-bolsillo;renombrar-un-bolsillo-conserva-su-saldo",
+        "keyword": "Scenario",
+        "line": 12,
+        "name": "Renombrar un bolsillo conserva su saldo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3118487699
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1319102199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1028407999
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "ella renombra por API el bolsillo \"Vacaciones\" a \"Viaje a Cartagena\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:46"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30592499
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 547921199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "su bolsillo \"Viaje a Cartagena\" tiene 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30277000
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 11
+          },
+          {
+            "name": "@smoke",
+            "line": 11
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;aumentar-el-monto-de-un-bolsillo-descuenta-la-diferencia-de-la-cuenta",
+        "keyword": "Scenario",
+        "line": 18,
+        "name": "Aumentar el monto de un bolsillo descuenta la diferencia de la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3165518000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1325445300
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1450023100
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 19,
+            "name": "ella ajusta por API el monto del bolsillo \"Vacaciones\" a 150000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:50"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29277799
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 544783599
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "su bolsillo \"Vacaciones\" tiene 150000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 325408699
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 22,
+            "name": "el saldo de su cuenta es 350000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 48952199
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 17
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;disminuir-el-monto-de-un-bolsillo-devuelve-la-diferencia-a-la-cuenta",
+        "keyword": "Scenario",
+        "line": 25,
+        "name": "Disminuir el monto de un bolsillo devuelve la diferencia a la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2903074200
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1300861800
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1512232000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 26,
+            "name": "ella ajusta por API el monto del bolsillo \"Vacaciones\" a 40000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:50"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30091899
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 27,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 535332599
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 28,
+            "name": "su bolsillo \"Vacaciones\" tiene 40000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 308906600
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 29,
+            "name": "el saldo de su cuenta es 460000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 46149399
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 24
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;no-se-puede-ajustar-un-bolsillo-por-encima-del-dinero-total",
+        "keyword": "Scenario",
+        "line": 32,
+        "name": "No se puede ajustar un bolsillo por encima del dinero total",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3150880299
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1399514699
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 850557300
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 33,
+            "name": "ella ajusta por API el monto del bolsillo \"Vacaciones\" a 500001",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:50"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 41331599
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 34,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 79379899
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 35,
+            "name": "el código de error es \"INSUFFICIENT_AVAILABLE_BALANCE\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 408356200
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 36,
+            "name": "el saldo de su cuenta es 400000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 60339600
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 31
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "editar-bolsillo;renombrar-un-bolsillo-desde-la-pantalla",
+        "keyword": "Scenario",
+        "line": 39,
+        "name": "Renombrar un bolsillo desde la pantalla",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3577156499
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1491926000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14812981399
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 40,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:24"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2373838700
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 41,
+            "name": "ella renombra el bolsillo \"Vacaciones\" a \"Viaje a Cartagena\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:99"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1185902000
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 42,
+            "name": "ella ve la notificación \"Bolsillo actualizado\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:61"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 346029799
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 43,
+            "name": "ella ve el bolsillo \"Viaje a Cartagena\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:113"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 177181899
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 38
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "editar-bolsillo",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Editar bolsillo",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "features\\bolsillos\\editar_bolsillo.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero eliminar un bolsillo que ya no uso\n  Para que su dinero vuelva a mi cuenta",
+    "elements": [
+      {
+        "description": "",
+        "id": "eliminar-bolsillo;eliminar-un-bolsillo-devuelve-su-saldo-a-la-cuenta",
+        "keyword": "Scenario",
+        "line": 12,
+        "name": "Eliminar un bolsillo devuelve su saldo a la cuenta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3648455699
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1397111799
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1358836400
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "ella elimina por API el bolsillo \"Vacaciones\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:54"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 39528599
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 376753399
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 15,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 617966099
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "su cuenta no tiene bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:75"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 60101200
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 11
+          },
+          {
+            "name": "@smoke",
+            "line": 11
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eliminar-bolsillo;no-se-puede-eliminar-el-bolsillo-de-otro-cliente",
+        "keyword": "Scenario",
+        "line": 19,
+        "name": "No se puede eliminar el bolsillo de otro cliente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3549110600
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1650188099
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3531956899
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 20,
+            "name": "Bruno es cliente con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1448789699
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 21,
+            "name": "él tiene el bolsillo \"Moto\" con 50000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 579102700
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 22,
+            "name": "Ana elimina por API el bolsillo \"Moto\" de Bruno",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:58"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 41059099
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 23,
+            "name": "la respuesta HTTP tiene estado 403",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 61746299
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 24,
+            "name": "el código de error es \"FORBIDDEN\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 355346900
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 25,
+            "name": "el saldo de la cuenta de Bruno es 50000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:54"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 94045000
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 18
+          },
+          {
+            "name": "@seguridad",
+            "line": 18
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "eliminar-bolsillo;eliminar-un-bolsillo-desde-la-pantalla-con-confirmación",
+        "keyword": "Scenario",
+        "line": 28,
+        "name": "Eliminar un bolsillo desde la pantalla con confirmación",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3302100600
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1332322000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene el bolsillo \"Vacaciones\" con 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:15"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 5360678000
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 29,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:24"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 425396899
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 30,
+            "name": "ella elimina el bolsillo \"Vacaciones\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:103"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1525236399
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 31,
+            "name": "ella ve la notificación \"Bolsillo eliminado\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:61"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 61594900
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 32,
+            "name": "ella ve que su cuenta no tiene bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:125"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 308580199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "el saldo de su cuenta es 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29389699
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 27
+          },
+          {
+            "name": "@smoke",
+            "line": 27
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "eliminar-bolsillo",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Eliminar bolsillo",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "features\\bolsillos\\eliminar_bolsillo.feature"
+  },
+  {
+    "description": "  Como clienta de FuBanking\n  Quiero mover dinero de un bolsillo a otro\n  Para reorganizar mis ahorros sin tocar el saldo de la cuenta",
+    "elements": [
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;mover-dinero-de-un-bolsillo-a-otro",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Mover dinero de un bolsillo a otro",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2995871500
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2541301300
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1453847999
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 16,
+            "name": "ella transfiere por API 30000 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:63"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30557200
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 17,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 555790700
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 18,
+            "name": "su bolsillo \"Vacaciones\" tiene 70000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 562406199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "su bolsillo \"Mercado\" tiene 80000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 295870399
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "el saldo de su cuenta es 350000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31070999
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 14
+          },
+          {
+            "name": "@smoke",
+            "line": 14
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;se-puede-transferir-todo-el-saldo-de-un-bolsillo",
+        "keyword": "Scenario",
+        "line": 23,
+        "name": "Se puede transferir todo el saldo de un bolsillo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3242097200
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2597430900
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1507659799
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "ella transfiere por API 100000 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:63"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 21868900
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 532150399
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "su bolsillo \"Vacaciones\" tiene 0",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 561594199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "su bolsillo \"Mercado\" tiene 150000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 37543700
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;no-se-puede-transferir-más-de-lo-que-tiene-el-bolsillo-de-origen",
+        "keyword": "Scenario",
+        "line": 30,
+        "name": "No se puede transferir más de lo que tiene el bolsillo de origen",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3156027299
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2668054600
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 779665799
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 31,
+            "name": "ella transfiere por API 100001 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:63"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14836899
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 32,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31357199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 33,
+            "name": "el código de error es \"INSUFFICIENT_POCKET_BALANCE\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 552897100
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 34,
+            "name": "su bolsillo \"Vacaciones\" tiene 100000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:82"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31041800
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 29
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;el-bolsillo-de-origen-y-el-de-destino-deben-ser-diferentes",
+        "keyword": "Scenario",
+        "line": 37,
+        "name": "El bolsillo de origen y el de destino deben ser diferentes",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3041367100
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2602141700
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 38962799
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 38,
+            "name": "ella transfiere por API 10000 del bolsillo \"Vacaciones\" al bolsillo \"Vacaciones\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:63"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 26442199
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 39,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 16293200
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 40,
+            "name": "el código de error es \"INVALID_TRANSFER_TARGET\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31377099
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 36
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "transferir-entre-bolsillos;transferir-entre-bolsillos-desde-la-pantalla",
+        "keyword": "Scenario",
+        "line": 43,
+        "name": "Transferir entre bolsillos desde la pantalla",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2922716499
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 500000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2635116500
+            },
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "nombre",
+                      "monto"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Vacaciones",
+                      "100000"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "Mercado",
+                      "50000"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "And ",
+            "line": 9,
+            "name": "ella tiene los bolsillos:",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4970811599
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 44,
+            "name": "ella está en la pantalla de bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:24"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 296701999
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 45,
+            "name": "ella transfiere 30000 del bolsillo \"Vacaciones\" al bolsillo \"Mercado\"",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:107"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1481517200
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 46,
+            "name": "ella ve la notificación \"Transferencia realizada\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:61"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 848753700
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 47,
+            "name": "ella ve el bolsillo \"Vacaciones\" con 70000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:113"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 122536800
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 48,
+            "name": "ella ve el bolsillo \"Mercado\" con 80000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:113"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 39621800
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 42
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "transferir-entre-bolsillos",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Transferir entre bolsillos",
+    "tags": [
+      {
+        "name": "@bolsillos",
+        "line": 1
+      }
+    ],
+    "uri": "features\\bolsillos\\transferir_entre_bolsillos.feature"
+  },
+  {
+    "description": "  Para recuperar el acceso a mi cuenta\n  Como cliente que olvidó su contraseña\n  Quiero poder restablecerla de forma segura",
+    "elements": [
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;solicitar-restablecimiento-con-email-existente",
+        "keyword": "Escenario",
+        "line": 11,
+        "name": "Solicitar restablecimiento con email existente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2395514999
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4543871699
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 13,
+            "name": "ella solicita restablecer la contraseña con su email",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:13"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 16621099
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 32533600
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@contrasena",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;solicitar-restablecimiento-con-email-no-registrado",
+        "keyword": "Escenario",
+        "line": 17,
+        "name": "Solicitar restablecimiento con email no registrado",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 557176199
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 18,
+            "name": "alguien solicita restablecer la contraseña del email \"fantasma@fubanking.test\"",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 20661699
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 19,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30822299
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 16
+          },
+          {
+            "name": "@contrasena",
+            "line": 16
+          },
+          {
+            "name": "@validaciones",
+            "line": 16
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;solicitar-restablecimiento-con-email-con-formato-inválido",
+        "keyword": "Escenario",
+        "line": 22,
+        "name": "Solicitar restablecimiento con email con formato inválido",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 43869299
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 23,
+            "name": "alguien solicita restablecer la contraseña del email \"esto-no-es-un-email\"",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 17164399
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 24,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30958999
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 21
+          },
+          {
+            "name": "@contrasena",
+            "line": 21
+          },
+          {
+            "name": "@validaciones",
+            "line": 21
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;verificar-token-de-restablecimiento-inválido",
+        "keyword": "Escenario",
+        "line": 29,
+        "name": "Verificar token de restablecimiento inválido",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45163999
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 30,
+            "name": "alguien verifica el token de restablecimiento \"token-falso-12345\"",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:23"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 17506999
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 31,
+            "name": "la respuesta HTTP tiene estado 401",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29992999
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 28
+          },
+          {
+            "name": "@contrasena",
+            "line": 28
+          },
+          {
+            "name": "@validaciones",
+            "line": 28
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;verificar-token-de-restablecimiento-vacío",
+        "keyword": "Escenario",
+        "line": 34,
+        "name": "Verificar token de restablecimiento vacío",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45270399
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 35,
+            "name": "alguien verifica el token de restablecimiento \"\"",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:23"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 16728299
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 36,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29063699
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 33
+          },
+          {
+            "name": "@contrasena",
+            "line": 33
+          },
+          {
+            "name": "@validaciones",
+            "line": 33
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;restablecer-contraseña-con-token-inválido",
+        "keyword": "Escenario",
+        "line": 41,
+        "name": "Restablecer contraseña con token inválido",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 42917499
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 42,
+            "name": "alguien intenta restablecer la contraseña con token \"token-falso\" y nueva contraseña \"NuevaClave123!\"",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:29"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 20320899
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 43,
+            "name": "la respuesta HTTP tiene estado 401",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30729300
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 40
+          },
+          {
+            "name": "@contrasena",
+            "line": 40
+          },
+          {
+            "name": "@validaciones",
+            "line": 40
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;restablecer-contraseña-con-contraseña-débil",
+        "keyword": "Escenario",
+        "line": 46,
+        "name": "Restablecer contraseña con contraseña débil",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45643099
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 47,
+            "name": "alguien intenta restablecer la contraseña con token \"token-falso\" y nueva contraseña \"1234\"",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:29"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 22158799
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 48,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 27897899
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 45
+          },
+          {
+            "name": "@contrasena",
+            "line": 45
+          },
+          {
+            "name": "@validaciones",
+            "line": 45
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "restablecimiento-de-contraseña;restablecer-contraseña-con-contraseñas-que-no-coinciden",
+        "keyword": "Escenario",
+        "line": 51,
+        "name": "Restablecer contraseña con contraseñas que no coinciden",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 43920699
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 52,
+            "name": "alguien intenta restablecer la contraseña con token \"token-falso\", nueva contraseña \"NuevaClave123!\" y confirmación \"OtraClave456!\"",
+            "match": {
+              "location": "features\\step-definitions\\contrasena.steps.ts:36"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 20289300
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 53,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30150199
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 50
+          },
+          {
+            "name": "@contrasena",
+            "line": 50
+          },
+          {
+            "name": "@validaciones",
+            "line": 50
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "restablecimiento-de-contraseña",
+    "line": 2,
+    "keyword": "Requisito",
+    "name": "Restablecimiento de Contraseña",
+    "tags": [],
+    "uri": "features\\contrasena\\restablecer_contrasena.feature"
+  },
+  {
+    "description": "  Como cliente de FuBanking\n  Quiero simular cuotas de préstamo y gestionar solicitudes de crédito\n  Para tomar decisiones financieras informadas con transparencia",
+    "elements": [
+      {
+        "description": "",
+        "id": "gestión-y-simulación-de-créditos-bancarios;simulación-exitosa-de-crédito-con-cálculo-de-cuota-mensual",
+        "keyword": "Escenario",
+        "line": 9,
+        "name": "Simulación exitosa de crédito con cálculo de cuota mensual",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 662414700
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 10,
+            "name": "que Gabriel abre la plataforma FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 661614999
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 11,
+            "name": "él ingresa al simulador de créditos",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 396653500
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 12,
+            "name": "él simula un préstamo con monto \"5000\", cuotas \"12\" y tasa \"18\"",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:25"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 27117700
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 13,
+            "name": "él observa el resultado de la simulación",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:36"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30674799
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 14,
+            "name": "él confirma que la simulación está lista",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:42"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 33553300
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 2
+          },
+          {
+            "name": "@loans",
+            "line": 2
+          },
+          {
+            "name": "@smoke",
+            "line": 8
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "gestión-y-simulación-de-créditos-bancarios;simulación-con-límites-y-valores-de-frontera",
+        "keyword": "Escenario",
+        "line": 16,
+        "name": "Simulación con límites y valores de frontera",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 648489100
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 17,
+            "name": "que Gabriel abre la plataforma FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 659807800
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 18,
+            "name": "él ingresa al simulador de créditos",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 723971599
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 19,
+            "name": "él simula un préstamo con monto \"25000000\", cuotas \"36\" y tasa \"24\"",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:25"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31043200
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 20,
+            "name": "él observa el resultado de la simulación",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:36"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30836300
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 21,
+            "name": "él confirma que la simulación está lista",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:42"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 33072500
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 2
+          },
+          {
+            "name": "@loans",
+            "line": 2
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "gestión-y-simulación-de-créditos-bancarios;validación-preventiva-ante-montos-y-cuotas-en-cero",
+        "keyword": "Escenario",
+        "line": 23,
+        "name": "Validación preventiva ante montos y cuotas en cero",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 673471799
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 24,
+            "name": "que Gabriel abre la plataforma FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 700991199
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 25,
+            "name": "él ingresa al simulador de créditos",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 390012500
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 26,
+            "name": "él simula un préstamo con monto \"0\", cuotas \"0\" y tasa \"18\"",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:25"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29833400
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 27,
+            "name": "él observa un mensaje de validación en pantalla",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:48"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30407799
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 2
+          },
+          {
+            "name": "@loans",
+            "line": 2
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "gestión-y-simulación-de-créditos-bancarios;verificación-de-requisitos-de-elegibilidad-de-perfil",
+        "keyword": "Escenario",
+        "line": 29,
+        "name": "Verificación de requisitos de elegibilidad de perfil",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 651549599
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 30,
+            "name": "que Gabriel abre la plataforma FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 650890099
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 31,
+            "name": "él ingresa al simulador de créditos",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45603800
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 32,
+            "name": "él observa los requisitos para solicitar crédito en pantalla",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:54"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 61384299
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 33,
+            "name": "él visualiza el botón de solicitar crédito disponible",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:58"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31265300
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 2
+          },
+          {
+            "name": "@loans",
+            "line": 2
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "gestión-y-simulación-de-créditos-bancarios;inspección-de-contenedores-informativos-y-resumen-de-crédito",
+        "keyword": "Escenario",
+        "line": 35,
+        "name": "Inspección de contenedores informativos y resumen de crédito",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 635582800
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 36,
+            "name": "que Gabriel abre la plataforma FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 713880600
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 37,
+            "name": "él ingresa al simulador de créditos",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 76856599
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 38,
+            "name": "él observa el panel de resumen del préstamo",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:62"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45570699
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 2
+          },
+          {
+            "name": "@loans",
+            "line": 2
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "gestión-y-simulación-de-créditos-bancarios;envío-de-solicitud-de-crédito-por-el-cliente-gabriel",
+        "keyword": "Escenario",
+        "line": 40,
+        "name": "Envío de solicitud de crédito por el cliente Gabriel",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 738594299
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 41,
+            "name": "que Gabriel abre la plataforma FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 736142400
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 42,
+            "name": "él ingresa al simulador de créditos",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 506787699
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 43,
+            "name": "él simula un préstamo con monto \"5000\", cuotas \"12\" y tasa \"18\"",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:25"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 107129499
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 44,
+            "name": "él intenta enviar la solicitud de crédito",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:32"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29572799
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 45,
+            "name": "él confirma que la solicitud fue enviada",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:80"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30703399
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 2
+          },
+          {
+            "name": "@loans",
+            "line": 2
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "gestión-y-simulación-de-créditos-bancarios;aprobación-de-crédito-por-el-administrador-andresito",
+        "keyword": "Escenario",
+        "line": 48,
+        "name": "Aprobación de crédito por el Administrador Andresito",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 712466799
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 49,
+            "name": "que Andresito abre la plataforma FuBanking",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:17"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 713623399
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 50,
+            "name": "él ingresa al panel de administración de créditos",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:66"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 137977499
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 51,
+            "name": "él aprueba la solicitud de crédito pendiente",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:70"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 44482699
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 52,
+            "name": "él observa el estado \"Aprobado\" en la solicitud",
+            "match": {
+              "location": "features\\step-definitions\\creditos.steps.ts:74"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45582199
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 2
+          },
+          {
+            "name": "@loans",
+            "line": 2
+          },
+          {
+            "name": "@admin",
+            "line": 47
+          },
+          {
+            "name": "@golden",
+            "line": 47
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "gestión-y-simulación-de-créditos-bancarios",
+    "line": 3,
+    "keyword": "Característica",
+    "name": "Gestión y Simulación de Créditos Bancarios",
+    "tags": [
+      {
+        "name": "@web",
+        "line": 2
+      },
+      {
+        "name": "@loans",
+        "line": 2
+      }
+    ],
+    "uri": "features\\creditos\\creditos.feature"
+  },
+  {
+    "description": "  Como cliente de FuBanking\n  Quiero abonar dinero a mi cuenta\n  Para tener saldo disponible para mis bolsillos",
+    "elements": [
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;depositar-un-monto-válido",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Depositar un monto válido",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2598167300
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 751917100
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 12,
+            "name": "él deposita por API 250000 en su cuenta con la descripción \"Ahorro mensual\"",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29268099
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 13,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 303267500
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "el saldo de su cuenta es 250000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30688299
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@smoke",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;los-depósitos-se-acumulan-en-el-saldo",
+        "keyword": "Scenario",
+        "line": 17,
+        "name": "Los depósitos se acumulan en el saldo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2080311899
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 748334099
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 18,
+            "name": "él deposita por API 100000 en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 746051999
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 19,
+            "name": "él deposita por API 50000 en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 621505600
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 20,
+            "name": "el saldo de su cuenta es 150000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30881899
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 16
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-depósito-de-0",
+        "keyword": "Scenario Outline",
+        "line": 31,
+        "name": "Rechazar un depósito de 0",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2066987600
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 43936199
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "él deposita por API 0 en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14190399
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30006699
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 293178899
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31239200
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-depósito-de--50000",
+        "keyword": "Scenario Outline",
+        "line": 32,
+        "name": "Rechazar un depósito de -50000",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2082337300
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 43183400
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 24,
+            "name": "él deposita por API -50000 en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28621899
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 25,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28942099
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 26,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 293709000
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 27,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30225200
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 22
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-(true)",
+        "keyword": "Scenario Outline",
+        "line": 43,
+        "name": "Rechazar un monto que no es un número (true)",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2070727100
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45347500
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON true en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14458600
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29995600
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 295547800
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30397999
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-(\"abc\")",
+        "keyword": "Scenario Outline",
+        "line": 44,
+        "name": "Rechazar un monto que no es un número (\"abc\")",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2060823699
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 46001300
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON \"abc\" en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14620500
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29054300
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 309169099
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29720799
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-(null)",
+        "keyword": "Scenario Outline",
+        "line": 45,
+        "name": "Rechazar un monto que no es un número (null)",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2073993300
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 44205100
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON null en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14534900
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14883299
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 278962999
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30383299
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;rechazar-un-monto-que-no-es-un-número-([1000])",
+        "keyword": "Scenario Outline",
+        "line": 46,
+        "name": "Rechazar un monto que no es un número ([1000])",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2078398300
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45373099
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 36,
+            "name": "él deposita por API el valor JSON [1000] en su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:21"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14870200
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29797600
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 38,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 293475999
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 39,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30083199
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 34
+          },
+          {
+            "name": "@seguridad",
+            "line": 34
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;no-se-puede-depositar-en-la-cuenta-de-otro-cliente",
+        "keyword": "Scenario",
+        "line": 49,
+        "name": "No se puede depositar en la cuenta de otro cliente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2035580699
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2870595100
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 50,
+            "name": "Diana es clienta con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 262189000
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 51,
+            "name": "Carlos deposita por API 50000 en la cuenta de Diana",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:25"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14147900
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 52,
+            "name": "la respuesta HTTP tiene estado 403",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14486199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 53,
+            "name": "el código de error es \"FORBIDDEN\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 278425999
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 54,
+            "name": "el saldo de la cuenta de Diana es 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:54"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 45918000
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@api",
+            "line": 48
+          },
+          {
+            "name": "@seguridad",
+            "line": 48
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;abonar-saldo-desde-la-pantalla-de-cuentas",
+        "keyword": "Scenario",
+        "line": 57,
+        "name": "Abonar saldo desde la pantalla de cuentas",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2019479700
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4689142399
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 58,
+            "name": "él está en la pantalla de cuentas",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:28"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 294843300
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 59,
+            "name": "él abona 150000 a su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:32"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1494524399
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 60,
+            "name": "él ve la notificación \"Deposito realizado\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:61"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 59709499
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 61,
+            "name": "él ve el saldo de su cuenta en 150000",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:36"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 296766699
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 62,
+            "name": "el saldo de su cuenta es 150000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29793300
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 56
+          },
+          {
+            "name": "@smoke",
+            "line": 56
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "depositar-dinero-en-la-cuenta;el-formulario-de-abono-rechaza-un-monto-en-cero",
+        "keyword": "Scenario",
+        "line": 65,
+        "name": "El formulario de abono rechaza un monto en cero",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2492690599
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4611929099
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 66,
+            "name": "él está en la pantalla de cuentas",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:28"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 278745999
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 67,
+            "name": "él abona 0 a su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:32"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 59499400
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 68,
+            "name": "él ve el error del formulario \"Por favor ingresa un monto válido mayor a cero.\"",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:42"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 296600299
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 69,
+            "name": "el saldo de su cuenta es 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29858200
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@web",
+            "line": 64
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "depositar-dinero-en-la-cuenta",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Depositar dinero en la cuenta",
+    "tags": [
+      {
+        "name": "@deposito",
+        "line": 1
+      }
+    ],
+    "uri": "features\\deposito\\depositar.feature"
+  },
+  {
+    "description": "  Para acceder de forma segura a mis finanzas\n  Como cliente registrado del banco\n  Quiero poder iniciar sesión con mis credenciales",
+    "elements": [
+      {
+        "description": "",
+        "id": "autenticación-de-usuarios;inicio-de-sesión-exitoso",
+        "keyword": "Escenario",
+        "line": 11,
+        "name": "Inicio de sesión exitoso",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2086746700
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 528619599
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 13,
+            "name": "ella inicia sesión con sus credenciales correctas",
+            "match": {
+              "location": "features\\step-definitions\\login.steps.ts:14"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13848999
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29029399
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 15,
+            "name": "la respuesta contiene un token de sesión",
+            "match": {
+              "location": "features\\step-definitions\\login.steps.ts:29"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30422399
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@login",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "autenticación-de-usuarios;inicio-de-sesión-con-contraseña-incorrecta",
+        "keyword": "Escenario",
+        "line": 20,
+        "name": "Inicio de sesión con contraseña incorrecta",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2031873900
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 21,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 515181400
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 22,
+            "name": "ella intenta iniciar sesión con la contraseña \"claveIncorrecta123!\"",
+            "match": {
+              "location": "features\\step-definitions\\login.steps.ts:18"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 13984999
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 23,
+            "name": "la respuesta HTTP tiene estado 401",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30541900
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 19
+          },
+          {
+            "name": "@login",
+            "line": 19
+          },
+          {
+            "name": "@validaciones",
+            "line": 19
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "autenticación-de-usuarios;inicio-de-sesión-con-email-no-registrado",
+        "keyword": "Escenario",
+        "line": 26,
+        "name": "Inicio de sesión con email no registrado",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 276500399
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 27,
+            "name": "alguien intenta iniciar sesión con el email \"noexiste@fubanking.test\" y contraseña \"Clave123!\"",
+            "match": {
+              "location": "features\\step-definitions\\login.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14570799
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 28,
+            "name": "la respuesta HTTP tiene estado 401",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30778799
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 25
+          },
+          {
+            "name": "@login",
+            "line": 25
+          },
+          {
+            "name": "@validaciones",
+            "line": 25
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "autenticación-de-usuarios;inicio-de-sesión-con-campos-vacíos",
+        "keyword": "Escenario",
+        "line": 31,
+        "name": "Inicio de sesión con campos vacíos",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 42944100
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 32,
+            "name": "alguien intenta iniciar sesión con el email \"\" y contraseña \"\"",
+            "match": {
+              "location": "features\\step-definitions\\login.steps.ts:22"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14760899
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 33,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31133099
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 30
+          },
+          {
+            "name": "@login",
+            "line": 30
+          },
+          {
+            "name": "@validaciones",
+            "line": 30
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "autenticación-de-usuarios",
+    "line": 2,
+    "keyword": "Requisito",
+    "name": "Autenticación de Usuarios",
+    "tags": [],
+    "uri": "features\\login\\login.feature"
+  },
+  {
+    "description": "  Para mantener mi información actualizada\n  Como cliente del banco\n  Quiero poder editar los datos de mi perfil personal",
+    "elements": [
+      {
+        "description": "",
+        "id": "edición-de-perfil;actualizar-nombre-exitosamente",
+        "keyword": "Escenario",
+        "line": 11,
+        "name": "Actualizar nombre exitosamente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2008621799
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 515242300
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 13,
+            "name": "ella actualiza su perfil con nombre \"Ana María\" y apellido \"García\"",
+            "match": {
+              "location": "features\\step-definitions\\perfil.steps.ts:11"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14751600
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31054599
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@perfil",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "edición-de-perfil;actualizar-perfil-con-nombre-vacío",
+        "keyword": "Escenario",
+        "line": 19,
+        "name": "Actualizar perfil con nombre vacío",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2188027299
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 20,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 44724099
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 21,
+            "name": "ella actualiza su perfil con nombre \"\" y apellido \"García\"",
+            "match": {
+              "location": "features\\step-definitions\\perfil.steps.ts:11"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30507600
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 22,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29758800
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 18
+          },
+          {
+            "name": "@perfil",
+            "line": 18
+          },
+          {
+            "name": "@validaciones",
+            "line": 18
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "edición-de-perfil;actualizar-perfil-con-apellido-vacío",
+        "keyword": "Escenario",
+        "line": 25,
+        "name": "Actualizar perfil con apellido vacío",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2194205799
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 26,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 44827199
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 27,
+            "name": "ella actualiza su perfil con nombre \"Ana\" y apellido \"\"",
+            "match": {
+              "location": "features\\step-definitions\\perfil.steps.ts:11"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29308599
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 28,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29661399
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 24
+          },
+          {
+            "name": "@perfil",
+            "line": 24
+          },
+          {
+            "name": "@validaciones",
+            "line": 24
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "edición-de-perfil;actualizar-perfil-sin-autenticación",
+        "keyword": "Escenario",
+        "line": 33,
+        "name": "Actualizar perfil sin autenticación",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 40614500
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 34,
+            "name": "alguien intenta actualizar un perfil sin token de sesión",
+            "match": {
+              "location": "features\\step-definitions\\perfil.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30551800
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 35,
+            "name": "la respuesta HTTP tiene estado 401",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29918100
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 32
+          },
+          {
+            "name": "@perfil",
+            "line": 32
+          },
+          {
+            "name": "@validaciones",
+            "line": 32
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "edición-de-perfil",
+    "line": 2,
+    "keyword": "Requisito",
+    "name": "Edición de Perfil",
+    "tags": [],
+    "uri": "features\\perfil\\perfil.feature"
+  },
+  {
+    "description": "  Como cliente nuevo de FuBanking\n  Quiero abonar dinero y apartar una parte en un bolsillo\n  Para empezar a ahorrar desde la aplicación",
+    "elements": [
+      {
+        "description": "",
+        "id": "recorrido-completo-de-ahorro;abonar-a-la-cuenta-y-apartar-una-parte-en-un-bolsillo-nuevo",
+        "keyword": "Scenario",
+        "line": 8,
+        "name": "Abonar a la cuenta y apartar una parte en un bolsillo nuevo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1997557299
+            },
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 9,
+            "name": "Carlos es cliente con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 4478759799
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "él está en la pantalla de cuentas",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:28"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 401434699
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 11,
+            "name": "él abona 200000 a su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:32"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1576067099
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 12,
+            "name": "él ve el saldo de su cuenta en 200000",
+            "match": {
+              "location": "features\\step-definitions\\deposito.steps.ts:36"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1974135500
+            },
+            "arguments": [],
+            "keyword": "When ",
+            "line": 13,
+            "name": "él abre la pantalla de bolsillos",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:91"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 263912799
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 14,
+            "name": "él crea el bolsillo \"Emergencias\" con 50000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:95"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1584858499
+            },
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 15,
+            "name": "él ve el bolsillo \"Emergencias\" con 50000",
+            "match": {
+              "location": "features\\step-definitions\\bolsillos.steps.ts:113"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 294944199
+            },
+            "arguments": [],
+            "keyword": "And ",
+            "line": 16,
+            "name": "el saldo de su cuenta es 150000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30066299
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@web",
+            "line": 1
+          },
+          {
+            "name": "@bolsillos",
+            "line": 1
+          },
+          {
+            "name": "@deposito",
+            "line": 1
+          },
+          {
+            "name": "@smoke",
+            "line": 7
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "recorrido-completo-de-ahorro",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "Recorrido completo de ahorro",
+    "tags": [
+      {
+        "name": "@web",
+        "line": 1
+      },
+      {
+        "name": "@bolsillos",
+        "line": 1
+      },
+      {
+        "name": "@deposito",
+        "line": 1
+      }
+    ],
+    "uri": "features\\recorrido\\abonar_y_ahorrar.feature"
+  },
+  {
+    "description": "  Para comenzar a usar los servicios del banco\n  Como persona interesada\n  Quiero poder registrarme como nuevo cliente",
+    "elements": [
+      {
+        "description": "",
+        "id": "registro-de-usuarios;registro-exitoso-de-nuevo-usuario",
+        "keyword": "Escenario",
+        "line": 11,
+        "name": "Registro exitoso de nuevo usuario",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 1034810400
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 12,
+            "name": "un nuevo usuario se registra con datos válidos",
+            "match": {
+              "location": "features\\step-definitions\\registro.steps.ts:13"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28515300
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 13,
+            "name": "la respuesta HTTP tiene estado 201",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14235000
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 14,
+            "name": "la respuesta contiene un token de sesión",
+            "match": {
+              "location": "features\\step-definitions\\login.steps.ts:29"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30556600
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@registro",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "registro-de-usuarios;registro-con-email-ya-existente",
+        "keyword": "Escenario",
+        "line": 19,
+        "name": "Registro con email ya existente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2192228200
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 20,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 0",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 261925099
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 21,
+            "name": "alguien intenta registrarse con el email de Ana",
+            "match": {
+              "location": "features\\step-definitions\\registro.steps.ts:19"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28760899
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 22,
+            "name": "la respuesta HTTP tiene estado 401",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 61666200
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 18
+          },
+          {
+            "name": "@registro",
+            "line": 18
+          },
+          {
+            "name": "@validaciones",
+            "line": 18
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "registro-de-usuarios;registro-con-contraseña-débil",
+        "keyword": "Escenario",
+        "line": 25,
+        "name": "Registro con contraseña débil",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 53702300
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 26,
+            "name": "un nuevo usuario se registra con la contraseña \"1234\"",
+            "match": {
+              "location": "features\\step-definitions\\registro.steps.ts:26"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29233399
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 27,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 46870900
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 24
+          },
+          {
+            "name": "@registro",
+            "line": 24
+          },
+          {
+            "name": "@validaciones",
+            "line": 24
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "registro-de-usuarios;registro-con-email-inválido",
+        "keyword": "Escenario",
+        "line": 30,
+        "name": "Registro con email inválido",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 39906799
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 31,
+            "name": "un nuevo usuario se registra con el email \"esto-no-es-un-email\"",
+            "match": {
+              "location": "features\\step-definitions\\registro.steps.ts:32"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28843500
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 32,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29738799
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 29
+          },
+          {
+            "name": "@registro",
+            "line": 29
+          },
+          {
+            "name": "@validaciones",
+            "line": 29
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "registro-de-usuarios",
+    "line": 2,
+    "keyword": "Requisito",
+    "name": "Registro de Usuarios",
+    "tags": [],
+    "uri": "features\\registro\\registro.feature"
+  },
+  {
+    "description": "  Para poder utilizar el dinero de mi cuenta bancaria\n  Como cliente del banco\n  Quiero poder retirar fondos de mi cuenta principal",
+    "elements": [
+      {
+        "description": "",
+        "id": "retiro-de-dinero;retirar-un-monto-válido",
+        "keyword": "Escenario",
+        "line": 11,
+        "name": "Retirar un monto válido",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2796116299
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 734831400
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 13,
+            "name": "ella retira por API 20000 de su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\retiro.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 14220900
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 14,
+            "name": "la respuesta HTTP tiene estado 200",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 279425100
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 15,
+            "name": "el saldo de su cuenta es 80000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:47"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30009799
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 10
+          },
+          {
+            "name": "@retiros",
+            "line": 10
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "retiro-de-dinero;intentar-retirar-un-monto-negativo",
+        "keyword": "Escenario",
+        "line": 20,
+        "name": "Intentar retirar un monto negativo",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2992276299
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 21,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 43632400
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 22,
+            "name": "ella retira por API -50000 de su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\retiro.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30637399
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 23,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28643900
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 24,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30088400
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 19
+          },
+          {
+            "name": "@retiros",
+            "line": 19
+          },
+          {
+            "name": "@validaciones",
+            "line": 19
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "retiro-de-dinero;intentar-retirar-cero",
+        "keyword": "Escenario",
+        "line": 27,
+        "name": "Intentar retirar cero",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 3076400600
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 28,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 42942800
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 29,
+            "name": "ella retira por API 0 de su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\retiro.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29068900
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 30,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29754699
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 31,
+            "name": "el código de error es \"INVALID_AMOUNT\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 44120100
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 26
+          },
+          {
+            "name": "@retiros",
+            "line": 26
+          },
+          {
+            "name": "@validaciones",
+            "line": 26
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "retiro-de-dinero;intentar-retirar-más-del-saldo-disponible",
+        "keyword": "Escenario",
+        "line": 34,
+        "name": "Intentar retirar más del saldo disponible",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2787486699
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 35,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 50000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 265973100
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 36,
+            "name": "ella retira por API 200000 de su cuenta",
+            "match": {
+              "location": "features\\step-definitions\\retiro.steps.ts:12"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29157400
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 37,
+            "name": "la respuesta HTTP tiene estado 400",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29891599
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 38,
+            "name": "el código de error es \"INSUFFICIENT_FUNDS\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 30273899
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 33
+          },
+          {
+            "name": "@retiros",
+            "line": 33
+          },
+          {
+            "name": "@validaciones",
+            "line": 33
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "retiro-de-dinero;intentar-retirar-sin-autenticación",
+        "keyword": "Escenario",
+        "line": 43,
+        "name": "Intentar retirar sin autenticación",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 51531799
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 44,
+            "name": "alguien intenta retirar por API 10000 sin autenticación",
+            "match": {
+              "location": "features\\step-definitions\\retiro.steps.ts:18"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29296499
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 45,
+            "name": "la respuesta HTTP tiene estado 401",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 28909600
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 42
+          },
+          {
+            "name": "@retiros",
+            "line": 42
+          },
+          {
+            "name": "@validaciones",
+            "line": 42
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "retiro-de-dinero;intentar-retirar-de-una-cuenta-inexistente",
+        "keyword": "Escenario",
+        "line": 48,
+        "name": "Intentar retirar de una cuenta inexistente",
+        "steps": [
+          {
+            "result": {
+              "status": "passed",
+              "duration": 2758608200
+            },
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 49,
+            "name": "Ana es clienta con una cuenta de ahorros con saldo de 100000",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:16"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 276400299
+            },
+            "arguments": [],
+            "keyword": "Cuando ",
+            "line": 50,
+            "name": "ella intenta retirar por API 20000 de una cuenta inexistente",
+            "match": {
+              "location": "features\\step-definitions\\retiro.steps.ts:24"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29453600
+            },
+            "arguments": [],
+            "keyword": "Entonces ",
+            "line": 51,
+            "name": "la respuesta HTTP tiene estado 404",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:34"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 31081200
+            },
+            "arguments": [],
+            "keyword": "Y ",
+            "line": 52,
+            "name": "el código de error es \"ACCOUNT_NOT_FOUND\"",
+            "match": {
+              "location": "features\\step-definitions\\cliente.steps.ts:40"
+            }
+          },
+          {
+            "result": {
+              "status": "passed",
+              "duration": 29660999
+            },
+            "keyword": "After",
+            "hidden": true
+          }
+        ],
+        "tags": [
+          {
+            "name": "@api",
+            "line": 47
+          },
+          {
+            "name": "@retiros",
+            "line": 47
+          },
+          {
+            "name": "@validaciones",
+            "line": 47
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "retiro-de-dinero",
+    "line": 2,
+    "keyword": "Requisito",
+    "name": "Retiro de Dinero",
+    "tags": [],
+    "uri": "features\\retiro\\retirar_dinero.feature"
+  }
+]
