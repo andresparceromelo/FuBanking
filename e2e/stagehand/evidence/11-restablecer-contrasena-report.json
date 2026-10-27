@@ -1,0 +1,99 @@
+{
+  "scenario": "11-restablecer-contrasena",
+  "executedAt": "2026-10-27T02:27:11.325Z",
+  "totalSteps": 11,
+  "steps": [
+    {
+      "step": "Enviar solicitud reset",
+      "capability": "act",
+      "instruction": "Email: pruebaskatalon2@gmail.com",
+      "result": "Enviado",
+      "durationMs": 5153
+    },
+    {
+      "step": "Verificar mensaje de confirmación",
+      "capability": "extract",
+      "instruction": "Extract success message",
+      "result": {
+        "successMessage": false,
+        "messageText": ""
+      },
+      "durationMs": 6403
+    },
+    {
+      "step": "Submit con email inválido",
+      "capability": "act",
+      "instruction": "Click submit invalid email",
+      "result": "Enviado",
+      "durationMs": 3874
+    },
+    {
+      "step": "Verificar error email inválido",
+      "capability": "extract",
+      "instruction": "Extract email format error",
+      "result": {
+        "errorVisible": true,
+        "errorText": "El correo electrónico es requerido"
+      },
+      "durationMs": 14581
+    },
+    {
+      "step": "Submit con email vacío",
+      "capability": "act",
+      "instruction": "Click submit empty",
+      "result": "Enviado",
+      "durationMs": 4537
+    },
+    {
+      "step": "Enviar nueva contraseña",
+      "capability": "act",
+      "instruction": "Click submit new password",
+      "result": "Enviado",
+      "durationMs": 12987
+    },
+    {
+      "step": "Verificar éxito de cambio de contraseña",
+      "capability": "extract",
+      "instruction": "Extract success message",
+      "result": {
+        "successVisible": true,
+        "successText": "¡Contraseña actualizada! Tu contraseña se ha cambiado correctamente. Ya puedes iniciar sesión con tus nuevas credenciales."
+      },
+      "durationMs": 2071
+    },
+    {
+      "step": "Submit contraseñas que no coinciden",
+      "capability": "act",
+      "instruction": "Click submit mismatched passwords",
+      "result": "Enviado",
+      "durationMs": 3796
+    },
+    {
+      "step": "Verificar error contraseñas no coinciden",
+      "capability": "extract",
+      "instruction": "Extract mismatch error",
+      "result": {
+        "errorVisible": true,
+        "errorText": "Las contraseñas no coinciden"
+      },
+      "durationMs": 20620
+    },
+    {
+      "step": "Submit con contraseña débil en reset",
+      "capability": "act",
+      "instruction": "Click submit weak password reset",
+      "result": "Enviado",
+      "durationMs": 4154
+    },
+    {
+      "step": "Verificar error contraseña débil",
+      "capability": "extract",
+      "instruction": "Extract weak password error",
+      "result": {
+        "passwordError": true,
+        "errorText": "La contraseña es demasiado débil. Por favor refuérzala antes de continuar."
+      },
+      "durationMs": 27611
+    }
+  ]
+}

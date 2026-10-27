@@ -15,9 +15,7 @@ export default async function ResetPasswordPage({ searchParams }: PageProps) {
   const params = await searchParams;
   const token = typeof params.token === 'string' ? params.token : '';
 
-  if (!token) {
-    redirect('/login');
-  }
+  // No redirigimos — ResetPasswordForm mostrará "Enlace inválido" si el token no existe o es inválido
 
   return (
     <div>

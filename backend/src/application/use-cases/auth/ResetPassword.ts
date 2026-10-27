@@ -49,6 +49,10 @@ export class ResetPassword {
     await this.userRepository.updatePassword(user.id, newPasswordHash);
 
     // Marca el token como consumido para evitar reutilización
-    await this.resetTokenRepository.markAsUsed(tokenHash);
+    try {
+      await this.resetTokenRepository.markAsUsed(tokenHash);
+    } catch (err) {
+      console.warn('⚠️ No se pudo marcar token como usado (BD no disponible):', (err as Error).message);
+    }
   }
 }

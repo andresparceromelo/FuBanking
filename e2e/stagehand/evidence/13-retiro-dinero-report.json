@@ -1,0 +1,137 @@
+{
+  "scenario": "13-retiro-dinero",
+  "executedAt": "2026-10-27T02:31:32.843Z",
+  "totalSteps": 13,
+  "steps": [
+    {
+      "step": "Abrir modal de retiro",
+      "capability": "act",
+      "instruction": "Click Retirar",
+      "result": "Modal abierto",
+      "durationMs": 12457
+    },
+    {
+      "step": "Confirmar retiro $1000",
+      "capability": "act",
+      "instruction": "Click dw-submit",
+      "result": "Enviado",
+      "durationMs": 6169
+    },
+    {
+      "step": "Verificar retiro completado",
+      "capability": "extract",
+      "instruction": "Check Retirar button visible",
+      "result": {
+        "backToAccounts": false
+      },
+      "durationMs": 2693
+    },
+    {
+      "step": "Abrir modal retiro",
+      "capability": "act",
+      "instruction": "Click Retirar",
+      "result": "Modal abierto",
+      "durationMs": 4324
+    },
+    {
+      "step": "Submit retiro saldo insuficiente",
+      "capability": "act",
+      "instruction": "Click dw-submit huge amount",
+      "result": "Enviado",
+      "durationMs": 29312
+    },
+    {
+      "step": "Verificar error saldo insuficiente",
+      "capability": "extract",
+      "instruction": "Extract insufficient funds error",
+      "result": {
+        "errorVisible": true,
+        "errorText": "Saldo insuficiente en la cuenta para realizar este retiro.",
+        "modalOpen": true
+      },
+      "durationMs": 23652
+    },
+    {
+      "step": "Abrir modal retiro",
+      "capability": "act",
+      "instruction": "Click Retirar",
+      "result": "Modal abierto",
+      "durationMs": 13161
+    },
+    {
+      "step": "Submit retiro monto cero",
+      "capability": "act",
+      "instruction": "Click dw-submit amount=0",
+      "result": "Enviado",
+      "durationMs": 9337
+    },
+    {
+      "step": "Verificar validación monto cero",
+      "capability": "extract",
+      "instruction": "Extract invalid amount validation",
+      "result": {
+        "validationError": true,
+        "errorText": "Por favor ingresa un monto válido mayor a cero.",
+        "modalOpen": true
+      },
+      "durationMs": 25802
+    },
+    {
+      "step": "Abrir modal retiro",
+      "capability": "act",
+      "instruction": "Click Retirar",
+      "result": "Modal abierto",
+      "durationMs": 12688
+    },
+    {
+      "step": "Observar modal abierto",
+      "capability": "observe",
+      "instruction": "Find Retirar Dinero modal",
+      "result": {
+        "data": [
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/main[1]/section[1]/div[4]/div[1]/div[1]/div[1]/div[2]/h3[1]",
+            "description": "The title of the Retirar Dinero modal",
+            "method": "click",
+            "arguments": []
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/main[1]/section[1]/div[4]/div[1]/form[1]/div[3]/button[1]",
+            "description": "The Cancelar button in the Retirar Dinero modal",
+            "method": "click",
+            "arguments": []
+          }
+        ],
+        "metadata": {
+          "cache": {
+            "status": "DISABLED"
+          },
+          "usage": {
+            "inputTokens": 1409,
+            "outputTokens": 114,
+            "reasoningTokens": 0,
+            "cachedInputTokens": 0,
+            "inferenceTimeMs": 1341
+          }
+        }
+      },
+      "durationMs": 0
+    },
+    {
+      "step": "Cancelar retiro",
+      "capability": "act",
+      "instruction": "Click Cancelar",
+      "result": "Click realizado",
+      "durationMs": 6604
+    },
+    {
+      "step": "Verificar modal cerrado",
+      "capability": "extract",
+      "instruction": "Check modal closed",
+      "result": {
+        "retirarButtonVisible": true
+      },
+      "durationMs": 5236
+    }
+  ]
+}

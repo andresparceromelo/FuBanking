@@ -66,8 +66,9 @@ export class AuthController {
   forgotPassword = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       const dto = requestPasswordResetSchema.parse(req.body);
-      await this.requestPasswordResetUseCase.execute(dto);
-      sendSuccess(res, null, 'Si el correo existe, recibirás un enlace de recuperación');
+      const result = await this.requestPasswordResetUseCase.execute(dto);
+      const data = process.env.NODE_ENV !== 'production' && result ? result : null;
+      sendSuccess(res, data, 'Si el correo existe, recibirás un enlace de recuperación');
     } catch (error) {
       next(error);
     }

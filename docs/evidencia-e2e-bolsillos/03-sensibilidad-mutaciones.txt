@@ -1,0 +1,271 @@
+SENSIBILIDAD DE LA SUITE E2E — mutaciones introducidas a propósito (y revertidas)
+Rama: tests/bolsillos-e2e-serenity · base: 9be8d21 · 2026-10-10 11:03
+Procedimiento: aplicar 1 mutación → esperar recarga de tsx/next → ejecutar escenarios afectados → git checkout
+
+================================================================================
+M1 — Reintroducir E2E-01: getAuthToken() solo lee localStorage
+Archivo: frontend/src/shared/services/api.client.ts
+Comando: npm test -- --tags @web
+--- diff de la mutación ---
+diff --git a/frontend/src/shared/services/api.client.ts b/frontend/src/shared/services/api.client.ts
+index 301c9cf..f0bea06 100644
+--- a/frontend/src/shared/services/api.client.ts
++++ b/frontend/src/shared/services/api.client.ts
+@@ -13,10 +13,6 @@ function getAuthToken(): string | null {
+   if (globalThis.window === undefined) return null;
+   const local = localStorage.getItem('token');
+   if (local) return local;
+-  const session = sessionStorage.getItem('token');
+-  if (session) return session;
+-  const cookieMatch = document.cookie.match(/(?:^|;\s*)token=([^;]+)/);
+-  if (cookieMatch) return decodeURIComponent(cookieMatch[1]);
+   return null;
+ }
+ 
+--- resultado (exit 1) ---
+Execution Summary
+
+Consultar bolsillos:           1 failed, 1 total (43s 430ms)
+Crear bolsillo:                2 failed, 2 total (1m 12s 903ms)
+Depositar dinero en la cuenta: 2 failed, 2 total (1m 12s 121ms)
+Editar bolsillo:               1 failed, 1 total (37s 579ms)
+Eliminar bolsillo:             1 failed, 1 total (37s 122ms)
+Recorrido completo de ahorro:  1 failed, 1 total (36s 140ms)
+Transferir entre bolsillos:    1 compromised, 1 total (11s 314ms)
+
+Total time: 5m 10s 609ms
+Real time: 5m 11s 525ms
+Scenarios:  9
+================================================================================
+--- pasos que fallaron ---
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 276ms)
+✗ Execution failed with assertion error (43s 430ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 140ms)
+✗ Execution failed with assertion error (36s 498ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 46ms)
+✗ Execution failed with assertion error (36s 405ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 110ms)
+✗ Execution failed with assertion error (37s 579ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 95ms)
+✗ Execution failed with assertion error (37s 122ms)
+        ✗ Ana sends a POST request to 'accounts' (10s 15ms)
+✗ Execution compromised (11s 314ms)
+      ✗ Carlos waits until botón Abonar does become visible (30s 167ms)
+✗ Execution failed with assertion error (36s 55ms)
+      ✗ Carlos waits until botón Abonar does become visible (30s 285ms)
+✗ Execution failed with assertion error (36s 66ms)
+      ✗ Carlos waits until botón Abonar does become visible (30s 320ms)
+✗ Execution failed with assertion error (36s 140ms)
+--- primeras aserciones ---
+  AssertionError: Timeout of 30s has expired while waiting for the value of selector de cuenta to not equal ""
+  Expected string
+  Caused by: TimeoutExpiredError: Timeout of 30s has expired
+  AssertionError: Timeout of 30s has expired while waiting for the value of selector de cuenta to not equal ""
+  Expected string
+  Caused by: TimeoutExpiredError: Timeout of 30s has expired
+  AssertionError: Timeout of 30s has expired while waiting for the value of selector de cuenta to not equal ""
+  Expected string
+  Caused by: TimeoutExpiredError: Timeout of 30s has expired
+  AssertionError: Timeout of 30s has expired while waiting for the value of selector de cuenta to not equal ""
+  Expected string
+  Caused by: TimeoutExpiredError: Timeout of 30s has expired
+--- revertido: 0 cambios pendientes en el archivo ---
+
+================================================================================
+M2 — DeletePocket resta (en vez de sumar) el monto al saldo
+Archivo: backend/src/application/use-cases/pocket/DeletePocket.ts
+Comando: npm test -- --name liminar
+--- diff de la mutación ---
+diff --git a/backend/src/application/use-cases/pocket/DeletePocket.ts b/backend/src/application/use-cases/pocket/DeletePocket.ts
+index 5d4385d..ca9985c 100644
+--- a/backend/src/application/use-cases/pocket/DeletePocket.ts
++++ b/backend/src/application/use-cases/pocket/DeletePocket.ts
+@@ -46,7 +46,7 @@ export class DeletePocket {
+     const pocketAmount = pocket.amount;
+     const pocketName = pocket.name;
+     await this.pocketRepository.delete(dto.pocketId);
+-    await this.accountRepository.updateBalance(account.id, account.balance + pocketAmount);
++    await this.accountRepository.updateBalance(account.id, account.balance - pocketAmount);
+ 
+     if (this.notificationRepository) {
+       await this.notificationRepository.save(new Notification({
+--- resultado (exit 1) ---
+Execution Summary
+
+Eliminar bolsillo: 2 failed, 1 successful, 3 total (24s 974ms)
+
+Total time: 24s 974ms
+Real time: 25s 794ms
+Scenarios:  3
+================================================================================
+--- pasos que fallaron ---
+    ✗ Ana ensures that el saldo de la cuenta does equal 500000 (2ms)
+✗ Execution failed with assertion error (6s 123ms)
+    ✗ Ana ensures that el saldo de la cuenta does equal 500000 (2ms)
+✗ Execution failed with assertion error (10s 516ms)
+--- primeras aserciones ---
+  AssertionError: Expected el saldo de la cuenta to equal 500000
+  Expected number: 500000
+  AssertionError: Expected el saldo de la cuenta to equal 500000
+  Expected number: 500000
+--- revertido: 0 cambios pendientes en el archivo ---
+
+================================================================================
+M3 — DepositMoney sin verificación de propiedad (assertBelongsTo)
+Archivo: backend/src/application/use-cases/account/DepositMoney.ts
+Comando: npm test -- --tags @deposito and @api
+--- diff de la mutación ---
+diff --git a/backend/src/application/use-cases/account/DepositMoney.ts b/backend/src/application/use-cases/account/DepositMoney.ts
+index 5881676..604e2ec 100644
+--- a/backend/src/application/use-cases/account/DepositMoney.ts
++++ b/backend/src/application/use-cases/account/DepositMoney.ts
+@@ -28,7 +28,7 @@ export class DepositMoney {
+       throw new AppError('La cuenta no existe', 404, 'ACCOUNT_NOT_FOUND');
+     }
+ 
+-    account.assertBelongsTo(dto.userId);
++// MUTACION     account.assertBelongsTo(dto.userId);
+ 
+     if (!account.isOperational()) {
+       throw new AppError('La cuenta no está activa', 400, 'ACCOUNT_INACTIVE');
+--- resultado (exit 1) ---
+Execution Summary
+
+Depositar dinero en la cuenta: 1 failed, 8 successful, 9 total (26s 482ms)
+
+Total time: 26s 482ms
+Real time: 27s 417ms
+Scenarios:  9
+================================================================================
+--- pasos que fallaron ---
+    ✗ Carlos ensures that the status of the last response does equal 403 (9ms)
+✗ Execution failed with assertion error (5s 693ms)
+--- primeras aserciones ---
+  AssertionError: Expected the status of the last response to equal 403
+  Expected number: 403
+--- revertido: 0 cambios pendientes en el archivo ---
+
+================================================================================
+M4 — Modal de abono sin la validación de monto > 0 en el cliente
+Archivo: frontend/src/features/account/components/DepositWithdrawModal.tsx
+Comando: npm test -- --tags @deposito and @web
+--- diff de la mutación ---
+diff --git a/frontend/src/features/account/components/DepositWithdrawModal.tsx b/frontend/src/features/account/components/DepositWithdrawModal.tsx
+index b05f3fc..29eb119 100644
+--- a/frontend/src/features/account/components/DepositWithdrawModal.tsx
++++ b/frontend/src/features/account/components/DepositWithdrawModal.tsx
+@@ -40,7 +40,7 @@ export function DepositWithdrawModal({ account, type, isOpen, onClose, onSuccess
+     setError(null);
+ 
+     const numericAmount = Number.parseFloat(amount);
+-    if (Number.isNaN(numericAmount) || numericAmount <= 0) {
++    if (Number.isNaN(numericAmount)) {
+       setError('Por favor ingresa un monto válido mayor a cero.');
+       return;
+     }
+--- resultado (exit 1) ---
+Execution Summary
+
+Depositar dinero en la cuenta: 1 failed, 1 successful, 2 total (40s 771ms)
+Recorrido completo de ahorro:  1 successful, 1 total (11s 649ms)
+
+Total time: 52s 420ms
+Real time: 53s 459ms
+Scenarios:  3
+================================================================================
+--- pasos que fallaron ---
+    ✗ Carlos ensures that the text of mensaje de error del formulario does eventually equal "Por favor ingresa un monto válido mayor a cero." (25s 549ms)
+✗ Execution failed with assertion error (31s 824ms)
+--- primeras aserciones ---
+  AssertionError: Expected the text of mensaje de error del formulario to eventually equal "Por favor ingresa un monto válido mayor a cero."
+  Expected string: Por favor ingresa un monto válido mayor a cero.
+  Caused by: TimeoutExpiredError: Timeout of 15s has expired
+--- revertido: 0 cambios pendientes en el archivo ---
+
+================================================================================
+M5 — handleTransfer no recarga los bolsillos tras transferir
+Archivo: frontend/src/features/pockets/handlers/pocket.handlers.ts
+Comando: npm test -- --name Transferir entre bolsillos desde la pantalla
+--- diff de la mutación ---
+diff --git a/frontend/src/features/pockets/handlers/pocket.handlers.ts b/frontend/src/features/pockets/handlers/pocket.handlers.ts
+index 0af5c86..644794a 100644
+--- a/frontend/src/features/pockets/handlers/pocket.handlers.ts
++++ b/frontend/src/features/pockets/handlers/pocket.handlers.ts
+@@ -141,7 +141,7 @@ export async function handleTransfer(deps: TransferDeps, input: TransferInput):
+       amount: Number(input.transferAmount),
+     });
+     deps.toast.success('Transferencia realizada', `${result.fromPocket.name} → ${result.toPocket.name}`);
+-    await deps.loadPockets();
++// MUTACION     await deps.loadPockets();
+   } catch (error: any) {
+     const mensaje = backendMessage(error, 'No fue posible transferir el saldo.');
+     deps.toast.error('No fue posible transferir el saldo', mensaje);
+--- resultado (exit 1) ---
+Execution Summary
+
+Transferir entre bolsillos: 1 failed, 1 total (38s 551ms)
+
+Total time: 38s 551ms
+Real time: 39s 501ms
+Scenarios:  1
+================================================================================
+--- pasos que fallaron ---
+    ✗ Ana ensures that el saldo en pantalla del bolsillo "Vacaciones" does eventually equal 70000 (25s 855ms)
+✗ Execution failed with assertion error (38s 551ms)
+--- primeras aserciones ---
+  AssertionError: Expected el saldo en pantalla del bolsillo "Vacaciones" to eventually equal 70000
+  Expected number: 70000
+  Caused by: TimeoutExpiredError: Timeout of 15s has expired
+--- revertido: 0 cambios pendientes en el archivo ---
+
+================================================================================
+RESTAURADO — código de producción sin cambios: git status = ''
+Comando: npm run test:smoke
+--- resultado (exit 0) ---
+Execution Summary
+
+Consultar bolsillos:           1 successful, 1 total (6s 404ms)
+Crear bolsillo:                2 successful, 2 total (13s 998ms)
+Depositar dinero en la cuenta: 2 successful, 2 total (10s 803ms)
+Editar bolsillo:               1 successful, 1 total (5s 167ms)
+Eliminar bolsillo:             2 successful, 2 total (15s 777ms)
+Recorrido completo de ahorro:  1 successful, 1 total (11s 431ms)
+Transferir entre bolsillos:    1 successful, 1 total (7s 335ms)
+
+Total time: 1m 10s 915ms
+Real time: 1m 11s 968ms
+Scenarios:  10
+================================================================================
+
+================================================================================
+M1 (repetición) — en la corrida de M1, 'Transferir entre bolsillos desde la pantalla' quedó
+COMPROMETIDO antes de llegar al código mutado: POST /accounts superó el timeout de 10 s de
+CallAnApi durante la preparación de datos (latencia de Supabase). Se repite solo ese escenario.
+Comando: npm test -- --name "Transferir entre bolsillos desde la pantalla"
+--- diff de la mutación ---
+@@ -13,10 +13,6 @@ function getAuthToken(): string | null {
+   if (globalThis.window === undefined) return null;
+   const local = localStorage.getItem('token');
+   if (local) return local;
+-  const session = sessionStorage.getItem('token');
+-  if (session) return session;
+-  const cookieMatch = document.cookie.match(/(?:^|;\s*)token=([^;]+)/);
+-  if (cookieMatch) return decodeURIComponent(cookieMatch[1]);
+   return null;
+ }
+ 
+--- resultado (exit 1) ---
+Execution Summary
+
+Transferir entre bolsillos: 1 failed, 1 total (39s 690ms)
+
+Total time: 39s 690ms
+Real time: 40s 542ms
+Scenarios:  1
+================================================================================
+--- pasos que fallaron ---
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 276ms)
+✗ Execution failed with assertion error (39s 690ms)
+--- primeras aserciones ---
+  AssertionError: Timeout of 30s has expired while waiting for the value of selector de cuenta to not equal ""
+--- revertido: 0 cambios pendientes en el archivo ---

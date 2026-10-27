@@ -113,23 +113,24 @@ describe('Integración 2FA — Pruebas de caja blanca (tabla de caminos Frontend
   });
   test('C8 - intentos máximos alcanzados: POST /2fa/verify → 401 MAX_ATTEMPTS_REACHED', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });
-    deps.verificationCodeRepository.seed(buildVerificationCode({ used: false, attempts: 5 }));
+    deps.verificationCodeRepository.seed(buildVerificationCode({ used: false, attempts: 1 }));
     const res = await request(app)
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: validToken, code: '333333' });
     expect(res.status).toBe(401);
     expect(res.body.error).toMatchObject({ code: 'MAX_ATTEMPTS_REACHED' });
   });
-  test('C9 - código incorrecto (intentos < max): POST /2fa/verify → 401 INVALID_OTP, incrementa intentos', async () => {
+  test('C9 - código incorrecto al primer intento: POST /2fa/verify → 401 MAX_ATTEMPTS_REACHED y anulación', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });
-    deps.verificationCodeRepository.seed(buildVerificationCode({ used: false, attempts: 1 }));
+    deps.verificationCodeRepository.seed(buildVerificationCode({ used: false, attempts: 0 }));
     const res = await request(app)
       .post('/api/v1/auth/2fa/verify')
       .send({ temporaryToken: validToken, code: '444444' });
     expect(res.status).toBe(401);
-    expect(res.body.error).toMatchObject({ code: 'INVALID_OTP' });
+    expect(res.body.error).toMatchObject({ code: 'MAX_ATTEMPTS_REACHED' });
     const updatedCode = await deps.verificationCodeRepository.findLatestByUserId('user-456');
-    expect(updatedCode!.attempts).toBe(2);
+    expect(updatedCode!.attempts).toBe(1);
+    expect(updatedCode!.isUsed()).toBe(true);
   });
   test('C10 - flujo completo con 2FA exitoso: POST /2fa/verify → 200 { token, user }', async () => {
     const validToken = deps.tokenService.generate({ userId: 'user-456', email: 'ana@example.com' });

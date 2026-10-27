@@ -1,6 +1,7 @@
 'use client';
 
 import { useAccounts } from '@/features/account/hooks/useAccounts';
+import { ConfirmCardPasswordModal } from '@/features/cards/components/ConfirmCardPasswordModal';
 import { VirtualCard } from '@/features/cards/components/VirtualCard';
 import { useCards } from '@/features/cards/hooks/useCards';
 import { useAuth } from '@/shared/hooks/useAuth';
@@ -14,6 +15,7 @@ export default function CardsPage() {
   const { accounts } = useAccounts();
   const { cards, isLoading, error, setError, fetchCards, createCard, toggleLock, deleteCard } = useCards();
   const [accountId, setAccountId] = useState('');
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const activeAccountId = accountId || accounts[0]?.id || '';
   const selectedAccount = useMemo(
     () => accounts.find((account) => account.id === activeAccountId),
@@ -31,20 +33,24 @@ export default function CardsPage() {
     return () => globalThis.clearTimeout(timeoutId);
   }, [loadCards]);
 
-  const handleCreate = async () => {
+  const handleOpenCreateModal = () => {
     setError(null);
     if (!activeAccountId) {
       setError('Selecciona una cuenta para crear la tarjeta.');
       return;
     }
+    setIsAuthModalOpen(true);
+  };
 
-    const card = await createCard(activeAccountId);
+  const handleConfirmCreate = async (password: string): Promise<boolean> => {
+    const card = await createCard(activeAccountId, password);
     if (!card) {
-      toast.error('No pudimos crear la tarjeta', 'Intenta nuevamente.');
-      return;
+      toast.error('No pudimos crear la tarjeta', 'Verifica tu contraseña e intenta nuevamente.');
+      return false;
     }
 
     toast.success('Tarjeta creada', `Terminada en ${card.lastFour}.`);
+    return true;
   };
 
   const handleToggle = async (cardId: string) => {
@@ -114,7 +120,7 @@ export default function CardsPage() {
 
           <button
             type="button"
-            onClick={handleCreate}
+            onClick={handleOpenCreateModal}
             disabled={isLoading || !activeAccountId}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground disabled:opacity-50"
           >
@@ -145,6 +151,16 @@ export default function CardsPage() {
           )}
         </section>
       </div>
+
+      <ConfirmCardPasswordModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onConfirm={handleConfirmCreate}
+        accountNumber={selectedAccount?.accountNumber}
+        accountType={selectedAccount?.accountType}
+        isLoading={isLoading}
+        externalError={error}
+      />
     </div>
   );
 }

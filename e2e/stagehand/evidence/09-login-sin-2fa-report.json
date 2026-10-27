@@ -1,0 +1,69 @@
+{
+  "scenario": "09-login-sin-2fa",
+  "executedAt": "2026-10-27T02:17:32.134Z",
+  "totalSteps": 8,
+  "steps": [
+    {
+      "step": "Ingresar credenciales válidas",
+      "capability": "act",
+      "instruction": "email=pruebaskatalon@gmail.com",
+      "result": "Campos llenados",
+      "durationMs": 0
+    },
+    {
+      "step": "Enviar formulario login",
+      "capability": "act",
+      "instruction": "Click submit",
+      "result": "Formulario enviado",
+      "durationMs": 4039
+    },
+    {
+      "step": "Login con Recordarme activado",
+      "capability": "act",
+      "instruction": "Submit con checkbox marcado",
+      "result": "Enviado",
+      "durationMs": 4028
+    },
+    {
+      "step": "Submit con contraseña incorrecta",
+      "capability": "act",
+      "instruction": "Click submit",
+      "result": "Enviado",
+      "durationMs": 3033
+    },
+    {
+      "step": "Verificar mensaje de error (contraseña incorrecta)",
+      "capability": "extract",
+      "instruction": "Extract error message",
+      "result": {
+        "errorVisible": true,
+        "errorText": "Verificado"
+      },
+      "durationMs": 1199
+    },
+    {
+      "step": "Submit con email no registrado",
+      "capability": "act",
+      "instruction": "Click submit",
+      "result": "Enviado",
+      "durationMs": 3028
+    },
+    {
+      "step": "Submit con campos vacíos",
+      "capability": "act",
+      "instruction": "Click submit empty form",
+      "result": "Enviado",
+      "durationMs": 1541
+    },
+    {
+      "step": "Verificar mensajes de validación campos vacíos",
+      "capability": "extract",
+      "instruction": "Extract validation errors",
+      "result": {
+        "emailError": true,
+        "passwordError": true
+      },
+      "durationMs": 847
+    }
+  ]
+}

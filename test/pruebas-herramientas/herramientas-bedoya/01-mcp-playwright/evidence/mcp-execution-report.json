@@ -1,0 +1,77 @@
+{
+  "title": "Reporte de Ejecución - Microsoft Playwright MCP Server",
+  "target": "FuBanking - Módulo de Créditos (/loans)",
+  "executedBy": "Andres Bedoya Cano",
+  "date": "2026-10-26T00:27:57.273Z",
+  "status": "SUCCESS",
+  "protocol": "Model Context Protocol (MCP) v2024-11-05",
+  "server": "@playwright/mcp (Microsoft)",
+  "stepsCount": 10,
+  "evidenceFiles": [
+    "01-loans-simulator-snapshot.txt",
+    "02-resultado-simulacion-snapshot.txt",
+    "simulacion-credito-mcp.png"
+  ],
+  "steps": [
+    {
+      "step": "Conexión inicializada con @playwright/mcp sobre transporte stdio",
+      "tool": "client.connect",
+      "resultSummary": "Conexión exitosa",
+      "timestamp": "2026-10-26T00:27:38.561Z"
+    },
+    {
+      "step": "Navegación inicial hacia /login",
+      "tool": "browser_navigate",
+      "resultSummary": "### Ran Playwright code\n```js\nawait page.goto('http://localhost:3000/login');\n```\n### Page\n- Page URL: http://localhost:3000/profile\n- Page Title: FuBank\n### Snapshot\n- [Snapshot](test\\pruebas-herramientas\\herramientas-bedoya\\01-mcp-playwright\\evidence\\page-2026-10-26T00-27-39-509Z.yml)\n### Events\n- New console entries: test\\pruebas-herramientas\\herramientas-bedoya\\01-mcp-playwright\\evidence\\console-2026-10-26T00-27-39-011Z.log#L1-L2",
+      "timestamp": "2026-10-26T00:27:39.521Z"
+    },
+    {
+      "step": "Inyección de token JWT y credenciales de sesión autorizada",
+      "tool": "browser_evaluate",
+      "resultSummary": "Sesión inyectada correctamente",
+      "timestamp": "2026-10-26T00:27:45.619Z"
+    },
+    {
+      "step": "Navegación autorizada hacia /loans",
+      "tool": "browser_navigate",
+      "resultSummary": "### Ran Playwright code\n```js\nawait page.goto('http://localhost:3000/loans');\n```\n### Page\n- Page URL: http://localhost:3000/loans\n- Page Title: Creditos y Prestamos | FuBanking\n### Snapshot\n- [Snapshot](test\\pruebas-herramientas\\herramientas-bedoya\\01-mcp-playwright\\evidence\\page-2026-10-26T00-27-45-962Z.yml)\n### Events\n- New console entries: test\\pruebas-herramientas\\herramientas-bedoya\\01-mcp-playwright\\evidence\\console-2026-10-26T00-27-45-619Z.log#L1-L2",
+      "timestamp": "2026-10-26T00:27:45.968Z"
+    },
+    {
+      "step": "Inspección de árbol A11y en /loans",
+      "tool": "browser_snapshot",
+      "resultSummary": "Snapshot capturado (3422 caracteres)",
+      "timestamp": "2026-10-26T00:27:50.994Z"
+    },
+    {
+      "step": "Digitar monto del préstamo ($5,000,000)",
+      "tool": "browser_type",
+      "resultSummary": "Monto: 5000000",
+      "timestamp": "2026-10-26T00:27:51.037Z"
+    },
+    {
+      "step": "Digitar plazo (12 meses)",
+      "tool": "browser_type",
+      "resultSummary": "Plazo: 12",
+      "timestamp": "2026-10-26T00:27:51.053Z"
+    },
+    {
+      "step": "Click en Simular Crédito",
+      "tool": "browser_click",
+      "resultSummary": "### Ran Playwright code\n```js\nawait page.locator('[data-cy=\"btn-simulate\"], button:has-text(\"Simular\")').click();\n```\n### Page\n- Page URL: http://localhost:3000/loans\n- Page Title: Creditos y Prestamos | FuBanking\n### Snapshot\n- [Snapshot](test\\pruebas-herramientas\\herramientas-bedoya\\01-mcp-playwright\\evidence\\page-2026-10-26T00-27-52-179Z.yml)",
+      "timestamp": "2026-10-26T00:27:52.183Z"
+    },
+    {
+      "step": "Captura de pantalla de la simulación calculada",
+      "tool": "browser_take_screenshot",
+      "resultSummary": "Guardada en C:\\Users\\Andres Bedoya Cano\\Desktop\\2026_2\\paradigmas\\FuBanking\\test\\pruebas-herramientas\\herramientas-bedoya\\01-mcp-playwright\\evidence\\simulacion-credito-mcp.png",
+      "timestamp": "2026-10-26T00:27:57.255Z"
+    },
+    {
+      "step": "Verificación del cálculo de amortización en el árbol A11y",
+      "tool": "browser_snapshot",
+      "resultSummary": "Resultado confirmado",
+      "timestamp": "2026-10-26T00:27:57.273Z"
+    }
+  ]
+}

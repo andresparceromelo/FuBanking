@@ -7,8 +7,12 @@ class CardService {
     return response.data;
   }
 
-  async createCard(accountId: string): Promise<VirtualCard> {
-    const response = await apiClient.post<VirtualCard>('/cards', { accountId });
+  async createCard(accountId: string, password?: string): Promise<VirtualCard> {
+    const payload: { accountId: string; password?: string } = { accountId };
+    if (password !== undefined) {
+      payload.password = password;
+    }
+    const response = await apiClient.post<VirtualCard>('/cards', payload);
     return response.data;
   }
 

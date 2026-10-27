@@ -1,0 +1,477 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Suite 6 - Funcionalidad extra Depositar</title></head><body><table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC142_Depositar_monto_valido_con_descripcion</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Depositar 150000 con descripcion &#x27;Ahorro mensual&#x27;</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>150000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;150000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=dw-description</td><td>Ahorro mensual</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-description&#x27;);var v=&#x27;Ahorro mensual&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar deposito y saldo</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]/following-sibling::p[contains(.,&#x27;actualizada correctamente.&#x27;)]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td>exact:Deposito realizado</td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial} + 150000</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC143_Depositar_monto_valido_sin_descripcion</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Depositar 50000 sin descripcion</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>50000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;50000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar deposito y saldo</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]/following-sibling::p[contains(.,&#x27;actualizada correctamente.&#x27;)]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td>exact:Deposito realizado</td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial} + 50000</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC144_Depositar_monto_minimo_limite</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Depositar el monto minimo (1)</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>1</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;1&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar deposito y saldo</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]/following-sibling::p[contains(.,&#x27;actualizada correctamente.&#x27;)]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td>exact:Deposito realizado</td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial} + 1</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC145_Depositar_depositos_sucesivos_se_acumulan</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Primer deposito de 100000</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>100000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;100000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]/following-sibling::p[contains(.,&#x27;actualizada correctamente.&#x27;)]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td>exact:Deposito realizado</td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoIntermedio</td></tr>
+<tr><td>echo</td><td>saldoIntermedio = ${saldoIntermedio}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoIntermedio} == ${saldoInicial} + 100000</td><td>true</td></tr>
+<tr><td>echo</td><td>Paso 3: Segundo deposito de 50000</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>50000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;50000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]/following-sibling::p[contains(.,&#x27;actualizada correctamente.&#x27;)]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td>exact:Deposito realizado</td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>echo</td><td>Paso 4: Verificar saldo acumulado</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial} + 150000</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC146_Depositar_genera_notificacion</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Depositar 20000</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>20000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;20000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]/following-sibling::p[contains(.,&#x27;actualizada correctamente.&#x27;)]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td>exact:Deposito realizado</td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar la notificacion en /notifications (la mas reciente)</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/notifications</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//h3[normalize-space(.)=&#x27;Depósito realizado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=(//h3/parent::div[contains(@class,&#x27;justify-between&#x27;)]/parent::div[contains(@class,&#x27;flex-1&#x27;)])[1]/div/h3</td><td>exact:Depósito realizado</td></tr>
+<tr><td>assertText</td><td>xpath=(//h3/parent::div[contains(@class,&#x27;justify-between&#x27;)]/parent::div[contains(@class,&#x27;flex-1&#x27;)])[1]/p</td><td>glob:Depósito de $20.000 en tu cuenta ****</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC147_Depositar_saldo_disponible_en_bolsillos</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>storeEval</td><td>(function(){var t=(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;));var api=&#x27;http://localhost:3001/api/v1&#x27;;function pedir(m,u){var x=new XMLHttpRequest();x.open(m,api+u,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+t);x.send();return JSON.parse(x.responseText||&#x27;{}&#x27;);}var n=0;(pedir(&#x27;GET&#x27;,&#x27;/accounts/me&#x27;).data||[]).forEach(function(c){(pedir(&#x27;GET&#x27;,&#x27;/pockets/account/&#x27;+c.id).data||[]).forEach(function(p){pedir(&#x27;DELETE&#x27;,&#x27;/pockets/&#x27;+p.id);n++;});});return n;})()</td><td>bolsillosEliminados</td></tr>
+<tr><td>echo</td><td>Precondición: bolsillos de corridas anteriores eliminados = ${bolsillosEliminados}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>echo</td><td>Paso 2: Depositar 80000</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>80000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;80000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]/following-sibling::p[contains(.,&#x27;actualizada correctamente.&#x27;)]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td>exact:Deposito realizado</td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoConDeposito</td></tr>
+<tr><td>echo</td><td>saldoConDeposito = ${saldoConDeposito}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoConDeposito} == ${saldoInicial} + 80000</td><td>true</td></tr>
+<tr><td>echo</td><td>Paso 3: Abrir Bolsillos</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>echo</td><td>Paso 4: Crear &#x27;Desde deposito&#x27; con el monto depositado (80000)</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Desde deposito</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Desde deposito&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>80000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;80000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Desde deposito&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Desde deposito&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 80000</td><td>true</td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial}</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC148_Depositar_monto_cero_limite</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Intentar depositar 0</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>0</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;0&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar rechazo y saldo sin cambios</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;dw-error&quot;]</td><td></td></tr>
+<tr><td>assertText</td><td>css=[data-testid=&quot;dw-error&quot;]</td><td>exact:Por favor ingresa un monto válido mayor a cero.</td></tr>
+<tr><td>assertElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertElementNotPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial}</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC149_Depositar_monto_negativo</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Intentar depositar -50000</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>-50000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;-50000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar rechazo y saldo sin cambios</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;dw-error&quot;]</td><td></td></tr>
+<tr><td>assertText</td><td>css=[data-testid=&quot;dw-error&quot;]</td><td>exact:Por favor ingresa un monto válido mayor a cero.</td></tr>
+<tr><td>assertElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertElementNotPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial}</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC150_Depositar_monto_vacio</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Intentar depositar sin escribir el monto</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;dw-submit&quot;]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar que el formulario no se envia (campo obligatorio)</td><td></td></tr>
+<tr><td>pause</td><td>1500</td><td></td></tr>
+<tr><td>assertElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertEval</td><td>window.document.getElementById(&#x27;dw-amount&#x27;).validity.valueMissing</td><td>true</td></tr>
+<tr><td>assertElementNotPresent</td><td>css=[data-testid=&quot;dw-error&quot;]</td><td></td></tr>
+<tr><td>assertElementNotPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial}</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC151_Depositar_cancelar_con_boton_Cancelar</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Escribir 30000 y presionar &#x27;Cancelar&#x27;</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>30000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;30000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>xpath=//form[.//input[@id=&#x27;dw-amount&#x27;]]//button[normalize-space(.)=&#x27;Cancelar&#x27;]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar que la ventana se cierra y el saldo no cambia</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertElementNotPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial}</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC152_Depositar_cerrar_ventana_con_X</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Cuentas</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Cuenta Digital</td></tr>
+<tr><td>echo</td><td>Paso 2: Escribir 30000 y cerrar la ventana con la X</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;deposit-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//h3[contains(.,&#x27;Agregar Dinero&#x27;)]</td><td>exact:Agregar Dinero (Depósito)</td></tr>
+<tr><td>type</td><td>id=dw-amount</td><td>30000</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;dw-amount&#x27;);var v=&#x27;30000&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>xpath=//div[contains(@class,&#x27;justify-between&#x27;)][.//h3[contains(.,&#x27;Agregar Dinero&#x27;)]]/button</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar que la ventana se cierra y el saldo no cambia</td><td></td></tr>
+<tr><td>waitForElementNotPresent</td><td>id=dw-amount</td><td></td></tr>
+<tr><td>assertElementNotPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Deposito realizado&#x27;]</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoFinal</td></tr>
+<tr><td>echo</td><td>saldoFinal = ${saldoFinal}</td><td></td></tr>
+<tr><td>assertEval</td><td>${saldoFinal} == ${saldoInicial}</td><td>true</td></tr></tbody></table></body></html>

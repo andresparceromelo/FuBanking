@@ -1,0 +1,29 @@
+{
+  "validSimulation": {
+    "amount": 5000000,
+    "installments": 12,
+    "annualRate": 18
+  },
+  "smallSimulation": {
+    "amount": 1000000,
+    "installments": 6,
+    "annualRate": 15
+  },
+  "invalidSimulation": {
+    "amount": -500,
+    "installments": 0,
+    "annualRate": -5
+  },
+  "users": {
+    "client": {
+      "email": "bedoyacanoandres2@gmail.com",
+      "password": "Miabuela585*",
+      "name": "Gabriel"
+    },
+    "admin": {
+      "email": "bedoyacanoandres@gmail.com",
+      "password": "FuBanking123*",
+      "name": "Andresito"
+    }
+  }
+}

@@ -24,7 +24,8 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'No disponible';
     const date = dateString.includes('T') ? new Date(dateString) : new Date(`${dateString}T00:00:00`);
     return date.toLocaleDateString('es-CO', {
       year: 'numeric',
@@ -92,13 +93,13 @@ export function ProfileCard({ user, onEditClick, onToggleSuccess }: ProfileCardP
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold shadow-md">
             {user.avatarUrl ? (
-              <img src={user.avatarUrl} alt={user.fullName} className="w-full h-full rounded-full object-cover" />
+              <img src={user.avatarUrl} alt={user.fullName || 'Usuario'} className="w-full h-full rounded-full object-cover" />
             ) : (
-              user.fullName.charAt(0).toUpperCase()
+              (user.fullName || user.firstName || 'U').charAt(0).toUpperCase()
             )}
           </div>
           <div>
-            <CardTitle className="text-2xl">{user.fullName}</CardTitle>
+            <CardTitle className="text-2xl">{user.fullName || `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() || 'Usuario'}</CardTitle>
             <p className="text-muted-foreground text-sm flex items-center gap-1 mt-1">
               <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />{' '}
               Cuenta activa

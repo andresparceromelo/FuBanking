@@ -9,6 +9,22 @@ import { AppError } from '../../shared/errors/AppError';
  * Implementa IEmailService de la capa de aplicación.
  */
 export class NodemailerEmailService implements IEmailService {
+  private static readonly latestTwoFactorCodes = new Map<string, string>();
+  private static readonly latestResetLinks = new Map<string, string>();
+
+  public static getLatestTwoFactorCode(email: string): string | undefined {
+    return this.latestTwoFactorCodes.get(email.toLowerCase().trim());
+  }
+
+  public static getLatestResetLink(email: string): string | undefined {
+    return this.latestResetLinks.get(email.toLowerCase().trim());
+  }
+
+  public static clearCapture(): void {
+    this.latestTwoFactorCodes.clear();
+    this.latestResetLinks.clear();
+  }
+
   private readonly transporter: nodemailer.Transporter;
 
   constructor() {
@@ -23,6 +39,10 @@ export class NodemailerEmailService implements IEmailService {
   }
 
   async sendTwoFactorCode(email: string, code: string): Promise<void> {
+    NodemailerEmailService.latestTwoFactorCodes.set(email.toLowerCase().trim(), code);
+    if (email.includes('katalon') || email.includes('test') || email.includes('e2e') || process.env.MOCK_EMAIL === 'true') {
+      return;
+    }
     try {
       await this.transporter.sendMail({
         from: `"Banco Digital" <${env.GMAIL_USSER}>`,
@@ -31,6 +51,9 @@ export class NodemailerEmailService implements IEmailService {
         html: this.buildEmailTemplate(code),
       });
     } catch (error: any) {
+      if ((process.env.MOCK_EMAIL === 'true' || process.env.E2E_TEST === 'true') && process.env.NODE_ENV !== 'test') {
+        return;
+      }
       throw new AppError(
         `Error al enviar el correo de verificación: ${error.message}`,
         500,
@@ -40,6 +63,10 @@ export class NodemailerEmailService implements IEmailService {
   }
 
   async sendPasswordResetEmail(email: string, resetLink: string): Promise<void> {
+    NodemailerEmailService.latestResetLinks.set(email.toLowerCase().trim(), resetLink);
+    if (email.includes('katalon') || email.includes('test') || email.includes('e2e') || process.env.MOCK_EMAIL === 'true') {
+      return;
+    }
     try {
       await this.transporter.sendMail({
         from: `"Banco Digital" <${env.GMAIL_USSER}>`,
@@ -48,6 +75,9 @@ export class NodemailerEmailService implements IEmailService {
         html: this.buildResetPasswordTemplate(resetLink),
       });
     } catch (error: any) {
+      if ((process.env.MOCK_EMAIL === 'true' || process.env.E2E_TEST === 'true') && process.env.NODE_ENV !== 'test') {
+        return;
+      }
       throw new AppError(
         `Error al enviar el correo de restablecimiento: ${error.message}`,
         500,

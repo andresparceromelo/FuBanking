@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TC05_Verificar_Requisitos_Perfil_Elegibilidad</title>
+</head>
+<body>
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC05_Verificar_Requisitos_Perfil_Elegibilidad</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres2@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>Miabuela585*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//*[contains(.,'Requisitos para solicitar')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Documento verificado')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Mayor de edad')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Ingreso validado')]</td><td></td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//*[contains(.,'Historial crediticio validado')]</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=btn-apply</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

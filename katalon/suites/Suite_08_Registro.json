@@ -1,0 +1,547 @@
+{
+  "id": "fubanking-registro-suite",
+  "version": "3.0",
+  "name": "Suite_08_Registro",
+  "url": "http://localhost:3000",
+  "tests": [
+    {
+      "id": "cp01-registro-exitoso",
+      "name": "CP01_Registro_Exitoso",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=firstName",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('firstName'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Juan'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=lastName",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('lastName'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Perez'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=birthDate",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('birthDate'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1995-05-15'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'user_' + Date.now().toString().slice(-6) + '@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=document",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('document'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '10' + Date.now().toString().slice(-7)); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=monthlyIncome",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('monthlyIncome'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '2500000'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=confirmPassword",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3500",
+          "value": ""
+        },
+        {
+          "command": "assertNotLocation",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp02-registro-email-duplicado",
+      "name": "CP02_Registro_Email_Duplicado",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=firstName",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('firstName'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Ana'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=lastName",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('lastName'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Gomez'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=birthDate",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('birthDate'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1995-03-10'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Pruebaskatalon@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=document",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('document'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '99' + Date.now().toString().slice(-7)); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=monthlyIncome",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('monthlyIncome'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '2500000'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=confirmPassword",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Ya existe una cuenta con este correo electrónico')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Ya existe una cuenta con este correo electrónico')]",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp03-registro-password-debil",
+      "name": "CP03_Registro_Password_Debil",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=firstName",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('firstName'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Carlos'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=lastName",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('lastName'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Ruiz'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=birthDate",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('birthDate'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1990-01-01'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'carlos_' + Date.now().toString().slice(-6) + '@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=document",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('document'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '88' + Date.now().toString().slice(-7)); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=monthlyIncome",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('monthlyIncome'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '2000000'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1234'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "300",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=confirmPassword",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1234'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'La contraseña es demasiado débil') or contains(text(),'La contraseña debe tener al menos 8 caracteres')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'La contraseña es demasiado débil') or contains(text(),'La contraseña debe tener al menos 8 caracteres')]",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp04-registro-campos-vacios",
+      "name": "CP04_Registro_Campos_Vacios",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "css=button[type=\"submit\"]",
+          "value": "5000"
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'El primer nombre debe tener al menos 2 caracteres')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'El primer apellido debe tener al menos 2 caracteres')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Correo electrónico inválido')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Documento inválido')]",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/register",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

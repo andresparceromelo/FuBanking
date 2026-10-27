@@ -58,13 +58,13 @@ describe('LoanController', () => {
 
       // Act
       await controller.simulate(
-        mockReq({ body: { amount: 1_000, installments: 12, annualRate: 10 } }),
+        mockReq({ body: { amount: 1_000_000, installments: 12, annualRate: 10 } }),
         res,
         next,
       );
 
       // Assert
-      expect(useCases.simulate.execute).toHaveBeenCalledWith({ amount: 1_000, installments: 12, annualRate: 10 });
+      expect(useCases.simulate.execute).toHaveBeenCalledWith({ amount: 1_000_000, installments: 12, annualRate: 10 });
       expect(status).toHaveBeenCalledWith(200);
       expect(json).toHaveBeenCalledWith({ success: true, message: 'Simulación de préstamo creada', data: dto });
     });
@@ -88,7 +88,7 @@ describe('LoanController', () => {
 
       // Act
       await controller.simulate(
-        mockReq({ body: { amount: 1_000, installments: 12, annualRate: 10 } }),
+        mockReq({ body: { amount: 1_000_000, installments: 12, annualRate: 10 } }),
         res,
         next,
       );

@@ -45,6 +45,10 @@ export function usePasswordReset() {
    * Distingue entre token expirado, ya usado e inválido.
    */
   const verifyToken = async (token: string) => {
+    if (!token) {
+      setTokenStatus('invalid');
+      return;
+    }
     setTokenStatus('loading');
     try {
       await authService.verifyResetToken(token);

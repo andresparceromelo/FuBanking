@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:3000" />
+<title>CP04_Verificar_Token_Invalido</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CP04_Verificar_Token_Invalido</td></tr>
+</thead>
+<tbody>
+<tr>
+	<td>open</td>
+	<td>http://localhost:3000/reset-password?token=token-falso-12345</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>localStorage.clear(); sessionStorage.clear(); document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>2000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//*[contains(text(),'Enlace inválido')]</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//*[contains(text(),'Enlace inválido')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//button[contains(text(),'Solicitar uno nuevo')]</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

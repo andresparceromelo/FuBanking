@@ -10,6 +10,10 @@
  *   - Self-validating: termina en expect(); pasa o falla sin inspección manual.
  *   - Timely:      acompaña al código de producción de Bolsillos.
  *
+ *  Aserciones fluidas: estilo Chai BDD que Vitest trae integrado
+ *  (expect(x).to.have.property(...).that...). Cada aserción se lee como una
+ *  frase y encadena varias condiciones sobre el mismo objeto.
+ *
  *  Dobles demostrados aquí: FAKE, MOCK, SPY y DUMMY.
  * ============================================================================
  */
@@ -53,10 +57,9 @@ describe('CreatePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.name).toBe('Viaje');
-      expect(result.amount).toBe(200_000);
+      expect(result).to.include({ name: 'Viaje', amount: 200_000 });
       const account = await accountRepo.findById('acc-1');
-      expect(account?.balance).toBe(800_000); // 1.000.000 − 200.000
+      expect(account).to.have.property('balance', 800_000); // 1.000.000 − 200.000
     });
 
     it('recorta los espacios del nombre al crear el bolsillo', async () => {
@@ -67,7 +70,7 @@ describe('CreatePocket.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.name).toBe('Casa');
+      expect(result).to.have.property('name', 'Casa');
     });
   });
 
@@ -90,9 +93,9 @@ describe('CreatePocket.execute', () => {
       await sut.execute(dto);
 
       // Assert — se VERIFICAN las expectativas sobre las llamadas.
-      expect(mockAccountRepo.findById).toHaveBeenCalledWith('acc-1');
-      expect(mockAccountRepo.updateBalance).toHaveBeenCalledWith('acc-1', 380_000);
-      expect(mockPocketRepo.save).toHaveBeenCalledTimes(1);
+      expect(mockAccountRepo.findById).to.have.been.calledWith('acc-1');
+      expect(mockAccountRepo.updateBalance).to.have.been.calledWith('acc-1', 380_000);
+      expect(mockPocketRepo.save).to.have.been.calledOnce;
     });
   });
 
@@ -108,9 +111,10 @@ describe('CreatePocket.execute', () => {
       await sut.execute(dto);
 
       // Assert — se inspecciona el registro del spy.
-      expect(spyNotif.saveCallCount).toBe(1);
-      expect(spyNotif.savedNotifications[0].title).toBe('Bolsillo creado');
-      expect(spyNotif.savedNotifications[0].message).toContain('Regalo');
+      expect(spyNotif.saveCallCount).to.equal(1);
+      expect(spyNotif.savedNotifications[0])
+        .to.include({ title: 'Bolsillo creado' })
+        .and.to.have.property('message').that.includes('Regalo');
     });
 
     it('no falla cuando no se inyecta repositorio de notificaciones', async () => {
@@ -122,7 +126,7 @@ describe('CreatePocket.execute', () => {
       const result = await sut.execute(dto);
 
       // Assert
-      expect(result.name).toBe('Sin notif');
+      expect(result).to.have.property('name', 'Sin notif');
     });
   });
 
@@ -135,10 +139,27 @@ describe('CreatePocket.execute', () => {
       const dto = { userId: 'user-1', accountId: 'acc-1', name: 'Malo', amount: -5 };
 
       // Act + Assert
-      await expect(sut.execute(dto)).rejects.toMatchObject({
+      await expect(sut.execute(dto)).rejects.to.include({
         code: 'INVALID_POCKET_AMOUNT',
         statusCode: 400,
       });
+    });
+
+    it.each([
+      ['vacío', ''],
+      ['de solo espacios', '   '],
+    ])('rechaza un nombre %s sin tocar el saldo ni notificar (DUMMY)', async (_label, name) => {
+      // Arrange — DUMMY: si el caso de uso intentara notificar, la prueba fallaría.
+      const sut = new CreatePocket(accountRepo, pocketRepo, new DummyNotificationRepository());
+      const dto = { userId: 'user-1', accountId: 'acc-1', name, amount: 100_000 };
+
+      // Act + Assert
+      await expect(sut.execute(dto)).rejects.to.include({
+        code: 'INVALID_POCKET_NAME',
+        statusCode: 400,
+      });
+      expect(await accountRepo.findById('acc-1')).to.have.property('balance', 1_000_000);
+      expect(await pocketRepo.findByAccountId('acc-1')).to.be.empty;
     });
 
     it('lanza ACCOUNT_NOT_FOUND cuando la cuenta no existe', async () => {
@@ -146,7 +167,7 @@ describe('CreatePocket.execute', () => {
       const dto = { userId: 'user-1', accountId: 'inexistente', name: 'X', amount: 1_000 };
 
       // Act + Assert
-      await expect(useCase.execute(dto)).rejects.toMatchObject({
+      await expect(useCase.execute(dto)).rejects.to.include({
         code: 'ACCOUNT_NOT_FOUND',
         statusCode: 404,
       });
@@ -159,7 +180,7 @@ describe('CreatePocket.execute', () => {
       const dto = { userId: 'intruso', accountId: 'acc-1', name: 'X', amount: 1_000 };
 
       // Act + Assert
-      await expect(sut.execute(dto)).rejects.toMatchObject({
+      await expect(sut.execute(dto)).rejects.to.include({
         code: 'FORBIDDEN',
         statusCode: 403,
       });
@@ -174,7 +195,7 @@ describe('CreatePocket.execute', () => {
       const dto = { userId: 'user-1', accountId: 'acc-1', name: 'X', amount: 1_000 };
 
       // Act + Assert
-      await expect(sut.execute(dto)).rejects.toMatchObject({
+      await expect(sut.execute(dto)).rejects.to.include({
         code: 'ACCOUNT_NOT_OPERATIONAL',
         statusCode: 400,
       });
@@ -188,7 +209,7 @@ describe('CreatePocket.execute', () => {
       const dto = { userId: 'user-1', accountId: 'acc-1', name: 'X', amount: 50_000 };
 
       // Act + Assert
-      await expect(sut.execute(dto)).rejects.toMatchObject({
+      await expect(sut.execute(dto)).rejects.to.include({
         code: 'INSUFFICIENT_AVAILABLE_BALANCE',
         statusCode: 400,
       });

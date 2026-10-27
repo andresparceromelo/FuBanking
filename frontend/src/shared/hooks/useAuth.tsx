@@ -69,7 +69,12 @@ export function AuthProvider({ children }: Readonly<{ children: ReactNode }>) {
 
   const updateUser = (updatedUser: PublicUser) => {
     setUser(updatedUser);
-    localStorage.setItem('user', JSON.stringify(updatedUser));
+    if (sessionStorage.getItem('user')) {
+      sessionStorage.setItem('user', JSON.stringify(updatedUser));
+    }
+    if (localStorage.getItem('user') || !sessionStorage.getItem('user')) {
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+    }
   };
 
   return (

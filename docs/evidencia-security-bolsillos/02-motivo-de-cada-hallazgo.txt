@@ -1,0 +1,62 @@
+### Cada prueba marcada it.fails ejecutada como prueba normal: motivo exacto del fallo
+⎯⎯⎯⎯⎯⎯ Failed Tests 37 ⎯⎯⎯⎯⎯⎯⎯
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+AssertionError: Crear bolsillo: código HTTP: expected 201 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+AssertionError: Crear bolsillo: código HTTP: expected 201 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+AssertionError: Consultar bolsillos: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+AssertionError: Consultar bolsillos: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+AssertionError: Actualizar bolsillo: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+AssertionError: Actualizar bolsillo: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+AssertionError: Eliminar bolsillo: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+AssertionError: Eliminar bolsillo: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+AssertionError: Transferir entre bolsillos: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+AssertionError: Transferir entre bolsillos: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+AssertionError: Depositar dinero: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+AssertionError: Depositar dinero: código HTTP: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · adminMiddleware aplica la misma regla > [SEC-01] rechaza el token temporal de 2FA de un administrador
+AssertionError: expected 200 to equal 401
+ - autenticacion.security.test.ts > SEC-AUTH · adminMiddleware aplica la misma regla > [SEC-02] rechaza el token de recuperación de contraseña de un administrador
+AssertionError: expected 200 to equal 401
+ - endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-03 · Cuerpos malformados o excesivos > [SEC-06] JSON malformado → 400 (error del cliente), no 500
+AssertionError: expected 500 to equal 400
+ - endurecimiento.security.test.ts > SEC-HD · Endurecimiento de la aplicación real > SEC-HD-03 · Cuerpos malformados o excesivos > [SEC-07] body de más de 10 KB → 413 Payload Too Large, no 500
+AssertionError: expected 500 to equal 413
+ - endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Crear bolsillo': una ráfaga de 100 peticiones recibe 429
+AssertionError: expected [ 201, 201, 201, 201, 201, 201, …(94) ] to include 429
+ - endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Consultar bolsillos': una ráfaga de 100 peticiones recibe 429
+ - endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Actualizar bolsillo': una ráfaga de 100 peticiones recibe 429
+ - endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Transferir entre bolsillos': una ráfaga de 100 peticiones recibe 429
+ - endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Depositar dinero': una ráfaga de 100 peticiones recibe 429
+AssertionError: expected [ 200, 200, 200, 200, 200, 200, …(94) ] to include 429
+ - endurecimiento.security.test.ts > SEC-HD-05 · Límite de frecuencia por usuario (rate limiting) > [SEC-08] 'Eliminar bolsillo': una ráfaga de 100 peticiones recibe 429
+AssertionError: expected [ 200, 404, 404, 404, 404, 404, …(94) ] to include 429
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza booleano true con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza booleano false con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza null con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza lista vacía con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza lista con un número con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza texto vacío con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza texto de espacios con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza hexadecimal con 400 y no crea nada
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza notación científica con 400 y no crea nada
+AssertionError: expected 201 to equal 400
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza booleano true con 400 y no mueve el saldo
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza lista con un número con 400 y no mueve el saldo
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza hexadecimal con 400 y no mueve el saldo
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza notación científica con 400 y no mueve el saldo
+AssertionError: expected 200 to equal 400
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-02 · Montos dentro del rango entero seguro > [SEC-05] un depósito de MAX_SAFE_INTEGER + 2 se rechaza (pérdida de precisión)
+ - entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-02 · Montos dentro del rango entero seguro > [SEC-05] un depósito de 1e300 se rechaza (pérdida de precisión)
+AssertionError: expected 200 to equal 400
+      Tests  37 failed | 117 passed (154)

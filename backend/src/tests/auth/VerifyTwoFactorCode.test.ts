@@ -94,23 +94,24 @@ describe('VerifyTwoFactorCode — Pruebas de caja blanca (tabla de caminos Backe
       code: 'OTP_EXPIRED',
     });
   });
-  test('C9 - intentos ≥ máximo (5): lanza error MAX_ATTEMPTS_REACHED', async () => {
-    const maxedCode = buildVerificationCode({ used: false, attempts: 5 });
+  test('C9 - intentos ≥ máximo (1): lanza error MAX_ATTEMPTS_REACHED', async () => {
+    const maxedCode = buildVerificationCode({ used: false, attempts: 1 });
     verificationCodeRepository.seed(maxedCode);
     const dto = { temporaryToken: validTempToken, code: '333333' };
     await expect(verifyTwoFactor.execute(dto)).rejects.toMatchObject({
       code: 'MAX_ATTEMPTS_REACHED',
     });
   });
-  test('C10 - código incorrecto (intentos < max): incrementa intentos y lanza INVALID_OTP', async () => {
-    const activeCode = buildVerificationCode({ used: false, attempts: 2 });
+  test('C10 - código incorrecto al primer intento: anula el código y lanza MAX_ATTEMPTS_REACHED', async () => {
+    const activeCode = buildVerificationCode({ used: false, attempts: 0 });
     verificationCodeRepository.seed(activeCode);
     const dto = { temporaryToken: validTempToken, code: '444444' };
     await expect(verifyTwoFactor.execute(dto)).rejects.toMatchObject({
-      code: 'INVALID_OTP',
+      code: 'MAX_ATTEMPTS_REACHED',
     });
     const updatedCode = await verificationCodeRepository.findLatestByUserId('user-123');
-    expect(updatedCode!.attempts).toBe(3);
+    expect(updatedCode!.attempts).toBe(1);
+    expect(updatedCode!.isUsed()).toBe(true);
   });
   test('C2 - código correcto: marca como usado, genera JWT definitivo y retorna user+token', async () => {
     const validCode = buildVerificationCode({ used: false, attempts: 0 });

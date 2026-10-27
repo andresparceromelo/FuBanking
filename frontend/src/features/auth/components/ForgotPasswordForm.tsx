@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { requestPasswordResetSchema, RequestPasswordResetInput } from '../schemas/auth.schemas';
@@ -13,15 +13,37 @@ import { CheckCircle2 } from 'lucide-react';
 
 export function ForgotPasswordForm() {
   const { requestReset, isLoading, error, isSuccess } = usePasswordReset();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const {
     register,
-    handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<RequestPasswordResetInput>({
     resolver: zodResolver(requestPasswordResetSchema),
     defaultValues: { email: '' },
   });
+
+  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const emailEl = form.querySelector<HTMLInputElement>('#email, [name="email"]');
+    const email = emailEl?.value?.trim() ?? '';
+    if (!email) {
+      setError('email', { message: 'El correo electrónico es requerido' });
+      return;
+    }
+    // basic format check
+    if (!email.includes('@') || !email.includes('.')) {
+      setError('email', { message: 'Correo electrónico inválido' });
+      return;
+    }
+    requestReset({ email });
+  };
 
   if (isSuccess) {
     return (
@@ -43,7 +65,7 @@ export function ForgotPasswordForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(requestReset)} className="space-y-6 w-full max-w-sm">
+    <form onSubmit={onFormSubmit} noValidate data-hydrated={isMounted} className="space-y-6 w-full max-w-sm">
       {error && (
         <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
           {error.message}

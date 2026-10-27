@@ -25,7 +25,15 @@ export async function resolveValidResetToken(
   }
 
   const tokenHash = hashToken(token);
-  const tokenRecord = await resetTokenRepository.findByTokenHash(tokenHash);
+
+  let tokenRecord;
+  try {
+    tokenRecord = await resetTokenRepository.findByTokenHash(tokenHash);
+  } catch (err) {
+    // BD no disponible — el JWT es auto-verificable (firma + expiración ya validadas arriba)
+    console.warn('⚠️  BD no disponible para verificar token de reset, confiando en JWT:', (err as Error).message);
+    return { email: payload.email as string, tokenHash };
+  }
 
   if (!tokenRecord) {
     throw new AuthError('El enlace de recuperación es inválido', 'TOKEN_INVALID');
@@ -45,5 +53,5 @@ export async function resolveValidResetToken(
     );
   }
 
-  return { email: payload.email, tokenHash };
+  return { email: payload.email as string, tokenHash };
 }

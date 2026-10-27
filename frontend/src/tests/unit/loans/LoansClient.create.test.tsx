@@ -65,7 +65,7 @@ describe('LoansClient (solicitud)', () => {
 
     await waitFor(() => expect(screen.getByText('Solicitud enviada correctamente.')).toBeInTheDocument());
     expect(create).toHaveBeenCalledWith(
-      expect.objectContaining({ amount: 5000, installments: 12, annualRate: 18, monthlyIncome: 2_000_000 }),
+      expect.objectContaining({ amount: 5000000, installments: 12, annualRate: 18, monthlyIncome: 2_000_000 }),
     );
     expect(screen.getByText('PENDING')).toBeInTheDocument();
     expect(screen.getByText('Sí')).toBeInTheDocument();
@@ -106,7 +106,7 @@ describe('LoansClient (solicitud)', () => {
   it('should keep Solicitar disabled when amount is invalid', async () => {
     render(<LoansClient />);
 
-    fireEvent.change(screen.getByDisplayValue('5000'), { target: { value: '0' } });
+    fireEvent.change(screen.getByDisplayValue('5000000'), { target: { value: '0' } });
 
     await waitFor(() =>
       expect(screen.getByText('Solicitar').closest('button')).toBeDisabled(),

@@ -36,7 +36,7 @@ describe('LoansClient (simulador)', () => {
     render(<LoansClient />);
 
     expect(screen.getByText('Créditos y Préstamos')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('5000')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('5000000')).toBeInTheDocument();
     expect(screen.getByDisplayValue('12')).toBeInTheDocument();
     expect(screen.getByDisplayValue('18')).toBeInTheDocument();
     expect(screen.getByText('Aún no hay una simulación disponible.')).toBeInTheDocument();
@@ -52,7 +52,7 @@ describe('LoansClient (simulador)', () => {
     fireEvent.click(screen.getByText('Simular'));
 
     await waitFor(() => expect(screen.getByText('Simulación lista.')).toBeInTheDocument());
-    expect(simulate).toHaveBeenCalledWith({ amount: 5000, installments: 12, annualRate: 18 });
+    expect(simulate).toHaveBeenCalledWith({ amount: 5000000, installments: 12, annualRate: 18 });
     expect(screen.getByText(cop(470_000))).toBeInTheDocument();
     expect(screen.getByText(cop(5_640_000))).toBeInTheDocument();
     expect(screen.getByText(cop(640_000))).toBeInTheDocument();
@@ -75,16 +75,16 @@ describe('LoansClient (simulador)', () => {
   it('should update all three inputs', async () => {
     render(<LoansClient />);
 
-    fireEvent.change(screen.getByDisplayValue('5000'), { target: { value: '7000' } });
+    fireEvent.change(screen.getByDisplayValue('5000000'), { target: { value: '7000000' } });
     fireEvent.change(screen.getByDisplayValue('12'), { target: { value: '24' } });
     fireEvent.change(screen.getByDisplayValue('18'), { target: { value: '20' } });
 
-    expect(screen.getByDisplayValue('7000')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('7000000')).toBeInTheDocument();
     expect(screen.getByDisplayValue('24')).toBeInTheDocument();
     expect(screen.getByDisplayValue('20')).toBeInTheDocument();
 
     simulate.mockResolvedValue({ monthlyPayment: 1, totalToPay: 2, totalInterest: 3 });
     fireEvent.click(screen.getByText('Simular'));
-    await waitFor(() => expect(simulate).toHaveBeenCalledWith({ amount: 7000, installments: 24, annualRate: 20 }));
+    await waitFor(() => expect(simulate).toHaveBeenCalledWith({ amount: 7000000, installments: 24, annualRate: 20 }));
   });
 });

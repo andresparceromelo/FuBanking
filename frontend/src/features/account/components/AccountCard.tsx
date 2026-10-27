@@ -42,6 +42,7 @@ export function AccountCard({ account, showBalance = true, onClick, onDeposit, o
 
   return (
     <div
+      data-testid="account-card"
       className={`
         w-full text-left rounded-2xl p-6 
         bg-gradient-to-br ${gradient}
@@ -80,7 +81,7 @@ export function AccountCard({ account, showBalance = true, onClick, onDeposit, o
         {/* Saldo */}
         <div>
           <p className="text-xs text-white/40 uppercase tracking-widest mb-1 font-medium">Saldo disponible</p>
-          <p className="text-3xl font-bold text-white tracking-tight">{formattedBalance}</p>
+          <p data-testid="account-balance" className="text-3xl font-bold text-white tracking-tight">{formattedBalance}</p>
         </div>
       </div>
 
@@ -88,6 +89,7 @@ export function AccountCard({ account, showBalance = true, onClick, onDeposit, o
       <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <button
+            data-testid="deposit-button"
             onClick={(e) => {
               e.stopPropagation();
               onDeposit?.(account);

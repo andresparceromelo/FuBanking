@@ -2,7 +2,8 @@
  * ============================================================================
  *  Pruebas unitarias — TransferPocketBalance ("Transferir entre bolsillos")
  * ----------------------------------------------------------------------------
- *  Patrón AAA + principios FIRST (ver detalle en CreatePocket.test.ts).
+ *  Patrón AAA + principios FIRST + aserciones fluidas Chai BDD
+ *  (ver detalle en CreatePocket.test.ts).
  *  Dobles demostrados aquí: FAKE.
  * ============================================================================
  */
@@ -44,8 +45,8 @@ describe('TransferPocketBalance.execute', () => {
       const result = await useCase.execute(dto);
 
       // Assert
-      expect(result.fromPocket.amount).toBe(100_000); // 200.000 − 100.000
-      expect(result.toPocket.amount).toBe(150_000); // 50.000 + 100.000
+      expect(result.fromPocket).to.have.property('amount', 100_000); // 200.000 − 100.000
+      expect(result.toPocket).to.have.property('amount', 150_000); // 50.000 + 100.000
     });
 
     it('funciona sin repositorio de notificaciones', async () => {
@@ -61,8 +62,8 @@ describe('TransferPocketBalance.execute', () => {
       });
 
       // Assert
-      expect(result.fromPocket.amount).toBe(175_000);
-      expect(result.toPocket.amount).toBe(75_000);
+      expect(result.fromPocket).to.have.property('amount', 175_000);
+      expect(result.toPocket).to.have.property('amount', 75_000);
     });
   });
 
@@ -70,25 +71,25 @@ describe('TransferPocketBalance.execute', () => {
     it('rechaza montos menores o iguales a cero', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', fromPocketId: 'p1', toPocketId: 'p2', amount: 0 }),
-      ).rejects.toMatchObject({ code: 'INVALID_TRANSFER_AMOUNT', statusCode: 400 });
+      ).rejects.to.include({ code: 'INVALID_TRANSFER_AMOUNT', statusCode: 400 });
     });
 
     it('rechaza transferir un bolsillo hacia sí mismo', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', fromPocketId: 'p1', toPocketId: 'p1', amount: 10_000 }),
-      ).rejects.toMatchObject({ code: 'INVALID_TRANSFER_TARGET', statusCode: 400 });
+      ).rejects.to.include({ code: 'INVALID_TRANSFER_TARGET', statusCode: 400 });
     });
 
     it('lanza SOURCE_POCKET_NOT_FOUND cuando el origen no existe', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', fromPocketId: 'nope', toPocketId: 'p2', amount: 10_000 }),
-      ).rejects.toMatchObject({ code: 'SOURCE_POCKET_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'SOURCE_POCKET_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza TARGET_POCKET_NOT_FOUND cuando el destino no existe', async () => {
       await expect(
         useCase.execute({ userId: 'user-1', fromPocketId: 'p1', toPocketId: 'nope', amount: 10_000 }),
-      ).rejects.toMatchObject({ code: 'TARGET_POCKET_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'TARGET_POCKET_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza POCKETS_DIFFERENT_ACCOUNT cuando los bolsillos son de cuentas distintas', async () => {
@@ -101,7 +102,7 @@ describe('TransferPocketBalance.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', fromPocketId: 'p1', toPocketId: 'p2', amount: 10_000 }),
-      ).rejects.toMatchObject({ code: 'POCKETS_DIFFERENT_ACCOUNT', statusCode: 400 });
+      ).rejects.to.include({ code: 'POCKETS_DIFFERENT_ACCOUNT', statusCode: 400 });
     });
 
     it('lanza ACCOUNT_NOT_FOUND cuando la cuenta de los bolsillos no existe', async () => {
@@ -115,7 +116,7 @@ describe('TransferPocketBalance.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', fromPocketId: 'p1', toPocketId: 'p2', amount: 10_000 }),
-      ).rejects.toMatchObject({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
+      ).rejects.to.include({ code: 'ACCOUNT_NOT_FOUND', statusCode: 404 });
     });
 
     it('lanza FORBIDDEN cuando la cuenta es de otro usuario', async () => {
@@ -125,7 +126,7 @@ describe('TransferPocketBalance.execute', () => {
 
       await expect(
         sut.execute({ userId: 'intruso', fromPocketId: 'p1', toPocketId: 'p2', amount: 10_000 }),
-      ).rejects.toMatchObject({ code: 'FORBIDDEN', statusCode: 403 });
+      ).rejects.to.include({ code: 'FORBIDDEN', statusCode: 403 });
     });
 
     it('lanza ACCOUNT_NOT_OPERATIONAL cuando la cuenta está bloqueada', async () => {
@@ -135,14 +136,14 @@ describe('TransferPocketBalance.execute', () => {
 
       await expect(
         sut.execute({ userId: 'user-1', fromPocketId: 'p1', toPocketId: 'p2', amount: 10_000 }),
-      ).rejects.toMatchObject({ code: 'ACCOUNT_NOT_OPERATIONAL', statusCode: 400 });
+      ).rejects.to.include({ code: 'ACCOUNT_NOT_OPERATIONAL', statusCode: 400 });
     });
 
     it('lanza INSUFFICIENT_POCKET_BALANCE cuando el origen no tiene saldo suficiente', async () => {
       // Arrange — p1 solo tiene 200.000; se intenta mover 500.000.
       await expect(
         useCase.execute({ userId: 'user-1', fromPocketId: 'p1', toPocketId: 'p2', amount: 500_000 }),
-      ).rejects.toMatchObject({ code: 'INSUFFICIENT_POCKET_BALANCE', statusCode: 400 });
+      ).rejects.to.include({ code: 'INSUFFICIENT_POCKET_BALANCE', statusCode: 400 });
     });
   });
 });

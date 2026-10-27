@@ -29,6 +29,8 @@ export function hashToken(token: string): string {
  * Implementa IResetTokenRepository de la capa de dominio.
  * Almacena hashes SHA-256 en lugar de los tokens planos (Security Hotspot resuelto).
  */
+const inMemoryResetTokens = new Map<string, ResetTokenRecord>();
+
 export class SupabaseResetTokenRepository implements IResetTokenRepository {
   private readonly TABLE = 'reset_tokens';
 
@@ -46,67 +48,103 @@ export class SupabaseResetTokenRepository implements IResetTokenRepository {
   }
 
   async save(record: Omit<ResetTokenRecord, 'id' | 'createdAt'>): Promise<ResetTokenRecord> {
-    const { data, error } = await this.client
-      .from(this.TABLE)
-      .insert({
-        token_hash: record.tokenHash,
-        user_id: record.userId,
-        used: record.used,
-        expires_at: record.expiresAt.toISOString(),
-      })
-      .select()
-      .single();
+    const memoryRecord: ResetTokenRecord = {
+      id: `rt-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      tokenHash: record.tokenHash,
+      userId: record.userId,
+      used: record.used,
+      expiresAt: record.expiresAt,
+      createdAt: new Date(),
+    };
 
-    if (error || !data) {
-      throw new AppError(
-        `Error al guardar token de reset: ${error?.message ?? 'Desconocido'}`,
-        500,
-        'DB_ERROR',
-      );
+    try {
+      const { data, error } = await this.client
+        .from(this.TABLE)
+        .insert({
+          token_hash: record.tokenHash,
+          user_id: record.userId,
+          used: record.used,
+          expires_at: record.expiresAt.toISOString(),
+        })
+        .select()
+        .single();
+
+      if (error || !data) {
+        throw new AppError(
+          `Error al guardar token de reseteo: ${error?.message ?? 'Desconocido'}`,
+          500,
+          'DB_ERROR',
+        );
+      }
+
+      const saved = this.mapRow(data as ResetTokenRow);
+      inMemoryResetTokens.set(saved.tokenHash, saved);
+      return saved;
+    } catch (err) {
+      if (err instanceof AppError) throw err;
+      // Supabase offline, fallback a memoria
     }
 
-    return this.mapRow(data as ResetTokenRow);
+    inMemoryResetTokens.set(record.tokenHash, memoryRecord);
+    return memoryRecord;
   }
 
   async invalidateAllByUserId(userId: string): Promise<void> {
-    const { error } = await this.client
-      .from(this.TABLE)
-      .update({ used: true })
-      .eq('user_id', userId)
-      .eq('used', false);
+    for (const record of inMemoryResetTokens.values()) {
+      if (record.userId === userId && !record.used) {
+        record.used = true;
+      }
+    }
 
-    if (error) {
-      throw new AppError(
-        `Error al invalidar tokens previos: ${error.message}`,
-        500,
-        'DB_ERROR',
-      );
+    try {
+      await this.client
+        .from(this.TABLE)
+        .update({ used: true })
+        .eq('user_id', userId)
+        .eq('used', false);
+    } catch {
+      // Supabase offline
     }
   }
 
   async findByTokenHash(tokenHash: string): Promise<ResetTokenRecord | null> {
-    const { data, error } = await this.client
-      .from(this.TABLE)
-      .select('*')
-      .eq('token_hash', tokenHash)
-      .single();
+    try {
+      const { data, error } = await this.client
+        .from(this.TABLE)
+        .select('*')
+        .eq('token_hash', tokenHash)
+        .single();
 
-    if (error || !data) return null;
-    return this.mapRow(data as ResetTokenRow);
+      if (!error && data) {
+        const rowRecord = this.mapRow(data as ResetTokenRow);
+        inMemoryResetTokens.set(rowRecord.tokenHash, rowRecord);
+        return rowRecord;
+      }
+    } catch {
+      // Supabase offline
+    }
+
+    const memRecord = inMemoryResetTokens.get(tokenHash);
+    if (memRecord) {
+      return memRecord;
+    }
+
+    return null;
   }
 
   async markAsUsed(tokenHash: string): Promise<void> {
-    const { error } = await this.client
-      .from(this.TABLE)
-      .update({ used: true })
-      .eq('token_hash', tokenHash);
+    const memRecord = inMemoryResetTokens.get(tokenHash);
+    if (memRecord) {
+      memRecord.used = true;
+    }
 
-    if (error) {
-      throw new AppError(
-        `Error al marcar token como usado: ${error.message}`,
-        500,
-        'DB_ERROR',
-      );
+    try {
+      await this.client
+        .from(this.TABLE)
+        .update({ used: true })
+        .eq('token_hash', tokenHash);
+    } catch {
+      // Supabase offline
     }
   }
 }

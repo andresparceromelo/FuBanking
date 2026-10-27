@@ -1,0 +1,448 @@
+{
+  "id": "fubanking-login-2fa-suite",
+  "version": "3.0",
+  "name": "Suite_10_Login_2FA",
+  "url": "http://localhost:3000",
+  "tests": [
+    {
+      "id": "cp01-login-2fa-exitoso",
+      "name": "CP01_Login_2FA_Exitoso",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'katalonfa@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//h2[contains(text(),'Verificación de seguridad')]",
+          "value": "7000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//h2[contains(text(),'Verificación de seguridad')]",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const devCode = sessionStorage.getItem('2fa_dev_code'); const inputs = document.querySelectorAll('input[autoComplete=\"one-time-code\"]'); if (devCode && inputs.length === 6) { for (let i = 0; i < 6; i++) { const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(inputs[i], devCode[i]); inputs[i].dispatchEvent(new Event('input', { bubbles: true })); inputs[i].dispatchEvent(new Event('change', { bubbles: true })); } }",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const btn = document.querySelector('button[type=\"submit\"]'); if (btn && !btn.disabled) { btn.click(); }",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Hola') or contains(text(),'Mis Cuentas') or contains(text(),'Panel') or contains(text(),'Dashboard')]",
+          "value": "8000"
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/dashboard",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp02-login-2fa-codigo-incorrecto",
+      "name": "CP02_Login_2FA_Codigo_Incorrecto",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'katalonfa@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//h2[contains(text(),'Verificación de seguridad')]",
+          "value": "7000"
+        },
+        {
+          "command": "runScript",
+          "target": "const fakeCode = '000000'; const inputs = document.querySelectorAll('input[autoComplete=\"one-time-code\"]'); if (inputs.length === 6) { for (let i = 0; i < 6; i++) { const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(inputs[i], fakeCode[i]); inputs[i].dispatchEvent(new Event('input', { bubbles: true })); inputs[i].dispatchEvent(new Event('change', { bubbles: true })); } }",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const btn = document.querySelector('button[type=\"submit\"]'); if (btn && !btn.disabled) { btn.click(); }",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Código incorrecto') or contains(text(),'incorrecto')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Código incorrecto') or contains(text(),'incorrecto')]",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/verify-two-factor",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp03-login-2fa-reenviar-codigo",
+      "name": "CP03_Login_2FA_Reenviar_Codigo",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'katalonfa@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//button[contains(text(),'No recibí el código')]",
+          "value": "7000"
+        },
+        {
+          "command": "click",
+          "target": "xpath=//button[contains(text(),'No recibí el código')]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'¡Código reenviado exitosamente!')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'¡Código reenviado exitosamente!')]",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const devCode = sessionStorage.getItem('2fa_dev_code'); const inputs = document.querySelectorAll('input[autoComplete=\"one-time-code\"]'); if (devCode && inputs.length === 6) { for (let i = 0; i < 6; i++) { const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(inputs[i], devCode[i]); inputs[i].dispatchEvent(new Event('input', { bubbles: true })); inputs[i].dispatchEvent(new Event('change', { bubbles: true })); } }",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const btn = document.querySelector('button[type=\"submit\"]'); if (btn && !btn.disabled) { btn.click(); }",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Hola') or contains(text(),'Mis Cuentas') or contains(text(),'Panel') or contains(text(),'Dashboard')]",
+          "value": "8000"
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/dashboard",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp04-acceso-directo-2fa-sin-sesion",
+      "name": "CP04_Acceso_Directo_2FA_Sin_Sesion",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "open",
+          "target": "http://localhost:3000/verify-two-factor",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "id=password",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp05-login-2fa-contrasena-erronea",
+      "name": "CP05_Login_2FA_Contrasena_Erronea",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'katalonfa@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'ClaveErronea123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Correo o contraseña incorrectos') or contains(text(),'incorrectos')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Correo o contraseña incorrectos') or contains(text(),'incorrectos')]",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

@@ -65,12 +65,18 @@ export function RegisterForm() {
   const passwordStrength = calculateStrength(passwordCriteria);
   const isPasswordWeak = passwordValue.length > 0 && passwordStrength === 'weak';
 
+  const [isMounted, setIsMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const onSubmit = (data: RegisterInput) => {
     handleRegister(data);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full max-w-sm">
+    <form onSubmit={handleSubmit(onSubmit)} noValidate data-hydrated={isMounted} className="space-y-6 w-full max-w-sm">
 
       {error && (
         <div

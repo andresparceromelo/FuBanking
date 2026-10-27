@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:3000" />
+<title>CP05_Cancelar_Edicion</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CP05_Cancelar_Edicion</td></tr>
+</thead>
+<tbody>
+<tr>
+	<td>open</td>
+	<td>http://localhost:3000/login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>localStorage.clear(); sessionStorage.clear(); document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=email</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'pruebaskatalon@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=password</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=button[type="submit"]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//button[contains(text(),'Editar datos')]</td>
+	<td>10000</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//button[contains(text(),'Editar datos')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//*[contains(text(),'Editar mis datos')]</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>xpath=//button[contains(text(),'Cancelar')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//button[contains(text(),'Editar datos')]</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//button[contains(text(),'Editar datos')]</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

@@ -130,9 +130,9 @@ export function PocketsClient() {
                 )}
               </select>
             </div>
-            <Input label="Nombre del bolsillo" value={name} onChange={(e) => setName(e.target.value)} placeholder="Vacaciones" />
-            <Input label="Monto inicial" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" />
-            <Button onClick={handleCreate} isLoading={loading}>
+            <Input id="pocket-name" label="Nombre del bolsillo" value={name} onChange={(e) => setName(e.target.value)} placeholder="Vacaciones" />
+            <Input id="pocket-amount" label="Monto inicial" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" />
+            <Button data-testid="create-pocket-button" onClick={handleCreate} isLoading={loading}>
               <span className="flex items-center gap-2"><Plus size={16} /> Crear bolsillo</span>
             </Button>
           </CardContent>
@@ -175,8 +175,8 @@ export function PocketsClient() {
                 ))}
               </select>
             </div>
-            <Input label="Monto" type="number" value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)} placeholder="100" />
-            <Button variant="outline" onClick={handleTransfer} isLoading={loading}>
+            <Input id="transfer-amount" label="Monto" type="number" value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)} placeholder="100" />
+            <Button data-testid="transfer-pockets-button" variant="outline" onClick={handleTransfer} isLoading={loading}>
               <span className="flex items-center gap-2"><ArrowRightLeft size={16} /> Transferir</span>
             </Button>
           </CardContent>
@@ -189,7 +189,7 @@ export function PocketsClient() {
         </CardHeader>
         <CardContent>
           {pockets.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
+            <div data-testid="pockets-empty" className="flex flex-col items-center justify-center py-12 text-center">
               <div className="w-16 h-16 rounded-full bg-primary/20 text-primary flex items-center justify-center mb-4">
                 <PiggyBank size={28} />
               </div>
@@ -200,26 +200,26 @@ export function PocketsClient() {
               {pockets.map((pocket) => {
                 const isEditing = editingPocketId === pocket.id;
                 return (
-                  <div key={pocket.id} className="rounded-2xl border border-border p-4 space-y-3">
+                  <div key={pocket.id} data-testid="pocket-card" className="rounded-2xl border border-border p-4 space-y-3">
                     <div className="flex items-center justify-between">
-                      <h3 className="font-semibold text-foreground">{pocket.name}</h3>
-                      <span className="text-sm text-primary">$ {pocket.amount.toLocaleString()}</span>
+                      <h3 data-testid="pocket-card-name" className="font-semibold text-foreground">{pocket.name}</h3>
+                      <span data-testid="pocket-card-amount" className="text-sm text-primary">$ {pocket.amount.toLocaleString()}</span>
                     </div>
                     {isEditing ? (
                       <div className="space-y-2">
-                        <Input label="Nombre" value={editingName} onChange={(e) => setEditingName(e.target.value)} placeholder="Nombre" />
-                        <Input label="Monto" type="number" value={editingAmount} onChange={(e) => setEditingAmount(e.target.value)} placeholder="0" />
+                        <Input id="edit-pocket-name" label="Nombre" value={editingName} onChange={(e) => setEditingName(e.target.value)} placeholder="Nombre" />
+                        <Input id="edit-pocket-amount" label="Monto" type="number" value={editingAmount} onChange={(e) => setEditingAmount(e.target.value)} placeholder="0" />
                         <div className="flex gap-2">
-                          <Button size="sm" onClick={() => void handleSaveEdit(pocket.id)}>Guardar</Button>
+                          <Button data-testid="save-pocket-button" size="sm" onClick={() => void handleSaveEdit(pocket.id)}>Guardar</Button>
                           <Button size="sm" variant="outline" onClick={() => setEditingPocketId(null)}>Cancelar</Button>
                         </div>
                       </div>
                     ) : (
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline" onClick={() => handleEditStart(pocket)}>
+                        <Button data-testid="edit-pocket-button" size="sm" variant="outline" onClick={() => handleEditStart(pocket)}>
                           <span className="flex items-center gap-2"><Pencil size={14} />Editar</span>
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => void handleDelete(pocket.id)}>
+                        <Button data-testid="delete-pocket-button" size="sm" variant="outline" onClick={() => void handleDelete(pocket.id)}>
                           <span className="flex items-center gap-2"><Trash2 size={14} />Eliminar</span>
                         </Button>
                       </div>
@@ -255,7 +255,7 @@ export function PocketsClient() {
               <Button variant="outline" onClick={() => setPendingDeletePocket(null)}>
                 Cancelar
               </Button>
-              <Button variant="destructive" onClick={() => void confirmDelete()} isLoading={loading}>
+              <Button data-testid="confirm-delete-pocket-button" variant="destructive" onClick={() => void confirmDelete()} isLoading={loading}>
                 Sí, eliminar
               </Button>
             </div>

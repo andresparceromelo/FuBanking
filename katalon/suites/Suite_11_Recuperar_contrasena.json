@@ -1,0 +1,516 @@
+{
+  "id": "fubanking-recuperar-contrasena-suite",
+  "version": "3.0",
+  "name": "Suite_11_Recuperar_contrasena",
+  "url": "http://localhost:3000",
+  "tests": [
+    {
+      "id": "cp01-solicitud-restablecer-exitosa",
+      "name": "CP01_Solicitud_Restablecer_Exitosa",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'pruebaskatalon2@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Revisa tu correo')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Revisa tu correo')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Te hemos enviado un enlace')]",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp02-solicitud-email-invalido",
+      "name": "CP02_Solicitud_Email_Invalido",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'correo-invalido-sin-arroba'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Correo electrónico inválido')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Correo electrónico inválido')]",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp03-solicitud-email-vacio",
+      "name": "CP03_Solicitud_Email_Vacio",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "css=button[type=\"submit\"]",
+          "value": "5000"
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Correo electrónico inválido') or contains(text(),'requerido')]",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp04-verificar-token-invalido",
+      "name": "CP04_Verificar_Token_Invalido",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/reset-password?token=token-falso-12345",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Enlace inválido')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Enlace inválido')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//button[contains(text(),'Solicitar uno nuevo')]",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp05-acceso-reset-sin-token",
+      "name": "CP05_Acceso_Reset_Sin_Token",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/reset-password",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Enlace inválido')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Enlace inválido')]",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "xpath=//button[contains(text(),'Solicitar uno nuevo')]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1500",
+          "value": ""
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        }
+      ]
+    },
+    {
+      "id": "cp06-cambio-contrasena-exitoso",
+      "name": "CP06_Cambio_Contrasena_Exitoso",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "fetch('http://localhost:3001/api/v1/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'pruebaskatalon2@gmail.com' }) }).then(function(r) { return r.json(); }).then(function(res) { if (res && res.data && res.data.token) { window.location.href = 'http://localhost:3000/reset-password?token=' + res.data.token; } });",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "4000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=newPassword",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('newPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'¡Contraseña actualizada!')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'¡Contraseña actualizada!')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Tu contraseña se ha cambiado correctamente')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//button[contains(text(),'Ir a Iniciar Sesión')]",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "xpath=//button[contains(text(),'Ir a Iniciar Sesión')]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "assertLocation",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp07-restablecer-contrasenas-no-coinciden",
+      "name": "CP07_Restablecer_Contrasenas_No_Coinciden",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "fetch('http://localhost:3001/api/v1/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'pruebaskatalon2@gmail.com' }) }).then(function(r) { return r.json(); }).then(function(res) { if (res && res.data && res.data.token) { window.location.href = 'http://localhost:3000/reset-password?token=' + res.data.token; } });",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "4000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=newPassword",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('newPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'OtraContrasena999.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Las contraseñas no coinciden')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Las contraseñas no coinciden')]",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp08-restablecer-contrasena-debil",
+      "name": "CP08_Restablecer_Contrasena_Debil",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/forgot-password",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "fetch('http://localhost:3001/api/v1/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'pruebaskatalon2@gmail.com' }) }).then(function(r) { return r.json(); }).then(function(res) { if (res && res.data && res.data.token) { window.location.href = 'http://localhost:3000/reset-password?token=' + res.data.token; } });",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "4000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=newPassword",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('newPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1234'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1234'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'La contraseña es demasiado débil')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'La contraseña es demasiado débil')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//button[@type='submit' and @disabled]",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

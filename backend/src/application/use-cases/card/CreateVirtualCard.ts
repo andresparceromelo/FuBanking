@@ -3,6 +3,7 @@ import { IVirtualCardRepository } from '../../../domain/repositories/IVirtualCar
 import { IAccountRepository } from '../../../domain/repositories/IAccountRepository';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { INotificationRepository } from '../../../domain/repositories/INotificationRepository';
+import { IPasswordService } from '../../interfaces/IPasswordService';
 import { VirtualCard, CardStatus, PublicVirtualCard } from '../../../domain/entities/VirtualCard';
 import { Notification, NotificationType } from '../../../domain/entities/Notification';
 import { AppError } from '../../../shared/errors/AppError';
@@ -10,6 +11,7 @@ import { AppError } from '../../../shared/errors/AppError';
 export interface CreateVirtualCardDto {
   userId: string;
   accountId: string;
+  password?: string;
 }
 
 export class CreateVirtualCard {
@@ -18,6 +20,7 @@ export class CreateVirtualCard {
     private readonly accountRepository: IAccountRepository,
     private readonly userRepository: IUserRepository,
     private readonly notificationRepository?: INotificationRepository,
+    private readonly passwordService?: IPasswordService,
   ) {}
 
   async execute(dto: CreateVirtualCardDto): Promise<PublicVirtualCard> {
@@ -28,6 +31,26 @@ export class CreateVirtualCard {
     account.assertBelongsTo(dto.userId);
 
     const user = await this.userRepository.findById(dto.userId);
+
+    if (this.passwordService) {
+      if (!dto.password) {
+        throw new AppError('La contraseña es requerida para emitir una tarjeta virtual', 400, 'PASSWORD_REQUIRED');
+      }
+
+      if (!user) {
+        throw new AppError('Usuario no encontrado', 404, 'USER_NOT_FOUND');
+      }
+
+      const isPasswordValid = await this.passwordService.compare(
+        dto.password,
+        user.getPasswordHash(),
+      );
+
+      if (!isPasswordValid) {
+        throw new AppError('Contraseña incorrecta', 401, 'INVALID_CREDENTIALS');
+      }
+    }
+
     const cardHolderName = user ? `${user.firstName} ${user.lastName}`.toUpperCase() : 'TITULAR FUBANK';
 
     const { cardNumber, lastFour, expirationDate, cvv } = VirtualCard.generateNumber();

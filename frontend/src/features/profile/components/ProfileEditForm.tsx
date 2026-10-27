@@ -77,7 +77,7 @@ export function ProfileEditForm({ user, onCancel, onSuccess }: Readonly<ProfileE
       </CardHeader>
 
       <CardContent className="pt-6">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-6">
 
           {error && (
             <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">

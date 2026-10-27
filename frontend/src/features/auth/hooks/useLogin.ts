@@ -22,6 +22,9 @@ export function useLogin() {
       if (response.requiresTwoFactor) {
         sessionStorage.setItem('2fa_temp_token', response.temporaryToken);
         sessionStorage.setItem('2fa_masked_email', response.maskedEmail);
+        if ((response as any).devCode) {
+          sessionStorage.setItem('2fa_dev_code', (response as any).devCode);
+        }
         router.push('/verify-two-factor');
       } else {
         login(response.user, response.token, data.rememberMe);

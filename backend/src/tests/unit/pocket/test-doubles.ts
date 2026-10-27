@@ -95,6 +95,15 @@ export class FakeAccountRepository implements IAccountRepository {
 
   /** Persiste el nuevo saldo reconstruyendo la entidad (Account no tiene setter). */
   async updateBalance(accountId: string, newBalance: number): Promise<Account> {
+    return this.replace(accountId, { balance: newBalance });
+  }
+
+  /** Persiste el nuevo estado reconstruyendo la entidad. */
+  async updateStatus(accountId: string, status: AccountStatus): Promise<Account> {
+    return this.replace(accountId, { status });
+  }
+
+  private replace(accountId: string, changes: Partial<AccountProps>): Account {
     const current = this.accounts.get(accountId);
     if (!current) throw new Error(`Cuenta ${accountId} no existe en el fake`);
     const updated = new Account({
@@ -102,10 +111,11 @@ export class FakeAccountRepository implements IAccountRepository {
       userId: current.userId,
       accountNumber: current.accountNumber,
       accountType: current.accountType,
-      balance: newBalance,
+      balance: current.balance,
       status: current.status,
       details: current.details,
       createdAt: current.createdAt,
+      ...changes,
     });
     this.accounts.set(accountId, updated);
     return updated;
@@ -208,6 +218,10 @@ export class StubAccountRepository implements IAccountRepository {
     if (!this.canned) throw new Error('STUB sin cuenta enlatada');
     return this.canned; // respuesta enlatada
   }
+  async updateStatus(): Promise<Account> {
+    if (!this.canned) throw new Error('STUB sin cuenta enlatada');
+    return this.canned;
+  }
 }
 
 export class StubPocketRepository implements IPocketRepository {
@@ -277,6 +291,7 @@ export function makeMockAccountRepository(): {
     findByUserId: vi.fn(),
     save: vi.fn(),
     updateBalance: vi.fn(),
+    updateStatus: vi.fn(),
   };
 }
 

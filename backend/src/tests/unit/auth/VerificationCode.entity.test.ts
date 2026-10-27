@@ -11,15 +11,12 @@ describe('VerificationCode — Entity', () => {
     expect(code.attempts).toBe(0);
   });
 
-  it('should track attempts and cap at 5', () => {
+  it('should track attempts and cap at 1 (política bancaria de intento único)', () => {
     const code = VerificationCode.create({ id: 'vc-1', userId: 'u1', codeHash: 'h' });
 
-    for (let i = 0; i < 4; i += 1) {
-      code.incrementAttempts();
-      expect(code.hasExceededAttempts()).toBe(false);
-    }
+    expect(code.hasExceededAttempts()).toBe(false);
     code.incrementAttempts();
-    expect(code.attempts).toBe(5);
+    expect(code.attempts).toBe(1);
     expect(code.hasExceededAttempts()).toBe(true);
   });
 

@@ -55,6 +55,9 @@ export function useTwoFactor() {
       const response = await authService.resendTwoFactorCode(temporaryToken);
       sessionStorage.setItem('2fa_temp_token', response.temporaryToken);
       sessionStorage.setItem('2fa_masked_email', response.maskedEmail);
+      if ((response as any).devCode) {
+        sessionStorage.setItem('2fa_dev_code', (response as any).devCode);
+      }
       setResendSuccess(true);
       setTimeout(() => setResendSuccess(false), 4000);
     } catch (err: any) {

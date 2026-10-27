@@ -1,0 +1,45 @@
+> banco-digital-backend@1.0.0 test:performance:bolsillos
+> vitest run src/tests/performance/pocket --reporter=verbose
+ RUN  v4.1.11 <repo>/backend
+stdout | src/tests/performance/pocket/bolsillos.performance.test.ts
+◇ injected env (3) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-01 · Crear bolsillo — POST /pockets 198ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-02 · Consultar bolsillos — GET /pockets/account/:id 76ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-03 · Actualizar bolsillo — PATCH /pockets/:id 85ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-04 · Eliminar bolsillo — DELETE /pockets/:id 67ms
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-05 · Transferir entre bolsillos — POST /pockets/transfer 73ms
+ × src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-06 · Depositar dinero — POST /accounts/:id/deposit 5606ms
+   → PF-06 Depositar dinero (POST): p50 (ms): expected 159.42 to be at most 100
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Escalabilidad y recorrido completo > PF-07 · Consultar una cuenta con 1.000 bolsillos escala dentro del presupuesto 150ms
+stdout | src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria)
+Tiempos de respuesta (ms) — HTTP real sobre la app en memoria
+Operación                                        n    min  media    p50    p95    máx   p50≤   p95≤  estado
+PF-01 Crear bolsillo (POST /pockets)            30   1.79   2.64   2.41   4.07   4.35    100    300      OK
+PF-02 Consultar bolsillos (GET)                 30   1.54   1.76   1.76   1.93   2.01    100    300      OK
+PF-03 Actualizar bolsillo (PATCH)               30    1.8   2.06   2.02   2.42   2.65    100    300      OK
+PF-04 Eliminar bolsillo (DELETE)                30    1.2   1.67   1.71   1.96      2    100    300      OK
+PF-05 Transferir entre bolsillos (POST)         30   1.36   1.89   1.75   2.65   5.14    100    300      OK
+PF-06 Depositar dinero (POST)                   30 153.93 159.52 159.42 164.19 167.37    100    300   FUERA
+PF-07 Consultar con 1.000 bolsillos (GET)       20   4.56   5.37    4.9   7.52  10.49    150    400      OK
+PF-08 Recorrido de 5 peticiones                 15   5.37   6.72    6.5  10.05  10.05    250    600      OK
+ ✓ src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Escalabilidad y recorrido completo > PF-08 · Recorrido completo (crear → consultar → actualizar → transferir → eliminar) 139ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/tests/performance/pocket/bolsillos.performance.test.ts > Performance · Bolsillos y Depósito (HTTP real sobre la app en memoria) > Una petición por operación (30 repeticiones, 5 de calentamiento) > PF-06 · Depositar dinero — POST /accounts/:id/deposit
+AssertionError: PF-06 Depositar dinero (POST): p50 (ms): expected 159.42 to be at most 100
+- Expected
++ Received
+- 100
++ 159.42
+ ❯ assertWithinBudget src/tests/performance/pocket/bolsillos.performance.test.ts:76:60
+     74|     report.push(stats);
+     75|     expect(stats.unexpected, `${stats.label}: respuestas con código in…
+     76|     expect(stats.p50, `${stats.label}: p50 (ms)`).to.be.at.most(stats.…
+       |                                                            ^
+     77|     expect(stats.p95, `${stats.label}: p95 (ms)`).to.be.at.most(stats.…
+     78|   }
+ ❯ src/tests/performance/pocket/bolsillos.performance.test.ts:164:7
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  09:53:24
+   Duration  7.36s (transform 333ms, setup 0ms, import 730ms, tests 6.40s, environment 0ms)

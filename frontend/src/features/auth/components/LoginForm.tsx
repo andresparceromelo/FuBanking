@@ -14,10 +14,16 @@ import Link from 'next/link';
 export function LoginForm() {
   const { handleLogin, isLoading, error } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -28,15 +34,30 @@ export function LoginForm() {
     },
   });
 
-  const onSubmit = (data: LoginInput) => {
-    handleLogin(data);
+  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const emailEl = form.querySelector<HTMLInputElement>('#email, [name="email"]');
+    const passEl = form.querySelector<HTMLInputElement>('#password, [name="password"]');
+    const rememberEl = form.querySelector<HTMLInputElement>('input[type="checkbox"]');
+    const email = emailEl?.value ?? '';
+    const password = passEl?.value ?? '';
+    const rememberMe = rememberEl?.checked ?? false;
+
+    setValue('email', email);
+    setValue('password', password);
+    setValue('rememberMe', rememberMe);
+
+    handleSubmit((data) => {
+      handleLogin(data);
+    })(e);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 w-full max-w-sm" noValidate>
+    <form onSubmit={onFormSubmit} data-hydrated={isMounted} className="space-y-6 w-full max-w-sm" noValidate>
       
       {error && (
-        <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
+        <div data-cy="login-error" role="alert" className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
           {error.message}
         </div>
       )}
@@ -46,6 +67,7 @@ export function LoginForm() {
           <Label htmlFor="email">Correo electrónico</Label>
           <Input
             id="email"
+            data-cy="email"
             type="email"
             placeholder="Ingresa tu correo"
             autoComplete="email"
@@ -60,6 +82,7 @@ export function LoginForm() {
           <div className="relative">
             <Input
               id="password"
+              data-cy="password"
               type={showPassword ? 'text' : 'password'}
               placeholder="Ingresa tu contraseña"
               autoComplete="current-password"
@@ -69,6 +92,7 @@ export function LoginForm() {
             />
             <button
               type="button"
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Ver contraseña'}
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-4 top-3.5 text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -89,7 +113,7 @@ export function LoginForm() {
         </div>
       </div>
 
-      <Button type="submit" isLoading={isLoading} className="w-full mt-8">
+      <Button id="login-btn" data-cy="login-btn" type="submit" isLoading={isLoading} className="w-full mt-8">
         Continuar
       </Button>
 

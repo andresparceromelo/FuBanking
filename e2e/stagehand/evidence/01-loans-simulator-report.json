@@ -1,0 +1,39 @@
+{
+  "scenario": "01-loans-simulator",
+  "executedAt": "2026-10-24T18:00:24.070Z",
+  "totalSteps": 4,
+  "steps": [
+    {
+      "step": "Establecer monto en 5000000 vía lenguaje natural",
+      "capability": "act",
+      "instruction": "Type 5000000 into the Monto input field",
+      "result": "Valor ingresado",
+      "durationMs": 1348
+    },
+    {
+      "step": "Establecer 12 cuotas vía lenguaje natural",
+      "capability": "act",
+      "instruction": "Type 12 into the Cuotas input field",
+      "result": "Valor ingresado",
+      "durationMs": 879
+    },
+    {
+      "step": "Hacer clic en el botón Simular",
+      "capability": "act",
+      "instruction": "Click the Simular button",
+      "result": "Simulación ejecutada",
+      "durationMs": 2394
+    },
+    {
+      "step": "Extracción de resultados financieros con Zod",
+      "capability": "extract",
+      "instruction": "Extract the monthly payment, total to pay, and total interest from the loan results card",
+      "result": {
+        "monthlyPayment": "$458.400",
+        "totalToPay": "$5.500.800",
+        "totalInterest": "$500.800"
+      },
+      "durationMs": 684
+    }
+  ]
+}

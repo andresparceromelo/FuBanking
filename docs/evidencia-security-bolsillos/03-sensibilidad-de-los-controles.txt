@@ -1,0 +1,17 @@
+### Mutación 1: DeletePocket sin account.assertBelongsTo (control de propiedad eliminado)
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/tests/security/pocket/autorizacion.security.test.ts > SEC-AUTHZ · Un usuario solo opera sobre sus propios recursos > IDOR / BOLA: el intruso usa los ids de recursos del titular > 'Eliminar bolsillo' → 403 FORBIDDEN y ninguna de las dos cuentas cambia
+AssertionError: expected 200 to equal 403
+      Tests  1 failed | 14 passed (15)
+
+### Mutación 2: PocketsClient pinta el nombre con dangerouslySetInnerHTML
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/tests/unit/security/pockets.xss.test.tsx > SEC-OUT-01 · PocketsClient muestra nombres maliciosos como texto > etiqueta script: se ve literal y no crea elementos ni ejecuta código
+TestingLibraryElementError: Unable to find role="heading" and name "<script>window.__xss = 1</script>"
+ FAIL  src/tests/unit/security/pockets.xss.test.tsx > SEC-OUT-01 · PocketsClient muestra nombres maliciosos como texto > imagen con onerror: se ve literal y no crea elementos ni ejecuta código
+TestingLibraryElementError: Unable to find role="heading" and name "<img src="x" onerror="window.__xss = 1">"
+ FAIL  src/tests/unit/security/pockets.xss.test.tsx > SEC-OUT-01 · PocketsClient muestra nombres maliciosos como texto > svg con onload: se ve literal y no crea elementos ni ejecuta código
+TestingLibraryElementError: Unable to find role="heading" and name "<svg onload="window.__xss = 1"></svg>"
+ FAIL  src/tests/unit/security/pockets.xss.test.tsx > SEC-OUT-01 · PocketsClient muestra nombres maliciosos como texto > iframe con javascript:: se ve literal y no crea elementos ni ejecuta código
+TestingLibraryElementError: Unable to find role="heading" and name "<iframe src="javascript:window.__xss = 1"></iframe>"
+      Tests  4 failed (4)

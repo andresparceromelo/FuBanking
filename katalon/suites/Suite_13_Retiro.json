@@ -1,0 +1,507 @@
+{
+  "id": "fubanking-retiro-suite",
+  "version": "3.0",
+  "name": "Suite_13_Retiro",
+  "url": "http://localhost:3000",
+  "tests": [
+    {
+      "id": "cp01-retiro-monto-valido",
+      "name": "CP01_Retiro_Monto_Valido",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'pruebaskatalon@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "open",
+          "target": "http://localhost:3000/accounts",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": "10000"
+        },
+        {
+          "command": "click",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=dw-amount",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('dw-amount'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '1000'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=dw-description",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('dw-description'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Retiro cajero automatico'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "xpath=//button[@data-testid='dw-submit']",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": "10000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp02-retiro-saldo-insuficiente",
+      "name": "CP02_Retiro_Saldo_Insuficiente",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'pruebaskatalon@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "open",
+          "target": "http://localhost:3000/accounts",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": "10000"
+        },
+        {
+          "command": "click",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=dw-amount",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('dw-amount'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '90000000000'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "xpath=//button[@data-testid='dw-submit']",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Saldo insuficiente') or contains(text(),'INSUFFICIENT_FUNDS')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Saldo insuficiente') or contains(text(),'INSUFFICIENT_FUNDS')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//h3[contains(text(),'Retirar Dinero')]",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp03-retiro-monto-invalido",
+      "name": "CP03_Retiro_Monto_Invalido",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'pruebaskatalon@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "open",
+          "target": "http://localhost:3000/accounts",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": "10000"
+        },
+        {
+          "command": "click",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=dw-amount",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('dw-amount'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, '0'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "xpath=//button[@data-testid='dw-submit']",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//*[contains(text(),'Por favor ingresa un monto válido mayor a cero') or contains(text(),'INVALID_AMOUNT')]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//*[contains(text(),'Por favor ingresa un monto válido mayor a cero') or contains(text(),'INVALID_AMOUNT')]",
+          "value": ""
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=//h3[contains(text(),'Retirar Dinero')]",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "cp04-cancelar-retiro",
+      "name": "CP04_Cancelar_Retiro",
+      "commands": [
+        {
+          "command": "open",
+          "target": "http://localhost:3000/login",
+          "value": ""
+        },
+        {
+          "command": "runScript",
+          "target": "localStorage.clear(); sessionStorage.clear(); document.cookie = \"token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT\";",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=email",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'pruebaskatalon@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "id=password",
+          "value": "5000"
+        },
+        {
+          "command": "runScript",
+          "target": "const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "500",
+          "value": ""
+        },
+        {
+          "command": "click",
+          "target": "css=button[type=\"submit\"]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "3000",
+          "value": ""
+        },
+        {
+          "command": "open",
+          "target": "http://localhost:3000/accounts",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "2000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": "10000"
+        },
+        {
+          "command": "click",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=//h3[contains(text(),'Retirar Dinero')]",
+          "value": "5000"
+        },
+        {
+          "command": "click",
+          "target": "xpath=//button[contains(text(),'Cancelar')]",
+          "value": ""
+        },
+        {
+          "command": "pause",
+          "target": "1000",
+          "value": ""
+        },
+        {
+          "command": "waitForElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": "5000"
+        },
+        {
+          "command": "assertElementPresent",
+          "target": "xpath=(//button[contains(.,'Retirar')])[1]",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}

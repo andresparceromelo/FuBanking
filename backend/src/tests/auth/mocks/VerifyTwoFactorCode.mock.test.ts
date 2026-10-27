@@ -10,8 +10,8 @@
  *   C6  — código no encontrado → INVALID_OTP
  *   C7  — código ya usado → OTP_ALREADY_USED
  *   C8  — código expirado → OTP_EXPIRED
- *   C9  — intentos >= máximo (5) → MAX_ATTEMPTS_REACHED
- *   C10 — código incorrecto, intentos < max → incrementa y lanza INVALID_OTP
+ *   C9  — intentos >= máximo (1) → MAX_ATTEMPTS_REACHED
+ *   C10 — código incorrecto al 1er intento → invalida y lanza MAX_ATTEMPTS_REACHED
  *   C2  — código correcto → marca usado, genera JWT, retorna user+token
  *   C11 — rememberMe=true en temporaryToken → expiresIn '30d'
  *   C12 — rememberMe=false en temporaryToken → expiresIn '7d'
@@ -113,9 +113,9 @@ describe('VerifyTwoFactorCode — Pruebas con Mocks (vi.fn)', () => {
   });
 
   // ── C9 ──────────────────────────────────────────────────────────────────
-  it('C9 - intentos >= máximo (5): lanza error MAX_ATTEMPTS_REACHED', async () => {
+  it('C9 - intentos >= máximo (1): lanza error MAX_ATTEMPTS_REACHED', async () => {
     vi.mocked(mocks.verificationCodeRepository.findLatestByUserId).mockResolvedValue(
-      buildVerificationCode({ used: false, attempts: 5 }),
+      buildVerificationCode({ used: false, attempts: 1 }),
     );
 
     await expect(
@@ -124,20 +124,21 @@ describe('VerifyTwoFactorCode — Pruebas con Mocks (vi.fn)', () => {
   });
 
   // ── C10 ─────────────────────────────────────────────────────────────────
-  it('C10 - código incorrecto (intentos < max): incrementa intentos y lanza INVALID_OTP', async () => {
+  it('C10 - código incorrecto al primer intento: anula el código y lanza MAX_ATTEMPTS_REACHED', async () => {
     vi.mocked(mocks.verificationCodeRepository.findLatestByUserId).mockResolvedValue(
-      buildVerificationCode({ used: false, attempts: 2 }),
+      buildVerificationCode({ used: false, attempts: 0 }),
     );
     vi.mocked(mocks.passwordService.compare).mockResolvedValue(false);
     vi.mocked(mocks.verificationCodeRepository.update).mockResolvedValue();
 
     await expect(
       verifyTwoFactor.execute({ temporaryToken: validTempToken, code: '444444' }),
-    ).rejects.toMatchObject({ code: 'INVALID_OTP' });
+    ).rejects.toMatchObject({ code: 'MAX_ATTEMPTS_REACHED' });
 
     expect(mocks.verificationCodeRepository.update).toHaveBeenCalledTimes(1);
     const updatedCode = vi.mocked(mocks.verificationCodeRepository.update).mock.calls[0]?.[0];
-    assert(updatedCode?.attempts).toBeEqual(3);
+    assert(updatedCode?.attempts).toBeEqual(1);
+    assert(updatedCode?.isUsed()).toBeTrue();
   });
 
   // ── C2 ──────────────────────────────────────────────────────────────────

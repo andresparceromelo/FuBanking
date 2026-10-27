@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TC07_Admin_Iniciar_Sesion_Y_Acceso</title>
+</head>
+<body>
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC07_Admin_Iniciar_Sesion_Y_Acceso</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//h1[contains(.,'Gestionar Creditos')]</td><td>10000</td></tr>
+      <tr><td>assertVisible</td><td>xpath=//h1[contains(.,'Gestionar Creditos')]</td><td></td></tr>
+      <tr><td>assertVisible</td><td>id=btn-refresh-loans</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

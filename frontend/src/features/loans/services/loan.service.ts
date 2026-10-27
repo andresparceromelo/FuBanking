@@ -1,45 +1,17 @@
 import { apiClient } from '@/shared/services/api.client';
+import type {
+  LoanSimulation,
+  LoanApplication,
+  SimulateLoanPayload,
+  CreateLoanPayload,
+} from '../types/loan.types';
 
-export interface SimulateLoanPayload {
-  amount: number;
-  installments: number;
-  annualRate: number;
-}
-
-export interface CreateLoanPayload {
-  amount: number;
-  installments: number;
-  annualRate: number;
-  monthlyIncome: number;
-}
-
-export interface LoanSimulation {
-  amount: number;
-  installments: number;
-  annualRate: number;
-  monthlyRate: number;
-  monthlyPayment: number;
-  totalToPay: number;
-  totalInterest: number;
-}
-
-export interface LoanApplication {
-  id: string;
-  userId: string;
-  amount: number;
-  installments: number;
-  annualRate: number;
-  monthlyIncome: number;
-  monthlyPayment: number;
-  totalToPay: number;
-  totalInterest: number;
-  eligibility: {
-    isEligible: boolean;
-    reasons: string[];
-  };
-  status: string;
-  createdAt: string;
-}
+export type {
+  LoanSimulation,
+  LoanApplication,
+  SimulateLoanPayload,
+  CreateLoanPayload,
+};
 
 class LoanService {
   async simulate(payload: SimulateLoanPayload): Promise<LoanSimulation> {

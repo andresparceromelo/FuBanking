@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:3000" />
+<title>CP07_Restablecer_Contrasenas_No_Coinciden</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CP07_Restablecer_Contrasenas_No_Coinciden</td></tr>
+</thead>
+<tbody>
+<!-- 1. Abrir vista de recuperación de contraseña -->
+<tr>
+	<td>open</td>
+	<td>http://localhost:3000/forgot-password</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>localStorage.clear(); sessionStorage.clear(); document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 2. Solicitar token al backend y navegar automáticamente al formulario con el token real -->
+<tr>
+	<td>runScript</td>
+	<td>fetch('http://localhost:3001/api/v1/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'pruebaskatalon2@gmail.com' }) }).then(function(r) { return r.json(); }).then(function(res) { if (res &amp;&amp; res.data &amp;&amp; res.data.token) { window.location.href = 'http://localhost:3000/reset-password?token=' + res.data.token; } });</td>
+	<td></td>
+</tr>
+
+<!-- 3. Esperar que cargue el formulario -->
+<tr>
+	<td>pause</td>
+	<td>4000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=newPassword</td>
+	<td>5000</td>
+</tr>
+
+<!-- 4. Escribir contraseña nueva -->
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('newPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 5. Escribir confirmación diferente (que no coincide) -->
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'OtraContrasena999.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 6. Enviar formulario -->
+<tr>
+	<td>click</td>
+	<td>css=button[type="submit"]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1000</td>
+	<td></td>
+</tr>
+
+<!-- 7. Verificar mensaje de error de validación -->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//*[contains(text(),'Las contraseñas no coinciden')]</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//*[contains(text(),'Las contraseñas no coinciden')]</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

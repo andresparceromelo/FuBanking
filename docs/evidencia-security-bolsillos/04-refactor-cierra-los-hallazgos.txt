@@ -1,0 +1,34 @@
+### Suite completa del backend inmediatamente después del refactor, SIN tocar las pruebas.
+### Cada it.fails que ahora pasa es reportado por Vitest: son exactamente las vulnerabilidades corregidas.
+⎯⎯⎯⎯⎯⎯ Failed Tests 29 ⎯⎯⎯⎯⎯⎯⎯
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Crear bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Consultar bolsillos' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Actualizar bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Eliminar bolsillo' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Transferir entre bolsillos' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > [SEC-01] rechaza el token temporal de 2FA (emitido antes de validar el código OTP)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · Solo un token de acceso válido permite operar > 'Depositar dinero' > [SEC-02] rechaza el token de recuperación de contraseña (enlace del correo)
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · adminMiddleware aplica la misma regla > [SEC-01] rechaza el token temporal de 2FA de un administrador
+ - security/pocket/autenticacion.security.test.ts > SEC-AUTH · adminMiddleware aplica la misma regla > [SEC-02] rechaza el token de recuperación de contraseña de un administrador
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza booleano true con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza booleano false con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza null con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza lista vacía con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza lista con un número con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza texto vacío con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza texto de espacios con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza hexadecimal con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al crear un bolsillo > [SEC-03] rechaza notación científica con 400 y no crea nada
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza booleano true con 400 y no mueve el saldo
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza lista con un número con 400 y no mueve el saldo
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza hexadecimal con 400 y no mueve el saldo
+ - security/pocket/entrada.security.test.ts > SEC-IN · Política de entrada > SEC-IN-01 · Montos estrictos al depositar > [SEC-04] rechaza notación científica con 400 y no mueve el saldo
+ - regression/pocket/crear.regression.test.ts > Regresión · Crear bolsillo (POST /api/v1/pockets) > Defectos conocidos (it.fails) > RG-CR-D02 · [D-02] rechaza un monto booleano en vez de convertirlo en $1
+ - regression/account/depositar.regression.test.ts > Regresión · Depositar dinero (POST /api/v1/accounts/:id/deposit) > Defectos conocidos (it.fails) > RG-DE-D08 · [D-08] rechaza un monto booleano en vez de depositar $1
+ Test Files  4 failed | 80 passed (84)
+      Tests  29 failed | 772 passed | 13 expected fail (814)

@@ -40,10 +40,11 @@ export function ResetPasswordForm({ token }: Readonly<ResetPasswordFormProps>) {
   const passwordStrength = calculateStrength(passwordCriteria);
   const isPasswordWeak = passwordValue.length > 0 && passwordStrength === 'weak';
 
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
-    if (token) {
-      verifyToken(token);
-    }
+    setIsMounted(true);
+    verifyToken(token);
   }, [token]);
 
   if (tokenStatus === 'idle' || tokenStatus === 'loading') {
@@ -103,7 +104,7 @@ export function ResetPasswordForm({ token }: Readonly<ResetPasswordFormProps>) {
   }
 
   return (
-    <form onSubmit={handleSubmit(resetPassword)} className="space-y-6 w-full max-w-sm">
+    <form onSubmit={handleSubmit(resetPassword)} noValidate data-hydrated={isMounted} className="space-y-6 w-full max-w-sm">
       {error && (
         <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20">
           {error.message}

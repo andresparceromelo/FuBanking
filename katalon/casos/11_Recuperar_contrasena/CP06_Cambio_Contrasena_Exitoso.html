@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:3000" />
+<title>CP06_Cambio_Contrasena_Exitoso</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CP06_Cambio_Contrasena_Exitoso</td></tr>
+</thead>
+<tbody>
+<!-- 1. Abrir vista de recuperación de contraseña -->
+<tr>
+	<td>open</td>
+	<td>http://localhost:3000/forgot-password</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>localStorage.clear(); sessionStorage.clear(); document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 2. Solicitar token al backend y navegar automáticamente al formulario de reseteo con el token real -->
+<tr>
+	<td>runScript</td>
+	<td>fetch('http://localhost:3001/api/v1/auth/forgot-password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'pruebaskatalon2@gmail.com' }) }).then(function(r) { return r.json(); }).then(function(res) { if (res &amp;&amp; res.data &amp;&amp; res.data.token) { window.location.href = 'http://localhost:3000/reset-password?token=' + res.data.token; } });</td>
+	<td></td>
+</tr>
+
+<!-- 3. Esperar a que la página cargue, verifique el token y monte los inputs de contraseña -->
+<tr>
+	<td>pause</td>
+	<td>4000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=newPassword</td>
+	<td>5000</td>
+</tr>
+
+<!-- 4. Escribir nueva contraseña mediante descriptor nativo de React -->
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('newPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 5. Escribir confirmación de contraseña mediante descriptor nativo de React -->
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('confirmPassword'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 6. Enviar formulario para cambiar la contraseña en la base de datos -->
+<tr>
+	<td>click</td>
+	<td>css=button[type="submit"]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+
+<!-- 7. Validar mensaje de éxito de cambio de contraseña -->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//*[contains(text(),'¡Contraseña actualizada!')]</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//*[contains(text(),'¡Contraseña actualizada!')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//*[contains(text(),'Tu contraseña se ha cambiado correctamente')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//button[contains(text(),'Ir a Iniciar Sesión')]</td>
+	<td></td>
+</tr>
+
+<!-- 8. Redirección al login -->
+<tr>
+	<td>click</td>
+	<td>xpath=//button[contains(text(),'Ir a Iniciar Sesión')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=email</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>http://localhost:3000/login</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

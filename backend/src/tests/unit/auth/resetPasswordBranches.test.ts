@@ -176,7 +176,7 @@ describe('VerifyTwoFactorCode branches', () => {
 
     await expect(
       useCase.execute({ temporaryToken, code: '000000' }),
-    ).rejects.toThrow(/1 intento\./);
+    ).rejects.toThrow(/1 intento/i);
   });
 
   it('should throw USER_NOT_FOUND when the user is gone', async () => {

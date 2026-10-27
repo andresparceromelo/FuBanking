@@ -73,6 +73,7 @@ export interface LoginUserTwoFactorResponseDto {
   requiresTwoFactor: true;
   temporaryToken: string;
   maskedEmail: string;
+  devCode?: string;
 }
 
 export type LoginUserResponseDto = LoginUserDirectResponseDto | LoginUserTwoFactorResponseDto;
@@ -110,6 +111,11 @@ export interface ResendTwoFactorDto {
 
 export interface RequestPasswordResetDto {
   email: string;
+}
+
+export interface RequestPasswordResetResponseDto {
+  token?: string;
+  resetLink?: string;
 }
 
 export interface ResetPasswordDto {

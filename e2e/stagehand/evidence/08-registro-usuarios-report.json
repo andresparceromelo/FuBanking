@@ -1,0 +1,81 @@
+{
+  "scenario": "08-registro-usuarios",
+  "executedAt": "2026-10-27T02:22:41.549Z",
+  "totalSteps": 7,
+  "steps": [
+    {
+      "step": "Enviar formulario de registro",
+      "capability": "act",
+      "instruction": "Registro: user_631651@gmail.com",
+      "result": "Enviado",
+      "durationMs": 7774
+    },
+    {
+      "step": "Submit con email duplicado",
+      "capability": "act",
+      "instruction": "Click submit",
+      "result": "Enviado",
+      "durationMs": 18213
+    },
+    {
+      "step": "Verificar error email duplicado",
+      "capability": "extract",
+      "instruction": "Extract duplicate email error",
+      "result": {
+        "errorVisible": false
+      },
+      "durationMs": 19471
+    },
+    {
+      "step": "Submit con contraseña débil",
+      "capability": "act",
+      "instruction": "Click submit weak password",
+      "result": "Enviado",
+      "durationMs": 47634
+    },
+    {
+      "step": "Verificar error contraseña débil",
+      "capability": "extract",
+      "instruction": "Extract password validation",
+      "result": {
+        "passwordError": true
+      },
+      "durationMs": 10635
+    },
+    {
+      "step": "Submit formulario vacío",
+      "capability": "act",
+      "instruction": "Click submit empty",
+      "result": "Enviado",
+      "durationMs": 14490
+    },
+    {
+      "step": "Observar errores de validación campos vacíos",
+      "capability": "observe",
+      "instruction": "Find validation errors",
+      "result": {
+        "data": [
+          {
+            "selector": "xpath=/html[1]/body[1]/next-route-announcer[1]//div[1]",
+            "description": "The alert container that displays validation error messages for the registration form.",
+            "method": "scrollTo",
+            "arguments": []
+          }
+        ],
+        "metadata": {
+          "cache": {
+            "status": "DISABLED"
+          },
+          "usage": {
+            "inputTokens": 2225,
+            "outputTokens": 65,
+            "reasoningTokens": 0,
+            "cachedInputTokens": 0,
+            "inferenceTimeMs": 8997
+          }
+        }
+      },
+      "durationMs": 9039
+    }
+  ]
+}

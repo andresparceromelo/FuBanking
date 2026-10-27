@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TC10_Admin_Aprobar_Credito_Usuario</title>
+</head>
+<body>
+  <table cellpadding="1" cellspacing="1" border="1">
+    <thead>
+      <tr><td rowspan="1" colspan="3">TC10_Admin_Aprobar_Credito_Usuario</td></tr>
+    </thead>
+    <tbody>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=email</td><td></td></tr>
+      <tr><td>type</td><td>id=email</td><td>bedoyacanoandres@gmail.com</td></tr>
+      <tr><td>click</td><td>id=password</td><td></td></tr>
+      <tr><td>type</td><td>id=password</td><td>FuBanking123*</td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>click</td><td>css=button[type="submit"]</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//a[@href='/admin/loans']</td><td>15000</td></tr>
+      <tr><td>open</td><td>http://localhost:3000/admin/loans</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=filter-pending</td><td>10000</td></tr>
+      <tr><td>click</td><td>id=filter-pending</td><td></td></tr>
+      <tr><td>pause</td><td>500</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//button[contains(.,'Aprobar')]</td><td>10000</td></tr>
+      <tr><td>click</td><td>xpath=(//button[contains(.,'Aprobar')])[1]</td><td></td></tr>
+      <tr><td>pause</td><td>1000</td><td></td></tr>
+      <tr><td>click</td><td>id=filter-approved</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td>10000</td></tr>
+      <tr><td>assertElementPresent</td><td>xpath=//span[contains(.,'Aprobado')]</td><td></td></tr>
+      <tr><td>open</td><td>http://localhost:3000/logout</td><td></td></tr>
+      <tr><td>waitForElementPresent</td><td>id=email</td><td>10000</td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

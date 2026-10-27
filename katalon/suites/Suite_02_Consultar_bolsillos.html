@@ -1,0 +1,325 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Suite 2 - HU-24 Consultar bolsillos</title></head><body><table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC112_Consultar_cuenta_con_un_bolsillo</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Bolsillos</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var t=(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;));var api=&#x27;http://localhost:3001/api/v1&#x27;;function pedir(m,u){var x=new XMLHttpRequest();x.open(m,api+u,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+t);x.send();return JSON.parse(x.responseText||&#x27;{}&#x27;);}var n=0;(pedir(&#x27;GET&#x27;,&#x27;/accounts/me&#x27;).data||[]).forEach(function(c){(pedir(&#x27;GET&#x27;,&#x27;/pockets/account/&#x27;+c.id).data||[]).forEach(function(p){pedir(&#x27;DELETE&#x27;,&#x27;/pockets/&#x27;+p.id);n++;});});return n;})()</td><td>bolsillosEliminados</td></tr>
+<tr><td>echo</td><td>Precondición: bolsillos de corridas anteriores eliminados = ${bolsillosEliminados}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>echo</td><td>Precondicion: la cuenta tiene exactamente un bolsillo (&#x27;Unico&#x27; $100)</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Unico</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Unico&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>100</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;100&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Unico&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Unico&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 100</td><td>true</td></tr>
+<tr><td>echo</td><td>Paso 2: Consultar los bolsillos de la cuenta (recargar la pantalla)</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Unico&#x27;]]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar el unico bolsillo</td><td></td></tr>
+<tr><td>assertXpathCount</td><td>//*[@data-testid=&#x27;pocket-card&#x27;]</td><td>1</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Unico&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Unico&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 100</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC113_Consultar_cuenta_con_varios_bolsillos</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Bolsillos</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var t=(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;));var api=&#x27;http://localhost:3001/api/v1&#x27;;function pedir(m,u){var x=new XMLHttpRequest();x.open(m,api+u,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+t);x.send();return JSON.parse(x.responseText||&#x27;{}&#x27;);}var n=0;(pedir(&#x27;GET&#x27;,&#x27;/accounts/me&#x27;).data||[]).forEach(function(c){(pedir(&#x27;GET&#x27;,&#x27;/pockets/account/&#x27;+c.id).data||[]).forEach(function(p){pedir(&#x27;DELETE&#x27;,&#x27;/pockets/&#x27;+p.id);n++;});});return n;})()</td><td>bolsillosEliminados</td></tr>
+<tr><td>echo</td><td>Precondición: bolsillos de corridas anteriores eliminados = ${bolsillosEliminados}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>echo</td><td>Precondicion: la cuenta tiene 3 bolsillos</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Viaje</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Viaje&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>100</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;100&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Viaje&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Viaje&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 100</td><td>true</td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Estudio</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Estudio&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>200</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;200&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Estudio&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Estudio&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 200</td><td>true</td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Salud</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Salud&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>300</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;300&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Salud&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Salud&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 300</td><td>true</td></tr>
+<tr><td>echo</td><td>Paso 2: Consultar los bolsillos de la cuenta (recargar la pantalla)</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Viaje&#x27;]]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Estudio&#x27;]]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Salud&#x27;]]</td><td></td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar la cantidad</td><td></td></tr>
+<tr><td>assertXpathCount</td><td>//*[@data-testid=&#x27;pocket-card&#x27;]</td><td>3</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC114_Consultar_datos_correctos_por_bolsillo</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Bolsillos</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var t=(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;));var api=&#x27;http://localhost:3001/api/v1&#x27;;function pedir(m,u){var x=new XMLHttpRequest();x.open(m,api+u,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+t);x.send();return JSON.parse(x.responseText||&#x27;{}&#x27;);}var n=0;(pedir(&#x27;GET&#x27;,&#x27;/accounts/me&#x27;).data||[]).forEach(function(c){(pedir(&#x27;GET&#x27;,&#x27;/pockets/account/&#x27;+c.id).data||[]).forEach(function(p){pedir(&#x27;DELETE&#x27;,&#x27;/pockets/&#x27;+p.id);n++;});});return n;})()</td><td>bolsillosEliminados</td></tr>
+<tr><td>echo</td><td>Precondición: bolsillos de corridas anteriores eliminados = ${bolsillosEliminados}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>echo</td><td>Precondicion: bolsillos &#x27;Hogar&#x27; $150 y &#x27;Carro&#x27; $250</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Hogar</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Hogar&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>150</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;150&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Hogar&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Hogar&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 150</td><td>true</td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Carro</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Carro&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>250</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;250&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Carro&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Carro&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 250</td><td>true</td></tr>
+<tr><td>echo</td><td>Paso 2: Consultar los bolsillos (recargar la pantalla)</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>echo</td><td>Paso 3: Verificar nombre y monto de cada bolsillo</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Hogar&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Hogar&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 150</td><td>true</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Carro&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Carro&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 250</td><td>true</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC115_Consultar_cuenta_sin_bolsillos</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion con el usuario sin bolsillos y abrir Bolsillos</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.intruso@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.intruso@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.intruso@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var t=(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;));var api=&#x27;http://localhost:3001/api/v1&#x27;;function pedir(m,u){var x=new XMLHttpRequest();x.open(m,api+u,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+t);x.send();return JSON.parse(x.responseText||&#x27;{}&#x27;);}var n=0;(pedir(&#x27;GET&#x27;,&#x27;/accounts/me&#x27;).data||[]).forEach(function(c){(pedir(&#x27;GET&#x27;,&#x27;/pockets/account/&#x27;+c.id).data||[]).forEach(function(p){pedir(&#x27;DELETE&#x27;,&#x27;/pockets/&#x27;+p.id);n++;});});return n;})()</td><td>bolsillosEliminados</td></tr>
+<tr><td>echo</td><td>Precondición: bolsillos de corridas anteriores eliminados = ${bolsillosEliminados}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>echo</td><td>Paso 2: Verificar el estado vacio</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;pockets-empty&quot;]</td><td></td></tr>
+<tr><td>assertText</td><td>css=[data-testid=&quot;pockets-empty&quot;]</td><td>glob:*No hay bolsillos para esta cuenta aún.*</td></tr>
+<tr><td>assertElementNotPresent</td><td>css=[data-testid=&quot;pocket-card&quot;]</td><td></td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC116_Consultar_cuenta_ajena_API</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y abrir Bolsillos</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var t=(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;));var api=&#x27;http://localhost:3001/api/v1&#x27;;function pedir(m,u){var x=new XMLHttpRequest();x.open(m,api+u,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+t);x.send();return JSON.parse(x.responseText||&#x27;{}&#x27;);}var n=0;(pedir(&#x27;GET&#x27;,&#x27;/accounts/me&#x27;).data||[]).forEach(function(c){(pedir(&#x27;GET&#x27;,&#x27;/pockets/account/&#x27;+c.id).data||[]).forEach(function(p){pedir(&#x27;DELETE&#x27;,&#x27;/pockets/&#x27;+p.id);n++;});});return n;})()</td><td>bolsillosEliminados</td></tr>
+<tr><td>echo</td><td>Precondición: bolsillos de corridas anteriores eliminados = ${bolsillosEliminados}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/accounts</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td></td></tr>
+<tr><td>storeText</td><td>css=[data-testid=&quot;account-balance&quot;]</td><td>saldoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${saldoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>saldoInicial</td></tr>
+<tr><td>echo</td><td>saldoInicial = ${saldoInicial}</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>echo</td><td>Paso 1: Preparar la cuenta del propietario con el bolsillo &#x27;Privado&#x27; $200</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-name</td><td>Privado</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-name&#x27;);var v=&#x27;Privado&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=pocket-amount</td><td>200</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;pocket-amount&#x27;);var v=&#x27;200&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=[data-testid=&quot;create-pocket-button&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td></td></tr>
+<tr><td>assertText</td><td>xpath=//*[@data-testid=&#x27;toast-title&#x27; and normalize-space(.)=&#x27;Bolsillo creado&#x27;]</td><td>exact:Bolsillo creado</td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Privado&#x27;]]</td><td></td></tr>
+<tr><td>storeText</td><td>xpath=//*[@data-testid=&#x27;pocket-card&#x27;][.//*[@data-testid=&#x27;pocket-card-name&#x27; and normalize-space(.)=&#x27;Privado&#x27;]]//*[@data-testid=&#x27;pocket-card-amount&#x27;]</td><td>montoTexto</td></tr>
+<tr><td>storeEval</td><td>Number(&#x27;${montoTexto}&#x27;.replace(/[^0-9-]/g,&#x27;&#x27;))</td><td>montoBolsillo</td></tr>
+<tr><td>assertEval</td><td>${montoBolsillo} == 200</td><td>true</td></tr>
+<tr><td>storeValue</td><td>id=account-select</td><td>cuentaPropietario</td></tr>
+<tr><td>echo</td><td>Paso 2: Consultar esos bolsillos con otro usuario (intruso)</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.intruso@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.intruso@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.intruso@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var x=new XMLHttpRequest();x.open(&#x27;GET&#x27;,&#x27;http://localhost:3001/api/v1/pockets/account/${cuentaPropietario}&#x27;,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;)));x.send();var c=&#x27;&#x27;;try{c=JSON.parse(x.responseText).error.code||&#x27;&#x27;}catch(e){}return x.status+&#x27; &#x27;+c;})()</td><td>respuesta</td></tr>
+<tr><td>echo</td><td>Respuesta de la API: ${respuesta}</td><td></td></tr>
+<tr><td>assertEval</td><td>&#x27;${respuesta}&#x27;</td><td>exact:403 FORBIDDEN</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC117_Consultar_cuenta_inexistente_API</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Iniciar sesion y usar un accountId que no existe</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>echo</td><td>Paso 2: Consultar los bolsillos de esa cuenta</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var x=new XMLHttpRequest();x.open(&#x27;GET&#x27;,&#x27;http://localhost:3001/api/v1/pockets/account/00000000-0000-4000-8000-000000000000&#x27;,false);x.setRequestHeader(&#x27;Authorization&#x27;,&#x27;Bearer &#x27;+(window.sessionStorage.getItem(&#x27;token&#x27;)||window.localStorage.getItem(&#x27;token&#x27;)));x.send();var c=&#x27;&#x27;;try{c=JSON.parse(x.responseText).error.code||&#x27;&#x27;}catch(e){}return x.status+&#x27; &#x27;+c;})()</td><td>respuesta</td></tr>
+<tr><td>echo</td><td>Respuesta de la API: ${respuesta}</td><td></td></tr>
+<tr><td>assertEval</td><td>&#x27;${respuesta}&#x27;</td><td>exact:404 ACCOUNT_NOT_FOUND</td></tr></tbody></table>
+<table cellpadding="1" cellspacing="1" border="1"><thead><tr><td rowspan="1" colspan="3">TC118_Consultar_sin_autenticacion_API</td></tr></thead><tbody><tr><td>echo</td><td>Paso 1: Obtener un accountId real</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){try{return JSON.parse(window.sessionStorage.getItem(&#x27;user&#x27;)||window.localStorage.getItem(&#x27;user&#x27;)).email||&#x27;&#x27;}catch(e){return &#x27;&#x27;}})()</td><td>usuarioActual</td></tr>
+<tr><td>if</td><td>&#x27;${usuarioActual}&#x27; != &#x27;katalon.bolsillos@fubanking.test&#x27;</td><td></td></tr>
+<tr><td>runScript</td><td>localStorage.clear();sessionStorage.clear();document.cookie=&#x27;token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT&#x27;;</td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/login</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>id=email</td><td></td></tr>
+<tr><td>waitForEval</td><td>window.localStorage.getItem(&#x27;fubank-theme&#x27;) !== null</td><td>true</td></tr>
+<tr><td>type</td><td>id=email</td><td>katalon.bolsillos@fubanking.test</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;email&#x27;);var v=&#x27;katalon.bolsillos@fubanking.test&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>type</td><td>id=password</td><td>Kat638766c5aeFb7</td></tr>
+<tr><td>runScript</td><td>var s=document.createElement(&#x27;script&#x27;);s.textContent=&quot;(function(){var el=document.getElementById(&#x27;password&#x27;);var v=&#x27;Kat638766c5aeFb7&#x27;;var t=el._valueTracker;if(t){t.setValue(v===&#x27;&#x27;?&#x27; &#x27;:&#x27;&#x27;);}Object.getOwnPropertyDescriptor(Object.getPrototypeOf(el),&#x27;value&#x27;).set.call(el,v);el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));})();&quot;;(document.head||document.documentElement).appendChild(s);s.remove();</td><td></td></tr>
+<tr><td>click</td><td>css=form button[type=&quot;submit&quot;]</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=button[title=&quot;Cerrar sesión&quot;]</td><td></td></tr>
+<tr><td>assertLocation</td><td>glob:*/profile</td><td></td></tr>
+<tr><td>endIf</td><td><datalist></datalist></td><td></td></tr>
+<tr><td>open</td><td>http://localhost:3000/pockets</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>xpath=//select[@id=&#x27;account-select&#x27;]/option[@value!=&#x27;&#x27;]</td><td></td></tr>
+<tr><td>pause</td><td>1000</td><td></td></tr>
+<tr><td>waitForElementPresent</td><td>css=[data-testid=&quot;create-pocket-button&quot;]:not([disabled])</td><td></td></tr>
+<tr><td>assertText</td><td>css=h1</td><td>exact:Bolsillos de Ahorro</td></tr>
+<tr><td>storeValue</td><td>id=account-select</td><td>cuentaId</td></tr>
+<tr><td>echo</td><td>Paso 2: Consultar GET /pockets/account/:accountId sin cabecera Authorization</td><td></td></tr>
+<tr><td>storeEval</td><td>(function(){var x=new XMLHttpRequest();x.open(&#x27;GET&#x27;,&#x27;http://localhost:3001/api/v1/pockets/account/${cuentaId}&#x27;,false);x.send();var c=&#x27;&#x27;;try{c=JSON.parse(x.responseText).error.code||&#x27;&#x27;}catch(e){}return x.status+&#x27; &#x27;+c;})()</td><td>respuesta</td></tr>
+<tr><td>echo</td><td>Respuesta de la API: ${respuesta}</td><td></td></tr>
+<tr><td>assertEval</td><td>&#x27;${respuesta}&#x27;</td><td>exact:401 UNAUTHORIZED</td></tr></tbody></table></body></html>

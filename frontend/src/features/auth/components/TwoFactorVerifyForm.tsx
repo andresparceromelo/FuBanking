@@ -1,5 +1,5 @@
 'use client';
-import type { SubmitEvent } from 'react';
+
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useTwoFactor } from '../hooks/useTwoFactor';
@@ -74,7 +74,7 @@ export function TwoFactorVerifyForm() {
     }
   };
 
-  const onSubmit = (e: SubmitEvent) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const fullCode = code.join('');
     if (fullCode.length === 6) {
@@ -97,7 +97,19 @@ export function TwoFactorVerifyForm() {
 
       {error && (
         <div className="p-4 rounded-xl bg-destructive/10 text-destructive text-sm font-medium border border-destructive/20 text-center animate-in fade-in slide-in-from-top-2">
-          {error.message}
+          <p>{error.message}</p>
+          <button
+            type="button"
+            onClick={() => {
+              sessionStorage.removeItem('2fa_temp_token');
+              sessionStorage.removeItem('2fa_masked_email');
+              sessionStorage.removeItem('2fa_dev_code');
+              router.push('/login');
+            }}
+            className="w-full py-2 px-4 rounded-lg bg-destructive text-destructive-foreground hover:bg-destructive/90 text-xs font-semibold uppercase tracking-wider transition-all"
+          >
+            Reiniciar inicio de sesión
+          </button>
         </div>
       )}
 
@@ -120,7 +132,7 @@ export function TwoFactorVerifyForm() {
               onChange={(e) => handleChange(slot, e.target.value)}
               onKeyDown={(e) => handleKeyDown(slot, e)}
               onPaste={handlePaste}
-              disabled={isLoading}
+              disabled={isLoading || Boolean(error)}
               className="w-12 h-14 text-center text-xl font-semibold bg-background border border-input rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-50"
               autoComplete="one-time-code"
             />
@@ -130,7 +142,7 @@ export function TwoFactorVerifyForm() {
         <Button 
           type="submit" 
           isLoading={isLoading} 
-          disabled={code.some(v => !v) || isLoading}
+          disabled={code.some(v => !v) || isLoading || Boolean(error)}
           className="w-full mt-8"
         >
           Verificar código

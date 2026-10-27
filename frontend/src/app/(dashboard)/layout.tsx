@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { Navbar } from '@/shared/components/layout/Navbar';
+import { GabrielilloChat } from '@/features/chatbot/components/GabrielilloChat';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 
@@ -22,11 +23,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   if (!isAuthenticated) return null;
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col relative">
       <Navbar />
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 animate-in fade-in duration-500">
         {children}
       </main>
+      <GabrielilloChat />
     </div>
   );
 }

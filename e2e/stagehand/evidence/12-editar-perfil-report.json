@@ -1,0 +1,87 @@
+{
+  "scenario": "12-editar-perfil",
+  "executedAt": "2026-10-27T02:24:42.201Z",
+  "totalSteps": 10,
+  "steps": [
+    {
+      "step": "Clic Editar datos",
+      "capability": "act",
+      "instruction": "Click Editar datos",
+      "result": "Modal/form abierto",
+      "durationMs": 1049
+    },
+    {
+      "step": "Guardar cambios nombre/apellido",
+      "capability": "act",
+      "instruction": "Click Guardar cambios",
+      "result": "Enviado",
+      "durationMs": 2034
+    },
+    {
+      "step": "Verificar retorno a vista perfil",
+      "capability": "extract",
+      "instruction": "Check Editar datos visible",
+      "result": {
+        "editButtonVisible": true
+      },
+      "durationMs": 7399
+    },
+    {
+      "step": "Guardar cambios teléfono/ingresos",
+      "capability": "act",
+      "instruction": "Click Guardar cambios",
+      "result": "Enviado",
+      "durationMs": 2028
+    },
+    {
+      "step": "Submit con nombre inválido (1 char)",
+      "capability": "act",
+      "instruction": "Click Guardar cambios",
+      "result": "Enviado",
+      "durationMs": 2030
+    },
+    {
+      "step": "Verificar error validación nombre",
+      "capability": "extract",
+      "instruction": "Extract firstName validation error",
+      "result": {
+        "validationError": true,
+        "errorText": "El primer nombre debe tener al menos 2 caracteres"
+      },
+      "durationMs": 8173
+    },
+    {
+      "step": "Submit con apellido inválido (1 char)",
+      "capability": "act",
+      "instruction": "Click Guardar cambios",
+      "result": "Enviado",
+      "durationMs": 4758
+    },
+    {
+      "step": "Verificar error validación apellido",
+      "capability": "extract",
+      "instruction": "Extract lastName validation error",
+      "result": {
+        "validationError": false,
+        "errorText": ""
+      },
+      "durationMs": 26817
+    },
+    {
+      "step": "Cancelar edición de perfil",
+      "capability": "act",
+      "instruction": "Click Cancelar",
+      "result": "Click realizado",
+      "durationMs": 1023
+    },
+    {
+      "step": "Verificar retorno a perfil tras cancelar",
+      "capability": "extract",
+      "instruction": "Check Editar datos button",
+      "result": {
+        "editButtonVisible": true
+      },
+      "durationMs": 13180
+    }
+  ]
+}

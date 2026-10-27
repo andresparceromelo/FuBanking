@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:3000" />
+<title>CP01_Login_2FA_Exitoso</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">CP01_Login_2FA_Exitoso</td></tr>
+</thead>
+<tbody>
+<!-- 1. Abrir vista de Login y limpiar sesión previa -->
+<tr>
+	<td>open</td>
+	<td>http://localhost:3000/login</td>
+	<td></td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>localStorage.clear(); sessionStorage.clear(); document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 2. Esperar e ingresar credenciales del usuario con 2FA -->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=email</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('email'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'katalonfa@gmail.com'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>id=password</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>runScript</td>
+	<td>const input = document.getElementById('password'); const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(input, 'Katalon123.'); input.dispatchEvent(new Event('input', { bubbles: true })); input.dispatchEvent(new Event('change', { bubbles: true }));</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>500</td>
+	<td></td>
+</tr>
+
+<!-- 3. Enviar credenciales para iniciar flujo 2FA -->
+<tr>
+	<td>click</td>
+	<td>css=button[type="submit"]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+
+<!-- 4. Esperar carga de la vista de Verificación 2FA -->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//h2[contains(text(),'Verificación de seguridad')]</td>
+	<td>7000</td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>xpath=//h2[contains(text(),'Verificación de seguridad')]</td>
+	<td></td>
+</tr>
+
+<!-- 5. Inyectar automáticamente el código 2FA capturado del backend en los 6 campos OTP -->
+<tr>
+	<td>runScript</td>
+	<td>const devCode = sessionStorage.getItem('2fa_dev_code'); const inputs = document.querySelectorAll('input[autoComplete="one-time-code"]'); if (devCode &amp;&amp; inputs.length === 6) { for (let i = 0; i &lt; 6; i++) { const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set; nativeSetter.call(inputs[i], devCode[i]); inputs[i].dispatchEvent(new Event('input', { bubbles: true })); inputs[i].dispatchEvent(new Event('change', { bubbles: true })); } }</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>1500</td>
+	<td></td>
+</tr>
+
+<!-- 6. Enviar código de verificación si no se envió de forma automática -->
+<tr>
+	<td>runScript</td>
+	<td>const btn = document.querySelector('button[type="submit"]'); if (btn &amp;&amp; !btn.disabled) { btn.click(); }</td>
+	<td></td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3500</td>
+	<td></td>
+</tr>
+
+<!-- 7. Verificar acceso exitoso al Dashboard -->
+<tr>
+	<td>waitForElementPresent</td>
+	<td>xpath=//*[contains(text(),'Hola') or contains(text(),'Mis Cuentas') or contains(text(),'Panel') or contains(text(),'Dashboard')]</td>
+	<td>8000</td>
+</tr>
+<tr>
+	<td>assertLocation</td>
+	<td>http://localhost:3000/dashboard</td>
+	<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

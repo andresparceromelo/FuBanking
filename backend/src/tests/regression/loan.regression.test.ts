@@ -3,7 +3,6 @@ import { createLoanTestApp } from '../helpers/createLoanTestApp';
 
 /**
  * Regresión por contrato HTTP del módulo créditos.
- * Patrón AAA + FIRST (ver ejemplo del profesor: RegressionTesting).
  * App con repos en memoria (sin Supabase, sin red).
  *
  * Ejecutar: npm run test:regression (o npx vitest run src/tests/regression)
@@ -16,7 +15,7 @@ describe('Loans HTTP (contrato)', () => {
     const res = await request(app)
       .post('/api/v1/loans/simulate')
       .set('Authorization', `Bearer ${deps.userToken}`)
-      .send({ amount: 5_000_000, installments: 24, annualRate: 0.24 });
+      .send({ amount: 5_000_000, installments: 24, annualRate: 24 });
     // Assert
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);

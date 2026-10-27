@@ -19,8 +19,13 @@ frontend/coverage/
 
 # Variables de entorno
 .env
-.env.local
+.env.*
+*.env
 backend/.env
+!*.env.example
+
+# Test artifacts
+test-results/
 
 # Logs
 *.log
@@ -32,3 +37,20 @@ FUBANKING_HANDOFF.md
 coverage/
 backend/coverage/
 frontend/coverage/
+e2e/serenity/reports/
+e2e/serenity/target/
+e2e/serenity/.playwright/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/reports/
+mochawesome-report/
+
+# Stagehand
+e2e/stagehand/node_modules/
+e2e/stagehand/evidence/*.png
+
+# Python
+__pycache__/
+*.pyc

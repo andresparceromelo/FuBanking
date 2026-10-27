@@ -1,0 +1,131 @@
+{
+  "scenario": "02-loans-requirements",
+  "executedAt": "2026-10-24T18:00:32.982Z",
+  "totalSteps": 2,
+  "steps": [
+    {
+      "step": "Observación y descubrimiento de requisitos normativos vía IA",
+      "capability": "observe",
+      "instruction": "Find the requirements check items and action buttons on this loans page",
+      "result": {
+        "data": [
+          {
+            "selector": "xpath=/",
+            "description": "Filtro de solicitudes pendientes",
+            "method": "click",
+            "arguments": []
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]",
+            "description": "Botón de refresco o actualización",
+            "method": "click",
+            "arguments": []
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/div[1]/div[1]/div[1]/input[1]",
+            "description": "Campo de entrada para configurar el monto",
+            "method": "fill",
+            "arguments": [
+              "5000000"
+            ]
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/div[1]/div[2]/div[1]/div[1]/input[1]",
+            "description": "Campo de entrada para cuotas",
+            "method": "fill",
+            "arguments": [
+              "12"
+            ]
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/div[1]/div[2]/div[1]/button[1]",
+            "description": "Botón para ejecutar simulación",
+            "method": "click",
+            "arguments": []
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/button[1]",
+            "description": "Indicador normativo de documento verificado",
+            "method": "click",
+            "arguments": []
+          }
+        ],
+        "metadata": {
+          "cache": {
+            "status": "DISABLED"
+          },
+          "usage": {
+            "inputTokens": 50,
+            "outputTokens": 50,
+            "reasoningTokens": 0,
+            "cachedInputTokens": 0,
+            "inferenceTimeMs": 926
+          }
+        }
+      },
+      "durationMs": 985
+    },
+    {
+      "step": "Observación de campos de entrada del simulador",
+      "capability": "observe",
+      "instruction": "Find the numeric loan input fields and calculate buttons on this page",
+      "result": {
+        "data": [
+          {
+            "selector": "xpath=/",
+            "description": "Filtro de solicitudes pendientes",
+            "method": "click",
+            "arguments": []
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]",
+            "description": "Botón de refresco o actualización",
+            "method": "click",
+            "arguments": []
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/div[1]/div[1]/div[1]/input[1]",
+            "description": "Campo de entrada para configurar el monto",
+            "method": "fill",
+            "arguments": [
+              "5000000"
+            ]
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/div[1]/div[2]/div[1]/div[1]/input[1]",
+            "description": "Campo de entrada para cuotas",
+            "method": "fill",
+            "arguments": [
+              "12"
+            ]
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/div[1]/div[2]/div[1]/button[1]",
+            "description": "Botón para ejecutar simulación",
+            "method": "click",
+            "arguments": []
+          },
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/form[1]/button[1]",
+            "description": "Indicador normativo de documento verificado",
+            "method": "click",
+            "arguments": []
+          }
+        ],
+        "metadata": {
+          "cache": {
+            "status": "DISABLED"
+          },
+          "usage": {
+            "inputTokens": 50,
+            "outputTokens": 50,
+            "reasoningTokens": 0,
+            "cachedInputTokens": 0,
+            "inferenceTimeMs": 423
+          }
+        }
+      },
+      "durationMs": 461
+    }
+  ]
+}

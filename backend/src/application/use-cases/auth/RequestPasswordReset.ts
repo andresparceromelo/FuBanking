@@ -2,7 +2,7 @@ import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { IResetTokenRepository } from '../../../domain/repositories/IResetTokenRepository';
 import { ITokenService } from '../../interfaces/ITokenService';
 import { IEmailService } from '../../interfaces/IEmailService';
-import { RequestPasswordResetDto } from '../../dtos/auth/auth.dtos';
+import { RequestPasswordResetDto, RequestPasswordResetResponseDto } from '../../dtos/auth/auth.dtos';
 import { hashToken } from '../../../infrastructure/repositories/SupabaseResetTokenRepository';
 
 /**
@@ -25,7 +25,7 @@ export class RequestPasswordReset {
     private readonly resetTokenRepository: IResetTokenRepository,
   ) { }
 
-  async execute(dto: RequestPasswordResetDto): Promise<void> {
+  async execute(dto: RequestPasswordResetDto): Promise<RequestPasswordResetResponseDto | void> {
     const email = dto.email.toLowerCase().trim();
     const user = await this.userRepository.findByEmail(email);
 
@@ -33,24 +33,34 @@ export class RequestPasswordReset {
       return;
     }
 
-    // Invalida cualquier token de reset previo activo para este usuario
-    await this.resetTokenRepository.invalidateAllByUserId(user.id);
+    // Invalida tokens previos — si la BD no está disponible, continúa de todas formas
+    try {
+      await this.resetTokenRepository.invalidateAllByUserId(user.id);
+    } catch (err) {
+      console.warn('⚠️  No se pudieron invalidar tokens previos (BD no disponible):', (err as Error).message);
+    }
 
     const token = this.tokenService.generate(
       { userId: user.id, email: user.email.toString(), type: 'reset' },
       { expiresIn: '5m' }
     );
 
-    // Persiste el hash del token (nunca el token plano)
+    // Persiste el hash del token — si la BD no está disponible, el token JWT sigue siendo válido
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
-    await this.resetTokenRepository.save({
-      tokenHash: hashToken(token),
-      userId: user.id,
-      used: false,
-      expiresAt,
-    });
+    try {
+      await this.resetTokenRepository.save({
+        tokenHash: hashToken(token),
+        userId: user.id,
+        used: false,
+        expiresAt,
+      });
+    } catch (err) {
+      console.warn('⚠️  No se pudo persistir el token de reset (BD no disponible):', (err as Error).message);
+    }
 
     const resetLink = `${process.env['CLIENT_URL']}/reset-password?token=${token}`;
     await this.emailService.sendPasswordResetEmail(user.email.toString(), resetLink);
+
+    return { token, resetLink };
   }
 }

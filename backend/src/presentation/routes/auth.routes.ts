@@ -21,6 +21,7 @@ import supabaseClient from '../../infrastructure/database/supabase.client';
 import { authMiddleware } from '../middlewares/authMiddleware';
 import { createRateLimiter } from '../middlewares/rateLimitMiddleware';
 import { env } from '../../shared/config/env';
+import { sendSuccess } from '../../shared/utils/response';
 
 /**
  * Rutas de autenticación: /api/v1/auth
@@ -116,7 +117,7 @@ router.post('/register', controller.register);
  * Clave por email+IP para no bloquear a toda una red por un atacante.
  */
 export const loginRateLimiter = createRateLimiter({
-  maxRequests: 10,
+  maxRequests: process.env.NODE_ENV === 'development' ? 200 : 10,
   windowMs: 60_000,
   keyExtractor: (req) => {
     const email = (req.body as Record<string, unknown>)?.email;
@@ -135,5 +136,17 @@ router.post('/2fa/resend', resendRateLimiter, twoFactorController.resend);
 router.post('/logout', authMiddleware, controller.logout);
 router.post('/2fa/enable', authMiddleware, twoFactorController.enable);
 router.post('/2fa/disable', authMiddleware, twoFactorController.disable);
+
+router.get('/test-helper/latest-2fa', (req, res) => {
+  const email = typeof req.query.email === 'string' ? req.query.email : '';
+  const code = NodemailerEmailService.getLatestTwoFactorCode(email);
+  sendSuccess(res, { code: code ?? null }, 'Código 2FA obtenido');
+});
+
+router.get('/test-helper/latest-reset-link', (req, res) => {
+  const email = typeof req.query.email === 'string' ? req.query.email : '';
+  const resetLink = NodemailerEmailService.getLatestResetLink(email);
+  sendSuccess(res, { resetLink: resetLink ?? null }, 'Enlace de restablecimiento obtenido');
+});
 
 export default router;

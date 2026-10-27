@@ -1,24 +1,21 @@
 import { SimulateLoanDto, SimulateLoanResponseDto } from '../../dtos/loan/loan.dtos';
+import { LoanCalculator } from '../../../domain/services/LoanCalculator';
 
 export class SimulateLoan {
   async execute(dto: SimulateLoanDto): Promise<SimulateLoanResponseDto> {
-    const installments = Math.max(dto.installments, 1);
-    const monthlyRate = dto.annualRate / 100 / 12;
-
-    let monthlyPayment = dto.amount / installments;
-
-    if (monthlyRate > 0) {
-      monthlyPayment =
-        (dto.amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -installments));
-    }
+    const calc = LoanCalculator.calculate({
+      amount: dto.amount,
+      installments: dto.installments,
+      annualRate: dto.annualRate,
+    });
 
     return {
       amount: dto.amount,
-      installments,
+      installments: calc.installments,
       annualRate: dto.annualRate,
-      monthlyPayment,
-      totalToPay: monthlyPayment * installments,
-      totalInterest: monthlyPayment * installments - dto.amount,
+      monthlyPayment: calc.monthlyPayment,
+      totalToPay: calc.totalToPay,
+      totalInterest: calc.totalInterest,
     };
   }
 }

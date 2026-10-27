@@ -1,4 +1,5 @@
 import { AppError } from '../../shared/errors/AppError';
+import { LoanCalculator } from '../services/LoanCalculator';
 
 export enum LoanApplicationStatus {
   PENDING = 'PENDING',
@@ -133,16 +134,11 @@ export class LoanApplication {
   }
 
   static create(props: CreateLoanApplicationProps): LoanApplication {
-    const monthlyRate = props.annualRate / 100 / 12;
-    const installments = Math.max(props.installments, 1);
-    let monthlyPayment = props.amount / installments;
-
-    if (monthlyRate > 0) {
-      monthlyPayment = (props.amount * monthlyRate) / (1 - Math.pow(1 + monthlyRate, -installments));
-    }
-
-    const totalToPay = monthlyPayment * installments;
-    const totalInterest = totalToPay - props.amount;
+    const calc = LoanCalculator.calculate({
+      amount: props.amount,
+      installments: props.installments,
+      annualRate: props.annualRate,
+    });
 
     const reasons: string[] = [];
 
@@ -164,12 +160,12 @@ export class LoanApplication {
       id: props.id,
       userId: props.userId,
       amount: props.amount,
-      installments,
+      installments: calc.installments,
       annualRate: props.annualRate,
       monthlyIncome: props.monthlyIncome,
-      monthlyPayment,
-      totalToPay,
-      totalInterest,
+      monthlyPayment: calc.monthlyPayment,
+      totalToPay: calc.totalToPay,
+      totalInterest: calc.totalInterest,
       documentVerified: props.documentVerified,
       ageVerified: props.ageVerified,
       incomeVerified: props.incomeVerified,

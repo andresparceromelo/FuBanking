@@ -4,6 +4,7 @@ import { SupabaseUserRepository } from '../../infrastructure/repositories/Supaba
 import { IUserRepository } from '../../domain/repositories/IUserRepository';
 import supabaseClient from '../../infrastructure/database/supabase.client';
 import { sendError } from '../../shared/utils/response';
+import { isAccessToken } from './accessToken';
 
 const tokenService = new JwtTokenService();
 const defaultUserRepository = new SupabaseUserRepository(supabaseClient);
@@ -41,6 +42,10 @@ export function createAdminMiddleware(
 
   try {
     const payload = tokenService.verify(token);
+    if (!isAccessToken(payload)) {
+      sendError(res, 'Token inválido', 'TOKEN_INVALID', 401);
+      return;
+    }
     req.user = {
       id: payload.userId,
       email: payload.email,

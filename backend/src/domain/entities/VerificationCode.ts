@@ -55,9 +55,14 @@ export class VerificationCode {
     return this._used;
   }
 
-  /** Se superó el límite máximo de intentos (5). */
+  /** Se superó el límite máximo de intentos (1 intento permitido por política de seguridad bancaria). */
   hasExceededAttempts(): boolean {
-    return this._attempts >= 5;
+    return this._attempts >= 1;
+  }
+
+  /** Invalida el código de verificación para que no pueda volver a utilizarse. */
+  invalidate(): void {
+    this._used = true;
   }
 
   /** Incrementa el contador de intentos fallidos. */

@@ -3,12 +3,14 @@
  *  Pruebas unitarias — Entidad de dominio Pocket
  * ----------------------------------------------------------------------------
  *  La entidad no tiene dependencias externas, así que no requiere dobles:
- *  se prueba de forma totalmente aislada (unidad pura). Patrón AAA + FIRST.
+ *  se prueba de forma totalmente aislada (unidad pura). Patrón AAA + FIRST
+ *  + aserciones fluidas Chai BDD (ver detalle en CreatePocket.test.ts).
  * ============================================================================
  */
 
 import { describe, it, expect } from 'vitest';
 import { Pocket } from '../../../domain/entities/Pocket';
+import { AppError } from '../../../shared/errors/AppError';
 
 const baseProps = {
   id: 'p1',
@@ -26,10 +28,7 @@ describe('Pocket (entidad de dominio)', () => {
       const pocket = new Pocket(baseProps);
 
       // Assert
-      expect(pocket.id).toBe('p1');
-      expect(pocket.accountId).toBe('acc-1');
-      expect(pocket.name).toBe('Ahorros');
-      expect(pocket.amount).toBe(100_000);
+      expect(pocket).to.include({ id: 'p1', accountId: 'acc-1', name: 'Ahorros', amount: 100_000 });
     });
 
     it('acepta un monto de cero', () => {
@@ -37,27 +36,27 @@ describe('Pocket (entidad de dominio)', () => {
       const pocket = new Pocket({ ...baseProps, amount: 0 });
 
       // Assert
-      expect(pocket.amount).toBe(0);
+      expect(pocket).to.have.property('amount', 0);
     });
 
     it('rechaza montos negativos', () => {
       // Act + Assert
-      expect(() => new Pocket({ ...baseProps, amount: -1 })).toThrowError(
-        /mayor o igual a cero/i,
-      );
+      expect(() => new Pocket({ ...baseProps, amount: -1 }))
+        .to.throw(AppError, /mayor o igual a cero/i)
+        .with.property('code', 'INVALID_POCKET_AMOUNT');
     });
 
     it('rechaza montos NaN', () => {
-      expect(() => new Pocket({ ...baseProps, amount: Number.NaN })).toThrowError(
-        /mayor o igual a cero/i,
-      );
+      expect(() => new Pocket({ ...baseProps, amount: Number.NaN }))
+        .to.throw(AppError, /mayor o igual a cero/i)
+        .with.property('code', 'INVALID_POCKET_AMOUNT');
     });
 
     it('rechaza montos que no son número', () => {
       // Arrange — se fuerza un tipo inválido para probar la guarda de tipo.
-      expect(() => new Pocket({ ...baseProps, amount: '100' as unknown as number })).toThrowError(
-        /mayor o igual a cero/i,
-      );
+      expect(() => new Pocket({ ...baseProps, amount: '100' as unknown as number }))
+        .to.throw(AppError, /mayor o igual a cero/i)
+        .with.property('code', 'INVALID_POCKET_AMOUNT');
     });
   });
 
@@ -72,9 +71,9 @@ describe('Pocket (entidad de dominio)', () => {
       });
 
       // Assert
-      expect(pocket.name).toBe('Meta');
-      expect(pocket.createdAt).toBeInstanceOf(Date);
-      expect(pocket.updatedAt).toBeInstanceOf(Date);
+      expect(pocket).to.have.property('name', 'Meta');
+      expect(pocket.createdAt).to.be.an.instanceOf(Date);
+      expect(pocket.updatedAt).to.be.an.instanceOf(Date);
     });
   });
 
@@ -87,7 +86,7 @@ describe('Pocket (entidad de dominio)', () => {
       pocket.updateName('  Nuevo  ');
 
       // Assert
-      expect(pocket.name).toBe('Nuevo');
+      expect(pocket).to.have.property('name', 'Nuevo');
     });
 
     it('rechaza un nombre vacío o de solo espacios', () => {
@@ -95,7 +94,9 @@ describe('Pocket (entidad de dominio)', () => {
       const pocket = new Pocket(baseProps);
 
       // Act + Assert
-      expect(() => pocket.updateName('   ')).toThrowError(/no puede estar vacío/i);
+      expect(() => pocket.updateName('   '))
+        .to.throw(AppError, /no puede estar vacío/i)
+        .with.property('code', 'INVALID_POCKET_NAME');
     });
   });
 
@@ -108,7 +109,7 @@ describe('Pocket (entidad de dominio)', () => {
       pocket.updateAmount(250_000);
 
       // Assert
-      expect(pocket.amount).toBe(250_000);
+      expect(pocket).to.have.property('amount', 250_000);
     });
 
     it('rechaza un monto negativo', () => {
@@ -116,7 +117,9 @@ describe('Pocket (entidad de dominio)', () => {
       const pocket = new Pocket(baseProps);
 
       // Act + Assert
-      expect(() => pocket.updateAmount(-5)).toThrowError(/mayor o igual a cero/i);
+      expect(() => pocket.updateAmount(-5))
+        .to.throw(AppError, /mayor o igual a cero/i)
+        .with.property('code', 'INVALID_POCKET_AMOUNT');
     });
   });
 
@@ -129,7 +132,7 @@ describe('Pocket (entidad de dominio)', () => {
       const publicView = pocket.toPublic();
 
       // Assert
-      expect(publicView).toEqual({
+      expect(publicView).to.deep.equal({
         id: 'p1',
         accountId: 'acc-1',
         name: 'Ahorros',

@@ -1,0 +1,35 @@
+{
+  "name": "fubanking-stagehand",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pruebas E2E con Stagehand + Ollama (qwen3.5:4b) – 6 funcionalidades, 31 casos de prueba",
+  "scripts": {
+    "test": "cross-env LLM_PROVIDER=gemini HEADLESS=true tsx src/index.ts",
+    "test:headed": "cross-env LLM_PROVIDER=gemini HEADLESS=false tsx src/index.ts",
+    "test:simulate": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/01-loans-simulator.ts",
+    "test:requirements": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/02-loans-requirements.ts",
+    "test:admin": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/03-admin-approval.ts",
+    "test:login": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/04-login.ts",
+    "test:login2fa": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/05-login-2fa.ts",
+    "test:registro": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/06-registro.ts",
+    "test:perfil": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/07-editar-perfil.ts",
+    "test:contrasena": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/08-restablecer-contrasena.ts",
+    "test:retiro": "cross-env LLM_PROVIDER=gemini tsx src/scenarios/09-retiro.ts",
+    "test:report": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@browserbasehq/stagehand": "^4.3.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.3",
+    "playwright": "^1.50.0",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "cross-env": "^10.1.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

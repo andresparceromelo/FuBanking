@@ -1,0 +1,87 @@
+{
+  "scenario": "10-login-2fa",
+  "executedAt": "2026-10-27T02:20:12.200Z",
+  "totalSteps": 8,
+  "steps": [
+    {
+      "step": "Enviar credenciales usuario 2FA",
+      "capability": "act",
+      "instruction": "Click submit",
+      "result": "Enviado",
+      "durationMs": 3534
+    },
+    {
+      "step": "Ingresar código 2FA capturado del backend",
+      "capability": "act",
+      "instruction": "OTP: 755955",
+      "result": "Código ingresado",
+      "durationMs": 1073
+    },
+    {
+      "step": "Submit código 2FA",
+      "capability": "act",
+      "instruction": "Click submit OTP",
+      "result": "Enviado",
+      "durationMs": 4027
+    },
+    {
+      "step": "Submit código 2FA incorrecto",
+      "capability": "act",
+      "instruction": "OTP: 000000",
+      "result": "Enviado",
+      "durationMs": 3028
+    },
+    {
+      "step": "Verificar error código 2FA inválido",
+      "capability": "extract",
+      "instruction": "Extract OTP error",
+      "result": {
+        "errorVisible": true,
+        "errorText": "Verificado"
+      },
+      "durationMs": 66544
+    },
+    {
+      "step": "Clic en reenviar código 2FA",
+      "capability": "act",
+      "instruction": "Click reenviar código",
+      "result": "Click realizado",
+      "durationMs": 8490
+    },
+    {
+      "step": "Observar confirmación de reenvío",
+      "capability": "observe",
+      "instruction": "Find resend confirmation",
+      "result": {
+        "data": [
+          {
+            "selector": "xpath=/html[1]/body[1]/div[2]/div[3]/div[1]/div[2]/div[1]/div[2]",
+            "description": "Success notification message indicating the code was resent successfully",
+            "method": "click",
+            "arguments": []
+          }
+        ],
+        "metadata": {
+          "cache": {
+            "status": "DISABLED"
+          },
+          "usage": {
+            "inputTokens": 882,
+            "outputTokens": 61,
+            "reasoningTokens": 0,
+            "cachedInputTokens": 0,
+            "inferenceTimeMs": 3388
+          }
+        }
+      },
+      "durationMs": 3420
+    },
+    {
+      "step": "Submit con contraseña errónea (usuario 2FA)",
+      "capability": "act",
+      "instruction": "Click submit wrong password",
+      "result": "Enviado",
+      "durationMs": 3020
+    }
+  ]
+}

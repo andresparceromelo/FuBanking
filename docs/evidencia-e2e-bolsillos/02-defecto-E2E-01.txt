@@ -1,0 +1,95 @@
+DEFECTO E2E-01 — Sin "Recordarme" la aplicación no envía el token a la API
+Base: tests/bolsillos-calidad (95b4db8), antes de integrar dev. 2026-10-09/10.
+
+================================================================================
+A. DETECCIÓN — npm run test:web, inicio de sesión SIN marcar "Recordarme" (opción por defecto)
+   Resultado: 9 de 9 escenarios web fallan al cargar la cuenta del cliente.
+--- resumen ---
+Execution Summary
+
+Consultar bolsillos:           1 failed, 1 total (45s 142ms)
+Crear bolsillo:                2 failed, 2 total (1m 12s 191ms)
+Depositar dinero en la cuenta: 2 failed, 2 total (1m 11s 355ms)
+Editar bolsillo:               1 failed, 1 total (36s 881ms)
+Eliminar bolsillo:             1 failed, 1 total (36s 771ms)
+Recorrido completo de ahorro:  1 failed, 1 total (34s 675ms)
+Transferir entre bolsillos:    1 failed, 1 total (37s 789ms)
+
+Total time: 5m 34s 804ms
+Real time: 5m 38s 172ms
+Scenarios:  9
+================================================================================
+--- pasos que fallaron ---
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 352ms)
+✗ Execution failed with assertion error (45s 142ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 445ms)
+✗ Execution failed with assertion error (36s 332ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 409ms)
+✗ Execution failed with assertion error (35s 859ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 365ms)
+✗ Execution failed with assertion error (36s 881ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 363ms)
+✗ Execution failed with assertion error (36s 771ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 402ms)
+✗ Execution failed with assertion error (37s 789ms)
+      ✗ Carlos waits until botón Abonar does become visible (30s 437ms)
+✗ Execution failed with assertion error (37s 48ms)
+      ✗ Carlos waits until botón Abonar does become visible (30s 429ms)
+✗ Execution failed with assertion error (34s 307ms)
+      ✗ Carlos waits until botón Abonar does become visible (30s 461ms)
+✗ Execution failed with assertion error (34s 675ms)
+--- ejemplo completo (primer escenario) ---
+  And ella inició sesión en FuBanking
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (4s 283ms)
+      ✓ Ana enters "e2e.mv1q3mqogxp4@fubanking.test" into campo de correo (395ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (32ms)
+      ✓ Ana clicks on botón Iniciar sesión (233ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 538ms)
+  When ella abre la pantalla de bolsillos
+    Ana abre la pantalla de bolsillos
+      ✓ Ana navigates to "/pockets" (725ms)
+      ✗ Ana waits until the value of selector de cuenta does not equal "" (30s 352ms)
+  ⇢ Then ella ve los bolsillos:
+  | Vacaciones |
+  | Mercado    |
+  ⇢ And ella ve el bolsillo "Vacaciones" con 100000
+  ⇢ And ella ve el bolsillo "Mercado" con 50000
+
+================================================================================
+B. CONTRAMEDIDA TEMPORAL — misma suite marcando "Recordarme" (token en localStorage)
+   (tras corregir la sincronización descrita en la sección 9 del documento)
+   Resultado: 9 de 9 escenarios web pasan. Aísla la causa: dónde se guarda el token.
+--- resumen ---
+Execution Summary
+
+Consultar bolsillos:           1 successful, 1 total (12s 709ms)
+Crear bolsillo:                2 successful, 2 total (19s 580ms)
+Depositar dinero en la cuenta: 2 successful, 2 total (17s 142ms)
+Editar bolsillo:               1 successful, 1 total (11s 208ms)
+Eliminar bolsillo:             1 successful, 1 total (11s 594ms)
+Recorrido completo de ahorro:  1 successful, 1 total (13s 91ms)
+Transferir entre bolsillos:    1 successful, 1 total (12s 782ms)
+
+Total time: 1m 38s 106ms
+Real time: 1m 43s 782ms
+Scenarios:  9
+================================================================================
+--- paso de inicio de sesión ---
+    Ana inicia sesión en FuBanking
+      ✓ Ana navigates to "/login" (2s 693ms)
+      ✓ Ana enters "e2e.mv2jc6ps303n@fubanking.test" into campo de correo (114ms)
+      ✓ Ana enters [a masked value] into campo de contraseña (24ms)
+      ✓ Ana clicks on casilla Recordarme (164ms)
+      ✓ Ana clicks on botón Iniciar sesión (146ms)
+      ✓ Ana waits until "/profile" does end with "/profile" (1s 36ms)
+
+================================================================================
+C. CAUSA RAÍZ (código antes de la corrección)
+   useAuth.tsx  login(): rememberMe ? localStorage.setItem('token') : sessionStorage.setItem('token')
+   api.client.ts interceptor: const token = localStorage.getItem('token')   // no consulta sessionStorage
+   → sin Authorization, GET /accounts/me y GET /pockets/account/:id responden 401.
+
+D. CORRECCIÓN EN dev: commit 365171d — getAuthToken(): localStorage → sessionStorage → cookie.
+   Sobre dev, sin la contramedida, los 9 escenarios web pasan (01-suite-completa-sobre-dev.txt).
+   Al reintroducir el defecto, la suite vuelve a fallar (mutación M1 en 03-sensibilidad-mutaciones.txt).
